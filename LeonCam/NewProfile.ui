@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewProfile</class>
+ <widget class="QDialog" name="NewProfile">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LeonCam</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#NewProfile{
+	background-image: url(:/Resources/Images/backgroundv2.png);}</string>
+  </property>
+  <widget class="QLabel" name="Lloading">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>80</y>
+     <width>61</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>280</y>
+     <width>301</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;For your protection please, type the &lt;span style=&quot; font-weight:600; color:#bdf0ff;&quot;&gt;Security Question&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;and answer.This will help in future verification&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LUsername">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>160</y>
+     <width>261</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Username</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LPassword">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>200</y>
+     <width>261</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+   <property name="placeholderText">
+    <string>Password</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LConfPass">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>240</y>
+     <width>261</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+   <property name="placeholderText">
+    <string>Confirm your password</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LSecQuest">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>340</y>
+     <width>301</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Security Question</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LAnswer">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>380</y>
+     <width>301</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Answer</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="LTipUsername">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>160</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;span style=&quot;font-weight:600;&quot;&gt;Requirements:&lt;/span&gt;
+&lt;ul style=&quot;margin-top:0px;&quot;&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 8 characters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/Resources/Images/bulb.png);
+background-color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="LTipPassword">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>200</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;span style=&quot;font-weight:600;&quot;&gt;Requirements:&lt;/span&gt;
+&lt;ul style=&quot;margin-top:0px;&quot;&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 8 characters&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 1 digit&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 1 capital letter&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum lowercase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+background-image: url(:/Resources/Images/bulb.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBBack">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>420</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(255, 255, 255);
+background-color: rgb(255, 77, 61);</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBCreate">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>420</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59);
+data-balloon=&quot;Whats up!&quot;; data-balloon-pos=&quot;right&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Create</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="LogIn.qrc"/>
+ </resources>
+ <connections/>
+</ui>
