@@ -140,8 +140,7 @@ background-color:rgb(36, 118, 59)</string>
 &lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/Images/bulb.png);
-background-color: rgb(255, 255, 255);</string>
+    <string notr="true">background-image: url(:/Resources/Images/bulb.png);</string>
    </property>
    <property name="text">
     <string/>
@@ -169,8 +168,7 @@ background-color: rgb(255, 255, 255);</string>
 &lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-background-image: url(:/Resources/Images/bulb.png);</string>
+    <string notr="true">background-image: url(:/Resources/Images/bulb.png);</string>
    </property>
    <property name="text">
     <string/>

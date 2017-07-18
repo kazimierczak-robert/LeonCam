@@ -72,13 +72,11 @@ public:
         LTipUsername = new QLabel(NewProfile);
         LTipUsername->setObjectName(QStringLiteral("LTipUsername"));
         LTipUsername->setGeometry(QRect(250, 160, 31, 31));
-        LTipUsername->setStyleSheet(QLatin1String("background-image: url(:/Resources/Images/bulb.png);\n"
-"background-color: rgb(255, 255, 255);"));
+        LTipUsername->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/bulb.png);"));
         LTipPassword = new QLabel(NewProfile);
         LTipPassword->setObjectName(QStringLiteral("LTipPassword"));
         LTipPassword->setGeometry(QRect(250, 200, 31, 31));
-        LTipPassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"background-image: url(:/Resources/Images/bulb.png);"));
+        LTipPassword->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/bulb.png);"));
         PBBack = new QPushButton(NewProfile);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(250, 420, 61, 23));
