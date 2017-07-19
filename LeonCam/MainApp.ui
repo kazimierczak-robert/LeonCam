@@ -116,9 +116,9 @@ background-color:rgb(36, 118, 59)</string>
      <widget class="QTextBrowser" name="textBrowser">
       <property name="geometry">
        <rect>
-        <x>19</x>
+        <x>20</x>
         <y>20</y>
-        <width>561</width>
+        <width>560</width>
         <height>30</height>
        </rect>
       </property>

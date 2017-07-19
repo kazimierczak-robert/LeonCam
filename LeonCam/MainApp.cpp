@@ -7,6 +7,7 @@ MainApp::MainApp(QWidget *parent)
 
 	connect(ui.newCameraButton, SIGNAL(clicked()), this, SLOT(AddNewCamera()));
 	connect(ui.logOutButton, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.camerasTable, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(RowSelected(const QModelIndex&)));
 
 	ui.camerasTable->setColumnWidth(0, 16);
 	ui.camerasTable->setColumnWidth(1, 100);
@@ -83,6 +84,11 @@ void MainApp::AddNewCamera()
 	pLayout->setAlignment(Qt::AlignCenter);
 	pWidget->setLayout(pLayout);
 	ui.camerasTable->setCellWidget(0, 7, pWidget);
+
+	for (int i = 0; i < 7; i++)
+	{
+		//ui.camerasTable->item(0, i)->setFlags(Qt::ItemFlag::ItemIsEnabled);
+	}
 }
 
 void MainApp::LogOut()
@@ -90,4 +96,15 @@ void MainApp::LogOut()
 	LogIn *login = new LogIn(nullptr);
 	login->show();
 	this->close();
+}
+
+void MainApp::RowSelected(const QModelIndex& modelIndex)
+{
+	QString cameraDetails = ui.camerasTable->item(modelIndex.row(), 2)->text() + " " + ui.camerasTable->item(modelIndex.row(), 3)->text();
+	CameraPreview *cameraPreview = new CameraPreview(this, cameraDetails);
+	//hide window
+	//this->hide();
+	cameraPreview->exec();
+	//show window
+	//this->show();
 }

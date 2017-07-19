@@ -5,6 +5,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include "LogIn.h"
+#include "CameraPreview.h"
 
 class MainApp : public QMainWindow
 {
@@ -16,6 +17,7 @@ public:
 private slots:
 	void AddNewCamera();
 	void LogOut();
+	void RowSelected(const QModelIndex& modelIndex);
 private:
 	Ui::MainApp ui;
 };

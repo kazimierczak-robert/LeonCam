@@ -94,7 +94,7 @@ public:
 "background-color:rgb(36, 118, 59)"));
         textBrowser = new QTextBrowser(camerasTab);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(19, 20, 561, 30));
+        textBrowser->setGeometry(QRect(20, 20, 560, 30));
         camerasTable = new QTableWidget(camerasTab);
         if (camerasTable->columnCount() < 8)
             camerasTable->setColumnCount(8);
