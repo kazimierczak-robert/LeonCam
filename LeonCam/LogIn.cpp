@@ -20,6 +20,9 @@ void LogIn::LogInClicked()
 	//Start gif
 	DesignB->gif->start();
 	ui.LUsername->setText("Working");
+	MainApp *mainApp = new MainApp(nullptr);	
+	mainApp->show();
+	this->close();
 }
 void LogIn::ForgotPasswordClicked()
 {

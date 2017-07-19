@@ -6,6 +6,7 @@
 #include "ForgotPassword.h"
 #include "DesignBase.h"
 #include "NewProfile.h"
+#include "MainApp.h"
 
 class LogIn : public QMainWindow
 {
