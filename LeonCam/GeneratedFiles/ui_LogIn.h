@@ -41,11 +41,14 @@ public:
             LogInClass->setObjectName(QStringLiteral("LogInClass"));
         LogInClass->resize(800, 500);
         LogInClass->setMaximumSize(QSize(800, 500));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        LogInClass->setWindowIcon(icon);
         LogInClass->setLayoutDirection(Qt::LeftToRight);
         LogInClass->setStyleSheet(QLatin1String("#centralWidget\n"
 "{\n"
 "	/*background-color: rgb(174, 213, 255);*/\n"
-"	background-image: url(:/Resources/Images/backgroundv2.png);\n"
+"	background-image: url(:/Resources/Images/background.png);\n"
 "}\n"
 "\n"
 "\n"

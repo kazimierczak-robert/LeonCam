@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Resources/Images/backgroundv2.png</file>
         <file>Resources/Images/background.png</file>
         <file>Resources/Images/bulb.png</file>
         <file>Resources/Images/bulbHover.png</file>
@@ -9,5 +8,6 @@
         <file>Resources/Images/available.png</file>
         <file>Resources/Images/unavailable.png</file>
         <file>Resources/Images/unavailablePreview.png</file>
+        <file>Resources/Images/logo.ico</file>
     </qresource>
 </RCC>

@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>LeonCam</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="LogIn.qrc">
+    <normaloff>:/Resources/Images/logo.ico</normaloff>:/Resources/Images/logo.ico</iconset>
+  </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>
@@ -26,7 +30,7 @@
    <string notr="true">#centralWidget
 {
 	/*background-color: rgb(174, 213, 255);*/
-	background-image: url(:/Resources/Images/backgroundv2.png);
+	background-image: url(:/Resources/Images/background.png);
 }
 
 

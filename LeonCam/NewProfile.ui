@@ -16,9 +16,13 @@
   <property name="windowTitle">
    <string>LeonCam</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="LogIn.qrc">
+    <normaloff>:/Resources/Images/logo.ico</normaloff>:/Resources/Images/logo.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">#NewProfile{
-	background-image: url(:/Resources/Images/backgroundv2.png);}</string>
+	background-image: url(:/Resources/Images/background.png);}</string>
   </property>
   <widget class="QLabel" name="Lloading">
    <property name="geometry">
@@ -33,7 +37,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="LHelp">
    <property name="geometry">
     <rect>
      <x>250</x>

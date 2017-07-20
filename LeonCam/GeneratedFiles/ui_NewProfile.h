@@ -25,7 +25,7 @@ class Ui_NewProfile
 {
 public:
     QLabel *Lloading;
-    QLabel *label;
+    QLabel *LHelp;
     QLineEdit *LUsername;
     QLineEdit *LPassword;
     QLineEdit *LConfPass;
@@ -42,15 +42,18 @@ public:
             NewProfile->setObjectName(QStringLiteral("NewProfile"));
         NewProfile->setWindowModality(Qt::WindowModal);
         NewProfile->resize(800, 500);
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        NewProfile->setWindowIcon(icon);
         NewProfile->setStyleSheet(QLatin1String("#NewProfile{\n"
-"	background-image: url(:/Resources/Images/backgroundv2.png);}"));
+"	background-image: url(:/Resources/Images/background.png);}"));
         Lloading = new QLabel(NewProfile);
         Lloading->setObjectName(QStringLiteral("Lloading"));
         Lloading->setGeometry(QRect(370, 80, 61, 61));
-        label = new QLabel(NewProfile);
-        label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(250, 280, 301, 51));
-        label->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+        LHelp = new QLabel(NewProfile);
+        LHelp->setObjectName(QStringLiteral("LHelp"));
+        LHelp->setGeometry(QRect(250, 280, 301, 51));
+        LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)"));
         LUsername = new QLineEdit(NewProfile);
         LUsername->setObjectName(QStringLiteral("LUsername"));
@@ -112,7 +115,7 @@ public:
     {
         NewProfile->setWindowTitle(QApplication::translate("NewProfile", "LeonCam", Q_NULLPTR));
         Lloading->setText(QString());
-        label->setText(QApplication::translate("NewProfile", "<html><head/><body><p align=\"center\">For your protection please, type the <span style=\" font-weight:600; color:#bdf0ff;\">Security Question</span></p><p align=\"center\">and answer.This will help in future verification</p></body></html>", Q_NULLPTR));
+        LHelp->setText(QApplication::translate("NewProfile", "<html><head/><body><p align=\"center\">For your protection please, type the <span style=\" font-weight:600; color:#bdf0ff;\">Security Question</span></p><p align=\"center\">and answer.This will help in future verification</p></body></html>", Q_NULLPTR));
         LUsername->setPlaceholderText(QApplication::translate("NewProfile", "Username", Q_NULLPTR));
         LPassword->setPlaceholderText(QApplication::translate("NewProfile", "Password", Q_NULLPTR));
         LConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm your password", Q_NULLPTR));
