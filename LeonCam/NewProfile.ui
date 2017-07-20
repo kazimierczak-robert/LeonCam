@@ -140,7 +140,12 @@ background-color:rgb(36, 118, 59)</string>
 &lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/Images/bulb.png);</string>
+    <string notr="true">#LTipUsername
+{background-image: url(:/Resources/Images/bulb.png);}
+#LTipUsername:hover
+{
+background-image: url(:/Resources/Images/bulbHover.png);
+}</string>
    </property>
    <property name="text">
     <string/>
@@ -168,7 +173,8 @@ background-color:rgb(36, 118, 59)</string>
 &lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/Images/bulb.png);</string>
+    <string notr="true">#LTipPassword{background-image: url(:/Resources/Images/bulb.png);}
+#LTipPassword:hover{background-image: url(:/Resources/Images/bulbHover.png);}</string>
    </property>
    <property name="text">
     <string/>
@@ -184,8 +190,12 @@ background-color:rgb(36, 118, 59)</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color:rgb(255, 255, 255);
-background-color: rgb(255, 77, 61);</string>
+    <string notr="true">#PBBack{
+color:rgb(255, 255, 255);
+background-color: rgb(255, 77, 61);}
+#PBBack:hover{
+background-color: rgb(255, 87, 58);
+}</string>
    </property>
    <property name="text">
     <string>Back</string>
@@ -201,11 +211,13 @@ background-color: rgb(255, 77, 61);</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59);
-data-balloon=&quot;Whats up!&quot;; data-balloon-pos=&quot;right&quot;;
-
-</string>
+    <string notr="true">#PBCreate{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBCreate:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
    </property>
    <property name="text">
     <string>Create</string>

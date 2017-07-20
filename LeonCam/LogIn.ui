@@ -57,8 +57,13 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)
+     <string notr="true">#PBNewProfile{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBNewProfile:hover
+{
+background-color: rgb(39, 129, 63);
+}
 /*border: none;
 margin: 0px;
 padding: 0px;*/</string>
@@ -112,7 +117,12 @@ padding: 0px;*/</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(35, 167, 255)</string>
+     <string notr="true">#CBRememberMe{color: rgb(35, 167, 255);}
+#CBRememberMe:hover
+{
+	
+	color: rgb(89, 178, 255);
+}</string>
     </property>
     <property name="text">
      <string>Remember me</string>
@@ -128,8 +138,13 @@ padding: 0px;*/</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 69, 104);
-color: rgb(255, 255, 255);</string>
+     <string notr="true">#PBLogIn{
+background-color: rgb(0, 69, 104);
+color: rgb(255, 255, 255);}
+#PBLogIn:hover
+{
+background-color: rgb(0, 77, 116);
+}</string>
     </property>
     <property name="text">
      <string>Log In</string>
@@ -148,10 +163,15 @@ color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 90, 75);
+     <string notr="true">#PBForgotPassword{
+color: rgb(255, 90, 75);
 border: none;
 margin: 0px;
-padding: 0px;</string>
+padding: 0px;}
+#PBForgotPassword:hover
+{
+color: rgb(255, 122, 82);
+}</string>
     </property>
     <property name="text">
      <string>Forgot password?</string>

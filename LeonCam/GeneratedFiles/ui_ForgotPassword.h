@@ -60,8 +60,12 @@ public:
         PBBack = new QPushButton(ForgotPassword);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(250, 420, 61, 23));
-        PBBack->setStyleSheet(QLatin1String("color:rgb(255, 255, 255);\n"
-"background-color: rgb(255, 77, 61);\n"
+        PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
+"color:rgb(255, 255, 255);\n"
+"background-color: rgb(255, 77, 61);}\n"
+"#PBBack:hover{\n"
+"background-color: rgb(255, 87, 58);\n"
+"}\n"
 "/*border: none;\n"
 "margin: 0px;\n"
 "padding: 0px;\n"
@@ -87,8 +91,13 @@ public:
         PBVerify = new QPushButton(ForgotPassword);
         PBVerify->setObjectName(QStringLiteral("PBVerify"));
         PBVerify->setGeometry(QRect(250, 360, 301, 30));
-        PBVerify->setStyleSheet(QLatin1String("background-color: rgb(0, 69, 104);\n"
-"color: rgb(255, 255, 255);"));
+        PBVerify->setStyleSheet(QLatin1String("#PBVerify{\n"
+"background-color: rgb(0, 69, 104);\n"
+"color: rgb(255, 255, 255);}\n"
+"#PBVerify:hover\n"
+"{\n"
+"background-color: rgb(0, 77, 116);\n"
+"}"));
 
         retranslateUi(ForgotPassword);
 

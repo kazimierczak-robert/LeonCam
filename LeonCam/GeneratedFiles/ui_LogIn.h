@@ -59,8 +59,13 @@ public:
         PBNewProfile = new QPushButton(centralWidget);
         PBNewProfile->setObjectName(QStringLiteral("PBNewProfile"));
         PBNewProfile->setGeometry(QRect(480, 420, 71, 23));
-        PBNewProfile->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)\n"
+        PBNewProfile->setStyleSheet(QLatin1String("#PBNewProfile{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBNewProfile:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}\n"
 "/*border: none;\n"
 "margin: 0px;\n"
 "padding: 0px;*/"));
@@ -76,20 +81,35 @@ public:
         CBRememberMe = new QCheckBox(centralWidget);
         CBRememberMe->setObjectName(QStringLiteral("CBRememberMe"));
         CBRememberMe->setGeometry(QRect(250, 260, 261, 21));
-        CBRememberMe->setStyleSheet(QStringLiteral("color: rgb(35, 167, 255)"));
+        CBRememberMe->setStyleSheet(QLatin1String("#CBRememberMe{color: rgb(35, 167, 255);}\n"
+"#CBRememberMe:hover\n"
+"{\n"
+"	\n"
+"	color: rgb(89, 178, 255);\n"
+"}"));
         PBLogIn = new QPushButton(centralWidget);
         PBLogIn->setObjectName(QStringLiteral("PBLogIn"));
         PBLogIn->setGeometry(QRect(250, 290, 301, 30));
-        PBLogIn->setStyleSheet(QLatin1String("background-color: rgb(0, 69, 104);\n"
-"color: rgb(255, 255, 255);"));
+        PBLogIn->setStyleSheet(QLatin1String("#PBLogIn{\n"
+"background-color: rgb(0, 69, 104);\n"
+"color: rgb(255, 255, 255);}\n"
+"#PBLogIn:hover\n"
+"{\n"
+"background-color: rgb(0, 77, 116);\n"
+"}"));
         PBLogIn->setFlat(false);
         PBForgotPassword = new QPushButton(centralWidget);
         PBForgotPassword->setObjectName(QStringLiteral("PBForgotPassword"));
         PBForgotPassword->setGeometry(QRect(250, 330, 101, 16));
-        PBForgotPassword->setStyleSheet(QLatin1String("color: rgb(255, 90, 75);\n"
+        PBForgotPassword->setStyleSheet(QLatin1String("#PBForgotPassword{\n"
+"color: rgb(255, 90, 75);\n"
 "border: none;\n"
 "margin: 0px;\n"
-"padding: 0px;"));
+"padding: 0px;}\n"
+"#PBForgotPassword:hover\n"
+"{\n"
+"color: rgb(255, 122, 82);\n"
+"}"));
         PBForgotPassword->setFlat(true);
         LogInClass->setCentralWidget(centralWidget);
 

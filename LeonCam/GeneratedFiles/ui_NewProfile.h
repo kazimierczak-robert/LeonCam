@@ -72,24 +72,36 @@ public:
         LTipUsername = new QLabel(NewProfile);
         LTipUsername->setObjectName(QStringLiteral("LTipUsername"));
         LTipUsername->setGeometry(QRect(250, 160, 31, 31));
-        LTipUsername->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/bulb.png);"));
+        LTipUsername->setStyleSheet(QLatin1String("#LTipUsername\n"
+"{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipUsername:hover\n"
+"{\n"
+"background-image: url(:/Resources/Images/bulbHover.png);\n"
+"}"));
         LTipPassword = new QLabel(NewProfile);
         LTipPassword->setObjectName(QStringLiteral("LTipPassword"));
         LTipPassword->setGeometry(QRect(250, 200, 31, 31));
-        LTipPassword->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/bulb.png);"));
+        LTipPassword->setStyleSheet(QLatin1String("#LTipPassword{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipPassword:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         PBBack = new QPushButton(NewProfile);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(250, 420, 61, 23));
-        PBBack->setStyleSheet(QLatin1String("color:rgb(255, 255, 255);\n"
-"background-color: rgb(255, 77, 61);"));
+        PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
+"color:rgb(255, 255, 255);\n"
+"background-color: rgb(255, 77, 61);}\n"
+"#PBBack:hover{\n"
+"background-color: rgb(255, 87, 58);\n"
+"}"));
         PBCreate = new QPushButton(NewProfile);
         PBCreate->setObjectName(QStringLiteral("PBCreate"));
         PBCreate->setGeometry(QRect(490, 420, 61, 23));
-        PBCreate->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59);\n"
-"data-balloon=\"Whats up!\"; data-balloon-pos=\"right\";\n"
-"\n"
-""));
+        PBCreate->setStyleSheet(QLatin1String("#PBCreate{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBCreate:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
 
         retranslateUi(NewProfile);
 
