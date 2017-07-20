@@ -31,7 +31,7 @@ public:
     QPushButton *PBNewProfile;
     QLineEdit *LUsername;
     QLineEdit *LPassword;
-    QCheckBox *CBRememberMe;
+    QCheckBox *CBKeepMeLoggedIn;
     QPushButton *PBLogIn;
     QPushButton *PBForgotPassword;
 
@@ -81,11 +81,11 @@ public:
         LPassword->setObjectName(QStringLiteral("LPassword"));
         LPassword->setGeometry(QRect(250, 220, 301, 30));
         LPassword->setEchoMode(QLineEdit::Password);
-        CBRememberMe = new QCheckBox(centralWidget);
-        CBRememberMe->setObjectName(QStringLiteral("CBRememberMe"));
-        CBRememberMe->setGeometry(QRect(250, 260, 261, 21));
-        CBRememberMe->setStyleSheet(QLatin1String("#CBRememberMe{color: rgb(35, 167, 255);}\n"
-"#CBRememberMe:hover\n"
+        CBKeepMeLoggedIn = new QCheckBox(centralWidget);
+        CBKeepMeLoggedIn->setObjectName(QStringLiteral("CBKeepMeLoggedIn"));
+        CBKeepMeLoggedIn->setGeometry(QRect(250, 260, 261, 21));
+        CBKeepMeLoggedIn->setStyleSheet(QLatin1String("#CBKeepMeLoggedIn{color: rgb(35, 167, 255);}\n"
+"#CBKeepMeLoggedIn:hover\n"
 "{\n"
 "	\n"
 "	color: rgb(89, 178, 255);\n"
@@ -128,7 +128,7 @@ public:
         PBNewProfile->setText(QApplication::translate("LogInClass", "New profile", Q_NULLPTR));
         LUsername->setPlaceholderText(QApplication::translate("LogInClass", "Username", Q_NULLPTR));
         LPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
-        CBRememberMe->setText(QApplication::translate("LogInClass", "Remember me", Q_NULLPTR));
+        CBKeepMeLoggedIn->setText(QApplication::translate("LogInClass", "Keep me logged in", Q_NULLPTR));
         PBLogIn->setText(QApplication::translate("LogInClass", "Log In", Q_NULLPTR));
         PBForgotPassword->setText(QApplication::translate("LogInClass", "Forgot password?", Q_NULLPTR));
     } // retranslateUi

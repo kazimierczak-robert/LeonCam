@@ -111,7 +111,7 @@ padding: 0px;*/</string>
      <string>Password</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="CBRememberMe">
+   <widget class="QCheckBox" name="CBKeepMeLoggedIn">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -121,15 +121,15 @@ padding: 0px;*/</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">#CBRememberMe{color: rgb(35, 167, 255);}
-#CBRememberMe:hover
+     <string notr="true">#CBKeepMeLoggedIn{color: rgb(35, 167, 255);}
+#CBKeepMeLoggedIn:hover
 {
 	
 	color: rgb(89, 178, 255);
 }</string>
     </property>
     <property name="text">
-     <string>Remember me</string>
+     <string>Keep me logged in</string>
     </property>
    </widget>
    <widget class="QPushButton" name="PBLogIn">
