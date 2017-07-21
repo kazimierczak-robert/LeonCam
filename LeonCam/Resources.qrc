@@ -9,5 +9,15 @@
         <file>Resources/Images/unavailable.png</file>
         <file>Resources/Images/unavailablePreview.png</file>
         <file>Resources/Images/logo.ico</file>
+        <file>Resources/Images/home.png</file>
+        <file>Resources/Images/homeHover.png</file>
+        <file>Resources/Images/up.png</file>
+        <file>Resources/Images/upHover.png</file>
+        <file>Resources/Images/down.png</file>
+        <file>Resources/Images/downHover.png</file>
+        <file>Resources/Images/left.png</file>
+        <file>Resources/Images/leftHover.png</file>
+        <file>Resources/Images/right.png</file>
+        <file>Resources/Images/rightHover.png</file>
     </qresource>
 </RCC>

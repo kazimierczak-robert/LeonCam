@@ -14,11 +14,12 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -27,15 +28,16 @@ class Ui_MainApp
 {
 public:
     QWidget *centralWidget;
-    QTabWidget *tabWidget;
-    QWidget *camerasTab;
-    QPushButton *newCameraButton;
-    QTextBrowser *textBrowser;
-    QTableWidget *camerasTable;
-    QWidget *peopleBaseTab;
-    QWidget *reportsTab;
-    QWidget *settingsTab;
-    QPushButton *logOutButton;
+    QTabWidget *TWMenu;
+    QWidget *TCameras;
+    QPushButton *PBNewCamera;
+    QTextEdit *TESearch;
+    QTableWidget *TLWCameras;
+    QLabel *LTotalNumber;
+    QLabel *LEnabledNumber;
+    QWidget *TFacesBase;
+    QWidget *TReports;
+    QWidget *TSettings;
 
     void setupUi(QMainWindow *MainApp)
     {
@@ -44,6 +46,9 @@ public:
         MainApp->resize(800, 500);
         MainApp->setMinimumSize(QSize(800, 500));
         MainApp->setMaximumSize(QSize(800, 500));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        MainApp->setWindowIcon(icon);
         MainApp->setStyleSheet(QLatin1String("#centralWidget\n"
 "{\n"
 "	background-image: url(:/Resources/Images/backgroundMain.png);\n"
@@ -54,118 +59,135 @@ public:
 ""));
         centralWidget = new QWidget(MainApp);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        tabWidget = new QTabWidget(centralWidget);
-        tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(30, 20, 740, 461));
-        tabWidget->setFocusPolicy(Qt::TabFocus);
-        tabWidget->setContextMenuPolicy(Qt::DefaultContextMenu);
-        tabWidget->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
+        TWMenu = new QTabWidget(centralWidget);
+        TWMenu->setObjectName(QStringLiteral("TWMenu"));
+        TWMenu->setGeometry(QRect(30, 20, 740, 461));
+        TWMenu->setFocusPolicy(Qt::TabFocus);
+        TWMenu->setContextMenuPolicy(Qt::DefaultContextMenu);
+        TWMenu->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
 "border: 0px;\n"
 "}\n"
 "\n"
 "QTabBar::tab {\n"
 "background-color: transparent;\n"
-"color: rgb(138, 138, 207);\n"
+"/*color: rgb(0, 69, 104);*/\n"
+"color: rgb(116, 145, 206);\n"
 "height: 32px;\n"
-"font: 20pt \"Nirmala UI\";\n"
-"width: 178px;\n"
+"font: 18pt \"Nirmala UI\";\n"
+"width: 185px;\n"
 "}\n"
 "\n"
 "QTabBar::tab:hover{\n"
-"color: rgb(185, 185, 185);\n"
+"/*color: rgb(185, 185, 185);*/\n"
+"	color: rgb(134, 164, 245);\n"
 "}\n"
 "\n"
 "QTabBar::tab:selected{\n"
 "margin-top: 1px;\n"
-"color: rgb(233, 233, 233);\n"
+"	color: rgb(144, 174, 255);\n"
 "}\n"
 ""));
-        tabWidget->setTabPosition(QTabWidget::North);
-        tabWidget->setTabShape(QTabWidget::Rounded);
-        tabWidget->setElideMode(Qt::ElideNone);
-        tabWidget->setUsesScrollButtons(false);
-        camerasTab = new QWidget();
-        camerasTab->setObjectName(QStringLiteral("camerasTab"));
-        camerasTab->setStyleSheet(QStringLiteral("background-color: transparent"));
-        newCameraButton = new QPushButton(camerasTab);
-        newCameraButton->setObjectName(QStringLiteral("newCameraButton"));
-        newCameraButton->setGeometry(QRect(602, 20, 120, 30));
-        newCameraButton->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
-        textBrowser = new QTextBrowser(camerasTab);
-        textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(20, 20, 560, 30));
-        camerasTable = new QTableWidget(camerasTab);
-        if (camerasTable->columnCount() < 8)
-            camerasTable->setColumnCount(8);
+        TWMenu->setTabPosition(QTabWidget::North);
+        TWMenu->setTabShape(QTabWidget::Rounded);
+        TWMenu->setElideMode(Qt::ElideNone);
+        TWMenu->setUsesScrollButtons(false);
+        TCameras = new QWidget();
+        TCameras->setObjectName(QStringLiteral("TCameras"));
+        TCameras->setStyleSheet(QStringLiteral("background-color: transparent"));
+        PBNewCamera = new QPushButton(TCameras);
+        PBNewCamera->setObjectName(QStringLiteral("PBNewCamera"));
+        PBNewCamera->setGeometry(QRect(610, 390, 111, 23));
+        PBNewCamera->setStyleSheet(QLatin1String("#PBNewCamera{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBNewCamera:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
+        TESearch = new QTextEdit(TCameras);
+        TESearch->setObjectName(QStringLiteral("TESearch"));
+        TESearch->setGeometry(QRect(20, 20, 701, 23));
+        TESearch->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        TLWCameras = new QTableWidget(TCameras);
+        if (TLWCameras->columnCount() < 8)
+            TLWCameras->setColumnCount(8);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         __qtablewidgetitem->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        TLWCameras->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         __qtablewidgetitem1->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        TLWCameras->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        camerasTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        TLWCameras->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         __qtablewidgetitem3->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        camerasTable->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        TLWCameras->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
         __qtablewidgetitem4->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        TLWCameras->setHorizontalHeaderItem(4, __qtablewidgetitem4);
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         __qtablewidgetitem5->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        TLWCameras->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
         __qtablewidgetitem6->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        TLWCameras->setHorizontalHeaderItem(6, __qtablewidgetitem6);
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
         __qtablewidgetitem7->setTextAlignment(Qt::AlignCenter);
-        camerasTable->setHorizontalHeaderItem(7, __qtablewidgetitem7);
-        camerasTable->setObjectName(QStringLiteral("camerasTable"));
-        camerasTable->setGeometry(QRect(20, 70, 700, 340));
-        camerasTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        camerasTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        camerasTable->setEditTriggers(QAbstractItemView::DoubleClicked);
-        camerasTable->setDragDropOverwriteMode(false);
-        camerasTable->setSelectionMode(QAbstractItemView::SingleSelection);
-        camerasTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-        camerasTable->setShowGrid(true);
-        camerasTable->setGridStyle(Qt::DashLine);
-        camerasTable->setWordWrap(true);
-        camerasTable->setCornerButtonEnabled(true);
-        camerasTable->setRowCount(0);
-        camerasTable->setColumnCount(8);
-        camerasTable->horizontalHeader()->setVisible(false);
-        camerasTable->horizontalHeader()->setCascadingSectionResizes(false);
-        camerasTable->horizontalHeader()->setDefaultSectionSize(85);
-        camerasTable->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
-        camerasTable->horizontalHeader()->setStretchLastSection(false);
-        camerasTable->verticalHeader()->setVisible(false);
-        camerasTable->verticalHeader()->setDefaultSectionSize(50);
-        camerasTable->verticalHeader()->setStretchLastSection(false);
-        tabWidget->addTab(camerasTab, QString());
-        peopleBaseTab = new QWidget();
-        peopleBaseTab->setObjectName(QStringLiteral("peopleBaseTab"));
-        peopleBaseTab->setStyleSheet(QStringLiteral("background-color: transparent;"));
-        tabWidget->addTab(peopleBaseTab, QString());
-        reportsTab = new QWidget();
-        reportsTab->setObjectName(QStringLiteral("reportsTab"));
-        reportsTab->setStyleSheet(QStringLiteral("background-color: transparent;"));
-        tabWidget->addTab(reportsTab, QString());
-        settingsTab = new QWidget();
-        settingsTab->setObjectName(QStringLiteral("settingsTab"));
-        settingsTab->setStyleSheet(QStringLiteral("background-color: transparent;"));
-        tabWidget->addTab(settingsTab, QString());
-        logOutButton = new QPushButton(centralWidget);
-        logOutButton->setObjectName(QStringLiteral("logOutButton"));
-        logOutButton->setGeometry(QRect(740, 25, 30, 30));
-        logOutButton->setStyleSheet(QLatin1String("color:rgb(255, 255, 255);\n"
-"background-color: rgb(255, 77, 61);"));
+        TLWCameras->setHorizontalHeaderItem(7, __qtablewidgetitem7);
+        TLWCameras->setObjectName(QStringLiteral("TLWCameras"));
+        TLWCameras->setGeometry(QRect(20, 50, 700, 321));
+        TLWCameras->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        TLWCameras->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        TLWCameras->setEditTriggers(QAbstractItemView::DoubleClicked);
+        TLWCameras->setDragDropOverwriteMode(false);
+        TLWCameras->setSelectionMode(QAbstractItemView::SingleSelection);
+        TLWCameras->setSelectionBehavior(QAbstractItemView::SelectRows);
+        TLWCameras->setShowGrid(true);
+        TLWCameras->setGridStyle(Qt::DashLine);
+        TLWCameras->setWordWrap(true);
+        TLWCameras->setCornerButtonEnabled(true);
+        TLWCameras->setRowCount(0);
+        TLWCameras->setColumnCount(8);
+        TLWCameras->horizontalHeader()->setVisible(false);
+        TLWCameras->horizontalHeader()->setCascadingSectionResizes(false);
+        TLWCameras->horizontalHeader()->setDefaultSectionSize(85);
+        TLWCameras->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
+        TLWCameras->horizontalHeader()->setStretchLastSection(false);
+        TLWCameras->verticalHeader()->setVisible(false);
+        TLWCameras->verticalHeader()->setDefaultSectionSize(50);
+        TLWCameras->verticalHeader()->setStretchLastSection(false);
+        LTotalNumber = new QLabel(TCameras);
+        LTotalNumber->setObjectName(QStringLiteral("LTotalNumber"));
+        LTotalNumber->setGeometry(QRect(20, 388, 201, 23));
+        LTotalNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: transparent;"));
+        LTotalNumber->setFrameShape(QFrame::NoFrame);
+        LTotalNumber->setIndent(8);
+        LEnabledNumber = new QLabel(TCameras);
+        LEnabledNumber->setObjectName(QStringLiteral("LEnabledNumber"));
+        LEnabledNumber->setGeometry(QRect(290, 388, 221, 23));
+        LEnabledNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: transparent;"));
+        LEnabledNumber->setFrameShape(QFrame::NoFrame);
+        LEnabledNumber->setIndent(8);
+        TWMenu->addTab(TCameras, QString());
+        TFacesBase = new QWidget();
+        TFacesBase->setObjectName(QStringLiteral("TFacesBase"));
+        TFacesBase->setStyleSheet(QStringLiteral("background-color: transparent;"));
+        TWMenu->addTab(TFacesBase, QString());
+        TReports = new QWidget();
+        TReports->setObjectName(QStringLiteral("TReports"));
+        TReports->setStyleSheet(QStringLiteral("background-color: transparent;"));
+        TWMenu->addTab(TReports, QString());
+        TSettings = new QWidget();
+        TSettings->setObjectName(QStringLiteral("TSettings"));
+        TSettings->setStyleSheet(QStringLiteral("background-color: transparent;"));
+        TWMenu->addTab(TSettings, QString());
         MainApp->setCentralWidget(centralWidget);
 
         retranslateUi(MainApp);
 
-        tabWidget->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainApp);
@@ -174,28 +196,30 @@ public:
     void retranslateUi(QMainWindow *MainApp)
     {
         MainApp->setWindowTitle(QApplication::translate("MainApp", "LeonCam", Q_NULLPTR));
-        newCameraButton->setText(QApplication::translate("MainApp", "Add New Camera", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem = camerasTable->horizontalHeaderItem(0);
+        PBNewCamera->setText(QApplication::translate("MainApp", "Add New Camera", Q_NULLPTR));
+        TESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem = TLWCameras->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainApp", "isRunning", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem1 = camerasTable->horizontalHeaderItem(1);
+        QTableWidgetItem *___qtablewidgetitem1 = TLWCameras->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("MainApp", "Preview", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem2 = camerasTable->horizontalHeaderItem(2);
+        QTableWidgetItem *___qtablewidgetitem2 = TLWCameras->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem3 = camerasTable->horizontalHeaderItem(3);
+        QTableWidgetItem *___qtablewidgetitem3 = TLWCameras->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Model", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem4 = camerasTable->horizontalHeaderItem(4);
+        QTableWidgetItem *___qtablewidgetitem4 = TLWCameras->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Patrol", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem5 = camerasTable->horizontalHeaderItem(5);
+        QTableWidgetItem *___qtablewidgetitem5 = TLWCameras->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QApplication::translate("MainApp", "Recognation", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem6 = camerasTable->horizontalHeaderItem(6);
+        QTableWidgetItem *___qtablewidgetitem6 = TLWCameras->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem7 = camerasTable->horizontalHeaderItem(7);
+        QTableWidgetItem *___qtablewidgetitem7 = TLWCameras->horizontalHeaderItem(7);
         ___qtablewidgetitem7->setText(QApplication::translate("MainApp", "Remove", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(camerasTab), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(peopleBaseTab), QApplication::translate("MainApp", "PEOPLE BASE", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(reportsTab), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(settingsTab), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
-        logOutButton->setText(QString());
+        LTotalNumber->setText(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Total number of cameras: 0</span></p></body></html>", Q_NULLPTR));
+        LEnabledNumber->setText(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Number of enabled cameras: 0 </span></p></body></html>", Q_NULLPTR));
+        TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
+        TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
+        TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
+        TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
     } // retranslateUi
 
 };

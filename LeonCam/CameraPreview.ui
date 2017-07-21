@@ -25,13 +25,17 @@
   <property name="windowTitle">
    <string>LeonCam</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Resources.qrc">
+    <normaloff>:/Resources/Images/logo.ico</normaloff>:/Resources/Images/logo.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">#CameraPreview
 {
 	background-image: url(:/Resources/Images/backgroundMain.png);
 }</string>
   </property>
-  <widget class="QLabel" name="isAvailable">
+  <widget class="QLabel" name="LIsAvailable">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -47,7 +51,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="cameraDetailsLabel">
+  <widget class="QLabel" name="LCameraDetails">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -60,11 +64,11 @@
     <string>Camera details</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="patrolButton">
+  <widget class="QPushButton" name="PBPatrol">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>420</y>
+     <x>530</x>
+     <y>410</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -73,11 +77,11 @@
     <string>Patrol</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="recognizeButton">
+  <widget class="QPushButton" name="PBRecognize">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>420</y>
+     <x>580</x>
+     <y>410</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -86,11 +90,11 @@
     <string>Recognize</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="editButton">
+  <widget class="QPushButton" name="PBEdit">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>420</y>
+     <x>630</x>
+     <y>410</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -99,11 +103,11 @@
     <string>Edit</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="snapshotButton">
+  <widget class="QPushButton" name="PBSnapshot">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>420</y>
+     <x>680</x>
+     <y>410</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -112,7 +116,7 @@
     <string>Snapshot</string>
    </property>
   </widget>
-  <widget class="QLabel" name="previewScreen">
+  <widget class="QLabel" name="LPreviewScreen">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -131,7 +135,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="backButton">
+  <widget class="QPushButton" name="PBBack">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -141,14 +145,14 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">#backButton{
+    <string notr="true">#PBBack{
 	font: 30pt &quot;Kristen ITC&quot;;
 letter-spacing:12px;
 background-color: transparent;
 color: rgb(138, 138, 207);
 }
 
-#backButton:hover{
+#PBBack:hover{
 color: rgb(233, 233, 233);
 }</string>
    </property>
@@ -156,7 +160,7 @@ color: rgb(233, 233, 233);
     <string>&lt;&lt;</string>
    </property>
   </widget>
-  <widget class="QLabel" name="detectedPeopleLabel">
+  <widget class="QLabel" name="LDetectedPeople">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -169,75 +173,161 @@ color: rgb(233, 233, 233);
     <string>Number of detected people: 0</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="homeButton">
+  <widget class="QPushButton" name="PBHome">
    <property name="geometry">
     <rect>
-     <x>660</x>
-     <y>420</y>
+     <x>650</x>
+     <y>310</y>
      <width>40</width>
      <height>40</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Home</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="upButton">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>390</y>
-     <width>40</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Up</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="rightButton">
-   <property name="geometry">
-    <rect>
-     <x>700</x>
-     <y>420</y>
-     <width>30</width>
-     <height>40</height>
-    </rect>
+   <property name="styleSheet">
+    <string notr="true">#PBHome{
+background-image: url(:/Resources/Images/home.png);
+border: none;
+margin: 0px;
+padding: 0px;
+}
+
+#PBHome:hover{
+background-image: url(:/Resources/Images/homeHover.png);
+}</string>
    </property>
    <property name="text">
-    <string>Right</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="downButton">
+  <widget class="QPushButton" name="PBUp">
    <property name="geometry">
     <rect>
-     <x>660</x>
-     <y>460</y>
+     <x>650</x>
+     <y>280</y>
      <width>40</width>
      <height>30</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">#PBUp {
+background-image: url(:/Resources/Images/up.png);
+border: none;
+margin: 0px;
+padding: 0px;}
+#PBUp:hover{
+background-image: url(:/Resources/Images/upHover.png);}</string>
+   </property>
    <property name="text">
-    <string>Down</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="leftButton">
+  <widget class="QPushButton" name="PBRight">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>420</y>
+     <x>690</x>
+     <y>310</y>
      <width>30</width>
      <height>40</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">#PBRight {
+background-image: url(:/Resources/Images/right.png);
+border: none;
+margin: 0px;
+padding: 0px;}
+#PBRight:hover{
+background-image: url(:/Resources/Images/rightHover.png);}</string>
+   </property>
    <property name="text">
-    <string>Left</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBDown">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>350</y>
+     <width>40</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PBDown {
+background-image: url(:/Resources/Images/down.png);
+border: none;
+margin: 0px;
+padding: 0px;}
+#PBDown:hover{
+background-image: url(:/Resources/Images/downHover.png);}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBLeft">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>310</y>
+     <width>30</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PBLeft {
+background-image: url(:/Resources/Images/left.png);
+border: none;
+margin: 0px;
+padding: 0px;}
+#PBLeft:hover{
+background-image: url(:/Resources/Images/leftHover.png);}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBSavePreset">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>410</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="CBPresets">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>420</y>
+     <width>131</width>
+     <height>21</height>
+    </rect>
    </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="LogIn.qrc"/>
+  <include location="Resources.qrc"/>
  </resources>
  <connections/>
 </ui>

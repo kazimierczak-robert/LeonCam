@@ -69,9 +69,6 @@
     <ClCompile Include="NewProfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_LogIn.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainApp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -90,6 +87,9 @@
     <ClCompile Include="CameraPreview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -97,9 +97,6 @@
     </CustomBuild>
     <CustomBuild Include="LogIn.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="LogIn.qrc">
-      <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ForgotPassword.h">
       <Filter>Header Files</Filter>
@@ -127,6 +124,9 @@
     </CustomBuild>
     <CustomBuild Include="CameraPreview.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resources.qrc">
+      <Filter>Resource Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

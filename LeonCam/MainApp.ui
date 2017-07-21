@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>LeonCam</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Resources.qrc">
+    <normaloff>:/Resources/Images/logo.ico</normaloff>:/Resources/Images/logo.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">#centralWidget
 {
@@ -36,7 +40,7 @@
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="TWMenu">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -58,19 +62,21 @@ border: 0px;
 
 QTabBar::tab {
 background-color: transparent;
-color: rgb(138, 138, 207);
+/*color: rgb(0, 69, 104);*/
+color: rgb(116, 145, 206);
 height: 32px;
-font: 20pt &quot;Nirmala UI&quot;;
-width: 178px;
+font: 18pt &quot;Nirmala UI&quot;;
+width: 185px;
 }
 
 QTabBar::tab:hover{
-color: rgb(185, 185, 185);
+/*color: rgb(185, 185, 185);*/
+	color: rgb(134, 164, 245);
 }
 
 QTabBar::tab:selected{
 margin-top: 1px;
-color: rgb(233, 233, 233);
+	color: rgb(144, 174, 255);
 }
 </string>
     </property>
@@ -89,47 +95,58 @@ color: rgb(233, 233, 233);
     <property name="usesScrollButtons">
      <bool>false</bool>
     </property>
-    <widget class="QWidget" name="camerasTab">
+    <widget class="QWidget" name="TCameras">
      <property name="styleSheet">
       <string notr="true">background-color: transparent</string>
      </property>
      <attribute name="title">
       <string>CAMERAS</string>
      </attribute>
-     <widget class="QPushButton" name="newCameraButton">
+     <widget class="QPushButton" name="PBNewCamera">
       <property name="geometry">
        <rect>
-        <x>602</x>
-        <y>20</y>
-        <width>120</width>
-        <height>30</height>
+        <x>610</x>
+        <y>390</y>
+        <width>111</width>
+        <height>23</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+       <string notr="true">#PBNewCamera{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBNewCamera:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
       </property>
       <property name="text">
        <string>Add New Camera</string>
       </property>
      </widget>
-     <widget class="QTextBrowser" name="textBrowser">
+     <widget class="QTextEdit" name="TESearch">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>560</width>
-        <height>30</height>
+        <width>701</width>
+        <height>23</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Search camera</string>
+      </property>
      </widget>
-     <widget class="QTableWidget" name="camerasTable">
+     <widget class="QTableWidget" name="TLWCameras">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>70</y>
+        <y>50</y>
         <width>700</width>
-        <height>340</height>
+        <height>321</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -254,16 +271,62 @@ background-color:rgb(36, 118, 59)</string>
        </property>
       </column>
      </widget>
+     <widget class="QLabel" name="LTotalNumber">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>388</y>
+        <width>201</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color: transparent;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Total number of cameras: 0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="indent">
+       <number>8</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="LEnabledNumber">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>388</y>
+        <width>221</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color: transparent;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Number of enabled cameras: 0 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="indent">
+       <number>8</number>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="peopleBaseTab">
+    <widget class="QWidget" name="TFacesBase">
      <property name="styleSheet">
       <string notr="true">background-color: transparent;</string>
      </property>
      <attribute name="title">
-      <string>PEOPLE BASE</string>
+      <string>FACES BASE</string>
      </attribute>
     </widget>
-    <widget class="QWidget" name="reportsTab">
+    <widget class="QWidget" name="TReports">
      <property name="styleSheet">
       <string notr="true">background-color: transparent;</string>
      </property>
@@ -271,7 +334,7 @@ background-color:rgb(36, 118, 59)</string>
       <string>   REPORTS</string>
      </attribute>
     </widget>
-    <widget class="QWidget" name="settingsTab">
+    <widget class="QWidget" name="TSettings">
      <property name="styleSheet">
       <string notr="true">background-color: transparent;</string>
      </property>
@@ -280,28 +343,11 @@ background-color:rgb(36, 118, 59)</string>
      </attribute>
     </widget>
    </widget>
-   <widget class="QPushButton" name="logOutButton">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>25</y>
-      <width>30</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:rgb(255, 255, 255);
-background-color: rgb(255, 77, 61);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="LogIn.qrc"/>
+  <include location="Resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -89,7 +89,7 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_NewProfile.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_LogIn.cpp">
+    <ClCompile Include="GeneratedFiles\qrc_Resources.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -202,12 +202,12 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="LogIn.qrc">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+    <CustomBuild Include="Resources.qrc">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath);.\Resources\Images\background.png;.\Resources\Images\bulb.png;.\Resources\Images\bulbHover.png;.\Resources\loading4.gif;.\Resources\Images\backgroundMain.png;.\Resources\Images\available.png;.\Resources\Images\unavailable.png;.\Resources\Images\unavailablePreview.png;.\Resources\Images\logo.ico;.\Resources\Images\home.png;.\Resources\Images\homeHover.png;.\Resources\Images\up.png;.\Resources\Images\upHover.png;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rcc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath);.\Resources\Images\background.png;.\Resources\Images\bulb.png;.\Resources\Images\bulbHover.png;.\Resources\loading4.gif;.\Resources\Images\backgroundMain.png;.\Resources\Images\available.png;.\Resources\Images\unavailable.png;.\Resources\Images\unavailablePreview.png;.\Resources\Images\logo.ico;.\Resources\Images\home.png;.\Resources\Images\homeHover.png;.\Resources\Images\up.png;.\Resources\Images\upHover.png;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rcc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>

@@ -14,4 +14,5 @@ private slots:
 	void BackButtonClicked();
 private:
 	Ui::CameraPreview ui;
+	//void SetArrowPictureInButton(QPushButton* button, int rotationDegree);
 };

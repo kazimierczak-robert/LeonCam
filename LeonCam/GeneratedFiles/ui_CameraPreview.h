@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -23,20 +24,22 @@ QT_BEGIN_NAMESPACE
 class Ui_CameraPreview
 {
 public:
-    QLabel *isAvailable;
-    QLabel *cameraDetailsLabel;
-    QPushButton *patrolButton;
-    QPushButton *recognizeButton;
-    QPushButton *editButton;
-    QPushButton *snapshotButton;
-    QLabel *previewScreen;
-    QPushButton *backButton;
-    QLabel *detectedPeopleLabel;
-    QPushButton *homeButton;
-    QPushButton *upButton;
-    QPushButton *rightButton;
-    QPushButton *downButton;
-    QPushButton *leftButton;
+    QLabel *LIsAvailable;
+    QLabel *LCameraDetails;
+    QPushButton *PBPatrol;
+    QPushButton *PBRecognize;
+    QPushButton *PBEdit;
+    QPushButton *PBSnapshot;
+    QLabel *LPreviewScreen;
+    QPushButton *PBBack;
+    QLabel *LDetectedPeople;
+    QPushButton *PBHome;
+    QPushButton *PBUp;
+    QPushButton *PBRight;
+    QPushButton *PBDown;
+    QPushButton *PBLeft;
+    QPushButton *PBSavePreset;
+    QComboBox *CBPresets;
 
     void setupUi(QDialog *CameraPreview)
     {
@@ -45,65 +48,117 @@ public:
         CameraPreview->resize(800, 500);
         CameraPreview->setMinimumSize(QSize(800, 500));
         CameraPreview->setMaximumSize(QSize(800, 500));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        CameraPreview->setWindowIcon(icon);
         CameraPreview->setStyleSheet(QLatin1String("#CameraPreview\n"
 "{\n"
 "	background-image: url(:/Resources/Images/backgroundMain.png);\n"
 "}"));
-        isAvailable = new QLabel(CameraPreview);
-        isAvailable->setObjectName(QStringLiteral("isAvailable"));
-        isAvailable->setGeometry(QRect(80, 430, 10, 10));
-        isAvailable->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/unavailable.png);"));
-        cameraDetailsLabel = new QLabel(CameraPreview);
-        cameraDetailsLabel->setObjectName(QStringLiteral("cameraDetailsLabel"));
-        cameraDetailsLabel->setGeometry(QRect(100, 427, 101, 16));
-        patrolButton = new QPushButton(CameraPreview);
-        patrolButton->setObjectName(QStringLiteral("patrolButton"));
-        patrolButton->setGeometry(QRect(420, 420, 40, 40));
-        recognizeButton = new QPushButton(CameraPreview);
-        recognizeButton->setObjectName(QStringLiteral("recognizeButton"));
-        recognizeButton->setGeometry(QRect(470, 420, 40, 40));
-        editButton = new QPushButton(CameraPreview);
-        editButton->setObjectName(QStringLiteral("editButton"));
-        editButton->setGeometry(QRect(520, 420, 40, 40));
-        snapshotButton = new QPushButton(CameraPreview);
-        snapshotButton->setObjectName(QStringLiteral("snapshotButton"));
-        snapshotButton->setGeometry(QRect(570, 420, 40, 40));
-        previewScreen = new QLabel(CameraPreview);
-        previewScreen->setObjectName(QStringLiteral("previewScreen"));
-        previewScreen->setGeometry(QRect(80, 20, 640, 360));
-        previewScreen->setFrameShape(QFrame::Box);
-        previewScreen->setAlignment(Qt::AlignCenter);
-        backButton = new QPushButton(CameraPreview);
-        backButton->setObjectName(QStringLiteral("backButton"));
-        backButton->setGeometry(QRect(0, 225, 40, 50));
-        backButton->setStyleSheet(QLatin1String("#backButton{\n"
+        LIsAvailable = new QLabel(CameraPreview);
+        LIsAvailable->setObjectName(QStringLiteral("LIsAvailable"));
+        LIsAvailable->setGeometry(QRect(80, 430, 10, 10));
+        LIsAvailable->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/unavailable.png);"));
+        LCameraDetails = new QLabel(CameraPreview);
+        LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
+        LCameraDetails->setGeometry(QRect(100, 427, 101, 16));
+        PBPatrol = new QPushButton(CameraPreview);
+        PBPatrol->setObjectName(QStringLiteral("PBPatrol"));
+        PBPatrol->setGeometry(QRect(530, 410, 40, 40));
+        PBRecognize = new QPushButton(CameraPreview);
+        PBRecognize->setObjectName(QStringLiteral("PBRecognize"));
+        PBRecognize->setGeometry(QRect(580, 410, 40, 40));
+        PBEdit = new QPushButton(CameraPreview);
+        PBEdit->setObjectName(QStringLiteral("PBEdit"));
+        PBEdit->setGeometry(QRect(630, 410, 40, 40));
+        PBSnapshot = new QPushButton(CameraPreview);
+        PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
+        PBSnapshot->setGeometry(QRect(680, 410, 40, 40));
+        LPreviewScreen = new QLabel(CameraPreview);
+        LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
+        LPreviewScreen->setGeometry(QRect(80, 20, 640, 360));
+        LPreviewScreen->setFrameShape(QFrame::Box);
+        LPreviewScreen->setAlignment(Qt::AlignCenter);
+        PBBack = new QPushButton(CameraPreview);
+        PBBack->setObjectName(QStringLiteral("PBBack"));
+        PBBack->setGeometry(QRect(0, 225, 40, 50));
+        PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
 "	font: 30pt \"Kristen ITC\";\n"
 "letter-spacing:12px;\n"
 "background-color: transparent;\n"
 "color: rgb(138, 138, 207);\n"
 "}\n"
 "\n"
-"#backButton:hover{\n"
+"#PBBack:hover{\n"
 "color: rgb(233, 233, 233);\n"
 "}"));
-        detectedPeopleLabel = new QLabel(CameraPreview);
-        detectedPeopleLabel->setObjectName(QStringLiteral("detectedPeopleLabel"));
-        detectedPeopleLabel->setGeometry(QRect(80, 450, 191, 16));
-        homeButton = new QPushButton(CameraPreview);
-        homeButton->setObjectName(QStringLiteral("homeButton"));
-        homeButton->setGeometry(QRect(660, 420, 40, 40));
-        upButton = new QPushButton(CameraPreview);
-        upButton->setObjectName(QStringLiteral("upButton"));
-        upButton->setGeometry(QRect(660, 390, 40, 30));
-        rightButton = new QPushButton(CameraPreview);
-        rightButton->setObjectName(QStringLiteral("rightButton"));
-        rightButton->setGeometry(QRect(700, 420, 30, 40));
-        downButton = new QPushButton(CameraPreview);
-        downButton->setObjectName(QStringLiteral("downButton"));
-        downButton->setGeometry(QRect(660, 460, 40, 30));
-        leftButton = new QPushButton(CameraPreview);
-        leftButton->setObjectName(QStringLiteral("leftButton"));
-        leftButton->setGeometry(QRect(630, 420, 30, 40));
+        LDetectedPeople = new QLabel(CameraPreview);
+        LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
+        LDetectedPeople->setGeometry(QRect(80, 450, 191, 16));
+        PBHome = new QPushButton(CameraPreview);
+        PBHome->setObjectName(QStringLiteral("PBHome"));
+        PBHome->setGeometry(QRect(650, 310, 40, 40));
+        PBHome->setStyleSheet(QLatin1String("#PBHome{\n"
+"background-image: url(:/Resources/Images/home.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;\n"
+"}\n"
+"\n"
+"#PBHome:hover{\n"
+"background-image: url(:/Resources/Images/homeHover.png);\n"
+"}"));
+        PBHome->setFlat(true);
+        PBUp = new QPushButton(CameraPreview);
+        PBUp->setObjectName(QStringLiteral("PBUp"));
+        PBUp->setGeometry(QRect(650, 280, 40, 30));
+        PBUp->setStyleSheet(QLatin1String("#PBUp {\n"
+"background-image: url(:/Resources/Images/up.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;}\n"
+"#PBUp:hover{\n"
+"background-image: url(:/Resources/Images/upHover.png);}"));
+        PBUp->setFlat(true);
+        PBRight = new QPushButton(CameraPreview);
+        PBRight->setObjectName(QStringLiteral("PBRight"));
+        PBRight->setGeometry(QRect(690, 310, 30, 40));
+        PBRight->setStyleSheet(QLatin1String("#PBRight {\n"
+"background-image: url(:/Resources/Images/right.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;}\n"
+"#PBRight:hover{\n"
+"background-image: url(:/Resources/Images/rightHover.png);}"));
+        PBRight->setFlat(true);
+        PBDown = new QPushButton(CameraPreview);
+        PBDown->setObjectName(QStringLiteral("PBDown"));
+        PBDown->setGeometry(QRect(650, 350, 40, 30));
+        PBDown->setStyleSheet(QLatin1String("#PBDown {\n"
+"background-image: url(:/Resources/Images/down.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;}\n"
+"#PBDown:hover{\n"
+"background-image: url(:/Resources/Images/downHover.png);}"));
+        PBDown->setFlat(true);
+        PBLeft = new QPushButton(CameraPreview);
+        PBLeft->setObjectName(QStringLiteral("PBLeft"));
+        PBLeft->setGeometry(QRect(620, 310, 30, 40));
+        PBLeft->setStyleSheet(QLatin1String("#PBLeft {\n"
+"background-image: url(:/Resources/Images/left.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;}\n"
+"#PBLeft:hover{\n"
+"background-image: url(:/Resources/Images/leftHover.png);}"));
+        PBLeft->setFlat(true);
+        PBSavePreset = new QPushButton(CameraPreview);
+        PBSavePreset->setObjectName(QStringLiteral("PBSavePreset"));
+        PBSavePreset->setGeometry(QRect(480, 410, 41, 41));
+        CBPresets = new QComboBox(CameraPreview);
+        CBPresets->setObjectName(QStringLiteral("CBPresets"));
+        CBPresets->setGeometry(QRect(330, 420, 131, 21));
 
         retranslateUi(CameraPreview);
 
@@ -113,20 +168,21 @@ public:
     void retranslateUi(QDialog *CameraPreview)
     {
         CameraPreview->setWindowTitle(QApplication::translate("CameraPreview", "LeonCam", Q_NULLPTR));
-        isAvailable->setText(QString());
-        cameraDetailsLabel->setText(QApplication::translate("CameraPreview", "Camera details", Q_NULLPTR));
-        patrolButton->setText(QApplication::translate("CameraPreview", "Patrol", Q_NULLPTR));
-        recognizeButton->setText(QApplication::translate("CameraPreview", "Recognize", Q_NULLPTR));
-        editButton->setText(QApplication::translate("CameraPreview", "Edit", Q_NULLPTR));
-        snapshotButton->setText(QApplication::translate("CameraPreview", "Snapshot", Q_NULLPTR));
-        previewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
-        backButton->setText(QApplication::translate("CameraPreview", "<<", Q_NULLPTR));
-        detectedPeopleLabel->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
-        homeButton->setText(QApplication::translate("CameraPreview", "Home", Q_NULLPTR));
-        upButton->setText(QApplication::translate("CameraPreview", "Up", Q_NULLPTR));
-        rightButton->setText(QApplication::translate("CameraPreview", "Right", Q_NULLPTR));
-        downButton->setText(QApplication::translate("CameraPreview", "Down", Q_NULLPTR));
-        leftButton->setText(QApplication::translate("CameraPreview", "Left", Q_NULLPTR));
+        LIsAvailable->setText(QString());
+        LCameraDetails->setText(QApplication::translate("CameraPreview", "Camera details", Q_NULLPTR));
+        PBPatrol->setText(QApplication::translate("CameraPreview", "Patrol", Q_NULLPTR));
+        PBRecognize->setText(QApplication::translate("CameraPreview", "Recognize", Q_NULLPTR));
+        PBEdit->setText(QApplication::translate("CameraPreview", "Edit", Q_NULLPTR));
+        PBSnapshot->setText(QApplication::translate("CameraPreview", "Snapshot", Q_NULLPTR));
+        LPreviewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
+        PBBack->setText(QApplication::translate("CameraPreview", "<<", Q_NULLPTR));
+        LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
+        PBHome->setText(QString());
+        PBUp->setText(QString());
+        PBRight->setText(QString());
+        PBDown->setText(QString());
+        PBLeft->setText(QString());
+        PBSavePreset->setText(QApplication::translate("CameraPreview", "Save", Q_NULLPTR));
     } // retranslateUi
 
 };

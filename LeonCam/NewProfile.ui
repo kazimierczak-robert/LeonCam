@@ -230,7 +230,7 @@ background-color: rgb(39, 129, 63);
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="LogIn.qrc"/>
+  <include location="Resources.qrc"/>
  </resources>
  <connections/>
 </ui>
