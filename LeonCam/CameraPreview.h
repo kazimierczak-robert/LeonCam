@@ -8,7 +8,7 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None");
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", bool isEnabled = false);
 	~CameraPreview();
 private slots:
 	void BackButtonClicked();

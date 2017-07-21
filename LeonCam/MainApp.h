@@ -20,4 +20,5 @@ private slots:
 	void RowSelected(const QModelIndex& modelIndex);
 private:
 	Ui::MainApp ui;
+	void TurnOnOffCamera(QPushButton* button);
 };

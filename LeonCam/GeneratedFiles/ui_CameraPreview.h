@@ -24,14 +24,12 @@ QT_BEGIN_NAMESPACE
 class Ui_CameraPreview
 {
 public:
-    QLabel *LIsAvailable;
     QLabel *LCameraDetails;
     QPushButton *PBPatrol;
     QPushButton *PBRecognize;
     QPushButton *PBEdit;
     QPushButton *PBSnapshot;
     QLabel *LPreviewScreen;
-    QPushButton *PBBack;
     QLabel *LDetectedPeople;
     QPushButton *PBHome;
     QPushButton *PBUp;
@@ -40,6 +38,8 @@ public:
     QPushButton *PBLeft;
     QPushButton *PBSavePreset;
     QComboBox *CBPresets;
+    QPushButton *PBBack;
+    QPushButton *PBCameraOnOff;
 
     void setupUi(QDialog *CameraPreview)
     {
@@ -55,13 +55,9 @@ public:
 "{\n"
 "	background-image: url(:/Resources/Images/backgroundMain.png);\n"
 "}"));
-        LIsAvailable = new QLabel(CameraPreview);
-        LIsAvailable->setObjectName(QStringLiteral("LIsAvailable"));
-        LIsAvailable->setGeometry(QRect(80, 430, 10, 10));
-        LIsAvailable->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/unavailable.png);"));
         LCameraDetails = new QLabel(CameraPreview);
         LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
-        LCameraDetails->setGeometry(QRect(100, 427, 101, 16));
+        LCameraDetails->setGeometry(QRect(160, 420, 101, 21));
         PBPatrol = new QPushButton(CameraPreview);
         PBPatrol->setObjectName(QStringLiteral("PBPatrol"));
         PBPatrol->setGeometry(QRect(530, 410, 40, 40));
@@ -79,22 +75,9 @@ public:
         LPreviewScreen->setGeometry(QRect(80, 20, 640, 360));
         LPreviewScreen->setFrameShape(QFrame::Box);
         LPreviewScreen->setAlignment(Qt::AlignCenter);
-        PBBack = new QPushButton(CameraPreview);
-        PBBack->setObjectName(QStringLiteral("PBBack"));
-        PBBack->setGeometry(QRect(0, 225, 40, 50));
-        PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
-"	font: 30pt \"Kristen ITC\";\n"
-"letter-spacing:12px;\n"
-"background-color: transparent;\n"
-"color: rgb(138, 138, 207);\n"
-"}\n"
-"\n"
-"#PBBack:hover{\n"
-"color: rgb(233, 233, 233);\n"
-"}"));
         LDetectedPeople = new QLabel(CameraPreview);
         LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
-        LDetectedPeople->setGeometry(QRect(80, 450, 191, 16));
+        LDetectedPeople->setGeometry(QRect(120, 450, 191, 16));
         PBHome = new QPushButton(CameraPreview);
         PBHome->setObjectName(QStringLiteral("PBHome"));
         PBHome->setGeometry(QRect(650, 310, 40, 40));
@@ -159,6 +142,22 @@ public:
         CBPresets = new QComboBox(CameraPreview);
         CBPresets->setObjectName(QStringLiteral("CBPresets"));
         CBPresets->setGeometry(QRect(330, 420, 131, 21));
+        PBBack = new QPushButton(CameraPreview);
+        PBBack->setObjectName(QStringLiteral("PBBack"));
+        PBBack->setGeometry(QRect(30, 440, 61, 23));
+        PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
+"color:rgb(255, 255, 255);\n"
+"background-color: rgb(255, 77, 61);}\n"
+"#PBBack:hover{\n"
+"background-color: rgb(255, 87, 58);\n"
+"}\n"
+"/*border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;\n"
+"background-color:none*/"));
+        PBCameraOnOff = new QPushButton(CameraPreview);
+        PBCameraOnOff->setObjectName(QStringLiteral("PBCameraOnOff"));
+        PBCameraOnOff->setGeometry(QRect(120, 420, 31, 23));
 
         retranslateUi(CameraPreview);
 
@@ -168,14 +167,12 @@ public:
     void retranslateUi(QDialog *CameraPreview)
     {
         CameraPreview->setWindowTitle(QApplication::translate("CameraPreview", "LeonCam", Q_NULLPTR));
-        LIsAvailable->setText(QString());
         LCameraDetails->setText(QApplication::translate("CameraPreview", "Camera details", Q_NULLPTR));
         PBPatrol->setText(QApplication::translate("CameraPreview", "Patrol", Q_NULLPTR));
         PBRecognize->setText(QApplication::translate("CameraPreview", "Recognize", Q_NULLPTR));
         PBEdit->setText(QApplication::translate("CameraPreview", "Edit", Q_NULLPTR));
         PBSnapshot->setText(QApplication::translate("CameraPreview", "Snapshot", Q_NULLPTR));
         LPreviewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
-        PBBack->setText(QApplication::translate("CameraPreview", "<<", Q_NULLPTR));
         LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
         PBHome->setText(QString());
         PBUp->setText(QString());
@@ -183,6 +180,8 @@ public:
         PBDown->setText(QString());
         PBLeft->setText(QString());
         PBSavePreset->setText(QApplication::translate("CameraPreview", "Save", Q_NULLPTR));
+        PBBack->setText(QApplication::translate("CameraPreview", "Back", Q_NULLPTR));
+        PBCameraOnOff->setText(QApplication::translate("CameraPreview", "OnOff", Q_NULLPTR));
     } // retranslateUi
 
 };

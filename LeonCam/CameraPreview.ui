@@ -35,29 +35,13 @@
 	background-image: url(:/Resources/Images/backgroundMain.png);
 }</string>
   </property>
-  <widget class="QLabel" name="LIsAvailable">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>430</y>
-     <width>10</width>
-     <height>10</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/Images/unavailable.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="LCameraDetails">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>427</y>
+     <x>160</x>
+     <y>420</y>
      <width>101</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -135,35 +119,10 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="PBBack">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>225</y>
-     <width>40</width>
-     <height>50</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">#PBBack{
-	font: 30pt &quot;Kristen ITC&quot;;
-letter-spacing:12px;
-background-color: transparent;
-color: rgb(138, 138, 207);
-}
-
-#PBBack:hover{
-color: rgb(233, 233, 233);
-}</string>
-   </property>
-   <property name="text">
-    <string>&lt;&lt;</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="LDetectedPeople">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>120</x>
      <y>450</y>
      <width>191</width>
      <height>16</height>
@@ -322,6 +281,44 @@ background-image: url(:/Resources/Images/leftHover.png);}</string>
      <width>131</width>
      <height>21</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBBack">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>440</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PBBack{
+color:rgb(255, 255, 255);
+background-color: rgb(255, 77, 61);}
+#PBBack:hover{
+background-color: rgb(255, 87, 58);
+}
+/*border: none;
+margin: 0px;
+padding: 0px;
+background-color:none*/</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBCameraOnOff">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>420</y>
+     <width>31</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OnOff</string>
    </property>
   </widget>
  </widget>
