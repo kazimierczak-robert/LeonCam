@@ -11,6 +11,7 @@ MainApp::MainApp(QWidget *parent)
 	connect(ui.PBNewCamera, SIGNAL(clicked()), this, SLOT(AddNewCamera()));
 	//connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
 	connect(ui.TLWCameras, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(RowSelected(const QModelIndex&)));
+	connect(ui.TESearch, SIGNAL(textChanged()), this, SLOT(TESearchChanged()));
 
 	ui.TLWCameras->setColumnWidth(0, 50);
 	ui.TLWCameras->setColumnWidth(1, 100);
@@ -94,7 +95,7 @@ void MainApp::LogOut()
 
 void MainApp::RowSelected(const QModelIndex& modelIndex)
 {
-	QString cameraDetails = ui.TLWCameras->item(modelIndex.row(), 2)->text() + " " + ui.TLWCameras->item(modelIndex.row(), 3)->text();
+	QString cameraDetails = ui.TLWCameras->item(modelIndex.row(), 2)->text() + " | " + ui.TLWCameras->item(modelIndex.row(), 3)->text();
 	CameraPreview *cameraPreview;
 	
 	if (vectorIsEnabledButtonToRowIndex->at(modelIndex.row())->text()=="On")
@@ -154,6 +155,22 @@ void MainApp::RemoveCamera(QPushButton* button)
 		else
 		{
 			index += 1;
+		}
+	}
+}
+
+
+void MainApp::TESearchChanged()
+{
+	for (int i = 0; i < ui.TLWCameras->rowCount(); i++)
+	{
+		if (ui.TLWCameras->item(i, 2)->text().startsWith(ui.TESearch->toPlainText(), Qt::CaseInsensitive))
+		{
+			ui.TLWCameras->showRow(i);
+		}
+		else
+		{
+			ui.TLWCameras->hideRow(i);
 		}
 	}
 }

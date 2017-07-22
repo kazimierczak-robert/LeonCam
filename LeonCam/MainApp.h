@@ -18,6 +18,7 @@ private slots:
 	void AddNewCamera();
 	void LogOut();
 	void RowSelected(const QModelIndex& modelIndex);
+	void TESearchChanged();
 private:
 	Ui::MainApp ui;
 	void TurnOnOffCamera(QPushButton* button);

@@ -57,19 +57,22 @@ public:
 "}"));
         LCameraDetails = new QLabel(CameraPreview);
         LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
-        LCameraDetails->setGeometry(QRect(160, 420, 101, 21));
+        LCameraDetails->setGeometry(QRect(160, 420, 301, 21));
+        LCameraDetails->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: transparent;\n"
+"font-weight:600;"));
         PBPatrol = new QPushButton(CameraPreview);
         PBPatrol->setObjectName(QStringLiteral("PBPatrol"));
-        PBPatrol->setGeometry(QRect(530, 410, 40, 40));
+        PBPatrol->setGeometry(QRect(530, 390, 40, 40));
         PBRecognize = new QPushButton(CameraPreview);
         PBRecognize->setObjectName(QStringLiteral("PBRecognize"));
-        PBRecognize->setGeometry(QRect(580, 410, 40, 40));
+        PBRecognize->setGeometry(QRect(580, 390, 40, 40));
         PBEdit = new QPushButton(CameraPreview);
         PBEdit->setObjectName(QStringLiteral("PBEdit"));
-        PBEdit->setGeometry(QRect(630, 410, 40, 40));
+        PBEdit->setGeometry(QRect(630, 390, 40, 40));
         PBSnapshot = new QPushButton(CameraPreview);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
-        PBSnapshot->setGeometry(QRect(680, 410, 40, 40));
+        PBSnapshot->setGeometry(QRect(680, 390, 40, 40));
         PBSnapshot->setStyleSheet(QLatin1String("#PBSnapshot{\n"
 "background-image: url(:/Resources/Images/snapshot.png);\n"
 "border: none;\n"
@@ -88,7 +91,10 @@ public:
         LPreviewScreen->setAlignment(Qt::AlignCenter);
         LDetectedPeople = new QLabel(CameraPreview);
         LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
-        LDetectedPeople->setGeometry(QRect(120, 450, 191, 16));
+        LDetectedPeople->setGeometry(QRect(120, 450, 221, 16));
+        LDetectedPeople->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: transparent;\n"
+"font-weight:600;"));
         PBHome = new QPushButton(CameraPreview);
         PBHome->setObjectName(QStringLiteral("PBHome"));
         PBHome->setGeometry(QRect(650, 310, 40, 40));
@@ -149,10 +155,10 @@ public:
         PBLeft->setFlat(true);
         PBSavePreset = new QPushButton(CameraPreview);
         PBSavePreset->setObjectName(QStringLiteral("PBSavePreset"));
-        PBSavePreset->setGeometry(QRect(480, 410, 41, 41));
+        PBSavePreset->setGeometry(QRect(480, 390, 41, 41));
         CBPresets = new QComboBox(CameraPreview);
         CBPresets->setObjectName(QStringLiteral("CBPresets"));
-        CBPresets->setGeometry(QRect(330, 420, 131, 21));
+        CBPresets->setGeometry(QRect(480, 440, 241, 21));
         PBBack = new QPushButton(CameraPreview);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(30, 440, 61, 23));
@@ -192,7 +198,7 @@ public:
         PBLeft->setText(QString());
         PBSavePreset->setText(QApplication::translate("CameraPreview", "Save", Q_NULLPTR));
         PBBack->setText(QApplication::translate("CameraPreview", "Back", Q_NULLPTR));
-        PBCameraOnOff->setText(QApplication::translate("CameraPreview", "OnOff", Q_NULLPTR));
+        PBCameraOnOff->setText(QApplication::translate("CameraPreview", "On/Off", Q_NULLPTR));
     } // retranslateUi
 
 };

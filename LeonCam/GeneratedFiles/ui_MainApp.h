@@ -62,8 +62,6 @@ public:
         TWMenu = new QTabWidget(centralWidget);
         TWMenu->setObjectName(QStringLiteral("TWMenu"));
         TWMenu->setGeometry(QRect(30, 20, 740, 461));
-        TWMenu->setFocusPolicy(Qt::TabFocus);
-        TWMenu->setContextMenuPolicy(Qt::DefaultContextMenu);
         TWMenu->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
 "border: 0px;\n"
 "}\n"
@@ -87,9 +85,6 @@ public:
 "	color: rgb(144, 174, 255);\n"
 "}\n"
 ""));
-        TWMenu->setTabPosition(QTabWidget::North);
-        TWMenu->setTabShape(QTabWidget::Rounded);
-        TWMenu->setElideMode(Qt::ElideNone);
         TWMenu->setUsesScrollButtons(false);
         TCameras = new QWidget();
         TCameras->setObjectName(QStringLiteral("TCameras"));
@@ -111,58 +106,30 @@ public:
         TLWCameras = new QTableWidget(TCameras);
         if (TLWCameras->columnCount() < 8)
             TLWCameras->setColumnCount(8);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        __qtablewidgetitem->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        __qtablewidgetitem1->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        TLWCameras->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        __qtablewidgetitem3->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        TLWCameras->setHorizontalHeaderItem(3, __qtablewidgetitem3);
-        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
-        __qtablewidgetitem4->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(4, __qtablewidgetitem4);
-        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
-        __qtablewidgetitem5->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(5, __qtablewidgetitem5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        __qtablewidgetitem6->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(6, __qtablewidgetitem6);
-        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        __qtablewidgetitem7->setTextAlignment(Qt::AlignCenter);
-        TLWCameras->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         TLWCameras->setObjectName(QStringLiteral("TLWCameras"));
         TLWCameras->setGeometry(QRect(20, 50, 700, 321));
+        TLWCameras->setStyleSheet(QStringLiteral("selection-background-color: transparent;"));
         TLWCameras->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         TLWCameras->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         TLWCameras->setEditTriggers(QAbstractItemView::DoubleClicked);
+        TLWCameras->setProperty("showDropIndicator", QVariant(false));
         TLWCameras->setDragDropOverwriteMode(false);
         TLWCameras->setSelectionMode(QAbstractItemView::SingleSelection);
         TLWCameras->setSelectionBehavior(QAbstractItemView::SelectRows);
-        TLWCameras->setShowGrid(true);
         TLWCameras->setGridStyle(Qt::DashLine);
-        TLWCameras->setWordWrap(true);
-        TLWCameras->setCornerButtonEnabled(true);
-        TLWCameras->setRowCount(0);
+        TLWCameras->setWordWrap(false);
+        TLWCameras->setCornerButtonEnabled(false);
         TLWCameras->setColumnCount(8);
         TLWCameras->horizontalHeader()->setVisible(false);
-        TLWCameras->horizontalHeader()->setCascadingSectionResizes(false);
         TLWCameras->horizontalHeader()->setDefaultSectionSize(85);
-        TLWCameras->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
-        TLWCameras->horizontalHeader()->setStretchLastSection(false);
         TLWCameras->verticalHeader()->setVisible(false);
         TLWCameras->verticalHeader()->setDefaultSectionSize(50);
-        TLWCameras->verticalHeader()->setStretchLastSection(false);
         LTotalNumber = new QLabel(TCameras);
         LTotalNumber->setObjectName(QStringLiteral("LTotalNumber"));
         LTotalNumber->setGeometry(QRect(20, 388, 201, 23));
         LTotalNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
-        LTotalNumber->setFrameShape(QFrame::NoFrame);
         LTotalNumber->setIndent(0);
         LEnabledNumber = new QLabel(TCameras);
         LEnabledNumber->setObjectName(QStringLiteral("LEnabledNumber"));
@@ -170,7 +137,6 @@ public:
         LEnabledNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
-        LEnabledNumber->setFrameShape(QFrame::NoFrame);
         LEnabledNumber->setIndent(0);
         TWMenu->addTab(TCameras, QString());
         TFacesBase = new QWidget();
@@ -200,22 +166,6 @@ public:
         MainApp->setWindowTitle(QApplication::translate("MainApp", "LeonCam", Q_NULLPTR));
         PBNewCamera->setText(QApplication::translate("MainApp", "Add New Camera", Q_NULLPTR));
         TESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem = TLWCameras->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MainApp", "isRunning", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem1 = TLWCameras->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("MainApp", "Preview", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem2 = TLWCameras->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem3 = TLWCameras->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Model", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem4 = TLWCameras->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Patrol", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem5 = TLWCameras->horizontalHeaderItem(5);
-        ___qtablewidgetitem5->setText(QApplication::translate("MainApp", "Recognation", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem6 = TLWCameras->horizontalHeaderItem(6);
-        ___qtablewidgetitem6->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem7 = TLWCameras->horizontalHeaderItem(7);
-        ___qtablewidgetitem7->setText(QApplication::translate("MainApp", "Remove", Q_NULLPTR));
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
         LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
