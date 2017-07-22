@@ -291,7 +291,7 @@ background-color: transparent;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Total number of cameras: 0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="indent">
-       <number>8</number>
+       <number>0</number>
       </property>
      </widget>
      <widget class="QLabel" name="LEnabledNumber">

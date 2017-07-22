@@ -162,7 +162,7 @@ public:
         LTotalNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;"));
         LTotalNumber->setFrameShape(QFrame::NoFrame);
-        LTotalNumber->setIndent(8);
+        LTotalNumber->setIndent(0);
         LEnabledNumber = new QLabel(TCameras);
         LEnabledNumber->setObjectName(QStringLiteral("LEnabledNumber"));
         LEnabledNumber->setGeometry(QRect(290, 388, 221, 23));

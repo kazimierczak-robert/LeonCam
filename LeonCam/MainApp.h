@@ -21,4 +21,7 @@ private slots:
 private:
 	Ui::MainApp ui;
 	void TurnOnOffCamera(QPushButton* button);
+	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
+	std::vector<QPushButton*> *vectorRemoveButtonToRowIndex;
+	void RemoveCamera(QPushButton* button);
 };

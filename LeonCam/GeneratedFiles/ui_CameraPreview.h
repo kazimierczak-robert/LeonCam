@@ -94,7 +94,7 @@ public:
         PBHome->setFlat(true);
         PBUp = new QPushButton(CameraPreview);
         PBUp->setObjectName(QStringLiteral("PBUp"));
-        PBUp->setGeometry(QRect(650, 280, 40, 30));
+        PBUp->setGeometry(QRect(655, 287, 30, 23));
         PBUp->setStyleSheet(QLatin1String("#PBUp {\n"
 "background-image: url(:/Resources/Images/up.png);\n"
 "border: none;\n"
@@ -105,7 +105,7 @@ public:
         PBUp->setFlat(true);
         PBRight = new QPushButton(CameraPreview);
         PBRight->setObjectName(QStringLiteral("PBRight"));
-        PBRight->setGeometry(QRect(690, 310, 30, 40));
+        PBRight->setGeometry(QRect(690, 315, 23, 30));
         PBRight->setStyleSheet(QLatin1String("#PBRight {\n"
 "background-image: url(:/Resources/Images/right.png);\n"
 "border: none;\n"
@@ -116,7 +116,7 @@ public:
         PBRight->setFlat(true);
         PBDown = new QPushButton(CameraPreview);
         PBDown->setObjectName(QStringLiteral("PBDown"));
-        PBDown->setGeometry(QRect(650, 350, 40, 30));
+        PBDown->setGeometry(QRect(655, 350, 30, 23));
         PBDown->setStyleSheet(QLatin1String("#PBDown {\n"
 "background-image: url(:/Resources/Images/down.png);\n"
 "border: none;\n"
@@ -127,7 +127,7 @@ public:
         PBDown->setFlat(true);
         PBLeft = new QPushButton(CameraPreview);
         PBLeft->setObjectName(QStringLiteral("PBLeft"));
-        PBLeft->setGeometry(QRect(620, 310, 30, 40));
+        PBLeft->setGeometry(QRect(627, 315, 23, 30));
         PBLeft->setStyleSheet(QLatin1String("#PBLeft {\n"
 "background-image: url(:/Resources/Images/left.png);\n"
 "border: none;\n"

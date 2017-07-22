@@ -163,10 +163,10 @@ background-image: url(:/Resources/Images/homeHover.png);
   <widget class="QPushButton" name="PBUp">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>280</y>
-     <width>40</width>
-     <height>30</height>
+     <x>655</x>
+     <y>287</y>
+     <width>30</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -189,9 +189,9 @@ background-image: url(:/Resources/Images/upHover.png);}</string>
    <property name="geometry">
     <rect>
      <x>690</x>
-     <y>310</y>
-     <width>30</width>
-     <height>40</height>
+     <y>315</y>
+     <width>23</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -213,10 +213,10 @@ background-image: url(:/Resources/Images/rightHover.png);}</string>
   <widget class="QPushButton" name="PBDown">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>655</x>
      <y>350</y>
-     <width>40</width>
-     <height>30</height>
+     <width>30</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -238,10 +238,10 @@ background-image: url(:/Resources/Images/downHover.png);}</string>
   <widget class="QPushButton" name="PBLeft">
    <property name="geometry">
     <rect>
-     <x>620</x>
-     <y>310</y>
-     <width>30</width>
-     <height>40</height>
+     <x>627</x>
+     <y>315</y>
+     <width>23</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
