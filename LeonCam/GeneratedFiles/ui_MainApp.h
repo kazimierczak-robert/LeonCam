@@ -160,16 +160,18 @@ public:
         LTotalNumber->setObjectName(QStringLiteral("LTotalNumber"));
         LTotalNumber->setGeometry(QRect(20, 388, 201, 23));
         LTotalNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color: transparent;"));
+"background-color: transparent;\n"
+"font-weight:600;"));
         LTotalNumber->setFrameShape(QFrame::NoFrame);
         LTotalNumber->setIndent(0);
         LEnabledNumber = new QLabel(TCameras);
         LEnabledNumber->setObjectName(QStringLiteral("LEnabledNumber"));
         LEnabledNumber->setGeometry(QRect(290, 388, 221, 23));
         LEnabledNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color: transparent;"));
+"background-color: transparent;\n"
+"font-weight:600;"));
         LEnabledNumber->setFrameShape(QFrame::NoFrame);
-        LEnabledNumber->setIndent(8);
+        LEnabledNumber->setIndent(0);
         TWMenu->addTab(TCameras, QString());
         TFacesBase = new QWidget();
         TFacesBase->setObjectName(QStringLiteral("TFacesBase"));
@@ -214,8 +216,8 @@ public:
         ___qtablewidgetitem6->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem7 = TLWCameras->horizontalHeaderItem(7);
         ___qtablewidgetitem7->setText(QApplication::translate("MainApp", "Remove", Q_NULLPTR));
-        LTotalNumber->setText(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Total number of cameras: 0</span></p></body></html>", Q_NULLPTR));
-        LEnabledNumber->setText(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Number of enabled cameras: 0 </span></p></body></html>", Q_NULLPTR));
+        LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
+        LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));

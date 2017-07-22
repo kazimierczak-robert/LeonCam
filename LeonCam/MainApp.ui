@@ -282,13 +282,14 @@ background-color: rgb(39, 129, 63);
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-background-color: transparent;</string>
+background-color: transparent;
+font-weight:600;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Total number of cameras: 0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>Total number of cameras: 0</string>
       </property>
       <property name="indent">
        <number>0</number>
@@ -305,16 +306,17 @@ background-color: transparent;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-background-color: transparent;</string>
+background-color: transparent;
+font-weight:600;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Number of enabled cameras: 0 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>Number of enabled cameras: 0</string>
       </property>
       <property name="indent">
-       <number>8</number>
+       <number>0</number>
       </property>
      </widget>
     </widget>

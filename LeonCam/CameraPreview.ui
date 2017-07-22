@@ -96,8 +96,23 @@
      <height>40</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">#PBSnapshot{
+background-image: url(:/Resources/Images/snapshot.png);
+border: none;
+margin: 0px;
+padding: 0px;
+}
+
+#PBSnapshot:hover{
+background-image: url(:/Resources/Images/snapshotHover.png);
+}</string>
+   </property>
    <property name="text">
-    <string>Snapshot</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="LPreviewScreen">

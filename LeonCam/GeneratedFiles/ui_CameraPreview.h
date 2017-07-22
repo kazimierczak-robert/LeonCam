@@ -70,6 +70,17 @@ public:
         PBSnapshot = new QPushButton(CameraPreview);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
         PBSnapshot->setGeometry(QRect(680, 410, 40, 40));
+        PBSnapshot->setStyleSheet(QLatin1String("#PBSnapshot{\n"
+"background-image: url(:/Resources/Images/snapshot.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;\n"
+"}\n"
+"\n"
+"#PBSnapshot:hover{\n"
+"background-image: url(:/Resources/Images/snapshotHover.png);\n"
+"}"));
+        PBSnapshot->setFlat(true);
         LPreviewScreen = new QLabel(CameraPreview);
         LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
         LPreviewScreen->setGeometry(QRect(80, 20, 640, 360));
@@ -171,7 +182,7 @@ public:
         PBPatrol->setText(QApplication::translate("CameraPreview", "Patrol", Q_NULLPTR));
         PBRecognize->setText(QApplication::translate("CameraPreview", "Recognize", Q_NULLPTR));
         PBEdit->setText(QApplication::translate("CameraPreview", "Edit", Q_NULLPTR));
-        PBSnapshot->setText(QApplication::translate("CameraPreview", "Snapshot", Q_NULLPTR));
+        PBSnapshot->setText(QString());
         LPreviewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
         LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
         PBHome->setText(QString());

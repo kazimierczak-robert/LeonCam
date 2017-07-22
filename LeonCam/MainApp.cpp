@@ -36,7 +36,7 @@ void MainApp::AddNewCamera()
 	btn_edit->setText("Off");
 	btn_edit->setGeometry(0, 0, 45, 45);
 	btn_edit->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
-	
+
 	connect(btn_edit, &QPushButton::clicked, this, [this, btn_edit] { TurnOnOffCamera(btn_edit); });
 	vectorIsEnabledButtonToRowIndex->push_back(btn_edit);
 	ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 0), btn_edit);
@@ -79,8 +79,10 @@ void MainApp::AddNewCamera()
 
 	for (int i = 1; i < 4; i++)
 	{
-		ui.TLWCameras->item(0, i)->setFlags(Qt::ItemFlag::ItemIsEnabled);
+		ui.TLWCameras->item(newIndex, i)->setFlags(Qt::ItemFlag::ItemIsEnabled);
 	}
+
+	ui.LTotalNumber->setText("Total number of cameras: " + QVariant(newIndex+1).toString());
 }
 
 void MainApp::LogOut()
@@ -97,11 +99,11 @@ void MainApp::RowSelected(const QModelIndex& modelIndex)
 	
 	if (vectorIsEnabledButtonToRowIndex->at(modelIndex.row())->text()=="On")
 	{
-		cameraPreview = new CameraPreview(this, cameraDetails, true);
+		cameraPreview = new CameraPreview(this, cameraDetails, true, vectorIsEnabledButtonToRowIndex->at(modelIndex.row()), ui.LEnabledNumber);
 	}
 	else
 	{
-		cameraPreview = new CameraPreview(this, cameraDetails, false);
+		cameraPreview = new CameraPreview(this, cameraDetails, false, vectorIsEnabledButtonToRowIndex->at(modelIndex.row()), ui.LEnabledNumber);
 	}
 	
 	cameraPreview->exec();
@@ -109,16 +111,23 @@ void MainApp::RowSelected(const QModelIndex& modelIndex)
 
 void MainApp::TurnOnOffCamera(QPushButton* button)
 {
+	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+
 	if (button->text() == "Off")
 	{
 		button->setText("On");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+		number += 1;
 	}
 	else
 	{
 		button->setText("Off");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+		number -= 1;
 	}
+
+	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
+
 }
 
 void MainApp::RemoveCamera(QPushButton* button)
@@ -129,9 +138,17 @@ void MainApp::RemoveCamera(QPushButton* button)
 	{
 		if (item == button)
 		{
+			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
+			{
+				int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number - 1).toString());
+			}
+
 			ui.TLWCameras->removeRow(index);
 			vectorIsEnabledButtonToRowIndex->erase(vectorIsEnabledButtonToRowIndex->begin() + index);
 			vectorRemoveButtonToRowIndex->erase(vectorRemoveButtonToRowIndex->begin() + index);
+
+			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(ui.TLWCameras->rowCount()).toString());
 			return;
 		}
 		else
