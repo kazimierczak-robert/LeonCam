@@ -3,7 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_LogIn.h"
 #include <qpushbutton.h>
-#include "ForgotPassword.h"
+#include "ForgottenPassword.h"
 #include "DesignBase.h"
 #include "NewProfile.h"
 #include "MainApp.h"
@@ -20,5 +20,5 @@ private slots:
 	void NewProfileClicked();
 private:
 	Ui::LogInClass ui;
-	DesignBase *DesignB;
+	DesignBase *designB;
 };

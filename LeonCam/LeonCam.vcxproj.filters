@@ -42,15 +42,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LogIn.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ForgotPassword.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ForgotPassword.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ForgotPassword.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DesignBase.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -99,18 +90,21 @@
     <ClCompile Include="UserCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ForgottenPassword.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ForgottenPassword.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ForgottenPassword.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="LogIn.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ForgotPassword.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ForgotPassword.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="DesignBase.h">
@@ -143,6 +137,12 @@
     <CustomBuild Include="UserCamera.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="ForgottenPassword.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ForgottenPassword.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_LogIn.h">
@@ -150,9 +150,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_ForgotPassword.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_NewProfile.h">
       <Filter>Generated Files</Filter>
@@ -164,6 +161,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_UserCamera.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ForgottenPassword.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

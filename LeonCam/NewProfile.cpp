@@ -6,9 +6,9 @@ NewProfile::NewProfile(QWidget *parent)
 {
 	ui.setupUi(this);
 	//Create DesignB instance
-	DesignB = new DesignBase(this);
+	designB = new DesignBase(this);
 	//Set gif in Lloading label
-	DesignB->SetGifInLabel(ui.Lloading);
+	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBCreate, SIGNAL(clicked()), this, SLOT(CreateClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
@@ -19,7 +19,7 @@ NewProfile::~NewProfile()
 }
 void NewProfile::CreateClicked()
 {
-	DesignB->gif->start();
+	designB->gif->start();
 }
 void NewProfile::BackClicked()
 {

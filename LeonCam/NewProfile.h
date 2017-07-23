@@ -16,5 +16,5 @@ public:
 
 private:
 	Ui::NewProfile ui;
-	DesignBase *DesignB;
+	DesignBase *designB;
 };

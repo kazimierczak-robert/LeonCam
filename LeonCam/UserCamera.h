@@ -3,21 +3,22 @@
 #include <QDialog>
 #include "ui_UserCamera.h"
 #include "DesignBase.h"
+#include "MainApp.h"
 
 class UserCamera : public QDialog
 {
 	Q_OBJECT
 
 public:
-	UserCamera(QWidget *parent = Q_NULLPTR);
+	UserCamera(QWidget *parent=Q_NULLPTR);
 	~UserCamera();
+	std::vector<QString>* GetValuesFromControls();
 private slots:
-	void VerifyClicked();
-	void DefineClicked();
+	void AddClicked();
 	void BackClicked();
 	void AssignChecked();
 private:
-	void UserCamera::DisableIfAssignChanged(bool flag);
+	void DisableIfAssignChanged(bool flag);
 	Ui::UserCamera ui;
-	DesignBase *DesignB;
+	DesignBase *designB;
 };

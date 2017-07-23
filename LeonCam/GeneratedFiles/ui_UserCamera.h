@@ -39,10 +39,10 @@ public:
     QGroupBox *groupBox;
     QLineEdit *LELogin;
     QLineEdit *LEPassword;
-    QPushButton *PBVerify;
-    QPushButton *PBDefine;
+    QPushButton *PBAdd;
     QLabel *LTip;
     QCheckBox *CBAssign;
+    QLabel *LTipLoginPass;
 
     void setupUi(QDialog *UserCamera)
     {
@@ -102,41 +102,30 @@ public:
 "background-color:none*/"));
         groupBox = new QGroupBox(UserCamera);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(250, 330, 301, 61));
+        groupBox->setGeometry(QRect(250, 330, 231, 61));
         LELogin = new QLineEdit(groupBox);
         LELogin->setObjectName(QStringLiteral("LELogin"));
-        LELogin->setGeometry(QRect(10, 10, 221, 21));
+        LELogin->setGeometry(QRect(10, 10, 211, 21));
         LEPassword = new QLineEdit(groupBox);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
-        LEPassword->setGeometry(QRect(10, 30, 221, 21));
-        PBVerify = new QPushButton(groupBox);
-        PBVerify->setObjectName(QStringLiteral("PBVerify"));
-        PBVerify->setGeometry(QRect(240, 10, 51, 41));
-        PBVerify->setStyleSheet(QLatin1String("#PBVerify{\n"
-"background-color: rgb(0, 69, 104);\n"
-"color: rgb(255, 255, 255);}\n"
-"#PBVerify:hover\n"
-"{\n"
-"background-color: rgb(0, 77, 116);\n"
-"}"));
-        PBVerify->setFlat(false);
-        PBDefine = new QPushButton(UserCamera);
-        PBDefine->setObjectName(QStringLiteral("PBDefine"));
-        PBDefine->setGeometry(QRect(490, 420, 61, 23));
-        PBDefine->setStyleSheet(QLatin1String("#PBDefine{\n"
+        LEPassword->setGeometry(QRect(10, 30, 211, 21));
+        PBAdd = new QPushButton(UserCamera);
+        PBAdd->setObjectName(QStringLiteral("PBAdd"));
+        PBAdd->setGeometry(QRect(490, 420, 61, 23));
+        PBAdd->setStyleSheet(QLatin1String("#PBAdd{\n"
 "color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)}\n"
-"#PBDefine:hover\n"
+"#PBAdd:hover\n"
 "{\n"
 "background-color: rgb(39, 129, 63);\n"
 "}\n"
 "/*border: none;\n"
 "margin: 0px;\n"
 "padding: 0px;*/"));
-        PBDefine->setFlat(false);
+        PBAdd->setFlat(false);
         LTip = new QLabel(UserCamera);
         LTip->setObjectName(QStringLiteral("LTip"));
-        LTip->setGeometry(QRect(500, 270, 31, 31));
+        LTip->setGeometry(QRect(510, 275, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         CBAssign = new QCheckBox(UserCamera);
@@ -147,6 +136,11 @@ public:
 "{\n"
 "	color: rgb(89, 178, 255);\n"
 "}"));
+        LTipLoginPass = new QLabel(UserCamera);
+        LTipLoginPass->setObjectName(QStringLiteral("LTipLoginPass"));
+        LTipLoginPass->setGeometry(QRect(510, 345, 31, 31));
+        LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
 
         retranslateUi(UserCamera);
 
@@ -172,13 +166,16 @@ public:
         LELogin->setPlaceholderText(QApplication::translate("UserCamera", "Login", Q_NULLPTR));
         LEPassword->setText(QString());
         LEPassword->setPlaceholderText(QApplication::translate("UserCamera", "Password", Q_NULLPTR));
-        PBVerify->setText(QApplication::translate("UserCamera", "Verify", Q_NULLPTR));
-        PBDefine->setText(QApplication::translate("UserCamera", "Add", Q_NULLPTR));
+        PBAdd->setText(QApplication::translate("UserCamera", "Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Model</span> and <span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
         CBAssign->setText(QApplication::translate("UserCamera", "Assign", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        LTipLoginPass->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Login</span> and <span style=\" font-weight:600;\">Password</span> must be filled.</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        LTipLoginPass->setText(QString());
     } // retranslateUi
 
 };

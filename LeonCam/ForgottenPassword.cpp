@@ -1,32 +1,28 @@
-#include "ForgotPassword.h"
-#include "LogIn.h"
-#include "qsystemtrayicon.h"
+#include "ForgottenPassword.h"
 
-
-
-ForgotPassword::ForgotPassword(QWidget *parent)
+ForgottenPassword::ForgottenPassword(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 	//Create DesignB instance
-	DesignB = new DesignBase(this);
+	designB = new DesignBase(this);
 	//Set gif in Lloading label
-	DesignB->SetGifInLabel(ui.Lloading);
+	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBVerify, SIGNAL(clicked()), this, SLOT(VerifyClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
 }
 
-ForgotPassword::~ForgotPassword()
+ForgottenPassword::~ForgottenPassword()
 {
 }
 
-void ForgotPassword::VerifyClicked()
+void ForgottenPassword::VerifyClicked()
 {
-	DesignB->gif->start();
+	designB->gif->start();
 	ui.LSecurityQuestion->setText("Working!");
 }
-void ForgotPassword::BackClicked()
+void ForgottenPassword::BackClicked()
 {
 	this->close();
 }

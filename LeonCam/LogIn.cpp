@@ -6,9 +6,9 @@ LogIn::LogIn(QWidget *parent)
 {
 	ui.setupUi(this);
 	//Create DesignB instance
-	DesignB = new DesignBase(this);
+	designB = new DesignBase(this);
 	//Set gif in Lloading label
-	DesignB->SetGifInLabel(ui.Lloading);
+	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBLogIn, SIGNAL(clicked()), this, SLOT(LogInClicked()));
 	connect(ui.PBForgotPassword, SIGNAL(clicked()), this, SLOT(ForgotPasswordClicked()));
@@ -18,7 +18,7 @@ LogIn::LogIn(QWidget *parent)
 void LogIn::LogInClicked()
 {
 	//Start gif
-	DesignB->gif->start();
+	designB->gif->start();
 	ui.LEUsername->setText("Working");
 	MainApp *mainApp = new MainApp(nullptr);	
 	mainApp->show();
@@ -26,10 +26,10 @@ void LogIn::LogInClicked()
 }
 void LogIn::ForgotPasswordClicked()
 {
-	ForgotPassword *ForgotPass = new ForgotPassword(this);
+	ForgottenPassword *ForgottenPass = new ForgottenPassword(this);
 	//hide window
 	//this->hide();
-	ForgotPass->exec();
+	ForgottenPass->exec();
 	//show window
 	//this->show();
 }
