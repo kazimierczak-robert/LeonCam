@@ -19,5 +19,7 @@
         <file>Resources/Images/rightHover.png</file>
         <file>Resources/Images/snapshot.png</file>
         <file>Resources/Images/snapshotHover.png</file>
+        <file>Resources/Images/patrol.PNG</file>
+        <file>Resources/Images/patrolHover.PNG</file>
     </qresource>
 </RCC>

@@ -40,6 +40,7 @@ public:
     QComboBox *CBPresets;
     QPushButton *PBBack;
     QPushButton *PBCameraOnOff;
+    QPushButton *PBGoToPreset;
 
     void setupUi(QDialog *CameraPreview)
     {
@@ -57,7 +58,7 @@ public:
 "}"));
         LCameraDetails = new QLabel(CameraPreview);
         LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
-        LCameraDetails->setGeometry(QRect(160, 420, 301, 21));
+        LCameraDetails->setGeometry(QRect(160, 420, 261, 21));
         LCameraDetails->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
@@ -91,7 +92,7 @@ public:
         LPreviewScreen->setAlignment(Qt::AlignCenter);
         LDetectedPeople = new QLabel(CameraPreview);
         LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
-        LDetectedPeople->setGeometry(QRect(120, 450, 221, 16));
+        LDetectedPeople->setGeometry(QRect(120, 450, 281, 16));
         LDetectedPeople->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
@@ -158,7 +159,7 @@ public:
         PBSavePreset->setGeometry(QRect(480, 390, 41, 41));
         CBPresets = new QComboBox(CameraPreview);
         CBPresets->setObjectName(QStringLiteral("CBPresets"));
-        CBPresets->setGeometry(QRect(480, 440, 241, 21));
+        CBPresets->setGeometry(QRect(430, 440, 291, 21));
         PBBack = new QPushButton(CameraPreview);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(30, 440, 61, 23));
@@ -175,6 +176,9 @@ public:
         PBCameraOnOff = new QPushButton(CameraPreview);
         PBCameraOnOff->setObjectName(QStringLiteral("PBCameraOnOff"));
         PBCameraOnOff->setGeometry(QRect(120, 420, 31, 23));
+        PBGoToPreset = new QPushButton(CameraPreview);
+        PBGoToPreset->setObjectName(QStringLiteral("PBGoToPreset"));
+        PBGoToPreset->setGeometry(QRect(430, 390, 41, 41));
 
         retranslateUi(CameraPreview);
 
@@ -199,6 +203,7 @@ public:
         PBSavePreset->setText(QApplication::translate("CameraPreview", "Save", Q_NULLPTR));
         PBBack->setText(QApplication::translate("CameraPreview", "Back", Q_NULLPTR));
         PBCameraOnOff->setText(QApplication::translate("CameraPreview", "On/Off", Q_NULLPTR));
+        PBGoToPreset->setText(QApplication::translate("CameraPreview", "Go To", Q_NULLPTR));
     } // retranslateUi
 
 };

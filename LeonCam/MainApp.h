@@ -16,14 +16,20 @@ public:
 	MainApp(QWidget *parent = Q_NULLPTR);
 	~MainApp();
 private slots:
-	void AddNewCamera();
+	void AddCamera();
 	void LogOut();
 	void RowSelected(const QModelIndex& modelIndex);
 	void TESearchChanged();
 private:
 	Ui::MainApp ui;
-	void TurnOnOffCamera(QPushButton* button);
 	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
+	std::vector<QPushButton*> *vectorPatrolButtonToRowIndex;
+	std::vector<QPushButton*> *vectorRecognationButtonToRowIndex;
+	std::vector<QPushButton*> *vectorEditButtonToRowIndex;
 	std::vector<QPushButton*> *vectorRemoveButtonToRowIndex;
+	void TurnOnOffCamera(QPushButton* button);
+	void PatrolCamera(QPushButton* button);
+	void RecognationCamera(QPushButton* button);
+	void EditCamera(QPushButton* button);
 	void RemoveCamera(QPushButton* button);
 };

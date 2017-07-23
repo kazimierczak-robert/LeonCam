@@ -70,7 +70,7 @@ QTabBar::tab:hover{
 
 QTabBar::tab:selected{
 margin-top: 1px;
-	color: rgb(144, 174, 255);
+	color: rgb(205, 220, 255);
 }
 </string>
     </property>
@@ -87,7 +87,7 @@ margin-top: 1px;
      <attribute name="title">
       <string>CAMERAS</string>
      </attribute>
-     <widget class="QPushButton" name="PBNewCamera">
+     <widget class="QPushButton" name="PBAddCamera">
       <property name="geometry">
        <rect>
         <x>610</x>
@@ -97,23 +97,23 @@ margin-top: 1px;
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#PBNewCamera{
+       <string notr="true">#PBAddCamera{
 color: rgb(255, 255, 255);
 background-color:rgb(36, 118, 59)}
-#PBNewCamera:hover
+#PBAddCamera:hover
 {
 background-color: rgb(39, 129, 63);
 }</string>
       </property>
       <property name="text">
-       <string>Add New Camera</string>
+       <string>Add Camera</string>
       </property>
      </widget>
      <widget class="QTextEdit" name="TESearch">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>20</y>
+        <y>70</y>
         <width>701</width>
         <height>23</height>
        </rect>
@@ -129,13 +129,14 @@ background-color: rgb(39, 129, 63);
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>50</y>
+        <y>100</y>
         <width>700</width>
-        <height>321</height>
+        <height>281</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">selection-background-color: transparent;</string>
+       <string notr="true">selection-background-color: transparent;
+gridline-color: rgb(116, 145, 206);</string>
       </property>
       <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOn</enum>
@@ -157,9 +158,6 @@ background-color: rgb(39, 129, 63);
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::DashLine</enum>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -195,7 +193,7 @@ background-color: rgb(39, 129, 63);
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>388</y>
+        <y>390</y>
         <width>201</width>
         <height>23</height>
        </rect>
@@ -216,7 +214,7 @@ font-weight:600;</string>
       <property name="geometry">
        <rect>
         <x>290</x>
-        <y>388</y>
+        <y>390</y>
         <width>221</width>
         <height>23</height>
        </rect>
@@ -231,6 +229,23 @@ font-weight:600;</string>
       </property>
       <property name="indent">
        <number>0</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="LHelpCameras">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>701</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Here you can manage cameras assigned to your profile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>

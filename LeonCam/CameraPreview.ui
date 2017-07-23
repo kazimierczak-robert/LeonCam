@@ -40,7 +40,7 @@
     <rect>
      <x>160</x>
      <y>420</y>
-     <width>301</width>
+     <width>261</width>
      <height>21</height>
     </rect>
    </property>
@@ -144,7 +144,7 @@ background-image: url(:/Resources/Images/snapshotHover.png);
     <rect>
      <x>120</x>
      <y>450</y>
-     <width>221</width>
+     <width>281</width>
      <height>16</height>
     </rect>
    </property>
@@ -301,9 +301,9 @@ background-image: url(:/Resources/Images/leftHover.png);}</string>
   <widget class="QComboBox" name="CBPresets">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>430</x>
      <y>440</y>
-     <width>241</width>
+     <width>291</width>
      <height>21</height>
     </rect>
    </property>
@@ -344,6 +344,19 @@ background-color:none*/</string>
    </property>
    <property name="text">
     <string>On/Off</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBGoToPreset">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>390</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Go To</string>
    </property>
   </widget>
  </widget>
