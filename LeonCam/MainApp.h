@@ -6,6 +6,7 @@
 #include <qlayout.h>
 #include "LogIn.h"
 #include "CameraPreview.h"
+#include "UserCamera.h"
 
 class MainApp : public QMainWindow
 {

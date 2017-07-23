@@ -10,6 +10,12 @@
     <height>500</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>500</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
@@ -20,7 +26,7 @@
    <string>LeonCam</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="LogIn.qrc">
+   <iconset resource="Resources.qrc">
     <normaloff>:/Resources/Images/logo.ico</normaloff>:/Resources/Images/logo.ico</iconset>
   </property>
   <property name="layoutDirection">
@@ -79,7 +85,7 @@ padding: 0px;*/</string>
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="LUsername">
+   <widget class="QLineEdit" name="LEUsername">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -95,7 +101,7 @@ padding: 0px;*/</string>
      <string>Username</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="LPassword">
+   <widget class="QLineEdit" name="LEPassword">
     <property name="geometry">
      <rect>
       <x>250</x>

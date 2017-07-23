@@ -19,7 +19,7 @@ void LogIn::LogInClicked()
 {
 	//Start gif
 	DesignB->gif->start();
-	ui.LUsername->setText("Working");
+	ui.LEUsername->setText("Working");
 	MainApp *mainApp = new MainApp(nullptr);	
 	mainApp->show();
 	this->close();
@@ -31,7 +31,7 @@ void LogIn::ForgotPasswordClicked()
 	//this->hide();
 	ForgotPass->exec();
 	//show window
-	this->show();
+	//this->show();
 }
 void LogIn::NewProfileClicked()
 {
@@ -41,5 +41,5 @@ void LogIn::NewProfileClicked()
 	NewProf->exec();
 	//show window
 	this->show();
-	ui.LUsername->setText("Working 3");
+	ui.LEUsername->setText("Working 3");
 }

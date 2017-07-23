@@ -38,6 +38,11 @@ public:
             ForgotPassword->setObjectName(QStringLiteral("ForgotPassword"));
         ForgotPassword->setWindowModality(Qt::WindowModal);
         ForgotPassword->resize(800, 500);
+        ForgotPassword->setMinimumSize(QSize(800, 500));
+        ForgotPassword->setMaximumSize(QSize(800, 500));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        ForgotPassword->setWindowIcon(icon);
         ForgotPassword->setStyleSheet(QLatin1String("#ForgotPassword\n"
 "{\n"
 "	background-image:url(:/Resources/Images/background.png);\n"

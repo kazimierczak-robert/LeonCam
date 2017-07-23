@@ -30,6 +30,10 @@ MainApp::~MainApp()
 
 void MainApp::AddNewCamera()
 {
+	UserCamera *UserCam = new UserCamera(this);
+	UserCam->exec();
+	//this->show();
+
 	int newIndex = ui.TLWCameras->rowCount();
 	ui.TLWCameras->insertRow(newIndex);
 

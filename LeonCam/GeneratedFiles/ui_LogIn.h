@@ -29,8 +29,8 @@ public:
     QWidget *centralWidget;
     QLabel *Lloading;
     QPushButton *PBNewProfile;
-    QLineEdit *LUsername;
-    QLineEdit *LPassword;
+    QLineEdit *LEUsername;
+    QLineEdit *LEPassword;
     QCheckBox *CBKeepMeLoggedIn;
     QPushButton *PBLogIn;
     QPushButton *PBForgotPassword;
@@ -40,6 +40,7 @@ public:
         if (LogInClass->objectName().isEmpty())
             LogInClass->setObjectName(QStringLiteral("LogInClass"));
         LogInClass->resize(800, 500);
+        LogInClass->setMinimumSize(QSize(800, 500));
         LogInClass->setMaximumSize(QSize(800, 500));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -73,14 +74,14 @@ public:
 "margin: 0px;\n"
 "padding: 0px;*/"));
         PBNewProfile->setFlat(false);
-        LUsername = new QLineEdit(centralWidget);
-        LUsername->setObjectName(QStringLiteral("LUsername"));
-        LUsername->setGeometry(QRect(250, 180, 301, 30));
-        LUsername->setStyleSheet(QStringLiteral(""));
-        LPassword = new QLineEdit(centralWidget);
-        LPassword->setObjectName(QStringLiteral("LPassword"));
-        LPassword->setGeometry(QRect(250, 220, 301, 30));
-        LPassword->setEchoMode(QLineEdit::Password);
+        LEUsername = new QLineEdit(centralWidget);
+        LEUsername->setObjectName(QStringLiteral("LEUsername"));
+        LEUsername->setGeometry(QRect(250, 180, 301, 30));
+        LEUsername->setStyleSheet(QStringLiteral(""));
+        LEPassword = new QLineEdit(centralWidget);
+        LEPassword->setObjectName(QStringLiteral("LEPassword"));
+        LEPassword->setGeometry(QRect(250, 220, 301, 30));
+        LEPassword->setEchoMode(QLineEdit::Password);
         CBKeepMeLoggedIn = new QCheckBox(centralWidget);
         CBKeepMeLoggedIn->setObjectName(QStringLiteral("CBKeepMeLoggedIn"));
         CBKeepMeLoggedIn->setGeometry(QRect(250, 260, 261, 21));
@@ -126,8 +127,8 @@ public:
         LogInClass->setWindowTitle(QApplication::translate("LogInClass", "LeonCam", Q_NULLPTR));
         Lloading->setText(QString());
         PBNewProfile->setText(QApplication::translate("LogInClass", "New profile", Q_NULLPTR));
-        LUsername->setPlaceholderText(QApplication::translate("LogInClass", "Username", Q_NULLPTR));
-        LPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
+        LEUsername->setPlaceholderText(QApplication::translate("LogInClass", "Username", Q_NULLPTR));
+        LEPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
         CBKeepMeLoggedIn->setText(QApplication::translate("LogInClass", "Keep me logged in", Q_NULLPTR));
         PBLogIn->setText(QApplication::translate("LogInClass", "Log In", Q_NULLPTR));
         PBForgotPassword->setText(QApplication::translate("LogInClass", "Forgot password?", Q_NULLPTR));

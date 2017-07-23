@@ -26,11 +26,11 @@ class Ui_NewProfile
 public:
     QLabel *Lloading;
     QLabel *LHelp;
-    QLineEdit *LUsername;
-    QLineEdit *LPassword;
-    QLineEdit *LConfPass;
-    QLineEdit *LSecQuest;
-    QLineEdit *LAnswer;
+    QLineEdit *LEUsername;
+    QLineEdit *LEPassword;
+    QLineEdit *LEConfPass;
+    QLineEdit *LESecQuest;
+    QLineEdit *LEAnswer;
     QLabel *LTipUsername;
     QLabel *LTipPassword;
     QPushButton *PBBack;
@@ -42,6 +42,8 @@ public:
             NewProfile->setObjectName(QStringLiteral("NewProfile"));
         NewProfile->setWindowModality(Qt::WindowModal);
         NewProfile->resize(800, 500);
+        NewProfile->setMinimumSize(QSize(800, 500));
+        NewProfile->setMaximumSize(QSize(800, 500));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
         NewProfile->setWindowIcon(icon);
@@ -55,23 +57,23 @@ public:
         LHelp->setGeometry(QRect(250, 280, 301, 51));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)"));
-        LUsername = new QLineEdit(NewProfile);
-        LUsername->setObjectName(QStringLiteral("LUsername"));
-        LUsername->setGeometry(QRect(290, 160, 261, 30));
-        LPassword = new QLineEdit(NewProfile);
-        LPassword->setObjectName(QStringLiteral("LPassword"));
-        LPassword->setGeometry(QRect(290, 200, 261, 30));
-        LPassword->setEchoMode(QLineEdit::Password);
-        LConfPass = new QLineEdit(NewProfile);
-        LConfPass->setObjectName(QStringLiteral("LConfPass"));
-        LConfPass->setGeometry(QRect(290, 240, 261, 30));
-        LConfPass->setEchoMode(QLineEdit::Password);
-        LSecQuest = new QLineEdit(NewProfile);
-        LSecQuest->setObjectName(QStringLiteral("LSecQuest"));
-        LSecQuest->setGeometry(QRect(250, 340, 301, 30));
-        LAnswer = new QLineEdit(NewProfile);
-        LAnswer->setObjectName(QStringLiteral("LAnswer"));
-        LAnswer->setGeometry(QRect(250, 380, 301, 30));
+        LEUsername = new QLineEdit(NewProfile);
+        LEUsername->setObjectName(QStringLiteral("LEUsername"));
+        LEUsername->setGeometry(QRect(290, 160, 261, 30));
+        LEPassword = new QLineEdit(NewProfile);
+        LEPassword->setObjectName(QStringLiteral("LEPassword"));
+        LEPassword->setGeometry(QRect(290, 200, 261, 30));
+        LEPassword->setEchoMode(QLineEdit::Password);
+        LEConfPass = new QLineEdit(NewProfile);
+        LEConfPass->setObjectName(QStringLiteral("LEConfPass"));
+        LEConfPass->setGeometry(QRect(290, 240, 261, 30));
+        LEConfPass->setEchoMode(QLineEdit::Password);
+        LESecQuest = new QLineEdit(NewProfile);
+        LESecQuest->setObjectName(QStringLiteral("LESecQuest"));
+        LESecQuest->setGeometry(QRect(250, 340, 301, 31));
+        LEAnswer = new QLineEdit(NewProfile);
+        LEAnswer->setObjectName(QStringLiteral("LEAnswer"));
+        LEAnswer->setGeometry(QRect(250, 380, 301, 30));
         LTipUsername = new QLabel(NewProfile);
         LTipUsername->setObjectName(QStringLiteral("LTipUsername"));
         LTipUsername->setGeometry(QRect(250, 160, 31, 31));
@@ -116,11 +118,11 @@ public:
         NewProfile->setWindowTitle(QApplication::translate("NewProfile", "LeonCam", Q_NULLPTR));
         Lloading->setText(QString());
         LHelp->setText(QApplication::translate("NewProfile", "<html><head/><body><p align=\"center\">For your protection please, type the <span style=\" font-weight:600; color:#bdf0ff;\">Security Question</span></p><p align=\"center\">and answer.This will help in future verification</p></body></html>", Q_NULLPTR));
-        LUsername->setPlaceholderText(QApplication::translate("NewProfile", "Username", Q_NULLPTR));
-        LPassword->setPlaceholderText(QApplication::translate("NewProfile", "Password", Q_NULLPTR));
-        LConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm your password", Q_NULLPTR));
-        LSecQuest->setPlaceholderText(QApplication::translate("NewProfile", "Security Question", Q_NULLPTR));
-        LAnswer->setPlaceholderText(QApplication::translate("NewProfile", "Answer", Q_NULLPTR));
+        LEUsername->setPlaceholderText(QApplication::translate("NewProfile", "Username", Q_NULLPTR));
+        LEPassword->setPlaceholderText(QApplication::translate("NewProfile", "Password", Q_NULLPTR));
+        LEConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm your password", Q_NULLPTR));
+        LESecQuest->setPlaceholderText(QApplication::translate("NewProfile", "Security Question", Q_NULLPTR));
+        LEAnswer->setPlaceholderText(QApplication::translate("NewProfile", "Answer", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTipUsername->setToolTip(QApplication::translate("NewProfile", "<html><head/><body>\n"
 "<span style=\"font-weight:600;\">Requirements:</span>\n"
