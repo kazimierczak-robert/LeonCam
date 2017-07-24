@@ -19,7 +19,7 @@ private slots:
 	void AddCamera();
 	void LogOut();
 	void RowSelected(const QModelIndex& modelIndex);
-	void TESearchChanged();
+	void LESearchChanged();
 private:
 	Ui::MainApp ui;
 	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;

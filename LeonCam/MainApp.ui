@@ -109,22 +109,6 @@ background-color: rgb(39, 129, 63);
        <string>Add Camera</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="TESearch">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>70</y>
-        <width>701</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Search camera</string>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="TLWCameras">
       <property name="geometry">
        <rect>
@@ -135,8 +119,14 @@ background-color: rgb(39, 129, 63);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">selection-background-color: transparent;
-gridline-color: rgb(116, 145, 206);</string>
+       <string notr="true">QTableWidget { selection-background-color: transparent;
+gridline-color: rgb(116, 145, 206);
+}
+
+QTableWidget::item { padding: 0px }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOn</enum>
@@ -166,7 +156,7 @@ gridline-color: rgb(116, 145, 206);</string>
        <bool>false</bool>
       </property>
       <property name="columnCount">
-       <number>8</number>
+       <number>9</number>
       </property>
       <attribute name="horizontalHeaderVisible">
        <bool>false</bool>
@@ -178,8 +168,9 @@ gridline-color: rgb(116, 145, 206);</string>
        <bool>false</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>50</number>
+       <number>40</number>
       </attribute>
+      <column/>
       <column/>
       <column/>
       <column/>
@@ -248,6 +239,47 @@ background-color:rgb(36, 118, 59)</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Here you can manage cameras assigned to your profile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <widget class="QLabel" name="LSearch">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>23</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-image: url(:/Resources/Images/search.png); border: none; margin: 0px; padding: 0px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="LESearch">
+      <property name="geometry">
+       <rect>
+        <x>25</x>
+        <y>70</y>
+        <width>695</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+padding-left: 22px;
+border-radius: 11px;</string>
+      </property>
+      <property name="placeholderText">
+       <string>Search camera</string>
+      </property>
+     </widget>
+     <zorder>PBAddCamera</zorder>
+     <zorder>TLWCameras</zorder>
+     <zorder>LTotalNumber</zorder>
+     <zorder>LEnabledNumber</zorder>
+     <zorder>LHelpCameras</zorder>
+     <zorder>LESearch</zorder>
+     <zorder>LSearch</zorder>
     </widget>
     <widget class="QWidget" name="TFacesBase">
      <property name="styleSheet">

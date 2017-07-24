@@ -19,7 +19,14 @@
         <file>Resources/Images/rightHover.png</file>
         <file>Resources/Images/snapshot.png</file>
         <file>Resources/Images/snapshotHover.png</file>
-        <file>Resources/Images/patrol.PNG</file>
-        <file>Resources/Images/patrolHover.PNG</file>
+        <file>Resources/Images/search.png</file>
+        <file>Resources/Images/patrol.png</file>
+        <file>Resources/Images/patrolHover.png</file>
+        <file>Resources/Images/remove.png</file>
+        <file>Resources/Images/removeHover.png</file>
+        <file>Resources/Images/recognizeOff.png</file>
+        <file>Resources/Images/recognizeOffHover.png</file>
+        <file>Resources/Images/recognizeOn.png</file>
+        <file>Resources/Images/recognizeOnHover.png</file>
     </qresource>
 </RCC>

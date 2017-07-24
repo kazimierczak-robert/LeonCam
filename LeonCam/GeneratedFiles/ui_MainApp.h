@@ -15,11 +15,11 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -31,11 +31,12 @@ public:
     QTabWidget *TWMenu;
     QWidget *TCameras;
     QPushButton *PBAddCamera;
-    QTextEdit *TESearch;
     QTableWidget *TLWCameras;
     QLabel *LTotalNumber;
     QLabel *LEnabledNumber;
     QLabel *LHelpCameras;
+    QLabel *LSearch;
+    QLineEdit *LESearch;
     QWidget *TFacesBase;
     QWidget *TReports;
     QWidget *TSettings;
@@ -100,17 +101,17 @@ public:
 "{\n"
 "background-color: rgb(39, 129, 63);\n"
 "}"));
-        TESearch = new QTextEdit(TCameras);
-        TESearch->setObjectName(QStringLiteral("TESearch"));
-        TESearch->setGeometry(QRect(20, 70, 701, 23));
-        TESearch->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         TLWCameras = new QTableWidget(TCameras);
-        if (TLWCameras->columnCount() < 8)
-            TLWCameras->setColumnCount(8);
+        if (TLWCameras->columnCount() < 9)
+            TLWCameras->setColumnCount(9);
         TLWCameras->setObjectName(QStringLiteral("TLWCameras"));
         TLWCameras->setGeometry(QRect(20, 100, 700, 281));
-        TLWCameras->setStyleSheet(QLatin1String("selection-background-color: transparent;\n"
-"gridline-color: rgb(116, 145, 206);"));
+        TLWCameras->setStyleSheet(QLatin1String("QTableWidget { selection-background-color: transparent;\n"
+"gridline-color: rgb(116, 145, 206);\n"
+"}\n"
+"\n"
+"QTableWidget::item { padding: 0px }"));
+        TLWCameras->setFrameShape(QFrame::StyledPanel);
         TLWCameras->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         TLWCameras->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         TLWCameras->setEditTriggers(QAbstractItemView::DoubleClicked);
@@ -120,11 +121,11 @@ public:
         TLWCameras->setSelectionBehavior(QAbstractItemView::SelectRows);
         TLWCameras->setWordWrap(false);
         TLWCameras->setCornerButtonEnabled(false);
-        TLWCameras->setColumnCount(8);
+        TLWCameras->setColumnCount(9);
         TLWCameras->horizontalHeader()->setVisible(false);
         TLWCameras->horizontalHeader()->setDefaultSectionSize(85);
         TLWCameras->verticalHeader()->setVisible(false);
-        TLWCameras->verticalHeader()->setDefaultSectionSize(50);
+        TLWCameras->verticalHeader()->setDefaultSectionSize(40);
         LTotalNumber = new QLabel(TCameras);
         LTotalNumber->setObjectName(QStringLiteral("LTotalNumber"));
         LTotalNumber->setGeometry(QRect(20, 390, 201, 23));
@@ -144,7 +145,24 @@ public:
         LHelpCameras->setGeometry(QRect(20, 30, 701, 31));
         LHelpCameras->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)"));
+        LSearch = new QLabel(TCameras);
+        LSearch->setObjectName(QStringLiteral("LSearch"));
+        LSearch->setGeometry(QRect(20, 70, 23, 23));
+        LSearch->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/search.png); border: none; margin: 0px; padding: 0px;"));
+        LESearch = new QLineEdit(TCameras);
+        LESearch->setObjectName(QStringLiteral("LESearch"));
+        LESearch->setGeometry(QRect(25, 70, 695, 23));
+        LESearch->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+"padding-left: 22px;\n"
+"border-radius: 11px;"));
         TWMenu->addTab(TCameras, QString());
+        PBAddCamera->raise();
+        TLWCameras->raise();
+        LTotalNumber->raise();
+        LEnabledNumber->raise();
+        LHelpCameras->raise();
+        LESearch->raise();
+        LSearch->raise();
         TFacesBase = new QWidget();
         TFacesBase->setObjectName(QStringLiteral("TFacesBase"));
         TFacesBase->setStyleSheet(QStringLiteral("background-color: transparent;"));
@@ -171,10 +189,11 @@ public:
     {
         MainApp->setWindowTitle(QApplication::translate("MainApp", "LeonCam", Q_NULLPTR));
         PBAddCamera->setText(QApplication::translate("MainApp", "Add Camera", Q_NULLPTR));
-        TESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
         LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
         LHelpCameras->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Here you can manage cameras assigned to your profile</p></body></html>", Q_NULLPTR));
+        LSearch->setText(QString());
+        LESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));

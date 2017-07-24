@@ -62,8 +62,15 @@ font-weight:600;</string>
      <height>40</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} 
+QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}</string>
+   </property>
    <property name="text">
-    <string>Patrol</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="PBRecognize">
@@ -75,8 +82,16 @@ font-weight:600;</string>
      <height>40</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px;} 
+QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}
+		</string>
+   </property>
    <property name="text">
-    <string>Recognize</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="PBEdit">
@@ -342,8 +357,11 @@ background-color:none*/</string>
      <height>23</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}</string>
+   </property>
    <property name="text">
-    <string>On/Off</string>
+    <string>Off</string>
    </property>
   </widget>
   <widget class="QPushButton" name="PBGoToPreset">
