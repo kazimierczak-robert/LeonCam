@@ -19,7 +19,6 @@ void LogIn::LogInClicked()
 {
 	//Start gif
 	designB->gif->start();
-	ui.LEUsername->setText("Working");
 	MainApp *mainApp = new MainApp(nullptr);	
 	mainApp->show();
 	this->close();

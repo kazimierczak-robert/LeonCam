@@ -99,6 +99,9 @@
     <ClCompile Include="ForgottenPassword.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -165,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_ForgottenPassword.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

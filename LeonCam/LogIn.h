@@ -7,6 +7,7 @@
 #include "DesignBase.h"
 #include "NewProfile.h"
 #include "MainApp.h"
+#include "DataBase.h"
 
 class LogIn : public QMainWindow
 {
