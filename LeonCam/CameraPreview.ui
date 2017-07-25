@@ -62,6 +62,9 @@ font-weight:600;</string>
      <height>40</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Turn on camera patrol</string>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} 
 QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}</string>
@@ -81,6 +84,9 @@ QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}</s
      <width>40</width>
      <height>40</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Recognation mode: On</string>
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px;} 
@@ -103,8 +109,19 @@ QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png)
      <height>40</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Edit camera</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} 
+QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}
+		</string>
+   </property>
    <property name="text">
-    <string>Edit</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="PBSnapshot">
@@ -115,6 +132,9 @@ QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png)
      <width>40</width>
      <height>40</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Take a snapshot</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#PBSnapshot{
@@ -181,6 +201,9 @@ font-weight:600;</string>
      <height>40</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Go to home position</string>
+   </property>
    <property name="styleSheet">
     <string notr="true">#PBHome{
 background-image: url(:/Resources/Images/home.png);
@@ -209,6 +232,9 @@ background-image: url(:/Resources/Images/homeHover.png);
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Move the camera up</string>
+   </property>
    <property name="styleSheet">
     <string notr="true">#PBUp {
 background-image: url(:/Resources/Images/up.png);
@@ -233,6 +259,9 @@ background-image: url(:/Resources/Images/upHover.png);}</string>
      <width>23</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Move the camera right</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#PBRight {
@@ -259,6 +288,9 @@ background-image: url(:/Resources/Images/rightHover.png);}</string>
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Move the camera down</string>
+   </property>
    <property name="styleSheet">
     <string notr="true">#PBDown {
 background-image: url(:/Resources/Images/down.png);
@@ -283,6 +315,9 @@ background-image: url(:/Resources/Images/downHover.png);}</string>
      <width>23</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Move the camera left</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#PBLeft {
@@ -309,8 +344,18 @@ background-image: url(:/Resources/Images/leftHover.png);}</string>
      <height>41</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Save selected preset</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{background-image: url(:/Resources/Images/savePreset.png);border: none; margin: 0px; padding: 0px;}
+QPushButton:hover{background-image: url(:/Resources/Images/savePresetHover.png);}</string>
+   </property>
    <property name="text">
-    <string>Save</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QComboBox" name="CBPresets">
@@ -373,8 +418,18 @@ background-color:none*/</string>
      <height>41</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Go to selected preset</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}
+QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}</string>
+   </property>
    <property name="text">
-    <string>Go To</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

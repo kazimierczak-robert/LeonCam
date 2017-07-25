@@ -78,6 +78,10 @@ public:
         PBEdit = new QPushButton(CameraPreview);
         PBEdit->setObjectName(QStringLiteral("PBEdit"));
         PBEdit->setGeometry(QRect(630, 390, 40, 40));
+        PBEdit->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} \n"
+"QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}\n"
+"		"));
+        PBEdit->setFlat(true);
         PBSnapshot = new QPushButton(CameraPreview);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
         PBSnapshot->setGeometry(QRect(680, 390, 40, 40));
@@ -164,6 +168,9 @@ public:
         PBSavePreset = new QPushButton(CameraPreview);
         PBSavePreset->setObjectName(QStringLiteral("PBSavePreset"));
         PBSavePreset->setGeometry(QRect(480, 390, 41, 41));
+        PBSavePreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/savePreset.png);border: none; margin: 0px; padding: 0px;}\n"
+"QPushButton:hover{background-image: url(:/Resources/Images/savePresetHover.png);}"));
+        PBSavePreset->setFlat(true);
         CBPresets = new QComboBox(CameraPreview);
         CBPresets->setObjectName(QStringLiteral("CBPresets"));
         CBPresets->setGeometry(QRect(430, 440, 291, 21));
@@ -187,6 +194,9 @@ public:
         PBGoToPreset = new QPushButton(CameraPreview);
         PBGoToPreset->setObjectName(QStringLiteral("PBGoToPreset"));
         PBGoToPreset->setGeometry(QRect(430, 390, 41, 41));
+        PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
+"QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
+        PBGoToPreset->setFlat(true);
 
         retranslateUi(CameraPreview);
 
@@ -197,21 +207,54 @@ public:
     {
         CameraPreview->setWindowTitle(QApplication::translate("CameraPreview", "LeonCam", Q_NULLPTR));
         LCameraDetails->setText(QApplication::translate("CameraPreview", "Camera details", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBPatrol->setToolTip(QApplication::translate("CameraPreview", "Turn on camera patrol", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBPatrol->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBRecognize->setToolTip(QApplication::translate("CameraPreview", "Recognation mode: On", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBRecognize->setText(QString());
-        PBEdit->setText(QApplication::translate("CameraPreview", "Edit", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBEdit->setToolTip(QApplication::translate("CameraPreview", "Edit camera", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        PBEdit->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBSnapshot->setToolTip(QApplication::translate("CameraPreview", "Take a snapshot", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBSnapshot->setText(QString());
         LPreviewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
         LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBHome->setToolTip(QApplication::translate("CameraPreview", "Go to home position", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBHome->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBUp->setToolTip(QApplication::translate("CameraPreview", "Move the camera up", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBUp->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBRight->setToolTip(QApplication::translate("CameraPreview", "Move the camera right", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBRight->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBDown->setToolTip(QApplication::translate("CameraPreview", "Move the camera down", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBDown->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        PBLeft->setToolTip(QApplication::translate("CameraPreview", "Move the camera left", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBLeft->setText(QString());
-        PBSavePreset->setText(QApplication::translate("CameraPreview", "Save", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBSavePreset->setToolTip(QApplication::translate("CameraPreview", "Save selected preset", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        PBSavePreset->setText(QString());
         PBBack->setText(QApplication::translate("CameraPreview", "Back", Q_NULLPTR));
         PBCameraOnOff->setText(QApplication::translate("CameraPreview", "Off", Q_NULLPTR));
-        PBGoToPreset->setText(QApplication::translate("CameraPreview", "Go To", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBGoToPreset->setToolTip(QApplication::translate("CameraPreview", "Go to selected preset", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        PBGoToPreset->setText(QString());
     } // retranslateUi
 
 };
