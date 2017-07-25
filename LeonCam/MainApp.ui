@@ -51,13 +51,15 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QTabWidget::pane {
+color: rgb(213, 235, 255);
 border: 0px;
 }
 
 QTabBar::tab {
 background-color: transparent;
 /*color: rgb(0, 69, 104);*/
-color: rgb(116, 145, 206);
+/*color: rgb(116, 145, 206);*/
+color: rgb(133, 196, 255);
 height: 32px;
 font: 18pt &quot;Nirmala UI&quot;;
 width: 185px;
@@ -65,12 +67,16 @@ width: 185px;
 
 QTabBar::tab:hover{
 /*color: rgb(185, 185, 185);*/
-	color: rgb(134, 164, 245);
+/*	color: rgb(134, 164, 245);*/
+color: rgb(160, 209, 255);
+
 }
 
 QTabBar::tab:selected{
 margin-top: 1px;
-	color: rgb(205, 220, 255);
+/*color: rgb(205, 220, 255);*/
+/*color: rgb(160, 209, 255);*/
+color:rgb(219, 235, 255)
 }
 </string>
     </property>
@@ -232,11 +238,13 @@ font-weight:600;</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+       <string notr="true">/*color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59);*/
+background-color: rgb(28, 138, 219);
+</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Here you can manage cameras assigned to your profile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Here you can manage cameras assigned to your profile&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="LSearch">

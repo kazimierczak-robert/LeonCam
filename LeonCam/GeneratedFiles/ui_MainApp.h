@@ -65,13 +65,15 @@ public:
         TWMenu->setObjectName(QStringLiteral("TWMenu"));
         TWMenu->setGeometry(QRect(30, 20, 740, 461));
         TWMenu->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
+"color: rgb(213, 235, 255);\n"
 "border: 0px;\n"
 "}\n"
 "\n"
 "QTabBar::tab {\n"
 "background-color: transparent;\n"
 "/*color: rgb(0, 69, 104);*/\n"
-"color: rgb(116, 145, 206);\n"
+"/*color: rgb(116, 145, 206);*/\n"
+"color: rgb(133, 196, 255);\n"
 "height: 32px;\n"
 "font: 18pt \"Nirmala UI\";\n"
 "width: 185px;\n"
@@ -79,12 +81,16 @@ public:
 "\n"
 "QTabBar::tab:hover{\n"
 "/*color: rgb(185, 185, 185);*/\n"
-"	color: rgb(134, 164, 245);\n"
+"/*	color: rgb(134, 164, 245);*/\n"
+"color: rgb(160, 209, 255);\n"
+"\n"
 "}\n"
 "\n"
 "QTabBar::tab:selected{\n"
 "margin-top: 1px;\n"
-"	color: rgb(205, 220, 255);\n"
+"/*color: rgb(205, 220, 255);*/\n"
+"/*color: rgb(160, 209, 255);*/\n"
+"color:rgb(219, 235, 255)\n"
 "}\n"
 ""));
         TWMenu->setUsesScrollButtons(false);
@@ -143,8 +149,10 @@ public:
         LHelpCameras = new QLabel(TCameras);
         LHelpCameras->setObjectName(QStringLiteral("LHelpCameras"));
         LHelpCameras->setGeometry(QRect(20, 30, 701, 31));
-        LHelpCameras->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
+        LHelpCameras->setStyleSheet(QLatin1String("/*color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59);*/\n"
+"background-color: rgb(28, 138, 219);\n"
+""));
         LSearch = new QLabel(TCameras);
         LSearch->setObjectName(QStringLiteral("LSearch"));
         LSearch->setGeometry(QRect(20, 70, 23, 23));
@@ -191,7 +199,7 @@ public:
         PBAddCamera->setText(QApplication::translate("MainApp", "Add Camera", Q_NULLPTR));
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
         LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
-        LHelpCameras->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Here you can manage cameras assigned to your profile</p></body></html>", Q_NULLPTR));
+        LHelpCameras->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\"><span style=\" color:#ffffff;\">Here you can manage cameras assigned to your profile</span></p></body></html>", Q_NULLPTR));
         LSearch->setText(QString());
         LESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));

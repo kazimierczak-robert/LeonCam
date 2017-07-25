@@ -79,9 +79,8 @@ void MainApp::AddCamera()
 		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 6), btn);
 
 		btn = new QPushButton();
-		btn->setText("Edit");
 		btn->setGeometry(0, 0, 45, 45);
-		btn->setStyleSheet("background-color: rgb(255, 77, 61);");
+		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;}");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
 		vectorEditButtonToRowIndex->push_back(btn);
 		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 7), btn);
