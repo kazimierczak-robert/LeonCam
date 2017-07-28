@@ -5,28 +5,24 @@ MainApp::MainApp(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	vectorCameraLayouts = new std::vector<QLayout*>();
+
 	vectorIsEnabledButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorPatrolButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorRecognationButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorEditButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorRemoveButtonToRowIndex = new std::vector<QPushButton*>();
-	
+
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
 	//connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
-	connect(ui.TLWCameras, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(RowSelected(const QModelIndex&)));
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
 
-	ui.TLWCameras->setColumnWidth(0, 40);
-	ui.TLWCameras->setColumnWidth(1, 77);
-	ui.TLWCameras->setColumnWidth(2, 170);
-	ui.TLWCameras->setColumnWidth(3, 140);
-	ui.TLWCameras->setColumnWidth(4, 95);
-	ui.TLWCameras->setColumnWidth(5, 40);
-	ui.TLWCameras->setColumnWidth(6, 40);
-	ui.TLWCameras->setColumnWidth(7, 40);
-	ui.TLWCameras->setColumnWidth(8, 40);
+	QPushButton* btn = new QPushButton();
+	btn->setFixedSize(20, 20);
+	btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 
-	ui.TLWCameras->setFocusPolicy(Qt::NoFocus);
+	ui.HLCameraPages->addWidget(btn, 2, 0);
+
 }
 
 MainApp::~MainApp()
@@ -41,68 +37,64 @@ void MainApp::AddCamera()
 	{
 		//vector includes values from QDialog
 		std::vector<QString>* controlsValues = UserCam->GetValuesFromControls();
-		
-		//TODO
-		int newIndex = ui.TLWCameras->rowCount();
-		ui.TLWCameras->insertRow(newIndex);
+
+		QGridLayout *layout = new QGridLayout();
+		ui.GLCameras->addLayout(layout, vectorCameraLayouts->size()/3, vectorCameraLayouts->size() % 3);
+		vectorCameraLayouts->push_back(layout);
+
+		QLabel *label = new QLabel();
+		label->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
+		label->setFixedSize(216, 123);
+		layout->addWidget(label, 0, 0, 1, 5);
+
+		QLabel *label2 = new QLabel("Garage (192.168.111.111)");
+		label2->setStyleSheet("color:rgb(255, 255, 255);");
+		label2->setFixedSize(216, 23);
+		layout->addWidget(label2, 1, 0, 1, 5);
 
 		QPushButton* btn = new QPushButton();
 		btn->setText("Off");
-		btn->setGeometry(0, 0, 45, 45);
+		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {TurnOnOffCamera(btn); });
 		vectorIsEnabledButtonToRowIndex->push_back(btn);
-		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 0), btn);
-
-		QImage *img = new QImage(":/Resources/Images/unavailablePreview.png");
-		QTableWidgetItem *thumbnail = new QTableWidgetItem;
-		thumbnail->setData(Qt::DecorationRole, QPixmap::fromImage(*img));
-		ui.TLWCameras->setItem(newIndex, 1, thumbnail);
-
-		ui.TLWCameras->setItem(newIndex, 2, new QTableWidgetItem("Garage " + QVariant(newIndex).toString()));
-		ui.TLWCameras->setItem(newIndex, 3, new QTableWidgetItem("Media-Tech"));
-		ui.TLWCameras->setItem(newIndex, 4, new QTableWidgetItem("192.168.147.227"));
+		layout->addWidget(btn, 2, 0);
 
 		btn = new QPushButton();
-		btn->setGeometry(0, 0, 40, 40);
+		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}");
 		btn->setToolTip("Turn on camera patrol");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {PatrolCamera(btn); });
 		vectorPatrolButtonToRowIndex->push_back(btn);
-		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 5), btn);
+		layout->addWidget(btn, 2, 1);
 
 		btn = new QPushButton();
-		btn->setGeometry(0, 0, 45, 45);
+		btn->setFixedSize(40, 40);
 		btn->setText("On");
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 		btn->setToolTip("Recognation mode: On");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognationCamera(btn); });
 		vectorRecognationButtonToRowIndex->push_back(btn);
-		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 6), btn);
+		layout->addWidget(btn, 2, 2);
 
 		btn = new QPushButton();
-		btn->setGeometry(0, 0, 45, 45);
+		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
 		vectorEditButtonToRowIndex->push_back(btn);
-		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 7), btn);
+		layout->addWidget(btn, 2, 3);
 
 		btn = new QPushButton();
-		btn->setGeometry(0, 0, 45, 45);
+		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/remove.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/removeHover.png);}");
 		btn->setToolTip("Remove camera");
 		connect(btn, &QPushButton::clicked, this, [this, btn] { RemoveCamera(btn); });
 		vectorRemoveButtonToRowIndex->push_back(btn);
+		layout->addWidget(btn, 2, 4);
 
-		ui.TLWCameras->setIndexWidget(ui.TLWCameras->model()->index(newIndex, 8), btn);
-
-		for (int i = 1; i < 5; i++)
-		{
-			ui.TLWCameras->item(newIndex, i)->setFlags(Qt::ItemFlag::ItemIsEnabled);
-		}
-
-		ui.LTotalNumber->setText("Total number of cameras: " + QVariant(newIndex + 1).toString());
+		layout->setHorizontalSpacing(4);
+		layout->setVerticalSpacing(2);
 	}
 }
 
@@ -113,31 +105,31 @@ void MainApp::LogOut()
 	this->close();
 }
 
-void MainApp::RowSelected(const QModelIndex& modelIndex)
+/*void MainApp::RowSelected(const QModelIndex& modelIndex)
 {
 	QString cameraDetails = ui.TLWCameras->item(modelIndex.row(), 2)->text() + " | " + ui.TLWCameras->item(modelIndex.row(), 3)->text();
 	CameraPreview *cameraPreview = new CameraPreview(this, cameraDetails, vectorIsEnabledButtonToRowIndex->at(modelIndex.row()), vectorRecognationButtonToRowIndex->at(modelIndex.row()), ui.LEnabledNumber);
 	cameraPreview->exec();
-}
+}*/
 
 void MainApp::TurnOnOffCamera(QPushButton* button)
 {
-	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+	//int number = ui.LEnabledNumber->text().split(" ").last().toInt();
 
 	if (button->text() == "Off")
 	{
 		button->setText("On");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-		number += 1;
+		//number += 1;
 	}
 	else
 	{
 		button->setText("Off");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
-		number -= 1;
+		//number -= 1;
 	}
 
-	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
+	//ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
 
 }
 
@@ -205,18 +197,18 @@ void MainApp::RemoveCamera(QPushButton* button)
 		{
 			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
 			{
-				int number = ui.LEnabledNumber->text().split(" ").last().toInt();
-				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number - 1).toString());
+				//int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+				//ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number - 1).toString());
 			}
 
-			ui.TLWCameras->removeRow(index);
+			//ui.TLWCameras->removeRow(index);
 			vectorIsEnabledButtonToRowIndex->erase(vectorIsEnabledButtonToRowIndex->begin() + index);
 			vectorPatrolButtonToRowIndex->erase(vectorPatrolButtonToRowIndex->begin() + index);
 			vectorRecognationButtonToRowIndex->erase(vectorRecognationButtonToRowIndex->begin() + index);
 			vectorEditButtonToRowIndex->erase(vectorEditButtonToRowIndex->begin() + index);
 			vectorRemoveButtonToRowIndex->erase(vectorRemoveButtonToRowIndex->begin() + index);
 
-			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(ui.TLWCameras->rowCount()).toString());
+			//ui.LTotalNumber->setText("Total number of cameras: " + QVariant(ui.TLWCameras->rowCount()).toString());
 			return;
 		}
 		else
@@ -229,7 +221,7 @@ void MainApp::RemoveCamera(QPushButton* button)
 
 void MainApp::LESearchChanged()
 {
-	for (int i = 0; i < ui.TLWCameras->rowCount(); i++)
+	/*for (int i = 0; i < ui.TLWCameras->rowCount(); i++)
 	{
 		if (ui.TLWCameras->item(i, 2)->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
 		{
@@ -239,5 +231,5 @@ void MainApp::LESearchChanged()
 		{
 			ui.TLWCameras->hideRow(i);
 		}
-	}
+	}*/
 }

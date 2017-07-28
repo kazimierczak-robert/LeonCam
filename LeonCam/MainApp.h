@@ -18,10 +18,11 @@ public:
 private slots:
 	void AddCamera();
 	void LogOut();
-	void RowSelected(const QModelIndex& modelIndex);
+	//void RowSelected(const QModelIndex& modelIndex);
 	void LESearchChanged();
 private:
 	Ui::MainApp ui;
+	std::vector<QLayout*> *vectorCameraLayouts;
 	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
 	std::vector<QPushButton*> *vectorPatrolButtonToRowIndex;
 	std::vector<QPushButton*> *vectorRecognationButtonToRowIndex;

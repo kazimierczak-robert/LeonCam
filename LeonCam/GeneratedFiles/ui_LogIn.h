@@ -39,9 +39,9 @@ public:
     {
         if (LogInClass->objectName().isEmpty())
             LogInClass->setObjectName(QStringLiteral("LogInClass"));
-        LogInClass->resize(800, 500);
-        LogInClass->setMinimumSize(QSize(800, 500));
-        LogInClass->setMaximumSize(QSize(800, 500));
+        LogInClass->resize(800, 600);
+        LogInClass->setMinimumSize(QSize(800, 600));
+        LogInClass->setMaximumSize(QSize(800, 600));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
         LogInClass->setWindowIcon(icon);

@@ -41,9 +41,9 @@ public:
         if (NewProfile->objectName().isEmpty())
             NewProfile->setObjectName(QStringLiteral("NewProfile"));
         NewProfile->setWindowModality(Qt::WindowModal);
-        NewProfile->resize(800, 500);
-        NewProfile->setMinimumSize(QSize(800, 500));
-        NewProfile->setMaximumSize(QSize(800, 500));
+        NewProfile->resize(800, 600);
+        NewProfile->setMinimumSize(QSize(800, 600));
+        NewProfile->setMaximumSize(QSize(800, 600));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
         NewProfile->setWindowIcon(icon);

@@ -37,9 +37,9 @@ public:
         if (ForgottenPassword->objectName().isEmpty())
             ForgottenPassword->setObjectName(QStringLiteral("ForgottenPassword"));
         ForgottenPassword->setWindowModality(Qt::WindowModal);
-        ForgottenPassword->resize(800, 500);
-        ForgottenPassword->setMinimumSize(QSize(800, 500));
-        ForgottenPassword->setMaximumSize(QSize(800, 500));
+        ForgottenPassword->resize(800, 600);
+        ForgottenPassword->setMinimumSize(QSize(800, 600));
+        ForgottenPassword->setMaximumSize(QSize(800, 600));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
         ForgottenPassword->setWindowIcon(icon);

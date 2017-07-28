@@ -46,9 +46,9 @@ public:
     {
         if (CameraPreview->objectName().isEmpty())
             CameraPreview->setObjectName(QStringLiteral("CameraPreview"));
-        CameraPreview->resize(800, 500);
-        CameraPreview->setMinimumSize(QSize(800, 500));
-        CameraPreview->setMaximumSize(QSize(800, 500));
+        CameraPreview->resize(800, 600);
+        CameraPreview->setMinimumSize(QSize(800, 600));
+        CameraPreview->setMaximumSize(QSize(800, 600));
         QIcon icon;
         icon.addFile(QStringLiteral(":/Resources/Images/logo.ico"), QSize(), QIcon::Normal, QIcon::Off);
         CameraPreview->setWindowIcon(icon);
@@ -167,7 +167,7 @@ public:
         PBLeft->setFlat(true);
         PBSavePreset = new QPushButton(CameraPreview);
         PBSavePreset->setObjectName(QStringLiteral("PBSavePreset"));
-        PBSavePreset->setGeometry(QRect(480, 390, 41, 41));
+        PBSavePreset->setGeometry(QRect(480, 390, 40, 40));
         PBSavePreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/savePreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/savePresetHover.png);}"));
         PBSavePreset->setFlat(true);
@@ -193,7 +193,7 @@ public:
         PBCameraOnOff->setStyleSheet(QStringLiteral("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}"));
         PBGoToPreset = new QPushButton(CameraPreview);
         PBGoToPreset->setObjectName(QStringLiteral("PBGoToPreset"));
-        PBGoToPreset->setGeometry(QRect(430, 390, 41, 41));
+        PBGoToPreset->setGeometry(QRect(430, 390, 40, 40));
         PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
         PBGoToPreset->setFlat(true);

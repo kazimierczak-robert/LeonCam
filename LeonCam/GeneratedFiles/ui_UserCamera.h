@@ -49,9 +49,9 @@ public:
         if (UserCamera->objectName().isEmpty())
             UserCamera->setObjectName(QStringLiteral("UserCamera"));
         UserCamera->setWindowModality(Qt::WindowModal);
-        UserCamera->resize(800, 500);
-        UserCamera->setMinimumSize(QSize(800, 500));
-        UserCamera->setMaximumSize(QSize(800, 500));
+        UserCamera->resize(800, 600);
+        UserCamera->setMinimumSize(QSize(800, 600));
+        UserCamera->setMaximumSize(QSize(800, 600));
         UserCamera->setStyleSheet(QLatin1String("#UserCamera\n"
 "{\n"
 "	background-image: url(:/Resources/Images/background.png);\n"
