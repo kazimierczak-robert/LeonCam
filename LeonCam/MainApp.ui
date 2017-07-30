@@ -46,7 +46,7 @@
       <x>30</x>
       <y>20</y>
       <width>740</width>
-      <height>551</height>
+      <height>561</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -57,8 +57,6 @@ border: 0px;
 
 QTabBar::tab {
 background-color: transparent;
-/*color: rgb(0, 69, 104);*/
-/*color: rgb(116, 145, 206);*/
 color: rgb(133, 196, 255);
 height: 32px;
 font: 18pt &quot;Nirmala UI&quot;;
@@ -66,16 +64,12 @@ width: 185px;
 }
 
 QTabBar::tab:hover{
-/*color: rgb(185, 185, 185);*/
-/*	color: rgb(134, 164, 245);*/
 color: rgb(160, 209, 255);
 
 }
 
 QTabBar::tab:selected{
 margin-top: 1px;
-/*color: rgb(205, 220, 255);*/
-/*color: rgb(160, 209, 255);*/
 color:rgb(219, 235, 255)
 }
 </string>
@@ -98,7 +92,7 @@ color:rgb(219, 235, 255)
        <rect>
         <x>610</x>
         <y>30</y>
-        <width>101</width>
+        <width>100</width>
         <height>23</height>
        </rect>
       </property>
@@ -136,7 +130,7 @@ background-color: rgb(39, 129, 63);
        <rect>
         <x>35</x>
         <y>30</y>
-        <width>561</width>
+        <width>560</width>
         <height>23</height>
        </rect>
       </property>
@@ -149,73 +143,96 @@ border-radius: 11px;</string>
        <string>Search camera</string>
       </property>
      </widget>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="TWCameraPages">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>59</y>
-        <width>721</width>
-        <height>441</height>
+        <width>720</width>
+        <height>440</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QTabWidget::pane {
 color: rgb(213, 235, 255);
-	background-color: rgb(0, 0, 0);
 border: 0px;
 }
 
+QTabWidget::tab-bar {
+left: 342px;
+}
+
 QTabBar::tab {
-	background-color: rgb(0, 0, 0);
+background-color: transparent;
 color: rgb(133, 196, 255);
-height: 25px;
-font: 18pt &quot;Nirmala UI&quot;;
-width: 35px;
+height: 18px;
+width: 36px;
 }
 
 QTabBar::tab:hover{
 color: rgb(160, 209, 255);
-
 }
 
 QTabBar::tab:selected{
 margin-top: -1px;
-color:rgb(219, 235, 255)
-}
-</string>
+color:rgb(219, 235, 255);
+}</string>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::South</enum>
       </property>
-      <property name="currentIndex">
-       <number>0</number>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
       </property>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>⚬</string>
-       </attribute>
-       <widget class="QWidget" name="gridLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>701</width>
-          <height>421</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="GLCameras"/>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>●</string>
-       </attribute>
-      </widget>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="usesScrollButtons">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="LTotalNumber">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>510</y>
+        <width>200</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color: transparent;
+font-weight:600;</string>
+      </property>
+      <property name="text">
+       <string>Total number of cameras: 0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="LEnabledNumber">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>510</y>
+        <width>200</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color: transparent;
+font-weight:600;</string>
+      </property>
+      <property name="text">
+       <string>Number of enabled cameras: 0</string>
+      </property>
      </widget>
      <zorder>PBAddCamera</zorder>
      <zorder>LESearch</zorder>
      <zorder>LSearch</zorder>
-     <zorder>tabWidget</zorder>
+     <zorder>TWCameraPages</zorder>
+     <zorder>LTotalNumber</zorder>
+     <zorder>LEnabledNumber</zorder>
     </widget>
     <widget class="QWidget" name="TFacesBase">
      <property name="styleSheet">

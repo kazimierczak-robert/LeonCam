@@ -20,9 +20,11 @@ private slots:
 	void LogOut();
 	//void RowSelected(const QModelIndex& modelIndex);
 	void LESearchChanged();
+	void TWCameraPagesChanged(int newIndex);
 private:
 	Ui::MainApp ui;
-	std::vector<QLayout*> *vectorCameraLayouts;
+	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
+	std::vector<QGridLayout*> *vectorQGridLayouts;
 	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
 	std::vector<QPushButton*> *vectorPatrolButtonToRowIndex;
 	std::vector<QPushButton*> *vectorRecognationButtonToRowIndex;
@@ -33,4 +35,6 @@ private:
 	void RecognationCamera(QPushButton* button);
 	void EditCamera(QPushButton* button);
 	void RemoveCamera(QPushButton* button);
+	int activeCameraPage;
+	void addTab();
 };

@@ -1,11 +1,12 @@
-#include "MainApp.h"
+﻿#include "MainApp.h"
 
 MainApp::MainApp(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 
-	vectorCameraLayouts = new std::vector<QLayout*>();
+	vectorCameraLayoutsPages = new std::vector<std::vector<QLayout*>*>();
+	vectorQGridLayouts = new std::vector<QGridLayout*>();
 
 	vectorIsEnabledButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorPatrolButtonToRowIndex = new std::vector<QPushButton*>();
@@ -16,12 +17,11 @@ MainApp::MainApp(QWidget *parent)
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
 	//connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
+	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
 
-	QPushButton* btn = new QPushButton();
-	btn->setFixedSize(20, 20);
-	btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+	activeCameraPage = 0;
 
-	ui.HLCameraPages->addWidget(btn, 2, 0);
+	addTab();
 
 }
 
@@ -31,6 +31,16 @@ MainApp::~MainApp()
 
 void MainApp::AddCamera()
 {
+	if (vectorCameraLayoutsPages->size() == 20)
+	{
+		if (vectorCameraLayoutsPages->at(19)->size()==6)
+		{
+			QMessageBox msgBox;
+			msgBox.setText("Error: You can't assign more cameras to your profile");
+			msgBox.exec();
+			return;
+		}
+	}
 	UserCamera *UserCam = new UserCamera(this);
 	bool result = UserCam->exec();
 	if (result == QDialog::Accepted)
@@ -39,8 +49,6 @@ void MainApp::AddCamera()
 		std::vector<QString>* controlsValues = UserCam->GetValuesFromControls();
 
 		QGridLayout *layout = new QGridLayout();
-		ui.GLCameras->addLayout(layout, vectorCameraLayouts->size()/3, vectorCameraLayouts->size() % 3);
-		vectorCameraLayouts->push_back(layout);
 
 		QLabel *label = new QLabel();
 		label->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
@@ -95,7 +103,36 @@ void MainApp::AddCamera()
 
 		layout->setHorizontalSpacing(4);
 		layout->setVerticalSpacing(2);
+
+		//layout->itemAtPosition(2,0)->widget()->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
+
+
+		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size()-1)->size() == 6)
+		{
+			addTab();
+		}
+
+		vectorQGridLayouts->at(vectorQGridLayouts->size()-1)->addLayout(layout, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() / 3, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() % 3);
+		vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->push_back(layout);
+
+		ui.LTotalNumber->setText("Total number of cameras: " + QString::number((vectorQGridLayouts->size()-1) * 6 + vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1) ->size()));
 	}
+}
+
+void MainApp::addTab()
+{
+	QGridLayout *newLayout = new QGridLayout();
+	QWidget *newTab = new QWidget(ui.TWCameraPages);
+	newTab->setLayout(newLayout);
+	ui.TWCameraPages->addTab(newTab, "");
+	ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size());
+	TWCameraPagesChanged(vectorQGridLayouts->size());
+
+	vectorCameraLayoutsPages->push_back(new std::vector<QLayout*>());
+	vectorQGridLayouts->push_back(newLayout);
+
+	ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
+
 }
 
 void MainApp::LogOut()
@@ -114,22 +151,22 @@ void MainApp::LogOut()
 
 void MainApp::TurnOnOffCamera(QPushButton* button)
 {
-	//int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
 
 	if (button->text() == "Off")
 	{
 		button->setText("On");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-		//number += 1;
+		number += 1;
 	}
 	else
 	{
 		button->setText("Off");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
-		//number -= 1;
+		number -= 1;
 	}
 
-	//ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
+	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
 
 }
 
@@ -232,4 +269,11 @@ void MainApp::LESearchChanged()
 			ui.TLWCameras->hideRow(i);
 		}
 	}*/
+}
+
+void MainApp::TWCameraPagesChanged(int newIndex)
+{
+	ui.TWCameraPages->setTabText(activeCameraPage, QString::fromStdWString(L"\u25CB"));
+	ui.TWCameraPages->setTabText(newIndex, QString::fromStdWString(L"\u25CF"));
+	activeCameraPage = newIndex;
 }
