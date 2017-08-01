@@ -213,8 +213,11 @@ void MainApp::EditCamera(QPushButton* button)
 		{
 			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
 			{
-
-			}
+				
+			}	
+			CameraEdition *cameraEdition = new CameraEdition(this);
+			cameraEdition->exec();
+			delete cameraEdition;
 			return;
 		}
 		else

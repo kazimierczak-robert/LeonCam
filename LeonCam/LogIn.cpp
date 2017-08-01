@@ -19,26 +19,28 @@ void LogIn::LogInClicked()
 {
 	//Start gif
 	designB->gif->start();
-	MainApp *mainApp = new MainApp(nullptr);	
+	MainApp *mainApp = new MainApp(nullptr);
 	mainApp->show();
 	this->close();
 }
 void LogIn::ForgotPasswordClicked()
 {
-	ForgottenPassword *ForgottenPass = new ForgottenPassword(this);
+	ForgottenPassword *forgottenPassword = new ForgottenPassword(this);
 	//hide window
 	//this->hide();
-	ForgottenPass->exec();
+	forgottenPassword->exec();
+	delete forgottenPassword;
 	//show window
 	//this->show();
 }
 void LogIn::NewProfileClicked()
 {
-	NewProfile *NewProf = new NewProfile(this);
+	NewProfile *newProfile = new NewProfile(this);
 	//hide window
 	//this->hide();
-	NewProf->exec();
+	newProfile->exec();
+	delete newProfile;
 	//show window
-	this->show();
-	ui.LEUsername->setText("Working 3");
+	//this->show();
+	//ui.LEUsername->setText("Working 3");
 }

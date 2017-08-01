@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CameraEdition</class>
+ <widget class="QDialog" name="CameraEdition">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LeonCam</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#CameraEdition{background-image: url(:/Resources/Images/background.png);}</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QLineEdit" name="LEDescripton">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>265</y>
+     <width>231</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Description</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LEModel">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>245</y>
+     <width>231</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Model</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="LEIPv4Address">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>285</y>
+     <width>231</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>IPv4 address</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="LTip">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>260</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#LTip{background-image: url(:/Resources/Images/bulb.png);}
+#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="LHelp">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>200</y>
+     <width>301</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Edit selected fields&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBBack">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>510</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PBBack{
+color:rgb(255, 255, 255);
+background-color: rgb(255, 77, 61);}
+#PBBack:hover{
+background-color: rgb(255, 87, 58);
+}
+/*border: none;
+margin: 0px;
+padding: 0px;
+background-color:none*/</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="PBEdit">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>510</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PBEdit{
+background-color: rgb(0, 69, 104);
+color: rgb(255, 255, 255);}
+#PBEdit:hover
+{
+background-color: rgb(0, 77, 116);
+}
+/*border: none;
+margin: 0px;
+padding: 0px;*/</string>
+   </property>
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Lloading">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>80</y>
+     <width>61</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:none</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
