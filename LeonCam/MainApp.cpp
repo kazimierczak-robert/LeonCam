@@ -97,7 +97,7 @@ void MainApp::AddCamera()
 		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/remove.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/removeHover.png);}");
 		btn->setToolTip("Remove camera");
-		connect(btn, &QPushButton::clicked, this, [this, btn] { RemoveCamera(btn); });
+		connect(btn, &QPushButton::clicked, this, [this, layout] { RemoveCamera(layout); });
 		vectorRemoveButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 4);
 
@@ -110,6 +110,10 @@ void MainApp::AddCamera()
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size()-1)->size() == 6)
 		{
 			addTab();
+		}
+		else
+		{
+			ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size()-1);
 		}
 
 		vectorQGridLayouts->at(vectorQGridLayouts->size()-1)->addLayout(layout, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() / 3, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() % 3);
@@ -211,10 +215,6 @@ void MainApp::EditCamera(QPushButton* button)
 	{
 		if (item == button)
 		{
-			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
-			{
-				
-			}	
 			CameraEdition *cameraEdition = new CameraEdition(this);
 			cameraEdition->exec();
 			delete cameraEdition;
@@ -227,35 +227,47 @@ void MainApp::EditCamera(QPushButton* button)
 	}
 }
 
-void MainApp::RemoveCamera(QPushButton* button)
+void MainApp::RemoveCamera(QLayout* layout)
 {
-	int index = 0;
-
-	for (const auto& item : *vectorRemoveButtonToRowIndex)
+	int pageIndex = 0;
+	for (const auto& item : *vectorCameraLayoutsPages)
 	{
-		if (item == button)
+		if (std::find(item->begin(), item->end(), layout) != item->end()) 
 		{
-			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
+			if (((QPushButton*)(layout->itemAt(2)->widget()))->text() == "On")
 			{
-				//int number = ui.LEnabledNumber->text().split(" ").last().toInt();
-				//ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number - 1).toString());
+				int numberEnabled = ui.LEnabledNumber->text().split(" ").last().toInt();
+				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(numberEnabled - 1).toString());
 			}
+			int number = ui.LTotalNumber->text().split(" ").last().toInt();
+			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(number - 1).toString());
 
-			//ui.TLWCameras->removeRow(index);
-			vectorIsEnabledButtonToRowIndex->erase(vectorIsEnabledButtonToRowIndex->begin() + index);
-			vectorPatrolButtonToRowIndex->erase(vectorPatrolButtonToRowIndex->begin() + index);
-			vectorRecognationButtonToRowIndex->erase(vectorRecognationButtonToRowIndex->begin() + index);
-			vectorEditButtonToRowIndex->erase(vectorEditButtonToRowIndex->begin() + index);
-			vectorRemoveButtonToRowIndex->erase(vectorRemoveButtonToRowIndex->begin() + index);
+			//Removing all item in layout
+			QLayoutItem * itemLayout;
+			QWidget * widget;
+			while ((itemLayout = layout->takeAt(0)))
+			{
+				if ((widget = itemLayout->widget()) != 0) 
+				{
+					widget->hide(); 
+					delete widget; 
+				}
+				else 
+				{ 
+					delete itemLayout; 
+				}
+			}
+			delete layout;
 
-			//ui.LTotalNumber->setText("Total number of cameras: " + QVariant(ui.TLWCameras->rowCount()).toString());
-			return;
+			item->erase(std::remove(item->begin(), item->end(), layout), item->end());
+			break;
 		}
 		else
 		{
-			index += 1;
+			pageIndex+=1;
 		}
 	}
+
 }
 
 

@@ -8,6 +8,7 @@
 #include "CameraPreview.h"
 #include "UserCamera.h"
 #include "CameraEdition.h"
+#include <algorithm>
 
 class MainApp : public QMainWindow
 {
@@ -35,7 +36,7 @@ private:
 	void PatrolCamera(QPushButton* button);
 	void RecognationCamera(QPushButton* button);
 	void EditCamera(QPushButton* button);
-	void RemoveCamera(QPushButton* button);
+	void RemoveCamera(QLayout* layout);
 	int activeCameraPage;
 	void addTab();
 };
