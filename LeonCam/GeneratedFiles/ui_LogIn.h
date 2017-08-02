@@ -62,7 +62,7 @@ public:
         Lloading->setGeometry(QRect(370, 80, 61, 61));
         PBNewProfile = new QPushButton(centralWidget);
         PBNewProfile->setObjectName(QStringLiteral("PBNewProfile"));
-        PBNewProfile->setGeometry(QRect(480, 420, 71, 23));
+        PBNewProfile->setGeometry(QRect(480, 510, 71, 25));
         PBNewProfile->setStyleSheet(QLatin1String("#PBNewProfile{\n"
 "color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)}\n"
@@ -76,15 +76,15 @@ public:
         PBNewProfile->setFlat(false);
         LEUsername = new QLineEdit(centralWidget);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
-        LEUsername->setGeometry(QRect(250, 180, 301, 30));
+        LEUsername->setGeometry(QRect(250, 200, 301, 25));
         LEUsername->setStyleSheet(QStringLiteral(""));
         LEPassword = new QLineEdit(centralWidget);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
-        LEPassword->setGeometry(QRect(250, 220, 301, 30));
+        LEPassword->setGeometry(QRect(250, 230, 301, 25));
         LEPassword->setEchoMode(QLineEdit::Password);
         CBKeepMeLoggedIn = new QCheckBox(centralWidget);
         CBKeepMeLoggedIn->setObjectName(QStringLiteral("CBKeepMeLoggedIn"));
-        CBKeepMeLoggedIn->setGeometry(QRect(250, 260, 261, 21));
+        CBKeepMeLoggedIn->setGeometry(QRect(250, 260, 261, 25));
         CBKeepMeLoggedIn->setStyleSheet(QLatin1String("#CBKeepMeLoggedIn{color: rgb(35, 167, 255);}\n"
 "#CBKeepMeLoggedIn:hover\n"
 "{\n"
@@ -93,7 +93,7 @@ public:
 "}"));
         PBLogIn = new QPushButton(centralWidget);
         PBLogIn->setObjectName(QStringLiteral("PBLogIn"));
-        PBLogIn->setGeometry(QRect(250, 290, 301, 30));
+        PBLogIn->setGeometry(QRect(250, 300, 301, 30));
         PBLogIn->setStyleSheet(QLatin1String("#PBLogIn{\n"
 "background-color: rgb(0, 69, 104);\n"
 "color: rgb(255, 255, 255);}\n"
@@ -104,7 +104,7 @@ public:
         PBLogIn->setFlat(false);
         PBForgotPassword = new QPushButton(centralWidget);
         PBForgotPassword->setObjectName(QStringLiteral("PBForgotPassword"));
-        PBForgotPassword->setGeometry(QRect(250, 330, 101, 16));
+        PBForgotPassword->setGeometry(QRect(250, 340, 101, 16));
         PBForgotPassword->setStyleSheet(QLatin1String("#PBForgotPassword{\n"
 "color: rgb(255, 90, 75);\n"
 "border: none;\n"

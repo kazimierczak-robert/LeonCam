@@ -131,7 +131,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="NewProfile.cpp" />
+    <ClCompile Include="SHA256.cpp" />
     <ClCompile Include="UserCamera.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -159,6 +161,8 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SHA256.h" />
+    <ClInclude Include="Utilities.h" />
     <CustomBuild Include="UserCamera.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing UserCamera.h...</Message>

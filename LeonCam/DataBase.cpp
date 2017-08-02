@@ -15,12 +15,6 @@ void DataBase::SetPathToDB()
 	QDir databasePath;
 	pathToDB = databasePath.currentPath() + "/DataBase/LeonCamDB.sqlite";
 }
-void DataBase::AlarmAboutError(QString error)
-{
-	QMessageBox msgBox;
-	msgBox.setText("Error: " + error);
-	msgBox.exec();
-}
 bool DataBase::CreateUsers()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS Users("
@@ -65,10 +59,32 @@ bool DataBase::CreateAlertsDeleteSettings()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS AlertsDeleteSettings("
 					"AlertDeleteSettingID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Date DATETIME NOT NULL);");
+					"Date TEXT NOT NULL);");
 
 	bool result;
 	result = query.isActive() == true ? true : false;
+	
+	if (result == true) 
+	{
+		query.clear();
+		query.prepare("SELECT COUNT(*) FROM AlertsDeleteSettings");
+		query.exec();
+		result = query.isActive() == true ? true : false;
+
+		query.next();
+		int queryResult = query.value(0).toInt();
+		if (queryResult == 0 && result==true)
+		{
+			query.clear();
+			query.prepare("INSERT INTO AlertsDeleteSettings (Date) VALUES (?)");
+			QVariantList times;
+			times << "never" << "1 day" << "1 week" << "1 month" << "half a year" << "1 year";
+			query.addBindValue(times);
+
+			result = query.execBatch() == true ? true : false;
+		}
+	}
+
 	return result;
 }
 bool DataBase::CreateCameras()
@@ -77,7 +93,9 @@ bool DataBase::CreateCameras()
 					"CameraID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					"Model TEXT NOT NULL,"
 					"IPAddress VARCHAR(39) NOT NULL,"
-					"Login TEXT NOT NULL);");
+					"Login TEXT NOT NULL,"
+					"LastEditedBy INTEGER REFERENCES Users(UserID),"
+					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;
 	result = query.isActive() == true ? true : false;
@@ -95,35 +113,16 @@ bool DataBase::CreateUsersCameras()
 	result = query.isActive() == true ? true : false;
 	return result;
 }
-bool DataBase::CreatePresets() 
-{
-	QSqlQuery query("CREATE TABLE IF NOT EXISTS Presets("
-					"PresetID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Name TEXT NOT NULL,"
-					"Description TEXT NOT NULL);");
 
-	bool result;
-	result = query.isActive() == true ? true : false;
-	return result;
-}
-bool DataBase::CreateCamerasPresets() 
-{
-	QSqlQuery query("CREATE TABLE IF NOT EXISTS CamerasPresets("
-					"CameraPresetID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"CameraID INTEGER REFERENCES Cameras(CameraID),"
-					"PresetID INTEGER REFERENCES Presets(PresetID));");
-
-	bool result;
-	result = query.isActive() == true ? true : false;
-	return result;
-}
 bool DataBase::CreateFaces() 
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS Faces("
 					"FaceID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					"Name VARCHAR(50) NOT NULL,"
 					"Surname VARCHAR(50) NOT NULL,"
-					"FacePath TEXT NOT NULL);");
+					"FacePath TEXT NOT NULL,"
+					"LastEditedBy INTEGER REFERENCES Users(UserID),"
+					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;
 	result = query.isActive() == true ? true : false;
@@ -158,21 +157,20 @@ bool DataBase::CreateDB()
 
 	if (dataBase.open() == false) //open the physical connection to DB
 	{
-		AlarmAboutError("connection with database failed");
+		Utilities::MBAlarm("connection with database failed", false);
 	}
 	else
 	{
 		creationResult &= CreateUsers();
 		creationResult &= CreateRedAlerts();
-		creationResult &= CreateRedAlerts();
+		creationResult &= CreateGreenAlerts();
 		creationResult &= CreateAlertsDeleteSettings();
 		creationResult &= CreateCameras();
 		creationResult &= CreateUsersCameras();
-		creationResult &= CreatePresets();
-		creationResult &= CreateCamerasPresets();
 		creationResult &= CreateFaces();
 		creationResult &= CreateMoviesSettings();
 		creationResult &= CreateFacesModulesSettings();
+
 	}
 	dataBase.removeDatabase("QSQLITE"); //Removes the DB connection [connectionName] from the list of database connections
 	return creationResult;

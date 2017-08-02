@@ -55,7 +55,7 @@ public:
         ForgottenPassword->setModal(true);
         LHelp = new QLabel(ForgottenPassword);
         LHelp->setObjectName(QStringLiteral("LHelp"));
-        LHelp->setGeometry(QRect(250, 180, 301, 61));
+        LHelp->setGeometry(QRect(250, 210, 301, 61));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)\n"
 ""));
@@ -64,7 +64,7 @@ public:
         LHelp->setScaledContents(false);
         PBBack = new QPushButton(ForgottenPassword);
         PBBack->setObjectName(QStringLiteral("PBBack"));
-        PBBack->setGeometry(QRect(250, 420, 61, 23));
+        PBBack->setGeometry(QRect(250, 510, 61, 25));
         PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -81,21 +81,21 @@ public:
         Lloading->setStyleSheet(QStringLiteral("background-color:none"));
         LSecurityQuestion = new QLabel(ForgottenPassword);
         LSecurityQuestion->setObjectName(QStringLiteral("LSecurityQuestion"));
-        LSecurityQuestion->setGeometry(QRect(250, 250, 161, 16));
+        LSecurityQuestion->setGeometry(QRect(250, 280, 161, 16));
         LSecurityQuestion->setStyleSheet(QLatin1String("background-color: none;\n"
 "color: rgb(255, 255, 255)"));
         LESecurityQuestion = new QLineEdit(ForgottenPassword);
         LESecurityQuestion->setObjectName(QStringLiteral("LESecurityQuestion"));
         LESecurityQuestion->setEnabled(false);
-        LESecurityQuestion->setGeometry(QRect(250, 270, 301, 30));
+        LESecurityQuestion->setGeometry(QRect(250, 300, 301, 25));
         LESecurityQuestion->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         LEAnswer = new QLineEdit(ForgottenPassword);
         LEAnswer->setObjectName(QStringLiteral("LEAnswer"));
-        LEAnswer->setGeometry(QRect(250, 310, 301, 30));
+        LEAnswer->setGeometry(QRect(250, 330, 301, 25));
         LEAnswer->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         PBVerify = new QPushButton(ForgottenPassword);
         PBVerify->setObjectName(QStringLiteral("PBVerify"));
-        PBVerify->setGeometry(QRect(250, 360, 301, 30));
+        PBVerify->setGeometry(QRect(250, 380, 301, 30));
         PBVerify->setStyleSheet(QLatin1String("#PBVerify{\n"
 "background-color: rgb(0, 69, 104);\n"
 "color: rgb(255, 255, 255);}\n"

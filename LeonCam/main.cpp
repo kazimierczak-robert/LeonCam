@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	result = dataBase->CreateDB();
 	if (result == false)
 	{
-		dataBase->AlarmAboutError("Data base is failed, please contact with system administrator");
+		Utilities::MBAlarm("Data base is failed, please contact with system administrator", false);
 		delete dataBase;
 		return -1;
 	}

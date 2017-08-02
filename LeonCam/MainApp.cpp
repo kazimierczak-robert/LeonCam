@@ -216,6 +216,7 @@ void MainApp::EditCamera(QPushButton* button)
 		if (item == button)
 		{
 			CameraEdition *cameraEdition = new CameraEdition(this);
+			//TODO
 			cameraEdition->exec();
 			delete cameraEdition;
 			return;

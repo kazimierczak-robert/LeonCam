@@ -31,10 +31,10 @@ public:
     QLineEdit *LEConfPass;
     QLineEdit *LESecQuest;
     QLineEdit *LEAnswer;
-    QLabel *LTipUsername;
     QLabel *LTipPassword;
     QPushButton *PBBack;
     QPushButton *PBCreate;
+    QLabel *LTip;
 
     void setupUi(QDialog *NewProfile)
     {
@@ -54,43 +54,35 @@ public:
         Lloading->setGeometry(QRect(370, 80, 61, 61));
         LHelp = new QLabel(NewProfile);
         LHelp->setObjectName(QStringLiteral("LHelp"));
-        LHelp->setGeometry(QRect(250, 280, 301, 51));
+        LHelp->setGeometry(QRect(250, 310, 301, 51));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)"));
         LEUsername = new QLineEdit(NewProfile);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
-        LEUsername->setGeometry(QRect(290, 160, 261, 30));
+        LEUsername->setGeometry(QRect(290, 204, 261, 25));
+        LEUsername->setMaxLength(50);
         LEPassword = new QLineEdit(NewProfile);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
-        LEPassword->setGeometry(QRect(290, 200, 261, 30));
+        LEPassword->setGeometry(QRect(290, 234, 261, 25));
         LEPassword->setEchoMode(QLineEdit::Password);
         LEConfPass = new QLineEdit(NewProfile);
         LEConfPass->setObjectName(QStringLiteral("LEConfPass"));
-        LEConfPass->setGeometry(QRect(290, 240, 261, 30));
+        LEConfPass->setGeometry(QRect(290, 264, 261, 25));
         LEConfPass->setEchoMode(QLineEdit::Password);
         LESecQuest = new QLineEdit(NewProfile);
         LESecQuest->setObjectName(QStringLiteral("LESecQuest"));
-        LESecQuest->setGeometry(QRect(250, 340, 301, 31));
+        LESecQuest->setGeometry(QRect(250, 370, 301, 25));
         LEAnswer = new QLineEdit(NewProfile);
         LEAnswer->setObjectName(QStringLiteral("LEAnswer"));
-        LEAnswer->setGeometry(QRect(250, 380, 301, 30));
-        LTipUsername = new QLabel(NewProfile);
-        LTipUsername->setObjectName(QStringLiteral("LTipUsername"));
-        LTipUsername->setGeometry(QRect(250, 160, 31, 31));
-        LTipUsername->setStyleSheet(QLatin1String("#LTipUsername\n"
-"{background-image: url(:/Resources/Images/bulb.png);}\n"
-"#LTipUsername:hover\n"
-"{\n"
-"background-image: url(:/Resources/Images/bulbHover.png);\n"
-"}"));
+        LEAnswer->setGeometry(QRect(250, 400, 301, 25));
         LTipPassword = new QLabel(NewProfile);
         LTipPassword->setObjectName(QStringLiteral("LTipPassword"));
-        LTipPassword->setGeometry(QRect(250, 200, 31, 31));
+        LTipPassword->setGeometry(QRect(250, 230, 31, 31));
         LTipPassword->setStyleSheet(QLatin1String("#LTipPassword{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTipPassword:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         PBBack = new QPushButton(NewProfile);
         PBBack->setObjectName(QStringLiteral("PBBack"));
-        PBBack->setGeometry(QRect(250, 420, 61, 23));
+        PBBack->setGeometry(QRect(250, 510, 61, 25));
         PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -99,7 +91,7 @@ public:
 "}"));
         PBCreate = new QPushButton(NewProfile);
         PBCreate->setObjectName(QStringLiteral("PBCreate"));
-        PBCreate->setGeometry(QRect(490, 420, 61, 23));
+        PBCreate->setGeometry(QRect(490, 510, 61, 25));
         PBCreate->setStyleSheet(QLatin1String("#PBCreate{\n"
 "color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)}\n"
@@ -107,6 +99,11 @@ public:
 "{\n"
 "background-color: rgb(39, 129, 63);\n"
 "}"));
+        LTip = new QLabel(NewProfile);
+        LTip->setObjectName(QStringLiteral("LTip"));
+        LTip->setGeometry(QRect(250, 200, 31, 31));
+        LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
 
         retranslateUi(NewProfile);
 
@@ -118,21 +115,16 @@ public:
         NewProfile->setWindowTitle(QApplication::translate("NewProfile", "LeonCam", Q_NULLPTR));
         Lloading->setText(QString());
         LHelp->setText(QApplication::translate("NewProfile", "<html><head/><body><p align=\"center\">For your protection please, type the <span style=\" font-weight:600; color:#bdf0ff;\">Security Question</span></p><p align=\"center\">and answer.This will help in future verification</p></body></html>", Q_NULLPTR));
+        LEUsername->setText(QString());
         LEUsername->setPlaceholderText(QApplication::translate("NewProfile", "Username", Q_NULLPTR));
+        LEPassword->setText(QString());
         LEPassword->setPlaceholderText(QApplication::translate("NewProfile", "Password", Q_NULLPTR));
-        LEConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm your password", Q_NULLPTR));
+        LEConfPass->setText(QString());
+        LEConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm password", Q_NULLPTR));
+        LESecQuest->setText(QString());
         LESecQuest->setPlaceholderText(QApplication::translate("NewProfile", "Security Question", Q_NULLPTR));
+        LEAnswer->setText(QString());
         LEAnswer->setPlaceholderText(QApplication::translate("NewProfile", "Answer", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        LTipUsername->setToolTip(QApplication::translate("NewProfile", "<html><head/><body>\n"
-"<span style=\"font-weight:600;\">Requirements:</span>\n"
-"<ul style=\"margin-top:0px;\">\n"
-"<li style=\"margin-left:-30px;\">minimum 8 characters</li>\n"
-"</ul>\n"
-"</body>\n"
-"</html>", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        LTipUsername->setText(QString());
 #ifndef QT_NO_TOOLTIP
         LTipPassword->setToolTip(QApplication::translate("NewProfile", "<html><head/><body>\n"
 "<span style=\"font-weight:600;\">Requirements:</span>\n"
@@ -148,6 +140,10 @@ public:
         LTipPassword->setText(QString());
         PBBack->setText(QApplication::translate("NewProfile", "Back", Q_NULLPTR));
         PBCreate->setText(QApplication::translate("NewProfile", "Create", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        LTip->setToolTip(QApplication::translate("NewProfile", "<html><head/><body><p><span style=\" font-weight:600;\">Username</span> has <span style=\" font-weight:600;\">50</span> letters up limit</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        LTip->setText(QString());
     } // retranslateUi
 
 };

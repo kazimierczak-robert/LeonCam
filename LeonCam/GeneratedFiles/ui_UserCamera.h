@@ -62,34 +62,37 @@ public:
         Lloading->setGeometry(QRect(370, 80, 61, 61));
         LHelp = new QLabel(UserCamera);
         LHelp->setObjectName(QStringLiteral("LHelp"));
-        LHelp->setGeometry(QRect(250, 150, 301, 31));
+        LHelp->setGeometry(QRect(250, 157, 301, 31));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)"));
         CBAvailableCameras = new QComboBox(UserCamera);
         CBAvailableCameras->setObjectName(QStringLiteral("CBAvailableCameras"));
-        CBAvailableCameras->setGeometry(QRect(250, 210, 161, 22));
+        CBAvailableCameras->setGeometry(QRect(250, 217, 231, 25));
         LAvailableCameras = new QLabel(UserCamera);
         LAvailableCameras->setObjectName(QStringLiteral("LAvailableCameras"));
-        LAvailableCameras->setGeometry(QRect(250, 190, 281, 16));
+        LAvailableCameras->setGeometry(QRect(250, 197, 281, 16));
         LAvailableCameras->setStyleSheet(QLatin1String("background-color: none;\n"
 "color: rgb(255, 255, 255)"));
         LNewCamera = new QLabel(UserCamera);
         LNewCamera->setObjectName(QStringLiteral("LNewCamera"));
-        LNewCamera->setGeometry(QRect(250, 240, 261, 16));
+        LNewCamera->setGeometry(QRect(250, 257, 261, 16));
         LNewCamera->setStyleSheet(QLatin1String("background-color: none;\n"
 "color: rgb(255, 255, 255)"));
         LEModel = new QLineEdit(UserCamera);
         LEModel->setObjectName(QStringLiteral("LEModel"));
-        LEModel->setGeometry(QRect(250, 260, 231, 21));
+        LEModel->setGeometry(QRect(250, 277, 271, 25));
+        LEModel->setMaxLength(24);
         LEIPv4Address = new QLineEdit(UserCamera);
         LEIPv4Address->setObjectName(QStringLiteral("LEIPv4Address"));
-        LEIPv4Address->setGeometry(QRect(250, 300, 231, 21));
+        LEIPv4Address->setGeometry(QRect(250, 337, 271, 25));
+        LEIPv4Address->setMaxLength(24);
         LEDescripton = new QLineEdit(UserCamera);
         LEDescripton->setObjectName(QStringLiteral("LEDescripton"));
-        LEDescripton->setGeometry(QRect(250, 280, 231, 21));
+        LEDescripton->setGeometry(QRect(250, 307, 271, 25));
+        LEDescripton->setMaxLength(24);
         PBBack = new QPushButton(UserCamera);
         PBBack->setObjectName(QStringLiteral("PBBack"));
-        PBBack->setGeometry(QRect(250, 420, 61, 23));
+        PBBack->setGeometry(QRect(250, 510, 61, 25));
         PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -102,16 +105,18 @@ public:
 "background-color:none*/"));
         groupBox = new QGroupBox(UserCamera);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(250, 330, 231, 61));
+        groupBox->setGeometry(QRect(250, 377, 271, 75));
         LELogin = new QLineEdit(groupBox);
         LELogin->setObjectName(QStringLiteral("LELogin"));
-        LELogin->setGeometry(QRect(10, 10, 211, 21));
+        LELogin->setGeometry(QRect(10, 10, 251, 25));
+        LELogin->setMaxLength(24);
         LEPassword = new QLineEdit(groupBox);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
-        LEPassword->setGeometry(QRect(10, 30, 211, 21));
+        LEPassword->setGeometry(QRect(10, 40, 251, 25));
+        LEPassword->setMaxLength(24);
         PBAdd = new QPushButton(UserCamera);
         PBAdd->setObjectName(QStringLiteral("PBAdd"));
-        PBAdd->setGeometry(QRect(490, 420, 61, 23));
+        PBAdd->setGeometry(QRect(490, 510, 61, 25));
         PBAdd->setStyleSheet(QLatin1String("#PBAdd{\n"
 "color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)}\n"
@@ -125,12 +130,12 @@ public:
         PBAdd->setFlat(false);
         LTip = new QLabel(UserCamera);
         LTip->setObjectName(QStringLiteral("LTip"));
-        LTip->setGeometry(QRect(510, 275, 31, 31));
+        LTip->setGeometry(QRect(530, 305, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         CBAssign = new QCheckBox(UserCamera);
         CBAssign->setObjectName(QStringLiteral("CBAssign"));
-        CBAssign->setGeometry(QRect(420, 210, 111, 21));
+        CBAssign->setGeometry(QRect(490, 220, 61, 25));
         CBAssign->setStyleSheet(QLatin1String("#CBAssign{color: rgb(35, 167, 255);}\n"
 "#CBAssign:hover\n"
 "{\n"
@@ -138,7 +143,7 @@ public:
 "}"));
         LTipLoginPass = new QLabel(UserCamera);
         LTipLoginPass->setObjectName(QStringLiteral("LTipLoginPass"));
-        LTipLoginPass->setGeometry(QRect(510, 345, 31, 31));
+        LTipLoginPass->setGeometry(QRect(530, 400, 31, 31));
         LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
 
