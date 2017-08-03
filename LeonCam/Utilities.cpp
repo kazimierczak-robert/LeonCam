@@ -29,19 +29,3 @@ void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 	}
 	msgBox.exec();
 }
-/*
-QString Utilities::CreateHash(std::string message)
-{
-	SHA256 *sha256 = new SHA256();
-	BYTE *abbreviation = NULL;
-	abbreviation=sha256->sha256_abbreviation(message);
-	char abbreviationC[65];
-	abbreviationC[64] = 0;
-	for (size_t i = 0; i < 32; i++)
-	{
-		sprintf(&abbreviationC[2 * i], "%02X", abbreviation[i]);
-	}
-		
-	delete sha256;
-	return QString::fromUtf8(abbreviationC);
-}*/

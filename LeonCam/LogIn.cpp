@@ -46,6 +46,18 @@ void LogIn::LogInClicked()
 		int result = query.value(0).toInt();
 		if (result == 1)
 		{
+			if (ui.CBKeepMeLoggedIn->isChecked() == true)
+			{
+				query.clear();
+				query.prepare("UPDATE Users SET KeepMeLoggedIn = 1 WHERE Username = ? AND Password = ?");
+				query.bindValue(0, username);
+				query.bindValue(1, passwordHash);
+				bool result = query.exec() == true ? true : false;
+			}
+			else
+			{
+				Utilities::MBAlarm("<i>Keep me logged in</i> option has been skipped", false);
+			}
 			MainApp *mainApp = new MainApp(nullptr);
 			mainApp->show();
 			this->close();
