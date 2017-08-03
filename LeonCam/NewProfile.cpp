@@ -61,30 +61,14 @@ void NewProfile::CreateClicked()
 		return;
 	}
 
-	//https://stackoverflow.com/a/10599161
-	SHA256 *sha256 = new SHA256();
 	std::string concatHelp = "";
-	//password abbreviation
+	//password abbreviation -> password + username
 	concatHelp = password.toStdString() + username.toStdString();
-	BYTE *passAbbrev = sha256->sha256_abbreviation(concatHelp);
-	char passAbbrevC[65];
-	passAbbrevC[64] = 0;
-	for (size_t i = 0; i < 32; i++)
-	{
-		sprintf(&passAbbrevC[2 * i], "%02X", passAbbrev[i]);
-	}
-	QString passwordAbbreviation = QString::fromUtf8(passAbbrevC);
-	//answer abbreviation
+	QString passwordAbbreviation = Utilities::CreateHash(concatHelp);
+
+	//answer abbreviation -> username + answer
 	concatHelp = username.toStdString() + answer.toStdString();
-	BYTE *answerAbbrev = sha256->sha256_abbreviation(concatHelp);
-	char answerAbbrevC[65];
-	answerAbbrevC[64] = 0;
-	for (size_t i = 0; i < 32; i++)
-	{
-		sprintf(&answerAbbrevC[2 * i], "%02X", answerAbbrev[i]);
-	}
-	QString answerAbbreviation = QString::fromUtf8(answerAbbrevC);
-	delete sha256;
+	QString answerAbbreviation = Utilities::CreateHash(concatHelp);
 
 	//get system current time
 	QDateTime currentDateTime = QDateTime::currentDateTime();
@@ -112,7 +96,7 @@ void NewProfile::CreateClicked()
 	}
 	else
 	{
-		Utilities::MBAlarm("Account has not been created", false);
+		Utilities::MBAlarm("Account has not been created. Your login is occupied", false);
 	}
 }
 void NewProfile::BackClicked()

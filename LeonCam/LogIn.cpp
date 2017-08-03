@@ -17,30 +17,58 @@ LogIn::LogIn(QWidget *parent)
 
 void LogIn::LogInClicked()
 {
-	//Start gif
 	designB->gif->start();
-	MainApp *mainApp = new MainApp(nullptr);
-	mainApp->show();
-	this->close();
+	QString username = "";
+	QString password = "";
+	username = ui.LEUsername -> text();
+	password = ui.LEPassword->text();
+	if (username == "" || password == "")
+	{
+		designB->gif->stop();
+		Utilities::MBAlarm("At least one field is incomplete", false);
+		return;
+	}
+
+	std::string concatHelp = "";
+	concatHelp = password.toStdString() + username.toStdString();
+	QString passwordHash = Utilities::CreateHash(concatHelp);
+	//Get proper user from DB
+	QSqlQuery query;
+	query.prepare("SELECT COUNT(*) FROM Users WHERE Username = (:Username) AND Password = (:Password)");
+	query.bindValue(":Username", username);
+	query.bindValue(":Passsword", password);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		if (query.value(0).toInt() == 1)
+		{
+			MainApp *mainApp = new MainApp(nullptr);
+			mainApp->show();
+			this->close();
+		}
+		else
+		{
+			designB->gif->stop();
+			Utilities::MBAlarm("Typed data is incorrect. Please, try log in again", false);
+		}	
+	}
+	else
+	{
+		designB->gif->stop();
+		Utilities::MBAlarm("User has not been found. Please, try log in again", false);
+	}
+	ui.LEPassword->setText("");
 }
 void LogIn::ForgotPasswordClicked()
 {
 	ForgottenPassword *forgottenPassword = new ForgottenPassword(this);
-	//hide window
-	//this->hide();
 	forgottenPassword->exec();
 	delete forgottenPassword;
-	//show window
-	//this->show();
 }
 void LogIn::NewProfileClicked()
 {
 	NewProfile *newProfile = new NewProfile(this);
-	//hide window
-	//this->hide();
 	newProfile->exec();
 	delete newProfile;
-	//show window
-	//this->show();
-	//ui.LEUsername->setText("Working 3");
 }
