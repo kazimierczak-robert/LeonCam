@@ -16,6 +16,22 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	delete dataBase;
-	w.show();
+	QSqlQuery query;
+	query.exec("SELECT Username FROM Users WHERE KeepMeLoggedIn = 1");
+	result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.last();
+		int querySize = query.at()+1;
+		if (querySize == 1)
+		{
+			MainApp *mainApp = new MainApp(nullptr);
+			mainApp->show();
+		}
+		else
+		{
+			w.show();
+		}
+	}
 	return a.exec();
 }

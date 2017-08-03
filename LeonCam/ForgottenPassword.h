@@ -5,6 +5,7 @@
 #include "DesignBase.h"
 #include "LogIn.h"
 #include "qsystemtrayicon.h"
+#include "qsqlquery.h"
 
 class ForgottenPassword : public QDialog
 {
@@ -13,10 +14,13 @@ class ForgottenPassword : public QDialog
 public:
 	ForgottenPassword(QWidget *parent = Q_NULLPTR);
 	~ForgottenPassword();
+	void SetSecurityQuestion(QString username);
 private slots:
 	void VerifyClicked();
 	void BackClicked();
 private:
+	QString username;
 	DesignBase *designB;
 	Ui::ForgottenPassword ui;
+
 };

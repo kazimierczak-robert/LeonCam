@@ -8,6 +8,7 @@
 #include "NewProfile.h"
 #include "MainApp.h"
 #include "DataBase.h"
+#include <qtooltip.h>
 
 class LogIn : public QMainWindow
 {

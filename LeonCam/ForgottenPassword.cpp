@@ -17,6 +17,26 @@ ForgottenPassword::~ForgottenPassword()
 {
 }
 
+void ForgottenPassword::SetSecurityQuestion(QString username)
+{
+	this->username = username;
+	//Get user from DB with Username==<Username>
+	QSqlQuery query;
+	query.exec("SELECT SecurityQuestion FROM Users WHERE Username = ?");
+	query.bindValue(0, this->username);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		QString securityQuestion = query.value(0).toString();
+		ui.LESecurityQuestion->setText(securityQuestion);
+	}
+	else
+	{
+		Utilities::MBAlarm("Problem with loading <i> Security Question </i>", false);
+	}
+}
+
 void ForgottenPassword::VerifyClicked()
 {
 	designB->gif->start();

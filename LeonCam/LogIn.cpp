@@ -53,10 +53,11 @@ void LogIn::LogInClicked()
 				query.bindValue(0, username);
 				query.bindValue(1, passwordHash);
 				bool result = query.exec() == true ? true : false;
-			}
-			else
-			{
-				Utilities::MBAlarm("<i>Keep me logged in</i> option has been skipped", false);
+				if (result == false)
+				{
+					designB->gif->stop();
+					Utilities::MBAlarm("<i>Keep me logged in</i> option has been skipped", false);
+				}
 			}
 			MainApp *mainApp = new MainApp(nullptr);
 			mainApp->show();
@@ -77,9 +78,17 @@ void LogIn::LogInClicked()
 }
 void LogIn::ForgotPasswordClicked()
 {
-	ForgottenPassword *forgottenPassword = new ForgottenPassword(this);
-	forgottenPassword->exec();
-	delete forgottenPassword;
+	if (ui.LEUsername->text() == "")
+	{
+		QToolTip::showText(ui.PBForgotPassword->mapToGlobal(QPoint(0, 0)),ui.PBForgotPassword->toolTip());
+	}
+	else
+	{
+		ForgottenPassword *forgottenPassword = new ForgottenPassword(this);
+		forgottenPassword->SetSecurityQuestion(ui.LEUsername->text());
+		forgottenPassword->exec();
+		delete forgottenPassword;
+	}
 }
 void LogIn::NewProfileClicked()
 {

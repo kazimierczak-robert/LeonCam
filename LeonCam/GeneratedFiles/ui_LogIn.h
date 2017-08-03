@@ -131,6 +131,9 @@ public:
         LEPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
         CBKeepMeLoggedIn->setText(QApplication::translate("LogInClass", "Keep me logged in", Q_NULLPTR));
         PBLogIn->setText(QApplication::translate("LogInClass", "Log In", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBForgotPassword->setToolTip(QApplication::translate("LogInClass", "To recover your password, firstly, fill your <b>Username</b>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBForgotPassword->setText(QApplication::translate("LogInClass", "Forgot password?", Q_NULLPTR));
     } // retranslateUi
 
