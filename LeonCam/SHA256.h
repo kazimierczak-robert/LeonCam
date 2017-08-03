@@ -44,5 +44,5 @@ public:
 	void sha256_init(SHA256_CTX *ctx);
 	void sha256_update(SHA256_CTX *ctx, const BYTE data[], size_t len);
 	void sha256_final(SHA256_CTX *ctx, BYTE hash[]);
-	BYTE* sha256_abbreviation(std::string key);
+	std::string SHA256::sha256_abbreviation(std::string message);
 };

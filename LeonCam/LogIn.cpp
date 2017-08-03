@@ -29,19 +29,22 @@ void LogIn::LogInClicked()
 		return;
 	}
 
+	SHA256 *sha256 = new SHA256();
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordHash = Utilities::CreateHash(concatHelp);
+	QString passwordHash = QString::fromStdString(sha256->sha256_abbreviation(concatHelp));
+
 	//Get proper user from DB
 	QSqlQuery query;
-	query.prepare("SELECT COUNT(*) FROM Users WHERE Username = (:Username) AND Password = (:Password)");
-	query.bindValue(":Username", username);
-	query.bindValue(":Passsword", password);
+	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND Password = ?");
+	query.bindValue(0, username);
+	query.bindValue(1, passwordHash);
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
 		query.next();
-		if (query.value(0).toInt() == 1)
+		int result = query.value(0).toInt();
+		if (result == 1)
 		{
 			MainApp *mainApp = new MainApp(nullptr);
 			mainApp->show();

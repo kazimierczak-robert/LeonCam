@@ -7,6 +7,7 @@
 #include <regex>
 #include <qsqlquery.h>
 #include "qdatetime.h"
+#include "SHA256.h"
 
 class NewProfile : public QDialog
 {

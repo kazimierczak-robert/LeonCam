@@ -124,22 +124,24 @@ void SHA256::sha256_final(SHA256_CTX *ctx, BYTE hash[])
 		hash[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0x000000ff;
 	}
 }
-BYTE* SHA256::sha256_abbreviation(std::string key)
+std::string SHA256::sha256_abbreviation(std::string message)
 {
-
-	/*BYTE *keyBuf = new BYTE[key.length()+1];
-	for (int i = 0; i < key.length(); i++)
-		keyBuf[i] = key[i];
-	keyBuf[key.length()] = '\0';*/
-
 	BYTE buf[SHA256_BLOCK_SIZE];
 	SHA256_CTX ctx;
 	SHA256 *sha256 = new SHA256();
 
 	sha256->sha256_init(&ctx);
-	sha256->sha256_update(&ctx, (const unsigned char *)key.c_str(), key.length());
+	sha256->sha256_update(&ctx, (const unsigned char *)message.c_str(), message.length());
 	sha256->sha256_final(&ctx, buf);
+	//https://stackoverflow.com/a/10599161
+	char abbreviationC[65];
+	abbreviationC[64] = 0;
+	for (size_t i = 0; i < 32; i++)
+	{
+		sprintf(&abbreviationC[2 * i], "%02X", buf[i]);
+	}
 
-	//delete [] keyBuf;
-	return buf;
+	delete sha256;
+
+	return std::string(abbreviationC);
 }

@@ -61,14 +61,15 @@ void NewProfile::CreateClicked()
 		return;
 	}
 
+	SHA256 *sha256 = new SHA256();
 	std::string concatHelp = "";
 	//password abbreviation -> password + username
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordAbbreviation = Utilities::CreateHash(concatHelp);
+	QString passwordAbbreviation = QString::fromStdString(sha256->sha256_abbreviation(concatHelp));
 
 	//answer abbreviation -> username + answer
 	concatHelp = username.toStdString() + answer.toStdString();
-	QString answerAbbreviation = Utilities::CreateHash(concatHelp);
+	QString answerAbbreviation = QString::fromStdString(sha256->sha256_abbreviation(concatHelp));
 
 	//get system current time
 	QDateTime currentDateTime = QDateTime::currentDateTime();
