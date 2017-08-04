@@ -27,6 +27,8 @@ bool DataBase::CreateUsers()
 					"RedAlertDeleteSettingID INTEGER NOT NULL REFERENCES AlertsDeleteSettings(AlertDeleteSettingID),"
 					"GreenAlertDeleteSettingID INTEGER NOT NULL REFERENCES AlertsDeleteSettings(AlertDeleteSettingID),"
 					"LastLogoutDate DATETIME NOT NULL,"
+					"LastLoginAttemptDate DATETIME NOT NULL,"
+					"LoginAttemptCounter INTEGER NOT NULL,"
 					"RegistrationDate DATETIME NOT NULL);");
 
 	bool result;
