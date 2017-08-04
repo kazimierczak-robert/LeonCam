@@ -62,7 +62,7 @@ void ForgottenPassword::VerifyClicked()
 			int result = query.value(0).toInt();
 			if (result == 1)
 			{
-				MainApp *mainApp = new MainApp();
+				MainApp *mainApp = new MainApp(nullptr, username);
 				mainApp->show();
 				this->close();
 			}

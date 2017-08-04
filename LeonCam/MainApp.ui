@@ -195,7 +195,7 @@ color:rgb(219, 235, 255);
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>510</y>
+        <y>500</y>
         <width>200</width>
         <height>13</height>
        </rect>
@@ -212,8 +212,8 @@ font-weight:600;</string>
      <widget class="QLabel" name="LEnabledNumber">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>510</y>
+        <x>30</x>
+        <y>515</y>
         <width>200</width>
         <height>13</height>
        </rect>

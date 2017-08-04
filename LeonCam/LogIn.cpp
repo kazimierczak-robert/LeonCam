@@ -59,7 +59,7 @@ void LogIn::LogInClicked()
 					Utilities::MBAlarm("<i>Keep me logged in</i> option has been skipped", false);
 				}
 			}
-			MainApp *mainApp = new MainApp(nullptr);
+			MainApp *mainApp = new MainApp(nullptr, username);
 			mainApp->show();
 			this->close();
 		}

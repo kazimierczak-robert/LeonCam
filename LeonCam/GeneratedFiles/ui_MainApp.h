@@ -141,13 +141,13 @@ public:
         TWCameraPages->setUsesScrollButtons(false);
         LTotalNumber = new QLabel(TCameras);
         LTotalNumber->setObjectName(QStringLiteral("LTotalNumber"));
-        LTotalNumber->setGeometry(QRect(30, 510, 200, 13));
+        LTotalNumber->setGeometry(QRect(30, 500, 200, 13));
         LTotalNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
         LEnabledNumber = new QLabel(TCameras);
         LEnabledNumber->setObjectName(QStringLiteral("LEnabledNumber"));
-        LEnabledNumber->setGeometry(QRect(370, 510, 200, 13));
+        LEnabledNumber->setGeometry(QRect(30, 515, 200, 13));
         LEnabledNumber->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));

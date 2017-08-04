@@ -1,9 +1,12 @@
 ﻿#include "MainApp.h"
 
-MainApp::MainApp(QWidget *parent)
+MainApp::MainApp(QWidget *parent, QString username)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+	this->username = username;
+	this->setWindowTitle(username + " - LeonCam");
 
 	vectorCameraLayoutsPages = new std::vector<std::vector<QLayout*>*>();
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
@@ -22,7 +25,7 @@ MainApp::MainApp(QWidget *parent)
 	activeCameraPage = 0;
 
 	addTab();
-
+	ui.TWCameraPages->setTabText(0, "");
 }
 
 MainApp::~MainApp()
@@ -50,17 +53,18 @@ void MainApp::AddCamera()
 
 		QGridLayout *layout = new QGridLayout();
 
-		QLabel *label = new QLabel();
-		label->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
-		label->setFixedSize(216, 123);
-		layout->addWidget(label, 0, 0, 1, 5);
+		QPushButton* btn = new QPushButton();
+		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
+		btn->setFixedSize(216, 123);
+		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
+		layout->addWidget(btn, 0, 0, 1, 5);
 
 		QLabel *label2 = new QLabel("Garage (192.168.111.111)");
 		label2->setStyleSheet("color:rgb(255, 255, 255);");
 		label2->setFixedSize(216, 23);
 		layout->addWidget(label2, 1, 0, 1, 5);
 
-		QPushButton* btn = new QPushButton();
+		btn = new QPushButton();
 		btn->setText("Off");
 		btn->setFixedSize(40, 40);
 		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
@@ -146,12 +150,11 @@ void MainApp::LogOut()
 	this->close();
 }
 
-/*void MainApp::RowSelected(const QModelIndex& modelIndex)
+void MainApp::CameraSelected(QGridLayout* layout)
 {
-	QString cameraDetails = ui.TLWCameras->item(modelIndex.row(), 2)->text() + " | " + ui.TLWCameras->item(modelIndex.row(), 3)->text();
-	CameraPreview *cameraPreview = new CameraPreview(this, cameraDetails, vectorIsEnabledButtonToRowIndex->at(modelIndex.row()), vectorRecognationButtonToRowIndex->at(modelIndex.row()), ui.LEnabledNumber);
+	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber);
 	cameraPreview->exec();
-}*/
+}
 
 void MainApp::TurnOnOffCamera(QPushButton* button)
 {
@@ -228,7 +231,7 @@ void MainApp::EditCamera(QPushButton* button)
 	}
 }
 
-void MainApp::RemoveCamera(QLayout* layout)
+void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int pageIndex = 0;
 	for (const auto& item : *vectorCameraLayoutsPages)
@@ -318,6 +321,10 @@ void MainApp::RemoveCamera(QLayout* layout)
 				ui.TWCameraPages->removeTab(vectorQGridLayouts->size());
 				ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
 
+			}
+			if (vectorQGridLayouts->size()==1)
+			{
+				ui.TWCameraPages->setTabText(0, "");
 			}
 			break;
 		}

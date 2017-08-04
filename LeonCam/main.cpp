@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 		int querySize = query.at()+1;
 		if (querySize == 1)
 		{
-			MainApp *mainApp = new MainApp(nullptr);
+			MainApp *mainApp = new MainApp(nullptr, query.value(0).toString());
 			mainApp->show();
 		}
 		else

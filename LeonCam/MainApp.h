@@ -15,16 +15,16 @@ class MainApp : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainApp(QWidget *parent = Q_NULLPTR);
+	MainApp(QWidget *parent = Q_NULLPTR, QString username = "");
 	~MainApp();
 private slots:
 	void AddCamera();
 	void LogOut();
-	//void RowSelected(const QModelIndex& modelIndex);
 	void LESearchChanged();
 	void TWCameraPagesChanged(int newIndex);
 private:
 	Ui::MainApp ui;
+	QString username;
 	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
@@ -36,7 +36,8 @@ private:
 	void PatrolCamera(QPushButton* button);
 	void RecognationCamera(QPushButton* button);
 	void EditCamera(QPushButton* button);
-	void RemoveCamera(QLayout* layout);
+	void RemoveCamera(QGridLayout* layout);
 	int activeCameraPage;
 	void addTab();
+	void CameraSelected(QGridLayout* layout);
 };
