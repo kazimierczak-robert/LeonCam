@@ -76,8 +76,8 @@ void NewProfile::CreateClicked()
 	QString currentDateTimeS = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
 
 	QSqlQuery query;
-	query.prepare("INSERT INTO Users (Username, Password, KeepMeLoggedIn, SecurityQuestion, Answer, RedAlertDeleteSettingID,GreenAlertDeleteSettingID, LastLogoutDate, RegistrationDate) "
-		"VALUES (:Username, :Password, :KeepMeLoggedIn, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID,:LastLogoutDate, :RegistrationDate)");
+	query.prepare("INSERT INTO Users (Username, Password, KeepMeLoggedIn, SecurityQuestion, Answer, RedAlertDeleteSettingID, GreenAlertDeleteSettingID, LastLogoutDate, LastLoginAttemptDate, LoginAttemptCounter, RegistrationDate) "
+		"VALUES (:Username, :Password, :KeepMeLoggedIn, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID, :LastLogoutDate, :LastLoginAttemptDate, :LoginAttemptCounter, :RegistrationDate)");
 	query.bindValue(":Username", username);
 	query.bindValue(":Password", passwordAbbreviation);
 	query.bindValue(":KeepMeLoggedIn", 0);
@@ -86,9 +86,10 @@ void NewProfile::CreateClicked()
 	query.bindValue(":RedAlertDeleteSettingID", 1);
 	query.bindValue(":GreenAlertDeleteSettingID", 1);
 	query.bindValue(":LastLogoutDate", currentDateTimeS);
+	query.bindValue(":LastLoginAttemptDate", currentDateTimeS);
+	query.bindValue(":LoginAttemptCounter", 0);
 	query.bindValue(":RegistrationDate", currentDateTimeS);
 	bool result = query.exec() == true ? true : false;
-
 	designB->gif->stop();
 	if (result == true)
 	{

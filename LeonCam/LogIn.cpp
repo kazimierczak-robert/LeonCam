@@ -78,6 +78,7 @@ void LogIn::LogInClicked()
 }
 void LogIn::ForgotPasswordClicked()
 {
+	//TODO -> sprawdzic, czy istnieje login w bazie
 	if (ui.LEUsername->text() == "")
 	{
 		QToolTip::showText(ui.PBForgotPassword->mapToGlobal(QPoint(0, 0)),ui.PBForgotPassword->toolTip());
