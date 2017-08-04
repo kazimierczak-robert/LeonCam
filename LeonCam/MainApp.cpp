@@ -235,6 +235,15 @@ void MainApp::RemoveCamera(QLayout* layout)
 	{
 		if (std::find(item->begin(), item->end(), layout) != item->end()) 
 		{
+			int indexOfLayoutInPage = 0;
+			for (indexOfLayoutInPage = 0; indexOfLayoutInPage < item->size(); indexOfLayoutInPage++)
+			{
+				if (item->at(indexOfLayoutInPage) == layout)
+				{
+					break;
+				}
+			}
+
 			if (((QPushButton*)(layout->itemAt(2)->widget()))->text() == "On")
 			{
 				int numberEnabled = ui.LEnabledNumber->text().split(" ").last().toInt();
@@ -261,6 +270,55 @@ void MainApp::RemoveCamera(QLayout* layout)
 			delete layout;
 
 			item->erase(std::remove(item->begin(), item->end(), layout), item->end());
+
+			while (pageIndex < vectorCameraLayoutsPages->size())
+			{
+				while (indexOfLayoutInPage < vectorCameraLayoutsPages->at(pageIndex)->size())
+				{
+					QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex)->itemAtPosition((indexOfLayoutInPage + 1) / 3, (indexOfLayoutInPage + 1) % 3);
+					vectorQGridLayouts->at(pageIndex)->removeItem(layoutToMove);
+
+					vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, indexOfLayoutInPage / 3, indexOfLayoutInPage % 3);
+					indexOfLayoutInPage += 1;
+				}
+
+				if ((pageIndex + 1) < vectorCameraLayoutsPages->size())
+				{
+					if (vectorCameraLayoutsPages->at(pageIndex + 1)->size() > 0)
+					{
+						QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex + 1)->itemAtPosition(0, 0);
+						vectorQGridLayouts->at(pageIndex + 1)->removeItem(layoutToMove);
+
+						vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, 1, 2);
+
+						vectorCameraLayoutsPages->at(pageIndex + 1)->erase(vectorCameraLayoutsPages->at(pageIndex + 1)->begin(), vectorCameraLayoutsPages->at(pageIndex + 1)->begin() + 1);
+						vectorCameraLayoutsPages->at(pageIndex)->push_back((QGridLayout *)layoutToMove);
+
+					}
+					indexOfLayoutInPage = 0;
+				}
+				pageIndex += 1;
+			}
+			if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 0 && vectorQGridLayouts->size() > 1)
+			{
+				QGridLayout *qgridlayout = vectorQGridLayouts->at(vectorQGridLayouts->size() - 1);
+				delete qgridlayout;
+				vectorQGridLayouts->pop_back();
+
+				std::vector<QLayout*> *vectorqlayout = vectorCameraLayoutsPages->at(vectorQGridLayouts->size());
+				delete vectorqlayout;
+				vectorCameraLayoutsPages->pop_back();
+
+				if (activeCameraPage == vectorQGridLayouts->size())
+				{
+					ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size()-1);
+					TWCameraPagesChanged(vectorQGridLayouts->size()-1);
+				}
+
+				ui.TWCameraPages->removeTab(vectorQGridLayouts->size());
+				ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
+
+			}
 			break;
 		}
 		else
