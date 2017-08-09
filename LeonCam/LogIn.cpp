@@ -77,32 +77,7 @@ void LogIn::LogInClicked()
 		else
 		{
 			designB->gif->stop();
-			query.clear();
-			query.prepare("SELECT LoginAttemptCounter FROM Users WHERE Username = ?");
-			query.bindValue(0, username);
-			bool result = query.exec() == true ? true : false;
-			if (result == true) 
-			{
-				query.next();
-				int loginAttemptCounter = query.value(0).toInt();
-				loginAttemptCounter += 1;
-				if (loginAttemptCounter < loginAttemptCounterMAX) 
-				{
-					UpdateAttempts(loginAttemptCounter, username);
-					Utilities::MBAlarm("Typed data is incorrect. Please, try log in again", false);
-				}
-				else
-				{
-					loginAttemptCounter = 4;
-					int msg = loginTimeLock / 60;
-					Utilities::MBAlarm("Your account is blocked. Please, try log in again after "+ QString::number(msg) + " minutes", false);					
-					UpdateAttempts(loginAttemptCounter, username);
-				}
-			}
-			else
-			{
-				Utilities::MBAlarm("Something went wrong. Please, try log in again", false);
-			}
+			UpdateCounter(username);
 		}	
 	}
 	else
@@ -114,13 +89,26 @@ void LogIn::LogInClicked()
 }
 void LogIn::ForgotPasswordClicked()
 {
-	//TODO -> sprawdzic, czy istnieje login w bazie
 	if (ui.LEUsername->text() == "")
 	{
 		QToolTip::showText(ui.PBForgotPassword->mapToGlobal(QPoint(0, 0)),ui.PBForgotPassword->toolTip());
 	}
 	else
 	{
+		QSqlQuery query;
+		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
+		query.bindValue(0, ui.LEUsername->text());
+		bool result = query.exec() == true ? true : false;
+		if (result == true)
+		{
+			query.next();
+			int counter = query.value(0).toInt();
+			if (counter == 0)
+			{
+				Utilities::MBAlarm("Typed person is not registered. Please, type proper </i>Username</i>", false);
+				return;
+			}
+		}
 		ForgottenPassword *forgottenPassword = new ForgottenPassword(this, ui.LEUsername->text());
 		forgottenPassword->exec();
 		delete forgottenPassword;
@@ -144,6 +132,36 @@ void LogIn::UpdateAttempts(int loginAttemptCounter, QString username)
 	bool result = query.exec() == true ? true : false;
 	query.exec("COMMIT");
 	if (result == false)
+	{
+		Utilities::MBAlarm("Something went wrong. Please, try log in again", false);
+	}
+}
+void LogIn::UpdateCounter(QString username)
+{
+	QSqlQuery query;
+	query.clear();
+	query.prepare("SELECT LoginAttemptCounter FROM Users WHERE Username = ?");
+	query.bindValue(0, username);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		int loginAttemptCounter = query.value(0).toInt();
+		loginAttemptCounter += 1;
+		if (loginAttemptCounter < loginAttemptCounterMAX)
+		{
+			UpdateAttempts(loginAttemptCounter, username);
+			Utilities::MBAlarm("Typed data is incorrect. Please, try log in again", false);
+		}
+		else
+		{
+			loginAttemptCounter = 4;
+			int msg = loginTimeLock / 60;
+			Utilities::MBAlarm("Your account is blocked. Please, try log in again after " + QString::number(msg) + " minutes", false);
+			UpdateAttempts(loginAttemptCounter, username);
+		}
+	}
+	else
 	{
 		Utilities::MBAlarm("Something went wrong. Please, try log in again", false);
 	}

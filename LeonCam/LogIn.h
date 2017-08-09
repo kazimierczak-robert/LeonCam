@@ -19,6 +19,8 @@ class LogIn : public QMainWindow
 
 public:
 	LogIn(QWidget *parent = Q_NULLPTR);
+	static void UpdateAttempts(int loginAttemptCounter, QString username);
+	static void UpdateCounter(QString username);
 private slots:
 	void LogInClicked();
 	void ForgotPasswordClicked();
@@ -26,5 +28,4 @@ private slots:
 private:
 	Ui::LogInClass ui;
 	DesignBase *designB;
-	void LogIn::UpdateAttempts(int loginAttemptCounter, QString username);
 };

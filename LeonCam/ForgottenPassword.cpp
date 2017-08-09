@@ -65,6 +65,7 @@ void ForgottenPassword::VerifyClicked()
 			int result = query.value(0).toInt();
 			if (result == 1)
 			{
+				LogIn::UpdateAttempts(0, username);
 				MainApp *mainApp = new MainApp(nullptr, username);
 				mainApp->show();
 				this->close();
@@ -72,7 +73,7 @@ void ForgottenPassword::VerifyClicked()
 			else
 			{
 				designB->gif->stop();
-				Utilities::MBAlarm("Your answer is wrong", false);
+				LogIn::UpdateCounter(username);
 				return;
 			}
 		}
