@@ -45,14 +45,6 @@ void CameraPreview::BackButtonClicked()
 	this->close();
 }
 
-/*void CameraPreview::SetArrowPictureInButton(QPushButton* button, int rotationDegree)
-{
-	QPixmap pixmap(":/Resources/Images/up.png");
-	QIcon ButtonIcon(pixmap.transformed(QTransform().rotate(rotationDegree)));
-	button->setIcon(ButtonIcon);
-	button->setIconSize(pixmap.rect().size());
-}*/
-
 void CameraPreview::TurnOnOffCamera()
 {
 	int number = numberOfEnabledCameras->text().split(" ").last().toInt();

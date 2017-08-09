@@ -12,6 +12,7 @@ ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 	connect(ui.PBVerify, SIGNAL(clicked()), this, SLOT(VerifyClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
 	SetSecurityQuestion(username);
+	this->setResult(QDialog::Rejected);
 }
 
 ForgottenPassword::~ForgottenPassword()
@@ -65,10 +66,29 @@ void ForgottenPassword::VerifyClicked()
 			int result = query.value(0).toInt();
 			if (result == 1)
 			{
-				LogIn::UpdateAttempts(0, username);
-				MainApp *mainApp = new MainApp(nullptr, username);
-				mainApp->show();
-				this->close();
+				QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+				query.clear();
+				query.prepare("SELECT LastLoginAttemptDate, LoginAttemptCounter FROM Users WHERE Username=?");
+				query.bindValue(0, username);
+				bool result = query.exec() == true ? true : false;
+				if (result == true)
+				{
+					query.next();
+					QDateTime lastLoginAttemptDate = query.value(0).toDateTime();
+					int loginAttemptCounter = query.value(1).toInt();
+					int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
+					if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
+					if (loginAttemptCounter < loginAttemptCounterMAX)
+					{
+						LogIn::UpdateAttempts(0, username);
+						this->done(QDialog::Accepted);
+					}
+					else
+					{
+						designB->gif->stop();
+						Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
+					}
+				}
 			}
 			else
 			{

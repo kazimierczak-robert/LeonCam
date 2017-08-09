@@ -16,7 +16,6 @@ private slots:
 	void TurnOnOffRecognizeMode();
 private:
 	Ui::CameraPreview ui;
-	//void SetArrowPictureInButton(QPushButton* button, int rotationDegree);
 	QPushButton *buttonIsEnabledFromParent;
 	QPushButton *buttonRecognationFromParent;
 	QLabel *numberOfEnabledCameras;

@@ -109,8 +109,15 @@ void LogIn::ForgotPasswordClicked()
 				return;
 			}
 		}
+
 		ForgottenPassword *forgottenPassword = new ForgottenPassword(this, ui.LEUsername->text());
-		forgottenPassword->exec();
+		result = forgottenPassword->exec();
+		if (result == QDialog::Accepted)
+		{
+			this->close();
+			MainApp *mainApp = new MainApp(nullptr, ui.LEUsername->text());
+			mainApp->show();
+		}
 		delete forgottenPassword;
 	}
 }
