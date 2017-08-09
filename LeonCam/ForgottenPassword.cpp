@@ -1,6 +1,6 @@
 #include "ForgottenPassword.h"
 
-ForgottenPassword::ForgottenPassword(QWidget *parent)
+ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -11,6 +11,7 @@ ForgottenPassword::ForgottenPassword(QWidget *parent)
 	//Signals and slots
 	connect(ui.PBVerify, SIGNAL(clicked()), this, SLOT(VerifyClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
+	SetSecurityQuestion(username);
 }
 
 ForgottenPassword::~ForgottenPassword()
@@ -42,7 +43,9 @@ void ForgottenPassword::VerifyClicked()
 	designB->gif->start();
 	if (ui.LEAnswer->text() == "")
 	{
+		designB->gif->stop();
 		Utilities::MBAlarm("Please, fill in the <i> Answer </i> field", false);
+		return;
 	}
 	else
 	{

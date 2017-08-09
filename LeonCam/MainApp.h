@@ -9,6 +9,7 @@
 #include "UserCamera.h"
 #include "CameraEdition.h"
 #include <algorithm>
+#include <QCloseEvent>
 
 class MainApp : public QMainWindow
 {
@@ -40,4 +41,5 @@ private:
 	int activeCameraPage;
 	void addTab();
 	void CameraSelected(QGridLayout* layout);
+	void MainApp::closeEvent(QCloseEvent *event);
 };

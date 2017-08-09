@@ -89,7 +89,7 @@ padding: 0px;*/</string>
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>200</y>
+      <y>220</y>
       <width>301</width>
       <height>25</height>
      </rect>
@@ -105,7 +105,7 @@ padding: 0px;*/</string>
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>230</y>
+      <y>250</y>
       <width>301</width>
       <height>25</height>
      </rect>
@@ -115,27 +115,6 @@ padding: 0px;*/</string>
     </property>
     <property name="placeholderText">
      <string>Password</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="CBKeepMeLoggedIn">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>260</y>
-      <width>261</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#CBKeepMeLoggedIn{color: rgb(35, 167, 255);}
-#CBKeepMeLoggedIn:hover
-{
-	
-	color: rgb(89, 178, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>Keep me logged in</string>
     </property>
    </widget>
    <widget class="QPushButton" name="PBLogIn">

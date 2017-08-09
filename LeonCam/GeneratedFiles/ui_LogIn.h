@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -31,7 +30,6 @@ public:
     QPushButton *PBNewProfile;
     QLineEdit *LEUsername;
     QLineEdit *LEPassword;
-    QCheckBox *CBKeepMeLoggedIn;
     QPushButton *PBLogIn;
     QPushButton *PBForgotPassword;
 
@@ -76,21 +74,12 @@ public:
         PBNewProfile->setFlat(false);
         LEUsername = new QLineEdit(centralWidget);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
-        LEUsername->setGeometry(QRect(250, 200, 301, 25));
+        LEUsername->setGeometry(QRect(250, 220, 301, 25));
         LEUsername->setStyleSheet(QStringLiteral(""));
         LEPassword = new QLineEdit(centralWidget);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
-        LEPassword->setGeometry(QRect(250, 230, 301, 25));
+        LEPassword->setGeometry(QRect(250, 250, 301, 25));
         LEPassword->setEchoMode(QLineEdit::Password);
-        CBKeepMeLoggedIn = new QCheckBox(centralWidget);
-        CBKeepMeLoggedIn->setObjectName(QStringLiteral("CBKeepMeLoggedIn"));
-        CBKeepMeLoggedIn->setGeometry(QRect(250, 260, 261, 25));
-        CBKeepMeLoggedIn->setStyleSheet(QLatin1String("#CBKeepMeLoggedIn{color: rgb(35, 167, 255);}\n"
-"#CBKeepMeLoggedIn:hover\n"
-"{\n"
-"	\n"
-"	color: rgb(89, 178, 255);\n"
-"}"));
         PBLogIn = new QPushButton(centralWidget);
         PBLogIn->setObjectName(QStringLiteral("PBLogIn"));
         PBLogIn->setGeometry(QRect(250, 300, 301, 30));
@@ -129,7 +118,6 @@ public:
         PBNewProfile->setText(QApplication::translate("LogInClass", "New profile", Q_NULLPTR));
         LEUsername->setPlaceholderText(QApplication::translate("LogInClass", "Username", Q_NULLPTR));
         LEPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
-        CBKeepMeLoggedIn->setText(QApplication::translate("LogInClass", "Keep me logged in", Q_NULLPTR));
         PBLogIn->setText(QApplication::translate("LogInClass", "Log In", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBForgotPassword->setToolTip(QApplication::translate("LogInClass", "To recover your password, firstly, fill your <b>Username</b>", Q_NULLPTR));

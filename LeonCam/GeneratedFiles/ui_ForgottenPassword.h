@@ -88,7 +88,8 @@ public:
         LESecurityQuestion->setObjectName(QStringLiteral("LESecurityQuestion"));
         LESecurityQuestion->setEnabled(false);
         LESecurityQuestion->setGeometry(QRect(250, 300, 301, 25));
-        LESecurityQuestion->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        LESecurityQuestion->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);"));
         LEAnswer = new QLineEdit(ForgottenPassword);
         LEAnswer->setObjectName(QStringLiteral("LEAnswer"));
         LEAnswer->setGeometry(QRect(250, 330, 301, 25));

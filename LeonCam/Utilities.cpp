@@ -29,3 +29,10 @@ void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 	}
 	msgBox.exec();
 }
+QString Utilities::GetCurrentDateTime()
+{
+	//get system current time
+	QDateTime currentDateTime = QDateTime::currentDateTime();
+	QString currentDateTimeS = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
+	return currentDateTimeS;
+}

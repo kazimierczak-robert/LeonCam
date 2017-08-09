@@ -18,7 +18,9 @@ MainApp::MainApp(QWidget *parent, QString username)
 	vectorRemoveButtonToRowIndex = new std::vector<QPushButton*>();
 
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
-	//connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
+	//logout: on close (logout and close), by clicking logout icon (only logout and switch to LogIn window)
+	connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
+	connect(ui.PBLogout, SIGNAL(clicked()), this, SLOT(LogOut()));
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
 	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
 
@@ -141,13 +143,6 @@ void MainApp::addTab()
 
 	ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
 
-}
-
-void MainApp::LogOut()
-{
-	LogIn *login = new LogIn(nullptr);
-	login->show();
-	this->close();
 }
 
 void MainApp::CameraSelected(QGridLayout* layout)
@@ -357,4 +352,69 @@ void MainApp::TWCameraPagesChanged(int newIndex)
 	ui.TWCameraPages->setTabText(activeCameraPage, QString::fromStdWString(L"\u25CB"));
 	ui.TWCameraPages->setTabText(newIndex, QString::fromStdWString(L"\u25CF"));
 	activeCameraPage = newIndex;
+}
+
+void MainApp::LogOut()
+{
+	//Get proper user from DB
+	QSqlQuery query;
+	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
+	query.bindValue(0, username);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		int result = query.value(0).toInt();
+		if (result == 1)
+		{
+			//set LastLogoutDate
+			query.clear();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("UPDATE Users SET LastLogoutDate = ?  WHERE Username = ?");
+			query.bindValue(0, Utilities::GetCurrentDateTime());
+			query.bindValue(1, username);
+			bool result = query.exec() == true ? true : false;
+			query.exec("COMMIT");
+			if (result == false)
+			{
+				Utilities::MBAlarm("User has not been logged out properly. Please, restart application.", false);
+			}
+		}
+	}
+
+	LogIn *login = new LogIn(nullptr);
+	login->show();
+	this->close();
+}
+
+void MainApp::closeEvent(QCloseEvent *event)
+{
+	//Get proper user from DB
+	QSqlQuery query;
+	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
+	query.bindValue(0, username);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		int result = query.value(0).toInt();
+		if (result == 1)
+		{
+			//set LastLogoutDate
+			query.clear();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("UPDATE Users SET LastLogoutDate = ? WHERE Username = ?");
+			query.bindValue(0, Utilities::GetCurrentDateTime());
+			query.bindValue(1, username);
+			bool result = query.exec() == true ? true : false;
+			query.exec("COMMIT");
+			if (result == false)
+			{
+				Utilities::MBAlarm("User has not been logged out properly. Please, restart application.", false);
+			}
+
+		}
+	}
+
+	event->accept();
 }

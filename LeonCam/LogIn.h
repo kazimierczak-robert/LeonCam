@@ -10,6 +10,9 @@
 #include "DataBase.h"
 #include <qtooltip.h>
 
+#define loginAttemptCounterMAX 3
+#define loginTimeLock 900
+
 class LogIn : public QMainWindow
 {
 	Q_OBJECT
@@ -23,4 +26,5 @@ private slots:
 private:
 	Ui::LogInClass ui;
 	DesignBase *designB;
+	void LogIn::UpdateAttempts(int loginAttemptCounter, QString username);
 };

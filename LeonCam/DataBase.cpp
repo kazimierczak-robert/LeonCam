@@ -21,7 +21,6 @@ bool DataBase::CreateUsers()
 					"UserID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					"Username VARCHAR(50) UNIQUE NOT NULL,"
 					"Password CHAR(64) NOT NULL,"
-					"KeepMeLoggedIn BOOLEAN NOT NULL,"
 					"SecurityQuestion TEXT NOT NULL,"
 					"Answer CHAR(64) NOT NULL,"
 					"RedAlertDeleteSettingID INTEGER NOT NULL REFERENCES AlertsDeleteSettings(AlertDeleteSettingID),"
@@ -78,12 +77,14 @@ bool DataBase::CreateAlertsDeleteSettings()
 		if (queryResult == 0 && result==true)
 		{
 			query.clear();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
 			query.prepare("INSERT INTO AlertsDeleteSettings (Date) VALUES (?)");
 			QVariantList times;
 			times << "never" << "1 day" << "1 week" << "1 month" << "half a year" << "1 year";
 			query.addBindValue(times);
 
 			result = query.execBatch() == true ? true : false;
+			query.exec("COMMIT");
 		}
 	}
 

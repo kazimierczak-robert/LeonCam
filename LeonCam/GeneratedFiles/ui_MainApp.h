@@ -38,6 +38,7 @@ public:
     QWidget *TFacesBase;
     QWidget *TReports;
     QWidget *TSettings;
+    QPushButton *PBLogout;
 
     void setupUi(QMainWindow *MainApp)
     {
@@ -170,6 +171,18 @@ public:
         TSettings->setObjectName(QStringLiteral("TSettings"));
         TSettings->setStyleSheet(QStringLiteral("background-color: transparent;"));
         TWMenu->addTab(TSettings, QString());
+        PBLogout = new QPushButton(centralWidget);
+        PBLogout->setObjectName(QStringLiteral("PBLogout"));
+        PBLogout->setGeometry(QRect(750, 550, 40, 40));
+        PBLogout->setStyleSheet(QLatin1String("#PBLogout\n"
+"{\n"
+"background-image: url(:/Resources/Images/logout.png);\n"
+"border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;}\n"
+"#PBLogout:hover{background-image: url(:/Resources/Images/logoutHover.png);}\n"
+""));
+        PBLogout->setFlat(true);
         MainApp->setCentralWidget(centralWidget);
 
         retranslateUi(MainApp);
@@ -193,6 +206,7 @@ public:
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
+        PBLogout->setText(QString());
     } // retranslateUi
 
 };

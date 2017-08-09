@@ -71,16 +71,14 @@ void NewProfile::CreateClicked()
 	concatHelp = username.toStdString() + answer.toStdString();
 	QString answerAbbreviation = QString::fromStdString(sha256->sha256_abbreviation(concatHelp));
 
-	//get system current time
-	QDateTime currentDateTime = QDateTime::currentDateTime();
-	QString currentDateTimeS = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
+	QString currentDateTimeS = Utilities::GetCurrentDateTime();
 
 	QSqlQuery query;
-	query.prepare("INSERT INTO Users (Username, Password, KeepMeLoggedIn, SecurityQuestion, Answer, RedAlertDeleteSettingID, GreenAlertDeleteSettingID, LastLogoutDate, LastLoginAttemptDate, LoginAttemptCounter, RegistrationDate) "
-		"VALUES (:Username, :Password, :KeepMeLoggedIn, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID, :LastLogoutDate, :LastLoginAttemptDate, :LoginAttemptCounter, :RegistrationDate)");
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
+	query.prepare("INSERT INTO Users (Username, Password, SecurityQuestion, Answer, RedAlertDeleteSettingID, GreenAlertDeleteSettingID, LastLogoutDate, LastLoginAttemptDate, LoginAttemptCounter, RegistrationDate) "
+		"VALUES (:Username, :Password, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID, :LastLogoutDate, :LastLoginAttemptDate, :LoginAttemptCounter, :RegistrationDate)");
 	query.bindValue(":Username", username);
 	query.bindValue(":Password", passwordAbbreviation);
-	query.bindValue(":KeepMeLoggedIn", 0);
 	query.bindValue(":SecurityQuestion", securityQuestion);
 	query.bindValue(":Answer", answerAbbreviation);
 	query.bindValue(":RedAlertDeleteSettingID", 1);
@@ -90,6 +88,7 @@ void NewProfile::CreateClicked()
 	query.bindValue(":LoginAttemptCounter", 0);
 	query.bindValue(":RegistrationDate", currentDateTimeS);
 	bool result = query.exec() == true ? true : false;
+	query.exec("COMMIT");
 	designB->gif->stop();
 	if (result == true)
 	{
