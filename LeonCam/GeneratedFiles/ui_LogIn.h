@@ -71,6 +71,7 @@ public:
 "/*border: none;\n"
 "margin: 0px;\n"
 "padding: 0px;*/"));
+        PBNewProfile->setAutoDefault(true);
         PBNewProfile->setFlat(false);
         LEUsername = new QLineEdit(centralWidget);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
@@ -90,6 +91,7 @@ public:
 "{\n"
 "background-color: rgb(0, 77, 116);\n"
 "}"));
+        PBLogIn->setAutoDefault(true);
         PBLogIn->setFlat(false);
         PBForgotPassword = new QPushButton(centralWidget);
         PBForgotPassword->setObjectName(QStringLiteral("PBForgotPassword"));
@@ -103,10 +105,18 @@ public:
 "{\n"
 "color: rgb(255, 122, 82);\n"
 "}"));
+        PBForgotPassword->setAutoDefault(true);
         PBForgotPassword->setFlat(true);
         LogInClass->setCentralWidget(centralWidget);
+        QWidget::setTabOrder(LEUsername, LEPassword);
+        QWidget::setTabOrder(LEPassword, PBLogIn);
+        QWidget::setTabOrder(PBLogIn, PBForgotPassword);
+        QWidget::setTabOrder(PBForgotPassword, PBNewProfile);
 
         retranslateUi(LogInClass);
+
+        PBLogIn->setDefault(true);
+
 
         QMetaObject::connectSlotsByName(LogInClass);
     } // setupUi

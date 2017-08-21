@@ -149,6 +149,9 @@ public:
 
         retranslateUi(UserCamera);
 
+        PBAdd->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(UserCamera);
     } // setupUi
 

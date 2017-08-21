@@ -117,6 +117,9 @@ public:
 
         retranslateUi(CameraEdition);
 
+        PBEdit->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(CameraEdition);
     } // setupUi
 

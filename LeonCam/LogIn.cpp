@@ -11,6 +11,8 @@ LogIn::LogIn(QWidget *parent)
 	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBLogIn, SIGNAL(clicked()), this, SLOT(LogInClicked()));
+	connect(ui.LEUsername, SIGNAL(returnPressed()), this, SLOT(LogInClicked()));
+	connect(ui.LEPassword, SIGNAL(returnPressed()), this, SLOT(LogInClicked()));
 	connect(ui.PBForgotPassword, SIGNAL(clicked()), this, SLOT(ForgotPasswordClicked()));
 	connect(ui.PBNewProfile, SIGNAL(clicked()), this, SLOT(NewProfileClicked()));
 }

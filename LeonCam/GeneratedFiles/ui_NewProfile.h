@@ -107,6 +107,9 @@ public:
 
         retranslateUi(NewProfile);
 
+        PBCreate->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(NewProfile);
     } // setupUi
 

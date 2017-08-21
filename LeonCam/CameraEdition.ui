@@ -156,6 +156,9 @@ padding: 0px;*/</string>
    <property name="text">
     <string>Edit</string>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
    <property name="flat">
     <bool>false</bool>
    </property>
@@ -258,6 +261,17 @@ padding: 0px;*/</string>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>LEModel</tabstop>
+  <tabstop>LEDescripton</tabstop>
+  <tabstop>LEIPv4Address</tabstop>
+  <tabstop>LELogin</tabstop>
+  <tabstop>LEOldPassword</tabstop>
+  <tabstop>LEPassword</tabstop>
+  <tabstop>LEConfPass</tabstop>
+  <tabstop>PBEdit</tabstop>
+  <tabstop>PBBack</tabstop>
+ </tabstops>
  <resources>
   <include location="Resources.qrc"/>
  </resources>

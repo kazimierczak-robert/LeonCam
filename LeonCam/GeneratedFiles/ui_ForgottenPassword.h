@@ -107,6 +107,9 @@ public:
 
         retranslateUi(ForgottenPassword);
 
+        PBVerify->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(ForgottenPassword);
     } // setupUi
 
