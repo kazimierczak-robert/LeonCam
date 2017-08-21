@@ -100,6 +100,7 @@ public:
 "{\n"
 "background-color: rgb(39, 129, 63);\n"
 "}"));
+        PBAddCamera->setAutoDefault(true);
         LSearch = new QLabel(TCameras);
         LSearch->setObjectName(QStringLiteral("LSearch"));
         LSearch->setGeometry(QRect(30, 30, 23, 23));
@@ -182,6 +183,7 @@ public:
 "padding: 0px;}\n"
 "#PBLogout:hover{background-image: url(:/Resources/Images/logoutHover.png);}\n"
 ""));
+        PBLogout->setAutoDefault(true);
         PBLogout->setFlat(true);
         MainApp->setCentralWidget(centralWidget);
 

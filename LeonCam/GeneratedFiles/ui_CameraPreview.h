@@ -197,6 +197,19 @@ public:
         PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
         PBGoToPreset->setFlat(true);
+        QWidget::setTabOrder(PBCameraOnOff, CBPresets);
+        QWidget::setTabOrder(CBPresets, PBGoToPreset);
+        QWidget::setTabOrder(PBGoToPreset, PBSavePreset);
+        QWidget::setTabOrder(PBSavePreset, PBPatrol);
+        QWidget::setTabOrder(PBPatrol, PBRecognize);
+        QWidget::setTabOrder(PBRecognize, PBEdit);
+        QWidget::setTabOrder(PBEdit, PBSnapshot);
+        QWidget::setTabOrder(PBSnapshot, PBHome);
+        QWidget::setTabOrder(PBHome, PBUp);
+        QWidget::setTabOrder(PBUp, PBLeft);
+        QWidget::setTabOrder(PBLeft, PBRight);
+        QWidget::setTabOrder(PBRight, PBDown);
+        QWidget::setTabOrder(PBDown, PBBack);
 
         retranslateUi(CameraPreview);
 

@@ -1,4 +1,4 @@
-#include "LogIn.h"
+﻿#include "LogIn.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 		delete dataBase;
 		return -1;
 	}
+
 	delete dataBase;
 	w.show();
 

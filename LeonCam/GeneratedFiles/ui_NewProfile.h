@@ -104,6 +104,12 @@ public:
         LTip->setGeometry(QRect(250, 200, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
+        QWidget::setTabOrder(LEUsername, LEPassword);
+        QWidget::setTabOrder(LEPassword, LEConfPass);
+        QWidget::setTabOrder(LEConfPass, LESecQuest);
+        QWidget::setTabOrder(LESecQuest, LEAnswer);
+        QWidget::setTabOrder(LEAnswer, PBCreate);
+        QWidget::setTabOrder(PBCreate, PBBack);
 
         retranslateUi(NewProfile);
 

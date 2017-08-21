@@ -114,6 +114,14 @@ public:
         LEConfPass->setObjectName(QStringLiteral("LEConfPass"));
         LEConfPass->setGeometry(QRect(10, 80, 231, 25));
         LEConfPass->setEchoMode(QLineEdit::Password);
+        QWidget::setTabOrder(LEModel, LEDescripton);
+        QWidget::setTabOrder(LEDescripton, LEIPv4Address);
+        QWidget::setTabOrder(LEIPv4Address, LELogin);
+        QWidget::setTabOrder(LELogin, LEOldPassword);
+        QWidget::setTabOrder(LEOldPassword, LEPassword);
+        QWidget::setTabOrder(LEPassword, LEConfPass);
+        QWidget::setTabOrder(LEConfPass, PBEdit);
+        QWidget::setTabOrder(PBEdit, PBBack);
 
         retranslateUi(CameraEdition);
 

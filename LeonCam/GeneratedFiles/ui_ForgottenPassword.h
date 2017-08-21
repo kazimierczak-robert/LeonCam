@@ -104,6 +104,9 @@ public:
 "{\n"
 "background-color: rgb(0, 77, 116);\n"
 "}"));
+        QWidget::setTabOrder(LESecurityQuestion, LEAnswer);
+        QWidget::setTabOrder(LEAnswer, PBVerify);
+        QWidget::setTabOrder(PBVerify, PBBack);
 
         retranslateUi(ForgottenPassword);
 
