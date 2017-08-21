@@ -61,10 +61,11 @@ void MainApp::AddCamera()
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
 
-		QLabel *label2 = new QLabel("Garage (192.168.111.111)");
-		label2->setStyleSheet("color:rgb(255, 255, 255);");
-		label2->setFixedSize(216, 23);
-		layout->addWidget(label2, 1, 0, 1, 5);
+		QLabel *label = new QLabel(controlsValues->at(1) + " (" + controlsValues->at(2) + ")");
+		label->setStyleSheet("color:rgb(255, 255, 255);");
+		label->setFixedSize(216, 23);
+		label->setAlignment(Qt::AlignCenter);
+		layout->addWidget(label, 1, 0, 1, 5);
 
 		btn = new QPushButton();
 		btn->setText("Off");

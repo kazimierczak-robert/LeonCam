@@ -434,6 +434,22 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>PBCameraOnOff</tabstop>
+  <tabstop>CBPresets</tabstop>
+  <tabstop>PBGoToPreset</tabstop>
+  <tabstop>PBSavePreset</tabstop>
+  <tabstop>PBPatrol</tabstop>
+  <tabstop>PBRecognize</tabstop>
+  <tabstop>PBEdit</tabstop>
+  <tabstop>PBSnapshot</tabstop>
+  <tabstop>PBHome</tabstop>
+  <tabstop>PBUp</tabstop>
+  <tabstop>PBLeft</tabstop>
+  <tabstop>PBRight</tabstop>
+  <tabstop>PBDown</tabstop>
+  <tabstop>PBBack</tabstop>
+ </tabstops>
  <resources>
   <include location="Resources.qrc"/>
  </resources>

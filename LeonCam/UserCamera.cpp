@@ -55,6 +55,23 @@ void UserCamera::AddClicked()
 {	
 	//TODO
 	designB->gif->start();
+
+	if (ui.LEModel->text() == "" || ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
+	{
+		designB->gif->stop();
+		Utilities::MBAlarm("At least one field is incomplete", false);
+		return;
+	}
+
+	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+	if (std::regex_match(ui.LEIPv4Address->text().toStdString(), IPv4AddressPattern) == false)
+	{
+		designB->gif->stop();
+		Utilities::MBAlarm("IPv4 address incompatible format", false);
+		return;
+	}
+
+	designB->gif->stop();
 	this->done(QDialog::Accepted);
 	//this->setResult(QDialog::Accepted);
 	//this->close();
