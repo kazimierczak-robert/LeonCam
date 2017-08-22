@@ -1,6 +1,5 @@
 #include "SHA256.h"
-#include <stdlib.h>
-#include <memory.h>
+
 
 SHA256::SHA256()
 { }
@@ -144,4 +143,23 @@ std::string SHA256::sha256_abbreviation(std::string message)
 	delete sha256;
 
 	return std::string(abbreviationC);
+}
+BYTE* SHA256::sha256_abbreviationBYTE(std::string key)
+{
+
+	/*BYTE *keyBuf = new BYTE[key.length()+1];
+	for (int i = 0; i < key.length(); i++)
+	keyBuf[i] = key[i];
+	keyBuf[key.length()] = '\0';*/
+
+	BYTE buf[SHA256_BLOCK_SIZE];
+	SHA256_CTX ctx;
+	SHA256 *sha256 = new SHA256();
+
+	sha256->sha256_init(&ctx);
+	sha256->sha256_update(&ctx, (const unsigned char *)key.c_str(), key.length());
+	sha256->sha256_final(&ctx, buf);
+
+	//delete [] keyBuf;
+	return buf;
 }

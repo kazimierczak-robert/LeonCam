@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AES.cpp" />
     <ClCompile Include="CameraEdition.cpp" />
     <ClCompile Include="CameraPreview.cpp" />
     <ClCompile Include="DataBase.cpp" />
@@ -256,6 +257,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AES.h" />
     <ClInclude Include="SHA256.h" />
     <ClInclude Include="Utilities.h" />
     <CustomBuild Include="UserCamera.h">

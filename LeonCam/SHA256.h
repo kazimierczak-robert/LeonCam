@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 #include <string>
+#include <stdlib.h>
+#include <memory.h>
 
 #define SHA256_BLOCK_SIZE 32            // SHA256 outputs a 32 byte digest
 
@@ -45,4 +47,5 @@ public:
 	void sha256_update(SHA256_CTX *ctx, const BYTE data[], size_t len);
 	void sha256_final(SHA256_CTX *ctx, BYTE hash[]);
 	std::string SHA256::sha256_abbreviation(std::string message);
+	BYTE* sha256_abbreviationBYTE(std::string message);
 };
