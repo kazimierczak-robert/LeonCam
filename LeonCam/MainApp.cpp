@@ -1,5 +1,7 @@
 ﻿#include "MainApp.h"
 
+//TODO: Delete buttons from Faces Base
+
 MainApp::MainApp(QWidget *parent, QString username)
 	: QMainWindow(parent)
 {
@@ -17,17 +19,23 @@ MainApp::MainApp(QWidget *parent, QString username)
 	vectorEditButtonToRowIndex = new std::vector<QPushButton*>();
 	vectorRemoveButtonToRowIndex = new std::vector<QPushButton*>();
 
+	FillFacesBaseTW();
+
+	activeCameraPage = 0;
+
+	addTab();
+	ui.TWCameraPages->setTabText(0, "");
+
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
 	//logout: on close (logout and close), by clicking logout icon (only logout and switch to LogIn window)
 	connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
 	connect(ui.PBLogout, SIGNAL(clicked()), this, SLOT(LogOut()));
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
 	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
-
-	activeCameraPage = 0;
-
-	addTab();
-	ui.TWCameraPages->setTabText(0, "");
+	//Faces base
+	connect(ui.TWFacesBase, SIGNAL(CurentCellChanged(int, int)), this, SLOT(UpdateDBAfterCellChanged(int, int)));
+	connect(ui.LESearchFB, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchFBChanged()));
+	connect(ui.PBAddPerson, SIGNAL(clicked()), this, SLOT(AddPerson()));
 }
 
 MainApp::~MainApp()
@@ -129,7 +137,6 @@ void MainApp::AddCamera()
 		ui.LTotalNumber->setText("Total number of cameras: " + QString::number((vectorQGridLayouts->size()-1) * 6 + vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1) ->size()));
 	}
 }
-
 void MainApp::addTab()
 {
 	QGridLayout *newLayout = new QGridLayout();
@@ -145,13 +152,11 @@ void MainApp::addTab()
 	ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
 
 }
-
 void MainApp::CameraSelected(QGridLayout* layout)
 {
 	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber);
 	cameraPreview->exec();
 }
-
 void MainApp::TurnOnOffCamera(QPushButton* button)
 {
 	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
@@ -172,7 +177,6 @@ void MainApp::TurnOnOffCamera(QPushButton* button)
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
 
 }
-
 void MainApp::PatrolCamera(QPushButton* button)
 {
 	int index = 0;
@@ -226,7 +230,6 @@ void MainApp::EditCamera(QPushButton* button)
 		}
 	}
 }
-
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int pageIndex = 0;
@@ -331,8 +334,6 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 	}
 
 }
-
-
 void MainApp::LESearchChanged()
 {
 	/*for (int i = 0; i < ui.TLWCameras->rowCount(); i++)
@@ -347,14 +348,12 @@ void MainApp::LESearchChanged()
 		}
 	}*/
 }
-
 void MainApp::TWCameraPagesChanged(int newIndex)
 {
 	ui.TWCameraPages->setTabText(activeCameraPage, QString::fromStdWString(L"\u25CB"));
 	ui.TWCameraPages->setTabText(newIndex, QString::fromStdWString(L"\u25CF"));
 	activeCameraPage = newIndex;
 }
-
 void MainApp::LogOut()
 {
 	//Get proper user from DB
@@ -387,7 +386,6 @@ void MainApp::LogOut()
 	login->show();
 	this->close();
 }
-
 void MainApp::closeEvent(QCloseEvent *event)
 {
 	//Get proper user from DB
@@ -418,4 +416,278 @@ void MainApp::closeEvent(QCloseEvent *event)
 	}
 
 	event->accept();
+}
+//Faces base
+void MainApp::AdjustFaceBaseTW()
+{
+	//ui.TWFacesBase->horizontalHeader()->setSortIndicator(0, Qt::DescendingOrder);
+	//Set adjusted column width
+	ui.TWFacesBase->setColumnWidth(0, 80);
+	ui.TWFacesBase->setColumnWidth(1, 140);
+	ui.TWFacesBase->setColumnWidth(2, 140);
+	ui.TWFacesBase->setColumnWidth(3, 100);
+	ui.TWFacesBase->setColumnWidth(4, 80);
+	ui.TWFacesBase->setColumnWidth(5, 70);
+	ui.TWFacesBase->setColumnWidth(6, 70);
+	ui.TWFacesBase->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+	//Disable dotted border
+	ui.TWFacesBase->setFocusPolicy(Qt::NoFocus);
+}
+void MainApp::AddRowToFB(int ID, QString name, QString surname)
+{
+	ui.TWFacesBase->setSortingEnabled(false);
+	QWidget *widget;
+	QPushButton *button;
+	QHBoxLayout *layout;
+	QTableWidgetItem *item;
+	int rowCount = ui.TWFacesBase->rowCount();
+
+	//Inserts an empty row into the table at row
+	ui.TWFacesBase->insertRow(ui.TWFacesBase->rowCount());
+
+	//Set the widget in the cell
+	item = new QTableWidgetItem(QVariant(ID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWFacesBase->setItem(rowCount, 0, item);
+
+	item = new QTableWidgetItem(name);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWFacesBase->setItem(rowCount, 1, item);
+
+	item = new QTableWidgetItem(surname);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWFacesBase->setItem(rowCount, 2, item);
+
+	//New widget
+	widget = new QWidget();
+	//Button to go to the folder (in the cell)
+	button = new QPushButton(ui.TWFacesBase);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/folder.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/folderHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWFacesBase);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	ui.TWFacesBase->setCellWidget(rowCount, 3, widget);
+	connect(button, &QPushButton::clicked, this, [this, ID] {OpenFileExplorer(ID); });
+
+	//New widget
+	widget = new QWidget();
+	//Button to take picture (in the cell)
+	button = new QPushButton(ui.TWFacesBase);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/snapshot.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/snapshotHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWFacesBase);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWFacesBase->setCellWidget(rowCount, 4, widget);
+	connect(button, &QPushButton::clicked, this, [this, ID] {TakePicture(ID); });
+
+	//New widget
+	widget = new QWidget();
+	//Button to edit person (in the cell)
+	button = new QPushButton(ui.TWFacesBase);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/edit.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/editHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWFacesBase);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWFacesBase->setCellWidget(rowCount, 5, widget);
+	connect(button, &QPushButton::clicked, this, [this, ID] {EditPerson(ID); });
+
+	//New widget
+	widget = new QWidget();
+	//Button to remove person (in the cell)
+	button = new QPushButton(ui.TWFacesBase);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/remove.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/removeHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWFacesBase);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWFacesBase->setCellWidget(rowCount, 6, widget);
+	connect(button, &QPushButton::clicked, this, [this, ID] {RemovePerson(ID); });
+	ui.TWFacesBase->setSortingEnabled(true);
+}
+void MainApp::FillFacesBaseTW()
+{
+	AdjustFaceBaseTW();
+	//TODO: Get data from DB
+	//http://doc.qt.io/qt-5/qhboxlayout.html
+	//http://www.qtcentre.org/threads/3416-Center-a-widget-in-a-cell-on-a-QTableWidget
+	//https://stackoverflow.com/a/14715980
+
+
+	for (int i = helpVar; helpVar < 20; helpVar++)
+	{
+		AddRowToFB(helpVar, "Kazimierz", "Aleksandrowicz");
+	}
+}
+void MainApp::UpdateDBAfterCellChanged(int row, int column)
+{
+	//TODO
+	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
+}
+void MainApp::OpenFileExplorer(int ID)
+{
+	//TODO
+	Utilities::MBAlarm("File Explorer " + QVariant(ID).toString(), true);
+}
+void MainApp::TakePicture(int ID)
+{
+	//TODO
+	Utilities::MBAlarm("TakePicture " + QVariant(ID).toString(), true);
+}
+void MainApp::LESearchFBChanged()
+{
+	QString typedSurname = ui.LESearchFB->text();
+	for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
+	{
+		if (ui.TWFacesBase->item(i, 2)->text().startsWith(typedSurname, Qt::CaseInsensitive))
+		{
+			ui.TWFacesBase->showRow(i);
+		}
+		else
+		{
+			ui.TWFacesBase->hideRow(i);
+		}
+	}
+}
+void MainApp::AddPerson()
+{
+	QString name = ui.LEUsername->text();
+	QString surname = ui.LESurname->text();
+
+	//TODO: Add to DB
+	if (name != "" && surname != "") 
+	{
+		AddRowToFB(helpVar, name, surname);
+		helpVar++;
+	}
+	else
+	{
+		Utilities::MBAlarm("At least one field is incomplete", false);
+	}
+
+}
+void MainApp::EditPerson(int ID)
+{
+	//TODO
+	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+	{
+		if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		{
+			//Create Qdialog
+			QDialog *qDialog = new QDialog(0, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+			QPixmap pixmap(iconPath);
+			QIcon ButtonIcon(pixmap);
+			qDialog->setWindowIcon(ButtonIcon);
+
+			QDialogButtonBox *dialogBB = new QDialogButtonBox();
+			dialogBB->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+			QFormLayout *formLayout = new QFormLayout();
+			QLabel *nameL = new QLabel();
+			nameL->setText("Name:");
+			QLineEdit *nameLE = new QLineEdit();
+			//Set name form table
+			nameLE->setText(ui.TWFacesBase->item(i, 1)->text());
+
+			QLabel *surnameL = new QLabel();
+			surnameL->setText("Surname:");
+			QLineEdit *surnameLE = new QLineEdit();
+			//Set surname from table
+			surnameLE->setText(ui.TWFacesBase->item(i, 2)->text());
+
+			//Check if fields are empty
+			connect(nameLE, &QLineEdit::textEdited, this, [this, nameLE, surnameLE, dialogBB]
+			{
+				if (nameLE->text() == "" || surnameLE->text() == "")
+				{
+					dialogBB->button(QDialogButtonBox::Ok)->setDisabled(true);
+				}
+				else
+				{
+					dialogBB->button(QDialogButtonBox::Ok)->setEnabled(true);
+				}
+			});
+			connect(surnameLE, &QLineEdit::textEdited, this, [this, nameLE, surnameLE, dialogBB]
+			{
+				if (surnameLE->text() == "" || nameLE->text() == "")
+				{
+					dialogBB->button(QDialogButtonBox::Ok)->setDisabled(true);
+				}
+				else
+				{
+					dialogBB->button(QDialogButtonBox::Ok)->setEnabled(true);
+				}
+			});
+
+			formLayout->addRow(nameL, nameLE);
+			formLayout->addRow(surnameL, surnameLE);
+
+			QGridLayout *gridLayout = new QGridLayout();
+			gridLayout->addLayout(formLayout, 0, 0, 1, 2, Qt::AlignCenter);
+
+			qDialog->setLayout(gridLayout);
+
+			gridLayout->addWidget(dialogBB, 3, 0, 1, 2, Qt::AlignRight);
+			qDialog->adjustSize();
+			qDialog->setMinimumSize(qDialog->width(), qDialog->height());
+			qDialog->setMaximumSize(qDialog->width(), qDialog->height());
+
+			connect(dialogBB, SIGNAL(accepted()), qDialog, SLOT(accept()));
+			connect(dialogBB, SIGNAL(rejected()), qDialog, SLOT(reject()));
+
+			int result = qDialog->exec();
+			if (result == QDialog::Accepted)
+			{
+				if (nameLE->text() != "" && surnameLE->text() != "") 
+				{
+					ui.TWFacesBase->item(i, 1)->setText(nameLE->text());
+					ui.TWFacesBase->item(i, 2)->setText(surnameLE->text());
+				}
+			}
+			break;
+		}
+	}
+}
+void MainApp::RemovePerson(int ID)
+{
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)ID).toString() + "?"))
+	{
+		//Remove row from table
+		for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+		{
+			if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+			{
+				ui.TWFacesBase->removeRow(i);
+				break;
+			}
+		}
+	}
+		//TODO::
+		//Remove from DB
+		//Remove folder
 }

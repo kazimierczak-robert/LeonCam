@@ -19,6 +19,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +37,13 @@ public:
     QLabel *LTotalNumber;
     QLabel *LEnabledNumber;
     QWidget *TFacesBase;
+    QLabel *LHelp;
+    QTableWidget *TWFacesBase;
+    QLineEdit *LESearchFB;
+    QLabel *LSearch_2;
+    QLineEdit *LEUsername;
+    QLineEdit *LESurname;
+    QPushButton *PBAddPerson;
     QWidget *TReports;
     QWidget *TSettings;
     QPushButton *PBLogout;
@@ -62,8 +70,9 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         TWMenu = new QTabWidget(centralWidget);
         TWMenu->setObjectName(QStringLiteral("TWMenu"));
-        TWMenu->setGeometry(QRect(30, 20, 740, 561));
+        TWMenu->setGeometry(QRect(30, 30, 740, 561));
         TWMenu->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
+"/*background-color: rgb(221, 221, 221);*/\n"
 "color: rgb(213, 235, 255);\n"
 "border: 0px;\n"
 "}\n"
@@ -163,6 +172,88 @@ public:
         TFacesBase = new QWidget();
         TFacesBase->setObjectName(QStringLiteral("TFacesBase"));
         TFacesBase->setStyleSheet(QStringLiteral("background-color: transparent;"));
+        LHelp = new QLabel(TFacesBase);
+        LHelp->setObjectName(QStringLiteral("LHelp"));
+        LHelp->setGeometry(QRect(30, 30, 680, 31));
+        LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: rgb(46, 147, 222);"));
+        TWFacesBase = new QTableWidget(TFacesBase);
+        if (TWFacesBase->columnCount() < 7)
+            TWFacesBase->setColumnCount(7);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
+        TWFacesBase->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        TWFacesBase->setObjectName(QStringLiteral("TWFacesBase"));
+        TWFacesBase->setGeometry(QRect(30, 100, 705, 357));
+        TWFacesBase->setFocusPolicy(Qt::NoFocus);
+        TWFacesBase->setAcceptDrops(false);
+        TWFacesBase->setAutoFillBackground(false);
+        TWFacesBase->setStyleSheet(QLatin1String("QTableWidget\n"
+"{\n"
+"	color: rgb(255, 255, 255);\n"
+"    alternate-background-color: rgb(53, 89, 127);\n"
+"}\n"
+"QHeaderView::section\n"
+"{\n"
+"	background-color: rgb(53, 89, 127);\n"
+"	color: rgb(203, 203, 203);\n"
+"}"));
+        TWFacesBase->setFrameShape(QFrame::Box);
+        TWFacesBase->setFrameShadow(QFrame::Sunken);
+        TWFacesBase->setEditTriggers(QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
+        TWFacesBase->setAlternatingRowColors(true);
+        TWFacesBase->setSelectionMode(QAbstractItemView::NoSelection);
+        TWFacesBase->setShowGrid(false);
+        TWFacesBase->setGridStyle(Qt::NoPen);
+        TWFacesBase->setSortingEnabled(true);
+        TWFacesBase->setWordWrap(false);
+        TWFacesBase->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
+        TWFacesBase->verticalHeader()->setVisible(false);
+        TWFacesBase->verticalHeader()->setHighlightSections(false);
+        LESearchFB = new QLineEdit(TFacesBase);
+        LESearchFB->setObjectName(QStringLiteral("LESearchFB"));
+        LESearchFB->setGeometry(QRect(30, 70, 681, 23));
+        LESearchFB->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+"padding-left: 22px;\n"
+"border-radius: 11px;"));
+        LSearch_2 = new QLabel(TFacesBase);
+        LSearch_2->setObjectName(QStringLiteral("LSearch_2"));
+        LSearch_2->setGeometry(QRect(30, 70, 23, 23));
+        LSearch_2->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/search.png); border: none; margin: 0px; padding: 0px;"));
+        LEUsername = new QLineEdit(TFacesBase);
+        LEUsername->setObjectName(QStringLiteral("LEUsername"));
+        LEUsername->setGeometry(QRect(30, 480, 200, 25));
+        LEUsername->setStyleSheet(QStringLiteral("background-color: rgb(234, 234, 234);"));
+        LESurname = new QLineEdit(TFacesBase);
+        LESurname->setObjectName(QStringLiteral("LESurname"));
+        LESurname->setGeometry(QRect(240, 480, 200, 25));
+        LESurname->setStyleSheet(QStringLiteral("background-color: rgb(234, 234, 234);"));
+        PBAddPerson = new QPushButton(TFacesBase);
+        PBAddPerson->setObjectName(QStringLiteral("PBAddPerson"));
+        PBAddPerson->setGeometry(QRect(450, 480, 81, 25));
+        PBAddPerson->setStyleSheet(QLatin1String("#PBAddPerson{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBAddPerson:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}\n"
+"/*border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;*/"));
+        PBAddPerson->setAutoDefault(true);
+        PBAddPerson->setFlat(false);
         TWMenu->addTab(TFacesBase, QString());
         TReports = new QWidget();
         TReports->setObjectName(QStringLiteral("TReports"));
@@ -186,10 +277,19 @@ public:
         PBLogout->setAutoDefault(true);
         PBLogout->setFlat(true);
         MainApp->setCentralWidget(centralWidget);
+        QWidget::setTabOrder(TWMenu, LESearch);
+        QWidget::setTabOrder(LESearch, TWCameraPages);
+        QWidget::setTabOrder(TWCameraPages, PBAddCamera);
+        QWidget::setTabOrder(PBAddCamera, LESearchFB);
+        QWidget::setTabOrder(LESearchFB, TWFacesBase);
+        QWidget::setTabOrder(TWFacesBase, LEUsername);
+        QWidget::setTabOrder(LEUsername, LESurname);
+        QWidget::setTabOrder(LESurname, PBAddPerson);
+        QWidget::setTabOrder(PBAddPerson, PBLogout);
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(1);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -205,6 +305,26 @@ public:
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
         LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
+        LHelp->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">You can sort by clicking on the table header</p></body></html>", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem = TWFacesBase->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem1 = TWFacesBase->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem2 = TWFacesBase->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem3 = TWFacesBase->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Go to the folder", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem4 = TWFacesBase->horizontalHeaderItem(4);
+        ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Take picture", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem5 = TWFacesBase->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem6 = TWFacesBase->horizontalHeaderItem(6);
+        ___qtablewidgetitem6->setText(QApplication::translate("MainApp", "Delete", Q_NULLPTR));
+        LESearchFB->setPlaceholderText(QApplication::translate("MainApp", "  Search person by Surname", Q_NULLPTR));
+        LSearch_2->setText(QString());
+        LEUsername->setPlaceholderText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
+        LESurname->setPlaceholderText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));
+        PBAddPerson->setText(QApplication::translate("MainApp", "Add person", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));

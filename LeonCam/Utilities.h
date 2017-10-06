@@ -18,5 +18,6 @@ public:
 	static bool SaveToBinFile(std::string fileName, BYTE *data);
 	static BYTE *ReadFromBinFile(std::string fileName);
 	static int BinFileElementsNo(std::string fileName);
+	static bool MBQuestion(QString nameAndSurname);
 };
 

@@ -36,5 +36,7 @@
         <file>Resources/Images/savePresetHover.png</file>
 		    <file>Resources/Images/logout.png</file>
 		    <file>Resources/Images/logoutHover.png</file>
+        <file>Resources/Images/folder.png</file>
+        <file>Resources/Images/folderHover.png</file>
     </qresource>
 </RCC>

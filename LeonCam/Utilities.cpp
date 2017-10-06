@@ -10,14 +10,35 @@ Utilities::Utilities()
 Utilities::~Utilities()
 {
 }
-
+bool Utilities::MBQuestion(QString message)
+{
+	//http://doc.qt.io/qt-4.8/qmessagebox.html
+	QMessageBox msgBox;
+	QPixmap pixmap(iconPath);
+	QIcon ButtonIcon(pixmap);
+	msgBox.setWindowIcon(ButtonIcon);
+	msgBox.setText(message);
+	//msgBox.setInformativeText(message);
+	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+	msgBox.setDefaultButton(QMessageBox::No);
+	msgBox.adjustSize();
+	int result = msgBox.exec();
+	if (result == QMessageBox::Yes)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 {
 	QMessageBox msgBox;
 	QPixmap pixmap(iconPath);
 	QIcon ButtonIcon(pixmap);
 	msgBox.setWindowIcon(ButtonIcon);
-	msgBox.setStyleSheet("QPushButton{background-color: rgb(36, 118, 59);color: rgb(255, 255, 255); }QPushButton:hover{background-color: rgb(39, 129, 63);}");
+	//msgBox.setStyleSheet("QPushButton{background-color: rgb(36, 118, 59);color: rgb(255, 255, 255); }QPushButton:hover{background-color: rgb(39, 129, 63);}");
 
 	if (errorOrSuccess == true) 
 	{

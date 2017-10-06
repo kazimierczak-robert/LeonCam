@@ -10,6 +10,9 @@
 #include "CameraEdition.h"
 #include <algorithm>
 #include <QCloseEvent>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <qdialogbuttonbox.h>
 
 class MainApp : public QMainWindow
 {
@@ -23,7 +26,17 @@ private slots:
 	void LogOut();
 	void LESearchChanged();
 	void TWCameraPagesChanged(int newIndex);
+	//Faces Base
+	void UpdateDBAfterCellChanged(int row, int column);
+	void OpenFileExplorer(int ID);
+	void TakePicture(int ID);
+	void LESearchFBChanged();
+	void AddPerson();
+	void EditPerson(int ID);
+	void RemovePerson(int ID);
 private:
+	//TODO: Remove this help var
+	int helpVar = 0;
 	Ui::MainApp ui;
 	QString username;
 	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
@@ -41,5 +54,8 @@ private:
 	int activeCameraPage;
 	void addTab();
 	void CameraSelected(QGridLayout* layout);
-	void MainApp::closeEvent(QCloseEvent *event);
+	void closeEvent(QCloseEvent *event);
+	void AdjustFaceBaseTW();
+	void FillFacesBaseTW();
+	void AddRowToFB(int ID, QString name, QString surname);
 };
