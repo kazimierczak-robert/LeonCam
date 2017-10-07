@@ -551,8 +551,15 @@ void MainApp::UpdateDBAfterCellChanged(int row, int column)
 }
 void MainApp::OpenFileExplorer(int ID)
 {
-	//TODO
-	Utilities::MBAlarm("File Explorer " + QVariant(ID).toString(), true);
+	QString path = ".\\FaceBase\\" + QVariant(ID).toString();
+	//https://stackoverflow.com/a/11517874
+	QDir folder(path);
+	if (!folder.exists()) 
+	{
+		folder.mkpath(".");
+	}
+	//https://stackoverflow.com/q/3490336
+	QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 void MainApp::TakePicture(int ID)
 {

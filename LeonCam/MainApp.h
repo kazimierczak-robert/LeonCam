@@ -13,6 +13,7 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <qdialogbuttonbox.h>
+#include <QDesktopServices>
 
 class MainApp : public QMainWindow
 {
