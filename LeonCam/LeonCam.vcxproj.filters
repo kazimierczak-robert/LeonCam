@@ -111,9 +111,6 @@
     <ClCompile Include="CameraEdition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SHA256.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -198,9 +195,6 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_CameraEdition.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SHA256.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>

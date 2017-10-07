@@ -50,15 +50,14 @@ void ForgottenPassword::VerifyClicked()
 	}
 	else
 	{
-		SHA256 *sha256 = new SHA256();
 		std::string answer = ui.LEAnswer->text().toStdString();
 		std::string concatHelp = this->username.toStdString() + answer;
-		std::string abbreviation=sha256->sha256_abbreviation(concatHelp);
-		delete sha256;
+
 		QSqlQuery query;
 		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND ANSWER = ?");
 		query.bindValue(0, username);
-		query.bindValue(1, QString::fromStdString(abbreviation));
+		QString answerHash = QString::fromStdString(Utilities::sha256(concatHelp));
+		query.bindValue(1, answerHash);
 		bool result = query.exec() == true ? true : false;
 		if (result == true)
 		{

@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -211,7 +211,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="NewProfile.cpp" />
-    <ClCompile Include="SHA256.cpp" />
     <ClCompile Include="UserCamera.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
@@ -258,7 +257,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AES.h" />
-    <ClInclude Include="SHA256.h" />
     <ClInclude Include="Utilities.h" />
     <CustomBuild Include="UserCamera.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

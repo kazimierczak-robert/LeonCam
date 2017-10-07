@@ -596,15 +596,14 @@ void AES::aes_decrypt(const BYTE in[], BYTE out[], const aesWORD key[], int keys
 }
 void AES::aes_encrypt(std::string SecretData, std::string key)
 {
-	SHA256 *sha256 = new SHA256();
-
 	unsigned int key_schedule[60];
 	BYTE enc_buf[128];
 	BYTE dec_buf[128];
 	BYTE plaintext[32];
 	BYTE initialValue[16] = { 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f };
-	BYTE *abbKey = sha256->sha256_abbreviationBYTE(key);
-	
+	char *abbKey;
+	strcpy(abbKey, Utilities::sha256(key).c_str());
+
 	BYTE keyAES[32];
 	for (size_t i = 0; i < 32; i++)
 	{
@@ -647,16 +646,15 @@ void AES::aes_encrypt(std::string SecretData, std::string key)
 	
 	fclose(file);
 	//aes_decrypt(key);
-	delete sha256;
 }
 std::string AES::aes_decrypt(std::string key)
 {
-	SHA256 *sha256 = new SHA256();
 	unsigned int key_schedule[60];
 	BYTE enc_buf[128];
 	BYTE dec_buf[128];
 	BYTE initialValue[16] = { 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f }; //initial value
-	BYTE *abbKey = sha256->sha256_abbreviationBYTE(key);
+	char *abbKey;
+	strcpy(abbKey, Utilities::sha256(key).c_str());
 
 	BYTE keyAES[32];
 	for (size_t i = 0; i < 32; i++)
@@ -692,6 +690,5 @@ std::string AES::aes_decrypt(std::string key)
 		std::cout << "config.bin is empty!" << std::endl;
 	}*/
 
-	delete sha256;
 	return plaintext;
 }

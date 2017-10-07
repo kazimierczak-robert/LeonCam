@@ -31,10 +31,9 @@ void LogIn::LogInClicked()
 		return;
 	}
 
-	SHA256 *sha256 = new SHA256();
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordHash = QString::fromStdString(sha256->sha256_abbreviation(concatHelp));
+	QString passwordHash = QString::fromStdString(Utilities::sha256(concatHelp));
 
 	//Get proper user from DB
 	QSqlQuery query;

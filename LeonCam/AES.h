@@ -3,7 +3,6 @@
 #include <memory.h>
 #include <stdio.h>
 #include <string>
-#include "SHA256.h"
 #include "Utilities.h"
 
 #define KE_ROTWORD(x) (((x) << 8) | ((x) >> 24))

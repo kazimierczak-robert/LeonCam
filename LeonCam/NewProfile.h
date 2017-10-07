@@ -6,7 +6,6 @@
 #include "Utilities.h"
 #include <regex>
 #include <qsqlquery.h>
-#include "SHA256.h"
 
 class NewProfile : public QDialog
 {

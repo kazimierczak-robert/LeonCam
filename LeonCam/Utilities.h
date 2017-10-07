@@ -3,6 +3,9 @@
 #include <qicon.h>
 #include <qdesktopwidget.h>
 #include "qdatetime.h"
+#include "openssl-win64\include\openssl\sha.h"
+#include <iomanip>
+#include <sstream>
 
 #define iconPath ":/Resources/Images/logo.ico"
 typedef unsigned char BYTE;// 8-bit byte
@@ -19,5 +22,6 @@ public:
 	static BYTE *ReadFromBinFile(std::string fileName);
 	static int BinFileElementsNo(std::string fileName);
 	static bool MBQuestion(QString nameAndSurname);
+	static std::string sha256(const std::string str);
 };
 
