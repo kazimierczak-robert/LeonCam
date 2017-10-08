@@ -149,3 +149,15 @@ std::string Utilities::sha256(const std::string str)
 	}
 	return ss.str();
 }
+void Utilities::OpenFileExplorer(int ID)
+{
+	QString path = ".\\FaceBase\\" + QVariant(ID).toString();
+	//https://stackoverflow.com/a/11517874
+	QDir folder(path);
+	if (!folder.exists())
+	{
+		folder.mkpath(".");
+	}
+	//https://stackoverflow.com/q/3490336
+	QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}

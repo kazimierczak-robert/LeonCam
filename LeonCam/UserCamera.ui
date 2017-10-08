@@ -59,7 +59,8 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+/*background-color:rgb(36, 118, 59)*/
+background-color: rgb(46, 147, 222);</string>
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Assign from available or define a new one&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

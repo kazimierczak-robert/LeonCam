@@ -1,7 +1,7 @@
 #include "UserCamera.h"
 
 UserCamera::UserCamera(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->setResult(QDialog::Rejected);

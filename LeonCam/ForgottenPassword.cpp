@@ -1,7 +1,7 @@
 #include "ForgottenPassword.h"
 
 ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
-	: QDialog(parent)
+	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	//Create DesignB instance

@@ -56,7 +56,8 @@ public:
         LHelp->setObjectName(QStringLiteral("LHelp"));
         LHelp->setGeometry(QRect(250, 310, 301, 51));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
+"/*background-color:rgb(36, 118, 59)*/\n"
+"background-color: rgb(46, 147, 222);"));
         LEUsername = new QLineEdit(NewProfile);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
         LEUsername->setGeometry(QRect(290, 204, 261, 25));

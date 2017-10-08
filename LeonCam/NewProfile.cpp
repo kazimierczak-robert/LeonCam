@@ -2,7 +2,7 @@
 
 
 NewProfile::NewProfile(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	//Create DesignB instance

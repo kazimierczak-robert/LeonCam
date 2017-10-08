@@ -64,7 +64,8 @@ public:
         LHelp->setObjectName(QStringLiteral("LHelp"));
         LHelp->setGeometry(QRect(250, 157, 301, 31));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
+"/*background-color:rgb(36, 118, 59)*/\n"
+"background-color: rgb(46, 147, 222);"));
         CBAvailableCameras = new QComboBox(UserCamera);
         CBAvailableCameras->setObjectName(QStringLiteral("CBAvailableCameras"));
         CBAvailableCameras->setGeometry(QRect(250, 217, 231, 25));

@@ -60,7 +60,8 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+/*background-color:rgb(36, 118, 59)*/
+background-color: rgb(46, 147, 222);</string>
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;For your protection please, type the &lt;span style=&quot; font-weight:600; color:#bdf0ff;&quot;&gt;Security Question&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;and answer.This will help in future verification&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

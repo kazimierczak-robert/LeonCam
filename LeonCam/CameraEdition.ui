@@ -101,7 +101,8 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+/*background-color:rgb(36, 118, 59)*/
+background-color: rgb(46, 147, 222);</string>
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Edit selected fields. If you do not want to change password, &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;skip &lt;span style=&quot; font-weight:600; color:#bdf0ff;&quot;&gt;Change password&lt;/span&gt; section!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

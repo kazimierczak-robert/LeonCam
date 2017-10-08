@@ -13,7 +13,7 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <qdialogbuttonbox.h>
-#include <QDesktopServices>
+#include "NewPhoto.h"
 
 class MainApp : public QMainWindow
 {
@@ -29,7 +29,6 @@ private slots:
 	void TWCameraPagesChanged(int newIndex);
 	//Faces Base
 	void UpdateDBAfterCellChanged(int row, int column);
-	void OpenFileExplorer(int ID);
 	void TakePicture(int ID);
 	void LESearchFBChanged();
 	void AddPerson();

@@ -436,7 +436,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	//Set the layout on the widget
 	widget->setLayout(layout);
 	ui.TWFacesBase->setCellWidget(rowCount, 3, widget);
-	connect(button, &QPushButton::clicked, this, [this, ID] {OpenFileExplorer(ID); });
+	connect(button, &QPushButton::clicked, this, [this, ID] {Utilities::OpenFileExplorer(ID); });
 
 	//New widget
 	widget = new QWidget();
@@ -512,22 +512,21 @@ void MainApp::UpdateDBAfterCellChanged(int row, int column)
 	//TODO
 	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
 }
-void MainApp::OpenFileExplorer(int ID)
-{
-	QString path = ".\\FaceBase\\" + QVariant(ID).toString();
-	//https://stackoverflow.com/a/11517874
-	QDir folder(path);
-	if (!folder.exists()) 
-	{
-		folder.mkpath(".");
-	}
-	//https://stackoverflow.com/q/3490336
-	QDesktopServices::openUrl(QUrl::fromLocalFile(path));
-}
 void MainApp::TakePicture(int ID)
 {
-	//TODO
-	Utilities::MBAlarm("TakePicture " + QVariant(ID).toString(), true);
+	QString name;
+	QString surname;
+	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+	{
+		if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		{
+			name=ui.TWFacesBase->item(i, 1)->text();
+			surname = ui.TWFacesBase->item(i, 2)->text();
+		}
+	}
+	NewPhoto *newPhoto = new NewPhoto(name, surname, ID, this);
+	newPhoto->exec();
+	delete newPhoto;
 }
 void MainApp::LESearchFBChanged()
 {

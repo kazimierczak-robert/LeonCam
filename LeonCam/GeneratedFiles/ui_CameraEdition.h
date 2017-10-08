@@ -65,7 +65,8 @@ public:
         LHelp->setObjectName(QStringLiteral("LHelp"));
         LHelp->setGeometry(QRect(250, 160, 301, 51));
         LHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
+"/*background-color:rgb(36, 118, 59)*/\n"
+"background-color: rgb(46, 147, 222);"));
         PBBack = new QPushButton(CameraEdition);
         PBBack->setObjectName(QStringLiteral("PBBack"));
         PBBack->setGeometry(QRect(250, 510, 61, 25));

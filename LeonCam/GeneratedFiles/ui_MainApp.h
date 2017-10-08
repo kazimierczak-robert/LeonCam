@@ -229,7 +229,7 @@ public:
 "border-radius: 11px;"));
         LSearch_2 = new QLabel(TFacesBase);
         LSearch_2->setObjectName(QStringLiteral("LSearch_2"));
-        LSearch_2->setGeometry(QRect(30, 70, 23, 23));
+        LSearch_2->setGeometry(QRect(29, 70, 23, 23));
         LSearch_2->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/search.png); border: none; margin: 0px; padding: 0px;"));
         LEUsername = new QLineEdit(TFacesBase);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
@@ -289,7 +289,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(1);
         TWCameraPages->setCurrentIndex(-1);
 
 
