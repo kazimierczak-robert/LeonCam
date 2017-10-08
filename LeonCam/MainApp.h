@@ -42,11 +42,6 @@ private:
 	QString username;
 	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
-	std::vector<QPushButton*> *vectorIsEnabledButtonToRowIndex;
-	std::vector<QPushButton*> *vectorPatrolButtonToRowIndex;
-	std::vector<QPushButton*> *vectorRecognationButtonToRowIndex;
-	std::vector<QPushButton*> *vectorEditButtonToRowIndex;
-	std::vector<QPushButton*> *vectorRemoveButtonToRowIndex;
 	void TurnOnOffCamera(QPushButton* button);
 	void PatrolCamera(QPushButton* button);
 	void RecognationCamera(QPushButton* button);

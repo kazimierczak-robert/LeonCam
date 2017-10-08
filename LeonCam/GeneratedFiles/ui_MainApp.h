@@ -289,7 +289,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(1);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -328,6 +328,9 @@ public:
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        PBLogout->setToolTip(QApplication::translate("MainApp", "<html><head/><body><p>Log out</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         PBLogout->setText(QString());
     } // retranslateUi
 

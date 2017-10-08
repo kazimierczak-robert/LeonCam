@@ -13,12 +13,6 @@ MainApp::MainApp(QWidget *parent, QString username)
 	vectorCameraLayoutsPages = new std::vector<std::vector<QLayout*>*>();
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
 
-	vectorIsEnabledButtonToRowIndex = new std::vector<QPushButton*>();
-	vectorPatrolButtonToRowIndex = new std::vector<QPushButton*>();
-	vectorRecognationButtonToRowIndex = new std::vector<QPushButton*>();
-	vectorEditButtonToRowIndex = new std::vector<QPushButton*>();
-	vectorRemoveButtonToRowIndex = new std::vector<QPushButton*>();
-
 	FillFacesBaseTW();
 
 	activeCameraPage = 0;
@@ -78,9 +72,9 @@ void MainApp::AddCamera()
 		btn = new QPushButton();
 		btn->setText("Off");
 		btn->setFixedSize(40, 40);
+		btn->setToolTip("Start monitoring camera");
 		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {TurnOnOffCamera(btn); });
-		vectorIsEnabledButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 0);
 
 		btn = new QPushButton();
@@ -88,7 +82,6 @@ void MainApp::AddCamera()
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}");
 		btn->setToolTip("Turn on camera patrol");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {PatrolCamera(btn); });
-		vectorPatrolButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 1);
 
 		btn = new QPushButton();
@@ -97,7 +90,6 @@ void MainApp::AddCamera()
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 		btn->setToolTip("Recognation mode: On");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognationCamera(btn); });
-		vectorRecognationButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 2);
 
 		btn = new QPushButton();
@@ -105,7 +97,6 @@ void MainApp::AddCamera()
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
-		vectorEditButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 3);
 
 		btn = new QPushButton();
@@ -113,7 +104,6 @@ void MainApp::AddCamera()
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/remove.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/removeHover.png);}");
 		btn->setToolTip("Remove camera");
 		connect(btn, &QPushButton::clicked, this, [this, layout] { RemoveCamera(layout); });
-		vectorRemoveButtonToRowIndex->push_back(btn);
 		layout->addWidget(btn, 2, 4);
 
 		layout->setHorizontalSpacing(4);
@@ -164,12 +154,14 @@ void MainApp::TurnOnOffCamera(QPushButton* button)
 	if (button->text() == "Off")
 	{
 		button->setText("On");
+		button->setToolTip("Stop monitoring camera");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
 		number += 1;
 	}
 	else
 	{
 		button->setText("Off");
+		button->setToolTip("Start monitoring camera");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		number -= 1;
 	}
@@ -179,23 +171,7 @@ void MainApp::TurnOnOffCamera(QPushButton* button)
 }
 void MainApp::PatrolCamera(QPushButton* button)
 {
-	int index = 0;
-
-	for (const auto& item : *vectorPatrolButtonToRowIndex)
-	{
-		if (item == button)
-		{
-			if (vectorIsEnabledButtonToRowIndex->at(index)->text() == "On")
-			{
-
-			}
-			return;
-		}
-		else
-		{
-			index += 1;
-		}
-	}
+	
 }
 void MainApp::RecognationCamera(QPushButton* button)
 {
@@ -212,23 +188,10 @@ void MainApp::RecognationCamera(QPushButton* button)
 }
 void MainApp::EditCamera(QPushButton* button)
 {
-	int index = 0;
-
-	for (const auto& item : *vectorEditButtonToRowIndex)
-	{
-		if (item == button)
-		{
-			CameraEdition *cameraEdition = new CameraEdition(this);
-			//TODO
-			cameraEdition->exec();
-			delete cameraEdition;
-			return;
-		}
-		else
-		{
-			index += 1;
-		}
-	}
+	CameraEdition *cameraEdition = new CameraEdition(this);
+	//TODO
+	cameraEdition->exec();
+	delete cameraEdition;
 }
 void MainApp::RemoveCamera(QGridLayout* layout)
 {

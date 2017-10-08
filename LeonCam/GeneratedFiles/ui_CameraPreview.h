@@ -58,33 +58,33 @@ public:
 "}"));
         LCameraDetails = new QLabel(CameraPreview);
         LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
-        LCameraDetails->setGeometry(QRect(160, 420, 261, 21));
+        LCameraDetails->setGeometry(QRect(60, 500, 261, 21));
         LCameraDetails->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
         PBPatrol = new QPushButton(CameraPreview);
         PBPatrol->setObjectName(QStringLiteral("PBPatrol"));
-        PBPatrol->setGeometry(QRect(530, 390, 40, 40));
+        PBPatrol->setGeometry(QRect(420, 460, 40, 40));
         PBPatrol->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} \n"
 "QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}"));
         PBPatrol->setFlat(true);
         PBRecognize = new QPushButton(CameraPreview);
         PBRecognize->setObjectName(QStringLiteral("PBRecognize"));
-        PBRecognize->setGeometry(QRect(580, 390, 40, 40));
+        PBRecognize->setGeometry(QRect(470, 460, 40, 40));
         PBRecognize->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px;} \n"
 "QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}\n"
 "		"));
         PBRecognize->setFlat(true);
         PBEdit = new QPushButton(CameraPreview);
         PBEdit->setObjectName(QStringLiteral("PBEdit"));
-        PBEdit->setGeometry(QRect(630, 390, 40, 40));
+        PBEdit->setGeometry(QRect(520, 460, 40, 40));
         PBEdit->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} \n"
 "QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}\n"
 "		"));
         PBEdit->setFlat(true);
         PBSnapshot = new QPushButton(CameraPreview);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
-        PBSnapshot->setGeometry(QRect(680, 390, 40, 40));
+        PBSnapshot->setGeometry(QRect(570, 460, 40, 40));
         PBSnapshot->setStyleSheet(QLatin1String("#PBSnapshot{\n"
 "background-image: url(:/Resources/Images/snapshot.png);\n"
 "border: none;\n"
@@ -98,18 +98,18 @@ public:
         PBSnapshot->setFlat(true);
         LPreviewScreen = new QLabel(CameraPreview);
         LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
-        LPreviewScreen->setGeometry(QRect(80, 20, 640, 360));
+        LPreviewScreen->setGeometry(QRect(19, 20, 760, 427));
         LPreviewScreen->setFrameShape(QFrame::Box);
         LPreviewScreen->setAlignment(Qt::AlignCenter);
         LDetectedPeople = new QLabel(CameraPreview);
         LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
-        LDetectedPeople->setGeometry(QRect(120, 450, 281, 16));
+        LDetectedPeople->setGeometry(QRect(315, 560, 241, 16));
         LDetectedPeople->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
         PBHome = new QPushButton(CameraPreview);
         PBHome->setObjectName(QStringLiteral("PBHome"));
-        PBHome->setGeometry(QRect(650, 310, 40, 40));
+        PBHome->setGeometry(QRect(710, 379, 40, 40));
         PBHome->setStyleSheet(QLatin1String("#PBHome{\n"
 "background-image: url(:/Resources/Images/home.png);\n"
 "border: none;\n"
@@ -123,7 +123,7 @@ public:
         PBHome->setFlat(true);
         PBUp = new QPushButton(CameraPreview);
         PBUp->setObjectName(QStringLiteral("PBUp"));
-        PBUp->setGeometry(QRect(655, 287, 30, 23));
+        PBUp->setGeometry(QRect(715, 356, 30, 23));
         PBUp->setStyleSheet(QLatin1String("#PBUp {\n"
 "background-image: url(:/Resources/Images/up.png);\n"
 "border: none;\n"
@@ -134,7 +134,7 @@ public:
         PBUp->setFlat(true);
         PBRight = new QPushButton(CameraPreview);
         PBRight->setObjectName(QStringLiteral("PBRight"));
-        PBRight->setGeometry(QRect(690, 315, 23, 30));
+        PBRight->setGeometry(QRect(750, 384, 23, 30));
         PBRight->setStyleSheet(QLatin1String("#PBRight {\n"
 "background-image: url(:/Resources/Images/right.png);\n"
 "border: none;\n"
@@ -145,7 +145,7 @@ public:
         PBRight->setFlat(true);
         PBDown = new QPushButton(CameraPreview);
         PBDown->setObjectName(QStringLiteral("PBDown"));
-        PBDown->setGeometry(QRect(655, 350, 30, 23));
+        PBDown->setGeometry(QRect(715, 419, 30, 23));
         PBDown->setStyleSheet(QLatin1String("#PBDown {\n"
 "background-image: url(:/Resources/Images/down.png);\n"
 "border: none;\n"
@@ -156,7 +156,7 @@ public:
         PBDown->setFlat(true);
         PBLeft = new QPushButton(CameraPreview);
         PBLeft->setObjectName(QStringLiteral("PBLeft"));
-        PBLeft->setGeometry(QRect(627, 315, 23, 30));
+        PBLeft->setGeometry(QRect(687, 384, 23, 30));
         PBLeft->setStyleSheet(QLatin1String("#PBLeft {\n"
 "background-image: url(:/Resources/Images/left.png);\n"
 "border: none;\n"
@@ -167,16 +167,16 @@ public:
         PBLeft->setFlat(true);
         PBSavePreset = new QPushButton(CameraPreview);
         PBSavePreset->setObjectName(QStringLiteral("PBSavePreset"));
-        PBSavePreset->setGeometry(QRect(480, 390, 40, 40));
+        PBSavePreset->setGeometry(QRect(370, 460, 40, 40));
         PBSavePreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/savePreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/savePresetHover.png);}"));
         PBSavePreset->setFlat(true);
         CBPresets = new QComboBox(CameraPreview);
         CBPresets->setObjectName(QStringLiteral("CBPresets"));
-        CBPresets->setGeometry(QRect(430, 440, 291, 21));
+        CBPresets->setGeometry(QRect(20, 470, 291, 21));
         PBBack = new QPushButton(CameraPreview);
         PBBack->setObjectName(QStringLiteral("PBBack"));
-        PBBack->setGeometry(QRect(30, 440, 61, 23));
+        PBBack->setGeometry(QRect(20, 560, 61, 23));
         PBBack->setStyleSheet(QLatin1String("#PBBack{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -189,11 +189,11 @@ public:
 "background-color:none*/"));
         PBCameraOnOff = new QPushButton(CameraPreview);
         PBCameraOnOff->setObjectName(QStringLiteral("PBCameraOnOff"));
-        PBCameraOnOff->setGeometry(QRect(120, 420, 31, 23));
+        PBCameraOnOff->setGeometry(QRect(20, 500, 31, 23));
         PBCameraOnOff->setStyleSheet(QStringLiteral("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}"));
         PBGoToPreset = new QPushButton(CameraPreview);
         PBGoToPreset->setObjectName(QStringLiteral("PBGoToPreset"));
-        PBGoToPreset->setGeometry(QRect(430, 390, 40, 40));
+        PBGoToPreset->setGeometry(QRect(320, 460, 40, 40));
         PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
         PBGoToPreset->setFlat(true);
