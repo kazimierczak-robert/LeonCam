@@ -19,7 +19,7 @@ MainApp::MainApp(QWidget *parent, QString username)
 
 	addTab();
 	ui.TWCameraPages->setTabText(0, "");
-
+	ui.TWCameraPages->setFocusPolicy(Qt::NoFocus);
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
 	//logout: on close (logout and close), by clicking logout icon (only logout and switch to LogIn window)
 	connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
@@ -60,6 +60,7 @@ void MainApp::AddCamera()
 		QPushButton* btn = new QPushButton();
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
 		btn->setFixedSize(216, 123);
+		btn->setFocusPolicy(Qt::NoFocus);
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
 
@@ -67,11 +68,13 @@ void MainApp::AddCamera()
 		label->setStyleSheet("color:rgb(255, 255, 255);");
 		label->setFixedSize(216, 23);
 		label->setAlignment(Qt::AlignCenter);
+		label->setFocusPolicy(Qt::NoFocus);
 		layout->addWidget(label, 1, 0, 1, 5);
 
 		btn = new QPushButton();
 		btn->setText("Off");
 		btn->setFixedSize(40, 40);
+		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setToolTip("Start monitoring camera");
 		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {TurnOnOffCamera(btn); });
@@ -79,6 +82,7 @@ void MainApp::AddCamera()
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
+		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}");
 		btn->setToolTip("Turn on camera patrol");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {PatrolCamera(btn); });
@@ -87,6 +91,7 @@ void MainApp::AddCamera()
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
 		btn->setText("On");
+		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 		btn->setToolTip("Recognation mode: On");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognationCamera(btn); });
@@ -94,6 +99,7 @@ void MainApp::AddCamera()
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
+		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
 		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
@@ -101,6 +107,7 @@ void MainApp::AddCamera()
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
+		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/remove.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/removeHover.png);}");
 		btn->setToolTip("Remove camera");
 		connect(btn, &QPushButton::clicked, this, [this, layout] { RemoveCamera(layout); });
@@ -115,6 +122,7 @@ void MainApp::AddCamera()
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size()-1)->size() == 6)
 		{
 			addTab();
+			ui.TWCameraPages->setFocusPolicy(Qt::TabFocus);
 		}
 		else
 		{
@@ -287,6 +295,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 			if (vectorQGridLayouts->size()==1)
 			{
 				ui.TWCameraPages->setTabText(0, "");
+				ui.TWCameraPages->setFocusPolicy(Qt::NoFocus);
 			}
 			break;
 		}
