@@ -152,7 +152,18 @@ void MainApp::addTab()
 }
 void MainApp::CameraSelected(QGridLayout* layout)
 {
-	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber);
+	string url = "http://192.168.1.1/onvif/device_service";
+	string user = "";
+	string pass = "";
+
+	OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
+	onvifDevice->GetCapabilities();
+
+	OnvifClientMedia media(*onvifDevice);
+	_trt__GetProfilesResponse profiles;
+	media.GetProfiles(profiles);
+
+	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice, profiles.Profiles[0]->token);
 	cameraPreview->exec();
 }
 void MainApp::TurnOnOffCamera(QPushButton* button)

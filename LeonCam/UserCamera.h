@@ -3,7 +3,8 @@
 #include <QDialog>
 #include "ui_UserCamera.h"
 #include "DesignBase.h"
-#include "MainApp.h"
+#include "Utilities.h"
+#include <regex>
 
 class UserCamera : public QDialog
 {
