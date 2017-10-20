@@ -112,8 +112,7 @@ bool DataBase::CreateFaces()
 					"FaceID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					"Name VARCHAR(50) NOT NULL,"
 					"Surname VARCHAR(50) NOT NULL,"
-					"FacePath TEXT NOT NULL,"
-					"LastEditedBy INTEGER REFERENCES Users(UserID),"
+					"LastEditedBy INTEGER REFERENCES Users(UserID) NOT NULL,"
 					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;

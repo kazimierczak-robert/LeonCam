@@ -22,7 +22,7 @@ void LogIn::LogInClicked()
 	designB->gif->start();
 	QString username = "";
 	QString password = "";
-	username = ui.LEUsername -> text();
+	username = ui.LEUsername->text();
 	password = ui.LEPassword->text();
 	if (username == "" || password == "")
 	{
@@ -37,7 +37,7 @@ void LogIn::LogInClicked()
 
 	//Get proper user from DB
 	QSqlQuery query;
-	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND Password = ?");
+	query.prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
 	query.bindValue(0, username);
 	query.bindValue(1, passwordHash);
 	bool result = query.exec() == true ? true : false;
@@ -45,42 +45,36 @@ void LogIn::LogInClicked()
 	{
 		query.next();
 		int result = query.value(0).toInt();
-		if (result == 1)
+		if (result > 0)
 		{
 			//check if account is not locked
-			QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-			query.clear();
-			query.prepare("SELECT LastLoginAttemptDate, LoginAttemptCounter FROM Users WHERE Username=?");
-			query.bindValue(0, username);
-			bool result = query.exec() == true ? true : false;
-			if (result == true)
+			QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");			
+			QDateTime lastLoginAttemptDate = query.value(9).toDateTime();
+			int loginAttemptCounter = query.value(10).toInt();
+			int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
+			if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
+			if (loginAttemptCounter < loginAttemptCounterMAX)
 			{
-				query.next();				
-				QDateTime lastLoginAttemptDate = query.value(0).toDateTime();
-				int loginAttemptCounter = query.value(1).toInt();
-				int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
-				if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
-				if (loginAttemptCounter < loginAttemptCounterMAX)
-				{
-					UpdateAttempts(0, username);
-					MainApp *mainApp = new MainApp(nullptr, username);
+				UpdateAttempts(0, username);
+				int loggedID = query.value(0).toInt();
+				if (loggedID > 0) {
+					MainApp *mainApp = new MainApp(nullptr, loggedID);
 					mainApp->show();
 					this->close();
 				}
-				else
-				{
-					//QString secondsDiffS = QString::number(15 - secondsDiff/60);
-					designB->gif->stop();
-					Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
-				}
 			}
-		}
-		else
-		{
-			designB->gif->stop();
-			UpdateCounter(username);
-		}	
+			else
+			{
+				designB->gif->stop();
+				Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
+			}
 	}
+	else
+	{
+		designB->gif->stop();
+		UpdateCounter(username);
+	}
+}
 	else
 	{
 		designB->gif->stop();
@@ -92,7 +86,7 @@ void LogIn::ForgotPasswordClicked()
 {
 	if (ui.LEUsername->text() == "")
 	{
-		QToolTip::showText(ui.PBForgotPassword->mapToGlobal(QPoint(0, 0)),ui.PBForgotPassword->toolTip());
+		QToolTip::showText(ui.PBForgotPassword->mapToGlobal(QPoint(0, 0)), ui.PBForgotPassword->toolTip());
 	}
 	else
 	{
@@ -116,7 +110,7 @@ void LogIn::ForgotPasswordClicked()
 		if (result == QDialog::Accepted)
 		{
 			this->close();
-			MainApp *mainApp = new MainApp(nullptr, ui.LEUsername->text());
+			MainApp *mainApp = new MainApp(nullptr, -1);
 			mainApp->show();
 		}
 		delete forgottenPassword;

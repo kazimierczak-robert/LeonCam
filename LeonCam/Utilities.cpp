@@ -171,3 +171,18 @@ void Utilities::CreateFolderIfNotExists(QString path)
 		folder.mkpath(".");
 	}
 }
+//https://stackoverflow.com/a/27758627
+void Utilities::RemoveFolderRecursively(int FaceID)
+{
+	QString path = ".\\FaceBase\\" + QVariant(FaceID).toString();
+	QDir dir(path);
+	int result=dir.removeRecursively();
+	if (result == true)
+	{
+		Utilities::MBAlarm("Folder " + path +" has been removed!", true);
+	}
+	else
+	{
+		Utilities::MBAlarm("Folder " + path + " hasn't been removed!", true);
+	}
+}

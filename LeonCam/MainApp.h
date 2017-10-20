@@ -20,7 +20,7 @@ class MainApp : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainApp(QWidget *parent = Q_NULLPTR, QString username = "");
+	MainApp(QWidget *parent = Q_NULLPTR, int loggedID=-1);
 	~MainApp();
 private slots:
 	void AddCamera();
@@ -29,16 +29,15 @@ private slots:
 	void TWCameraPagesChanged(int newIndex);
 	//Faces Base
 	void UpdateDBAfterCellChanged(int row, int column);
-	void TakePicture(int ID);
+	void TakePicture(int FaceID);
 	void LESearchFBChanged();
 	void AddPerson();
-	void EditPerson(int ID);
-	void RemovePerson(int ID);
+	void EditPerson(int FaceID);
+	void RemovePerson(int FaceID);
 private:
-	//TODO: Remove this help var
-	int helpVar = 0;
+	int loggedID;
 	Ui::MainApp ui;
-	QString username;
+	QString username = "";
 	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	void TurnOnOffCamera(QPushButton* button);

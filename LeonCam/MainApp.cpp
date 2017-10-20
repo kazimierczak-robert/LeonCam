@@ -2,12 +2,30 @@
 
 //TODO: Delete buttons from Faces Base
 
-MainApp::MainApp(QWidget *parent, QString username)
+MainApp::MainApp(QWidget *parent, int loggedID)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	this->loggedID = loggedID;
+	//Get username by loggedID
+	QSqlQuery query;
+	query.prepare("SELECT Username FROM Users WHERE UserID = ?");
+	query.bindValue(0, loggedID);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		QString result = query.value(0).toString();
+		if (result != "")
+		{
+			this->username = result;
+		}
+		else
+		{
+			this->username = loggedID;
+		}
+	}
 
-	this->username = username;
 	this->setWindowTitle(username + " - LeonCam");
 
 	vectorCameraLayoutsPages = new std::vector<std::vector<QLayout*>*>();
@@ -416,7 +434,7 @@ void MainApp::AdjustFaceBaseTW()
 	//Disable dotted border
 	ui.TWFacesBase->setFocusPolicy(Qt::NoFocus);
 }
-void MainApp::AddRowToFB(int ID, QString name, QString surname)
+void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 {
 	ui.TWFacesBase->setSortingEnabled(false);
 	QWidget *widget;
@@ -429,7 +447,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	ui.TWFacesBase->insertRow(ui.TWFacesBase->rowCount());
 
 	//Set the widget in the cell
-	item = new QTableWidgetItem(QVariant(ID).toString());
+	item = new QTableWidgetItem(QVariant(FaceID).toString());
 	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 	ui.TWFacesBase->setItem(rowCount, 0, item);
 
@@ -456,7 +474,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	//Set the layout on the widget
 	widget->setLayout(layout);
 	ui.TWFacesBase->setCellWidget(rowCount, 3, widget);
-	connect(button, &QPushButton::clicked, this, [this, ID] {Utilities::OpenFileExplorer(ID); });
+	connect(button, &QPushButton::clicked, this, [this, FaceID] {Utilities::OpenFileExplorer(FaceID); });
 
 	//New widget
 	widget = new QWidget();
@@ -474,7 +492,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 4, widget);
-	connect(button, &QPushButton::clicked, this, [this, ID] {TakePicture(ID); });
+	connect(button, &QPushButton::clicked, this, [this, FaceID] {TakePicture(FaceID); });
 
 	//New widget
 	widget = new QWidget();
@@ -492,7 +510,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 5, widget);
-	connect(button, &QPushButton::clicked, this, [this, ID] {EditPerson(ID); });
+	connect(button, &QPushButton::clicked, this, [this, FaceID] {EditPerson(FaceID); });
 
 	//New widget
 	widget = new QWidget();
@@ -510,7 +528,7 @@ void MainApp::AddRowToFB(int ID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 6, widget);
-	connect(button, &QPushButton::clicked, this, [this, ID] {RemovePerson(ID); });
+	connect(button, &QPushButton::clicked, this, [this, FaceID] {RemovePerson(FaceID); });
 	ui.TWFacesBase->setSortingEnabled(true);
 }
 void MainApp::FillFacesBaseTW()
@@ -521,10 +539,15 @@ void MainApp::FillFacesBaseTW()
 	//http://www.qtcentre.org/threads/3416-Center-a-widget-in-a-cell-on-a-QTableWidget
 	//https://stackoverflow.com/a/14715980
 
-
-	for (int i = helpVar; helpVar < 20; helpVar++)
+	QSqlQuery query;
+	query.prepare("SELECT * FROM Faces");
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
 	{
-		AddRowToFB(helpVar, "Kazimierz", "Aleksandrowicz");
+		while (query.next())
+		{
+			AddRowToFB(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
+		}
 	}
 }
 void MainApp::UpdateDBAfterCellChanged(int row, int column)
@@ -532,19 +555,19 @@ void MainApp::UpdateDBAfterCellChanged(int row, int column)
 	//TODO
 	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
 }
-void MainApp::TakePicture(int ID)
+void MainApp::TakePicture(int FaceID)
 {
 	QString name;
 	QString surname;
 	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
-		if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
 			name=ui.TWFacesBase->item(i, 1)->text();
 			surname = ui.TWFacesBase->item(i, 2)->text();
 		}
 	}
-	NewPhoto *newPhoto = new NewPhoto(name, surname, ID, this);
+	NewPhoto *newPhoto = new NewPhoto(name, surname, FaceID, this);
 	newPhoto->exec();
 	delete newPhoto;
 }
@@ -567,12 +590,34 @@ void MainApp::AddPerson()
 {
 	QString name = ui.LEUsername->text();
 	QString surname = ui.LESurname->text();
-
-	//TODO: Add to DB
+	int ID = 0;
 	if (name != "" && surname != "") 
 	{
-		AddRowToFB(helpVar, name, surname);
-		helpVar++;
+		//Add row to DB
+		QSqlQuery query;
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		query.prepare("INSERT INTO Faces (Name, Surname, LastEditedBy, LastEditDate) VALUES (?, ?, ?, ?)");
+		query.addBindValue(name);
+		query.addBindValue(surname);
+		int loggedID = this->loggedID;
+		query.addBindValue(loggedID);
+		QString currentDateTimeS = Utilities::GetCurrentDateTime();
+		query.addBindValue(currentDateTimeS);
+		bool result;
+		result = query.exec() == true ? true : false;
+		if (result == true)
+		{
+			query.exec("COMMIT");
+			int faceID = query.lastInsertId().toInt();
+			if (faceID>0)
+			{ 
+				AddRowToFB(faceID, name, surname);
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("DB error. Person hasn't been added to DB", false);
+		}
 	}
 	else
 	{
@@ -580,12 +625,11 @@ void MainApp::AddPerson()
 	}
 
 }
-void MainApp::EditPerson(int ID)
+void MainApp::EditPerson(int FaceID)
 {
-	//TODO
 	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
-		if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
 			//Create Qdialog
 			QDialog *qDialog = new QDialog(0, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
@@ -654,29 +698,63 @@ void MainApp::EditPerson(int ID)
 			{
 				if (nameLE->text() != "" && surnameLE->text() != "") 
 				{
-					ui.TWFacesBase->item(i, 1)->setText(nameLE->text());
-					ui.TWFacesBase->item(i, 2)->setText(surnameLE->text());
+					//Update row in DB
+					QSqlQuery query;
+					query.exec("BEGIN IMMEDIATE TRANSACTION");
+					query.clear();
+					query.prepare("UPDATE Faces SET Name = ?, Surname = ?, LastEditedBy = ?, LastEditDate = ?  WHERE FaceID = ?");
+					query.bindValue(0, nameLE->text());
+					query.bindValue(1, surnameLE->text());
+					query.bindValue(2, this->loggedID);
+					query.bindValue(3, Utilities::GetCurrentDateTime());
+					query.bindValue(4, FaceID);
+					bool result = query.exec() == true ? true : false;
+					query.exec("COMMIT");
+					if (result == false)
+					{
+						Utilities::MBAlarm("DB problem. Please, try update fields again", false);
+					}
+					else
+					{
+						ui.TWFacesBase->item(i, 1)->setText(nameLE->text());
+						ui.TWFacesBase->item(i, 2)->setText(surnameLE->text());
+					}
 				}
 			}
 			break;
 		}
 	}
 }
-void MainApp::RemovePerson(int ID)
+void MainApp::RemovePerson(int FaceID)
 {
-	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)ID).toString() + "?"))
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)FaceID).toString() + "?"))
 	{
 		//Remove row from table
 		for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
 		{
-			if (ID == ui.TWFacesBase->item(i, 0)->text().toInt())
+			if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 			{
 				ui.TWFacesBase->removeRow(i);
 				break;
 			}
 		}
 	}
-		//TODO::
-		//Remove from DB
-		//Remove folder
+
+	//Remove from DB
+	QSqlQuery query;
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
+	query.exec("DELETE FROM Faces WHERE FaceID = ?");
+	query.bindValue(0, FaceID);
+	bool result = query.exec() == true ? true : false;
+	query.exec("COMMIT");
+	if (result == false)
+	{
+		Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+	}
+	else
+	{
+		Utilities::RemoveFolderRecursively(FaceID);
+
+	}
+
 }
