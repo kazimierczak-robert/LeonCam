@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	}
 
 	delete dataBase;
+
 	w.show();
 
 	return a.exec();

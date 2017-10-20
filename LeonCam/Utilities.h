@@ -27,6 +27,7 @@ public:
 	static int BinFileElementsNo(std::string fileName);
 	static bool MBQuestion(QString nameAndSurname);
 	static std::string sha256(const std::string str);
-	static void Utilities::OpenFileExplorer(int ID);
+	static void OpenFileExplorer(int ID);
+	static void CreateFolderIfNotExists(QString path);
 };
 

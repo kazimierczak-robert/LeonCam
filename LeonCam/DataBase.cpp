@@ -94,23 +94,12 @@ bool DataBase::CreateCameras()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS Cameras("
 					"CameraID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Model TEXT NOT NULL,"
+					"Name TEXT NOT NULL,"
 					"IPAddress VARCHAR(39) NOT NULL,"
 					"Login TEXT NOT NULL,"
-					"LastEditedBy INTEGER REFERENCES Users(UserID),"
-					"LastEditDate DATETIME NOT NULL);");
-
-	bool result;
-	result = query.isActive() == true ? true : false;
-	return result;
-}
-bool DataBase::CreateUsersCameras()
-{
-	QSqlQuery query("CREATE TABLE IF NOT EXISTS UsersCameras("
-					"UserCameraID INTEGER PRIMARY KEY AUTOINCREMENT,"
+					"Password TEXT NOT NULL,"
 					"UserID INTEGER REFERENCES Users(UserID),"
-					"CameraID INTEGER REFERENCES Cameras(CameraID),"
-					"Password CHAR(256) NOT NULL);");
+					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;
 	result = query.isActive() == true ? true : false;
@@ -169,7 +158,6 @@ bool DataBase::CreateDB()
 		creationResult &= CreateGreenAlerts();
 		creationResult &= CreateAlertsDeleteSettings();
 		creationResult &= CreateCameras();
-		creationResult &= CreateUsersCameras();
 		creationResult &= CreateFaces();
 		creationResult &= CreateMoviesSettings();
 		creationResult &= CreateFacesModulesSettings();

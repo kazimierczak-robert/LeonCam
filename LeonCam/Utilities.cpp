@@ -161,3 +161,13 @@ void Utilities::OpenFileExplorer(int ID)
 	//https://stackoverflow.com/q/3490336
 	QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
+void Utilities::CreateFolderIfNotExists(QString path)
+{
+	//Create Picture folder if doesn't exist
+	//https://stackoverflow.com/a/11517874
+	QDir folder(path);
+	if (!folder.exists())
+	{
+		folder.mkpath(".");
+	}
+}

@@ -21,7 +21,6 @@ private:
 	bool CreateGreenAlerts();
 	bool CreateAlertsDeleteSettings();
 	bool CreateCameras();
-	bool CreateUsersCameras();
 	bool CreateFaces();
 	bool CreateMoviesSettings();
 	bool CreateFacesModulesSettings();
