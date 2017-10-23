@@ -40,11 +40,12 @@ private:
 	QString username = "";
 	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
-	void TurnOnOffCamera(QPushButton* button);
-	void PatrolCamera(QPushButton* button);
+	void TurnOnOffCamera(QGridLayout* layout);
+	void TakePictureCamera(QPushButton* button);
 	void RecognationCamera(QPushButton* button);
 	void EditCamera(QPushButton* button);
 	void RemoveCamera(QGridLayout* layout);
+	void AddCameraFromDB(int CameraID);
 	int activeCameraPage;
 	void addTab();
 	void CameraSelected(QGridLayout* layout);

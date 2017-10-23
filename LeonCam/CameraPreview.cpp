@@ -1,6 +1,25 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, string profileToken)
+void CameraPreview::CameraPreviewUpdate()
+{
+	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
+	cv::VideoCapture vcap;
+	cv::Mat img;
+	if (vcap.open(this->streamURI))
+	{
+		while (ui.PBCameraOnOff->text() == "On")
+		{
+			if (vcap.read(img))
+			{
+				cvtColor(img, img, CV_BGR2RGB);
+				ui.LPreviewScreen->setPixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+			}
+		}
+	}
+}
+
+
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, string profileToken, string streamURI)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -10,6 +29,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	this->profileToken = profileToken;
 	this->ptz = new OnvifClientPTZ(*onvifDevice);
+	this->streamURI = streamURI;
+	this->streamURI.insert(this->streamURI.find("//") + 2, ":@");
 
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
@@ -34,8 +55,10 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	_tptz__GetPresetsResponse *res = new _tptz__GetPresetsResponse();
 	ptz->GetPresets(*res, profileToken);*/
 
+
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
+		future = QtConcurrent::run([=]() {CameraPreviewUpdate();});
 		ui.PBCameraOnOff->setText("On");
 		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
 	}
@@ -55,6 +78,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 		ui.PBRecognize->setText("Off");
 		ui.PBRecognize->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}
+
 }
 
 CameraPreview::~CameraPreview()
@@ -63,8 +87,18 @@ CameraPreview::~CameraPreview()
 
 void CameraPreview::BackButtonClicked()
 {
+	if (future.isRunning()==true)
+	{
+		if (ui.PBCameraOnOff->text() == "On")
+		{
+			ui.PBCameraOnOff->setText("Off");
+			future.waitForFinished();
+			ui.PBCameraOnOff->setText("On");
+		}
+	}
 	this->close();
 }
+
 
 void CameraPreview::TurnOnOffCamera()
 {
@@ -72,6 +106,7 @@ void CameraPreview::TurnOnOffCamera()
 
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
+		future = QtConcurrent::run([=]() {CameraPreviewUpdate(); });
 		ui.PBCameraOnOff->setText("On");
 		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
 		buttonIsEnabledFromParent->setText("On");
@@ -121,15 +156,45 @@ void CameraPreview::MoveCamera(float panSpeed, float tiltSpeed)
 	ptzSpeed->Zoom = new tt__Vector1D();
 	ptzSpeed->Zoom->x = 0.0;
 
-	ptz->ContinuousMove(*res, *ptzSpeed, timeout, profileToken);
+	for (int i = 0; i < MAXTRIES; i++)
+	{
+		ptz->ContinuousMove(*res, *ptzSpeed, timeout, profileToken);
+		if (res->soap != nullptr)
+		{
+			if (res->soap->status == 200)
+			{
+				break;
+			}
+		}
+	}
 }
 void CameraPreview::StopCamera()
 {
 	_tptz__StopResponse *res = new _tptz__StopResponse();
-	ptz->Stop(*res, 1, 1, profileToken);
+	for (int i = 0; i < MAXTRIES; i++)
+	{
+		ptz->Stop(*res, 1, 1, profileToken);
+		if (res->soap != nullptr)
+		{
+			if (res->soap->status == 200)
+			{
+				break;
+			}
+		}
+	}
 }
 void CameraPreview::GoHomeCamera()
 {
 	_tptz__GotoHomePositionResponse *res = new _tptz__GotoHomePositionResponse();
-	ptz->GoToHomePosition(*res, profileToken);
+	for (int i = 0; i < MAXTRIES; i++)
+	{
+		ptz->GoToHomePosition(*res, profileToken);
+		if (res->soap != nullptr)
+		{
+			if (res->soap->status == 200)
+			{
+				break;
+			}
+		}
+	}
 }
