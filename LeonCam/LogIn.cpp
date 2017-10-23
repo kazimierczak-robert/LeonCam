@@ -33,7 +33,8 @@ void LogIn::LogInClicked()
 
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordHash = QString::fromStdString(Utilities::sha256(concatHelp));
+	QString passwordHash = QString::fromStdString(Utilities::sha256HEX(concatHelp));
+	std::string passHash = Utilities::sha256(password.toStdString());
 
 	//Get proper user from DB
 	QSqlQuery query;
@@ -58,7 +59,7 @@ void LogIn::LogInClicked()
 				UpdateAttempts(0, username);
 				int loggedID = query.value(0).toInt();
 				if (loggedID > 0) {
-					MainApp *mainApp = new MainApp(nullptr, loggedID);
+					MainApp *mainApp = new MainApp(nullptr, loggedID, passHash);
 					mainApp->show();
 					this->close();
 				}

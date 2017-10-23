@@ -14,13 +14,14 @@
 #include <QFormLayout>
 #include <qdialogbuttonbox.h>
 #include "NewPhoto.h"
+#include <map>
 
 class MainApp : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	MainApp(QWidget *parent = Q_NULLPTR, int loggedID=-1);
+	MainApp(QWidget *parent = Q_NULLPTR, int loggedID=-1, std::string passHash="");
 	~MainApp();
 private slots:
 	void AddCamera();
@@ -38,7 +39,7 @@ private:
 	int loggedID;
 	Ui::MainApp ui;
 	QString username = "";
-	std::vector<std::vector<QLayout*>*> *vectorCameraLayoutsPages;
+	std::vector<std::vector<QGridLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);

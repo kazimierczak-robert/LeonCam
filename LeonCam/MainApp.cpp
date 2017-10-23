@@ -2,7 +2,7 @@
 
 //TODO: Delete buttons from Faces Base
 
-MainApp::MainApp(QWidget *parent, int loggedID)
+MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -28,7 +28,7 @@ MainApp::MainApp(QWidget *parent, int loggedID)
 
 	this->setWindowTitle(username + " - LeonCam");
 
-	vectorCameraLayoutsPages = new std::vector<std::vector<QLayout*>*>();
+	vectorCameraLayoutsPages = new std::vector<std::vector<QGridLayout*>*>();
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
 
 	FillFacesBaseTW();
@@ -269,7 +269,7 @@ void MainApp::addTab()
 	ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size());
 	TWCameraPagesChanged(vectorQGridLayouts->size());
 
-	vectorCameraLayoutsPages->push_back(new std::vector<QLayout*>());
+	vectorCameraLayoutsPages->push_back(new std::vector<QGridLayout*>());
 	vectorQGridLayouts->push_back(newLayout);
 
 	ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
@@ -422,7 +422,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 				delete qgridlayout;
 				vectorQGridLayouts->pop_back();
 
-				std::vector<QLayout*> *vectorqlayout = vectorCameraLayoutsPages->at(vectorQGridLayouts->size());
+				std::vector<QGridLayout*> *vectorqlayout = vectorCameraLayoutsPages->at(vectorQGridLayouts->size());
 				delete vectorqlayout;
 				vectorCameraLayoutsPages->pop_back();
 
@@ -682,7 +682,25 @@ void MainApp::TakePicture(int FaceID)
 			surname = ui.TWFacesBase->item(i, 2)->text();
 		}
 	}
-	NewPhoto *newPhoto = new NewPhoto(name, surname, FaceID, this);
+	//vector of ON cameras ID
+	std::vector<int> cameraURIs;
+	for (std::vector<QGridLayout*> *vec : *vectorCameraLayoutsPages)
+	{
+		for (QGridLayout *lt: *vec)
+		{
+			//3 row and 1 column - check if OnOff button is On or not
+			QPushButton *button = (QPushButton*)lt->itemAtPosition(2, 0)->widget();
+			if (button->text() == "On")
+			{
+				button = (QPushButton*)lt->itemAtPosition(0, 0)->widget();
+				cameraURIs.push_back(button->text().toInt());
+			}
+		}
+	}
+
+	//TODO: if vector is empty, alert about it and don't create newPhoto
+
+	NewPhoto *newPhoto = new NewPhoto(cameraURIs, name, surname, FaceID, this);
 	newPhoto->exec();
 	delete newPhoto;
 }

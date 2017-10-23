@@ -21,7 +21,7 @@ public:
 	LogIn(QWidget *parent = Q_NULLPTR);
 	static void UpdateAttempts(int loginAttemptCounter, QString username);
 	static void UpdateCounter(QString username);
-private slots:
+	private slots:
 	void LogInClicked();
 	void ForgotPasswordClicked();
 	void NewProfileClicked();

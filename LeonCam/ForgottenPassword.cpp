@@ -56,7 +56,7 @@ void ForgottenPassword::VerifyClicked()
 		QSqlQuery query;
 		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND ANSWER = ?");
 		query.bindValue(0, username);
-		QString answerHash = QString::fromStdString(Utilities::sha256(concatHelp));
+		QString answerHash = QString::fromStdString(Utilities::sha256HEX(concatHelp));
 		query.bindValue(1, answerHash);
 		bool result = query.exec() == true ? true : false;
 		if (result == true)

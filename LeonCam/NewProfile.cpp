@@ -64,12 +64,12 @@ void NewProfile::CreateClicked()
 	std::string concatHelp = "";
 	//password abbreviation -> password + username
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordAbbreviation = QString::fromStdString(Utilities::sha256(concatHelp));
+	QString passwordAbbreviation = QString::fromStdString(Utilities::sha256HEX(concatHelp));
 
 	//answer abbreviation -> username + answer
 	concatHelp = username.toStdString() + answer.toStdString();
 
-	QString answerAbbreviation = QString::fromStdString(Utilities::sha256(concatHelp));
+	QString answerAbbreviation = QString::fromStdString(Utilities::sha256HEX(concatHelp));
 
 	QString currentDateTimeS = Utilities::GetCurrentDateTime();
 

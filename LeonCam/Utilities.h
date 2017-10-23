@@ -33,6 +33,7 @@ public:
 	static BYTE *ReadFromBinFile(std::string fileName);
 	static int BinFileElementsNo(std::string fileName);
 	static bool MBQuestion(QString nameAndSurname);
+	static std::string sha256HEX(const std::string str);
 	static std::string sha256(const std::string str);
 	static void OpenFileExplorer(int ID);
 	static void CreateFolderIfNotExists(QString path);
