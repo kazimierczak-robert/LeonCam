@@ -8,6 +8,7 @@
 #include "opencv2/contrib/contrib.hpp"
 #include <QFuture> 
 #include <QtConcurrent\qtconcurrentrun.h>
+#include "qsqlquery.h"
 
 class NewPhoto : public QDialog
 {
@@ -15,12 +16,24 @@ class NewPhoto : public QDialog
 
 public:
 	//ID - photo is saved in the folder named .\\FaceBase\\<ID>
-	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int ID, QWidget *parent = Q_NULLPTR);
+	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
 private slots:
 	void BackButtonClicked();
 private:
 	Ui::NewPhoto ui;
 	QFuture<void> future; //"thread" field
-	void NewPhoto::CameraPreviewUpdate(std::string streamUri);//Update video frames
+	void CameraPreviewUpdate(std::string streamUri);//Update video frames
+	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);
+	struct Camera
+	{
+		int CameraID;
+		std::string Name;
+		std::string IPAddress;
+		std::string Login;
+		std::string Password;
+	};
+	std::map<int, struct Camera*> cameras;
+	std::map<int, std::string> camerasToCB;
+	void FillCBWithCamerasToCB();
 };
