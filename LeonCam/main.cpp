@@ -1,6 +1,7 @@
 ﻿#include "LogIn.h"
 #include <QtWidgets/QApplication>
 
+
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
@@ -15,7 +16,11 @@ int main(int argc, char *argv[])
 		delete dataBase;
 		return -1;
 	}
-
+	
+	//Limit number of signs in password 127!
+	/*std::string encryptedMsg= Utilities::GetEncrypted("01234567890123456789012345678901", "abcdefghijklłmnńdkjfbkdjfiuegfs");
+	std::string decryptedMSG = Utilities::GetDecrypted("01234567890123456789012345678901", encryptedMsg);
+	*/
 	delete dataBase;
 
 	w.show();

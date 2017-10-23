@@ -126,9 +126,6 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AES.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_NewPhoto.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -368,9 +365,6 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AES.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_NewPhoto.h">

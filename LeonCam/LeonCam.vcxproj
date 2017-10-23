@@ -131,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AES.cpp" />
     <ClCompile Include="CameraEdition.cpp" />
     <ClCompile Include="CameraPreview.cpp" />
     <ClCompile Include="DataBase.cpp" />
@@ -317,7 +316,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AES.h" />
     <CustomBuild Include="NewPhoto.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing NewPhoto.h...</Message>
