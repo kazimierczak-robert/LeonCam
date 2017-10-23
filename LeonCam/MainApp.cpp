@@ -7,6 +7,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 {
 	ui.setupUi(this);
 	this->loggedID = loggedID;
+	this->passHash = passHash;
 	//Get username by loggedID
 	QSqlQuery query;
 	query.prepare("SELECT Username FROM Users WHERE UserID = ?");
@@ -83,85 +84,31 @@ void MainApp::AddCamera()
 		//vector includes values from QDialog
 		std::vector<QString>* controlsValues = UserCam->GetValuesFromControls();
 
-		QGridLayout *layout = new QGridLayout();
-
-		QPushButton* btn = new QPushButton();
-		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
-		btn->setFixedSize(216, 123);
-		btn->setFocusPolicy(Qt::NoFocus);
-		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
-		layout->addWidget(btn, 0, 0, 1, 5);
-
-		QLabel *label = new QLabel(controlsValues->at(1) + " (" + controlsValues->at(2) + ")");
-		label->setStyleSheet("color:rgb(255, 255, 255);");
-		label->setFixedSize(216, 23);
-		label->setAlignment(Qt::AlignCenter);
-		label->setFocusPolicy(Qt::NoFocus);
-		layout->addWidget(label, 1, 0, 1, 5);
-
-		btn = new QPushButton();
-		btn->setText("Off");
-		btn->setFixedSize(40, 40);
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setToolTip("Start monitoring camera");
-		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
-		connect(btn, &QPushButton::clicked, this, [this, layout] {TurnOnOffCamera(layout); });
-		layout->addWidget(btn, 2, 0);
-
-		btn = new QPushButton();
-		btn->setFixedSize(40, 40);
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/snapshot.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/snapshotHover.png);}");
-		btn->setToolTip("Take a picture (disabled)");
-		btn->setEnabled(false);
-		connect(btn, &QPushButton::clicked, this, [this, btn] {TakePictureCamera(btn); });
-		layout->addWidget(btn, 2, 1);
-
-		btn = new QPushButton();
-		btn->setFixedSize(40, 40);
-		btn->setText("On");
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-		btn->setToolTip("Recognation mode: On");
-		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognationCamera(btn); });
-		layout->addWidget(btn, 2, 2);
-
-		btn = new QPushButton();
-		btn->setFixedSize(40, 40);
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
-		btn->setToolTip("Edit camera");
-		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
-		layout->addWidget(btn, 2, 3);
-
-		btn = new QPushButton();
-		btn->setFixedSize(40, 40);
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/remove.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/removeHover.png);}");
-		btn->setToolTip("Remove camera");
-		connect(btn, &QPushButton::clicked, this, [this, layout] { RemoveCamera(layout); });
-		layout->addWidget(btn, 2, 4);
-
-		layout->setHorizontalSpacing(4);
-		layout->setVerticalSpacing(2);
-
-		//layout->itemAtPosition(2,0)->widget()->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-
-
-		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 6)
+		QSqlQuery query;
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		query.prepare("INSERT INTO Cameras (Name, IPAddress, Login, Password, UserID, LastEditDate) "
+			"VALUES (:Name, :IPAddress, :Login, :Password, :UserID, :LastEditDate)");
+		query.bindValue(":Name", controlsValues->at(0));
+		query.bindValue(":IPAddress", controlsValues->at(1));
+		query.bindValue(":Login", controlsValues->at(2));
+		std::string encryptedMsg = Utilities::GetEncrypted(passHash, controlsValues->at(3).toStdString());
+		query.bindValue(":Password", QString::fromStdString(encryptedMsg));
+		query.bindValue(":UserID", loggedID);
+		query.bindValue(":LastEditDate", Utilities::GetCurrentDateTime());
+		result = query.exec() == true ? true : false;
+		if (result == true)
 		{
-			addTab();
-			ui.TWCameraPages->setFocusPolicy(Qt::TabFocus);
-		}
-		else
-		{
-			ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size() - 1);
-		}
-
-		vectorQGridLayouts->at(vectorQGridLayouts->size() - 1)->addLayout(layout, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() / 3, vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() % 3);
-		vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->push_back(layout);
-
-		ui.LTotalNumber->setText("Total number of cameras: " + QString::number((vectorQGridLayouts->size() - 1) * 6 + vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size()));
+			query.exec("COMMIT");
+			query.prepare("SELECT CameraID FROM Cameras WHERE Name = ? AND UserID = ?");
+			query.bindValue(0, controlsValues->at(0));
+			query.bindValue(1, loggedID);
+			result = query.exec() == true ? true : false;
+			if (result == true)
+			{
+				query.next();
+				AddCameraFromDB(query.value(0).toInt());
+			}
+		}	
 	}
 }
 
@@ -173,12 +120,14 @@ void MainApp::AddCameraFromDB(int CameraID)
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
+		query.next();
 		QGridLayout *layout = new QGridLayout();
 
 		QPushButton* btn = new QPushButton();
-		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png);");
+		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
 		btn->setFocusPolicy(Qt::NoFocus);
+		btn->setText(QString::number(CameraID));
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
 

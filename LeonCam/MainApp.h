@@ -37,6 +37,7 @@ private slots:
 	void RemovePerson(int FaceID);
 private:
 	int loggedID;
+	std::string passHash;
 	Ui::MainApp ui;
 	QString username = "";
 	std::vector<std::vector<QGridLayout*>*> *vectorCameraLayoutsPages;

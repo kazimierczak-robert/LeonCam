@@ -22,7 +22,6 @@ UserCamera::~UserCamera()
 
 void UserCamera::DisableIfAssignChanged(bool flag)
 {
-	ui.LEModel->setDisabled(flag);
 	ui.LEDescripton->setDisabled(flag);
 	ui.LEIPv4Address->setDisabled(flag);
 }
@@ -43,7 +42,6 @@ void UserCamera::AssignChecked()
 std::vector<QString>*  UserCamera::GetValuesFromControls()
 {
 	std::vector<QString>* controlsValues = new std::vector<QString>();
-	controlsValues->push_back(ui.LEModel->text());
 	controlsValues->push_back(ui.LEDescripton->text());
 	controlsValues->push_back(ui.LEIPv4Address->text());
 	controlsValues->push_back(ui.LELogin->text());
@@ -56,7 +54,7 @@ void UserCamera::AddClicked()
 	//TODO
 	designB->gif->start();
 
-	if (ui.LEModel->text() == "" || ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
+	if (ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
 	{
 		designB->gif->stop();
 		Utilities::MBAlarm("At least one field is incomplete", false);

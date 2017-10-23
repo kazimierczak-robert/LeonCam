@@ -32,7 +32,6 @@ public:
     QComboBox *CBAvailableCameras;
     QLabel *LAvailableCameras;
     QLabel *LNewCamera;
-    QLineEdit *LEModel;
     QLineEdit *LEIPv4Address;
     QLineEdit *LEDescripton;
     QPushButton *PBBack;
@@ -79,17 +78,13 @@ public:
         LNewCamera->setGeometry(QRect(250, 257, 261, 16));
         LNewCamera->setStyleSheet(QLatin1String("background-color: none;\n"
 "color: rgb(255, 255, 255)"));
-        LEModel = new QLineEdit(UserCamera);
-        LEModel->setObjectName(QStringLiteral("LEModel"));
-        LEModel->setGeometry(QRect(250, 277, 271, 25));
-        LEModel->setMaxLength(24);
         LEIPv4Address = new QLineEdit(UserCamera);
         LEIPv4Address->setObjectName(QStringLiteral("LEIPv4Address"));
-        LEIPv4Address->setGeometry(QRect(250, 337, 271, 25));
+        LEIPv4Address->setGeometry(QRect(250, 307, 271, 25));
         LEIPv4Address->setMaxLength(24);
         LEDescripton = new QLineEdit(UserCamera);
         LEDescripton->setObjectName(QStringLiteral("LEDescripton"));
-        LEDescripton->setGeometry(QRect(250, 307, 271, 25));
+        LEDescripton->setGeometry(QRect(250, 277, 271, 25));
         LEDescripton->setMaxLength(24);
         PBBack = new QPushButton(UserCamera);
         PBBack->setObjectName(QStringLiteral("PBBack"));
@@ -106,7 +101,7 @@ public:
 "background-color:none*/"));
         groupBox = new QGroupBox(UserCamera);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(250, 377, 271, 75));
+        groupBox->setGeometry(QRect(250, 357, 271, 75));
         LELogin = new QLineEdit(groupBox);
         LELogin->setObjectName(QStringLiteral("LELogin"));
         LELogin->setGeometry(QRect(10, 10, 251, 25));
@@ -131,7 +126,7 @@ public:
         PBAdd->setFlat(false);
         LTip = new QLabel(UserCamera);
         LTip->setObjectName(QStringLiteral("LTip"));
-        LTip->setGeometry(QRect(530, 305, 31, 31));
+        LTip->setGeometry(QRect(530, 290, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         CBAssign = new QCheckBox(UserCamera);
@@ -144,12 +139,11 @@ public:
 "}"));
         LTipLoginPass = new QLabel(UserCamera);
         LTipLoginPass->setObjectName(QStringLiteral("LTipLoginPass"));
-        LTipLoginPass->setGeometry(QRect(530, 400, 31, 31));
+        LTipLoginPass->setGeometry(QRect(530, 380, 31, 31));
         LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         QWidget::setTabOrder(CBAvailableCameras, CBAssign);
-        QWidget::setTabOrder(CBAssign, LEModel);
-        QWidget::setTabOrder(LEModel, LEDescripton);
+        QWidget::setTabOrder(CBAssign, LEDescripton);
         QWidget::setTabOrder(LEDescripton, LEIPv4Address);
         QWidget::setTabOrder(LEIPv4Address, LELogin);
         QWidget::setTabOrder(LELogin, LEPassword);
@@ -171,8 +165,6 @@ public:
         LHelp->setText(QApplication::translate("UserCamera", "<html><head/><body><p align=\"center\">Assign from available or define a new one</p></body></html>", Q_NULLPTR));
         LAvailableCameras->setText(QApplication::translate("UserCamera", "<html><head/><body><p>Cameras from Data Base <span style=\" font-weight:600; color:#fe7e5d;\">not assigned</span> to your account</p></body></html>", Q_NULLPTR));
         LNewCamera->setText(QApplication::translate("UserCamera", "<html><head/><body><p>Define <span style=\" font-weight:600; color:#fe7e5d;\">New Camera</span></p></body></html>", Q_NULLPTR));
-        LEModel->setText(QString());
-        LEModel->setPlaceholderText(QApplication::translate("UserCamera", "Model", Q_NULLPTR));
         LEIPv4Address->setText(QString());
         LEIPv4Address->setPlaceholderText(QApplication::translate("UserCamera", "IPv4 address", Q_NULLPTR));
         LEDescripton->setText(QString());

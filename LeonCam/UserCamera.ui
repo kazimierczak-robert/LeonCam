@@ -110,30 +110,11 @@ color: rgb(255, 255, 255)</string>
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define &lt;span style=&quot; font-weight:600; color:#fe7e5d;&quot;&gt;New Camera&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="LEModel">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>277</y>
-     <width>271</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="maxLength">
-    <number>24</number>
-   </property>
-   <property name="placeholderText">
-    <string>Model</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="LEIPv4Address">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>337</y>
+     <y>307</y>
      <width>271</width>
      <height>25</height>
     </rect>
@@ -152,7 +133,7 @@ color: rgb(255, 255, 255)</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>307</y>
+     <y>277</y>
      <width>271</width>
      <height>25</height>
     </rect>
@@ -196,7 +177,7 @@ background-color:none*/</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>377</y>
+     <y>357</y>
      <width>271</width>
      <height>75</height>
     </rect>
@@ -278,7 +259,7 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>305</y>
+     <y>290</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -318,7 +299,7 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>400</y>
+     <y>380</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -339,7 +320,6 @@ padding: 0px;*/</string>
  <tabstops>
   <tabstop>CBAvailableCameras</tabstop>
   <tabstop>CBAssign</tabstop>
-  <tabstop>LEModel</tabstop>
   <tabstop>LEDescripton</tabstop>
   <tabstop>LEIPv4Address</tabstop>
   <tabstop>LELogin</tabstop>
