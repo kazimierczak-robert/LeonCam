@@ -345,19 +345,27 @@ std::string Utilities::GetEncrypted(std::string yourHashKey, std::string msg)
 	}
 
 	//Convert ciphertext to string
-	std::string ciphTmp(reinterpret_cast<char const*>(ciphertext));
-	return ciphTmp;
+	//std::string ciphTmp(reinterpret_cast<char const*>(ciphertext));
+	unsigned char ciphTmp[172];
+	EVP_EncodeBlock((unsigned char *)ciphTmp, ciphertext, ciphertext_len);
+	std::string ciphTmps(reinterpret_cast<char const*>(ciphTmp));
+	return ciphTmps;
 }
 std::string Utilities::GetDecrypted(std::string yourHashKey, std::string encMsg)
 {
+
 	//Convert string to unsigned char *
 	unsigned char *hashKey = new unsigned char[yourHashKey.length()+1];
 	memcpy(hashKey, yourHashKey.c_str(), yourHashKey.length());
 	hashKey[yourHashKey.length()] = '\0';
 
-	unsigned char *encMesg = new unsigned char[encMsg.length()+1];
-	memcpy(encMesg, encMsg.c_str(), encMsg.length());
-	encMesg[encMsg.length()] = '\0';
+	unsigned char *encMesg64 = new unsigned char[encMsg.length()+1];
+	memcpy(encMesg64, encMsg.c_str(), encMsg.length());
+	encMesg64[encMsg.length()] = '\0';
+
+	int encMsgLen = encMsg.length();
+	unsigned char *encMesg=new unsigned char[encMsgLen];
+	EVP_DecodeBlock(encMesg, encMesg64, strlen(reinterpret_cast<char const*>(encMesg64)));
 
 	/* A 128 bit IV */
 	unsigned char *iv = new unsigned char[16];

@@ -632,7 +632,7 @@ void MainApp::TakePicture(int FaceID)
 		}
 	}
 	//vector of ON cameras ID
-	std::vector<int> cameraURIs;
+	std::vector<int> cameraIDs;
 	for (std::vector<QGridLayout*> *vec : *vectorCameraLayoutsPages)
 	{
 		for (QGridLayout *lt: *vec)
@@ -642,14 +642,18 @@ void MainApp::TakePicture(int FaceID)
 			if (button->text() == "On")
 			{
 				button = (QPushButton*)lt->itemAtPosition(0, 0)->widget();
-				cameraURIs.push_back(button->text().toInt());
+				cameraIDs.push_back(button->text().toInt());
 			}
 		}
 	}
 
-	//TODO: if vector is empty, alert about it and don't create newPhoto
+	if (cameraIDs.empty())
+	{
+		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
+		return;
+	}
 
-	NewPhoto *newPhoto = new NewPhoto(cameraURIs, name, surname, FaceID, this);
+	NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, FaceID, this);
 	newPhoto->exec();
 	delete newPhoto;
 }

@@ -15,7 +15,7 @@ class NewPhoto : public QDialog
 
 public:
 	//ID - photo is saved in the folder named .\\FaceBase\\<ID>
-	NewPhoto(std::vector<int> cameraURIs, QString name, QString surname, int ID, QWidget *parent = Q_NULLPTR);
+	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int ID, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
 private slots:
 	void BackButtonClicked();

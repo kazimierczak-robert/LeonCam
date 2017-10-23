@@ -289,7 +289,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(1);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -315,7 +315,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem3 = TWFacesBase->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Go to the folder", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem4 = TWFacesBase->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Take picture", Q_NULLPTR));
+        ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Take a photo", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem5 = TWFacesBase->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem6 = TWFacesBase->horizontalHeaderItem(6);

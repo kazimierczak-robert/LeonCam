@@ -1,6 +1,6 @@
 #include "NewPhoto.h"
 
-NewPhoto::NewPhoto(std::vector<int> cameraURIs,QString name, QString surname, int ID, QWidget *parent)
+NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname, int ID, QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -14,6 +14,11 @@ NewPhoto::NewPhoto(std::vector<int> cameraURIs,QString name, QString surname, in
 NewPhoto::~NewPhoto()
 {
 }
+/*void GetCamerasInfo()
+//ip
+//login
+//haslo
+//name*/
 void NewPhoto::BackButtonClicked()
 {
 	this->close();
