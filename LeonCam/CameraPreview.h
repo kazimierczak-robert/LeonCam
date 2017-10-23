@@ -15,6 +15,8 @@
 #include <QFuture> 
 #include <QtConcurrent\qtconcurrentrun.h>
 
+#include <QCloseEvent>
+
 #define MAXTRIES 5
 class CameraPreview : public QDialog
 {
@@ -40,4 +42,5 @@ private:
 	string streamURI;
 	void CameraPreviewUpdate();
 	QFuture<void> future;
+	void closeEvent(QCloseEvent *event);
 };

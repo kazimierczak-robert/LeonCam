@@ -9,7 +9,6 @@
 #include "UserCamera.h"
 #include "CameraEdition.h"
 #include <algorithm>
-#include <QCloseEvent>
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <qdialogbuttonbox.h>

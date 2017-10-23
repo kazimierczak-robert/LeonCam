@@ -30,7 +30,11 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	this->profileToken = profileToken;
 	this->ptz = new OnvifClientPTZ(*onvifDevice);
 	this->streamURI = streamURI;
-	this->streamURI.insert(this->streamURI.find("//") + 2, ":@");
+
+	std::string login="";
+	std::string pass = "";
+	onvifDevice->GetUserPasswd(login, pass);
+	this->streamURI.insert(this->streamURI.find("//") + 2, login + ":" + pass + "@");
 
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
@@ -99,6 +103,20 @@ void CameraPreview::BackButtonClicked()
 	this->close();
 }
 
+void CameraPreview::closeEvent(QCloseEvent *event)
+{
+	if (future.isRunning() == true)
+	{
+		if (ui.PBCameraOnOff->text() == "On")
+		{
+			ui.PBCameraOnOff->setText("Off");
+			future.waitForFinished();
+			ui.PBCameraOnOff->setText("On");
+		}
+	}
+
+	event->accept();
+}
 
 void CameraPreview::TurnOnOffCamera()
 {
