@@ -159,7 +159,7 @@ std::string Utilities::sha256(const std::string str)
 	std::stringstream ss;
 	for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
 	{
-		ss << (int)hash[i];
+		ss << hash[i];
 	}
 	return ss.str();
 }
