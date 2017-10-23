@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	}
 	
 	//Limit number of signs in password 127!
-	/*std::string encryptedMsg= Utilities::GetEncrypted("01234567890123456789012345678901", "abcdefghijklłmnńdkjfbkdjfiuegfs");
+	/*std::string encryptedMsg= Utilities::GetEncrypted("01234567890123456789012345678901", "abcdefghijklłmnńdkjfbkdjfiuegfsabcdefghijklłmnńdkjfbkdjfiuegfsabcdefghijklłmnńdkjfbkdjfiuegfsabcdefghijklłmnńdkjfbkdjfiuegfsas");
 	std::string decryptedMSG = Utilities::GetDecrypted("01234567890123456789012345678901", encryptedMsg);
 	*/
 	delete dataBase;

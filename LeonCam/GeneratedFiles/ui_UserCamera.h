@@ -110,6 +110,7 @@ public:
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
         LEPassword->setGeometry(QRect(10, 40, 251, 25));
         LEPassword->setMaxLength(24);
+        LEPassword->setEchoMode(QLineEdit::Password);
         PBAdd = new QPushButton(UserCamera);
         PBAdd->setObjectName(QStringLiteral("PBAdd"));
         PBAdd->setGeometry(QRect(490, 510, 61, 25));
@@ -177,7 +178,7 @@ public:
         LEPassword->setPlaceholderText(QApplication::translate("UserCamera", "Password", Q_NULLPTR));
         PBAdd->setText(QApplication::translate("UserCamera", "Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Model</span> and <span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>", Q_NULLPTR));
+        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
         CBAssign->setText(QApplication::translate("UserCamera", "Assign", Q_NULLPTR));

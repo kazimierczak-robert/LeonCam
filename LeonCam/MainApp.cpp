@@ -226,22 +226,42 @@ void MainApp::addTab()
 }
 void MainApp::CameraSelected(QGridLayout* layout)
 {
-	string url = "http://192.168.1.1/onvif/device_service";
-	string user = "";
-	string pass = "";
+	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+	QSqlQuery query;
+	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+	query.bindValue(0, CameraID);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		string url = "http://" + query.value(1).toString().toStdString() + "/onvif/device_service";
+		string user = query.value(2).toString().toStdString();
+		string pass = Utilities::GetDecrypted(passHash, query.value(3).toString().toStdString());
 
-	OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
-	onvifDevice->GetCapabilities();
+		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
 
-	OnvifClientMedia media(*onvifDevice);
-	_trt__GetProfilesResponse profiles;
-	media.GetProfiles(profiles);
+		if (onvifDevice->GetCapabilities() == 0)
+		{
+			OnvifClientMedia media(*onvifDevice);
+			_trt__GetProfilesResponse profiles;
+			media.GetProfiles(profiles);
 
-	_trt__GetStreamUriResponse link;
-	media.GetStreamUrl(profiles.Profiles[0]->token, link);
+			if (profiles.Profiles.size() > 0)
+			{
+				_trt__GetStreamUriResponse link;
+				media.GetStreamUrl(profiles.Profiles[0]->token, link);
 
-	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice, profiles.Profiles[0]->token, link.MediaUri->Uri);
-	cameraPreview->exec();
+				//if (link != nullptr)
+				{
+					if (link.MediaUri->Uri != "")
+					{
+						CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice, profiles.Profiles[0]->token, link.MediaUri->Uri);
+						cameraPreview->exec();
+					}
+				}
+			}
+		}
+	}
 }
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
