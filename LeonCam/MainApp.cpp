@@ -26,13 +26,13 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 			this->username = loggedID;
 		}
 	}
-
 	this->setWindowTitle(username + " - LeonCam");
 
 	vectorCameraLayoutsPages = new std::vector<std::vector<QGridLayout*>*>();
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
 
 	FillFacesBaseTW();
+	FillReportsTW();
 
 	activeCameraPage = 0;
 
@@ -49,6 +49,10 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.TWFacesBase, SIGNAL(CurentCellChanged(int, int)), this, SLOT(UpdateDBAfterCellChanged(int, int)));
 	connect(ui.LESearchFB, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchFBChanged()));
 	connect(ui.PBAddPerson, SIGNAL(clicked()), this, SLOT(AddPerson()));
+	connect(ui.LEUsername, SIGNAL(returnPressed()), this, SLOT(AddPerson()));
+	connect(ui.LESurname, SIGNAL(returnPressed()), this, SLOT(AddPerson()));
+	connect(ui.PBGreenAlert, SIGNAL(clicked()), this, SLOT(ChangeTWReport()));
+	connect(ui.PBRedAlert, SIGNAL(clicked()), this, SLOT(ChangeTWReport()));
 
 	query.prepare("SELECT CameraID FROM Cameras");
 	result = query.exec() == true ? true : false;
@@ -543,16 +547,39 @@ void MainApp::AdjustFaceBaseTW()
 {
 	//ui.TWFacesBase->horizontalHeader()->setSortIndicator(0, Qt::DescendingOrder);
 	//Set adjusted column width
-	ui.TWFacesBase->setColumnWidth(0, 80);
-	ui.TWFacesBase->setColumnWidth(1, 140);
-	ui.TWFacesBase->setColumnWidth(2, 140);
-	ui.TWFacesBase->setColumnWidth(3, 100);
-	ui.TWFacesBase->setColumnWidth(4, 80);
-	ui.TWFacesBase->setColumnWidth(5, 70);
-	ui.TWFacesBase->setColumnWidth(6, 70);
+	ui.TWFacesBase->setColumnWidth(0, 0);//ID
+	ui.TWFacesBase->setColumnWidth(1, 150);//Name
+	ui.TWFacesBase->setColumnWidth(2, 150);//Surname
+	ui.TWFacesBase->setColumnWidth(3, 110);//Go to the folder
+	ui.TWFacesBase->setColumnWidth(4, 90);//Take a photo
+	ui.TWFacesBase->setColumnWidth(5, 90);//Edit
+	ui.TWFacesBase->setColumnWidth(6, 90);//Delete
 	ui.TWFacesBase->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	//Disable dotted border
 	ui.TWFacesBase->setFocusPolicy(Qt::NoFocus);
+}
+void MainApp::AdjustGreenReportsTW()
+{
+	ui.TWGreenReport->setColumnWidth(0, 0);//ID
+	ui.TWGreenReport->setColumnWidth(1, 102);//Date
+	ui.TWGreenReport->setColumnWidth(2, 0);//FaceID
+	ui.TWGreenReport->setColumnWidth(3, 102);//Name
+	ui.TWGreenReport->setColumnWidth(4, 102);//Surname
+	ui.TWGreenReport->setColumnWidth(5, 102);//Go to the folder
+	ui.TWGreenReport->setColumnWidth(6, 102);//Delete alert
+	ui.TWGreenReport->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+	//Disable dotted border
+	ui.TWGreenReport->setFocusPolicy(Qt::NoFocus);
+}
+void MainApp::AdjustRedReportsTW()
+{
+	ui.TWRedReport->setColumnWidth(0, 0);//ID
+	ui.TWRedReport->setColumnWidth(1, 170);//Date
+	ui.TWRedReport->setColumnWidth(2, 170);//Go to the folder
+	ui.TWRedReport->setColumnWidth(3, 170);//Delete alert and photo
+	ui.TWRedReport->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+	//Disable dotted border
+	ui.TWRedReport->setFocusPolicy(Qt::NoFocus);
 }
 void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 {
@@ -669,6 +696,12 @@ void MainApp::FillFacesBaseTW()
 			AddRowToFB(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
 		}
 	}
+}
+void MainApp::FillReportsTW()
+{
+	AdjustGreenReportsTW();
+	AdjustRedReportsTW();
+	ui.TWRedReport->setVisible(false);
 }
 void MainApp::UpdateDBAfterCellChanged(int row, int column)
 {
@@ -895,8 +928,21 @@ void MainApp::RemovePerson(int FaceID)
 	}
 	else
 	{
-		Utilities::RemoveFolderRecursively(FaceID);
-
+		Utilities::RemoveFolderRecursively(".\\FaceBase\\" + QVariant(FaceID).toString());
 	}
-
+}
+void MainApp::ChangeTWReport()
+{
+	if (greenOrRedAlert == 0) //TWGreenReport is active
+	{
+		greenOrRedAlert = 1;
+		ui.TWGreenReport->setVisible(false);
+		ui.TWRedReport->setVisible(true);
+	}
+	else
+	{
+		greenOrRedAlert = 0;
+		ui.TWGreenReport->setVisible(true);
+		ui.TWRedReport->setVisible(false);
+	}
 }

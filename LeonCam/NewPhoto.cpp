@@ -11,6 +11,9 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	FillCBWithCamerasToCB();
 	//connect(ui.PBFolder, SIGNAL(clicked()), this, SLOT(OpenFileExplorer(ID)));
 	//future = QtConcurrent::run([=]() {CameraPreviewUpdate(cameraURIs); }); //run preview from camera
+	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+		[=](int index) {CurrentIndexChanged(); });
+	CurrentIndexChanged();
 }
 
 NewPhoto::~NewPhoto()
@@ -75,4 +78,8 @@ void NewPhoto::FillCBWithCamerasToCB()
 		ui.CBPresets->addItem(QString::fromStdString(elem.second), elem.first);
 	}
 
+}
+void NewPhoto::CurrentIndexChanged()
+{
+	//Utilities::MBAlarm(ui.CBPresets->currentData().toString(), true);
 }

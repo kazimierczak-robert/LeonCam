@@ -36,4 +36,5 @@ private:
 	std::map<int, struct Camera*> cameras;
 	std::map<int, std::string> camerasToCB;
 	void FillCBWithCamerasToCB();
+	void CurrentIndexChanged();
 };

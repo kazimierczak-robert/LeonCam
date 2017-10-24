@@ -38,7 +38,8 @@ bool DataBase::CreateRedAlerts()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS RedAlerts("
 					"RedAlertID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Date DATETIME NOT NULL);");
+					"Date DATETIME NOT NULL,"
+					"UserID INTEGER REFERENCES Users(UserID));");
 
 	bool result;
 	result = query.isActive() == true ? true : false;

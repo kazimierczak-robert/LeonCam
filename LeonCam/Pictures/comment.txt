@@ -2,4 +2,4 @@
 	Utilities::CreateFolderIfNotExists(".\\Pictures\\PhotoFromCameras\\" + QVariant(<CameraID>).toString());
 	
 2. RedAlert - photo of unrecognized person: <RedAlertID>
-	Utilities::CreateFolderIfNotExists(".\\Pictures\\RedAlerts");
+	Utilities::CreateFolderIfNotExists(".\\Pictures\\RedAlerts\\" + QVariant(<RedAlertID>).toString());

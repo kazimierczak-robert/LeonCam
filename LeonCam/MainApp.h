@@ -34,7 +34,9 @@ private slots:
 	void AddPerson();
 	void EditPerson(int FaceID);
 	void RemovePerson(int FaceID);
+	void ChangeTWReport();
 private:
+	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
 	std::string passHash;
 	Ui::MainApp ui;
@@ -52,6 +54,9 @@ private:
 	void CameraSelected(QGridLayout* layout);
 	void closeEvent(QCloseEvent *event);
 	void AdjustFaceBaseTW();
+	void AdjustGreenReportsTW();
+	void AdjustRedReportsTW();
 	void FillFacesBaseTW();
+	void FillReportsTW();
 	void AddRowToFB(int ID, QString name, QString surname);
 };

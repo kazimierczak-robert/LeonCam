@@ -186,9 +186,8 @@ void Utilities::CreateFolderIfNotExists(QString path)
 	}
 }
 //https://stackoverflow.com/a/27758627
-void Utilities::RemoveFolderRecursively(int FaceID)
+void Utilities::RemoveFolderRecursively(QString path)
 {
-	QString path = ".\\FaceBase\\" + QVariant(FaceID).toString();
 	QDir dir(path);
 	int result=dir.removeRecursively();
 	if (result == true)

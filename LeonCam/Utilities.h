@@ -37,7 +37,7 @@ public:
 	static std::string sha256(const std::string str);
 	static void OpenFileExplorer(int ID);
 	static void CreateFolderIfNotExists(QString path);
-	static void RemoveFolderRecursively(int FaceID);
+	static void RemoveFolderRecursively(QString path);
 
 	static int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
 		unsigned char *iv, unsigned char *plaintext);
