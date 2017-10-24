@@ -178,7 +178,7 @@ public:
         LEPassword->setPlaceholderText(QApplication::translate("UserCamera", "Password", Q_NULLPTR));
         PBAdd->setText(QApplication::translate("UserCamera", "Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>", Q_NULLPTR));
+        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits and must be unique</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
         CBAssign->setText(QApplication::translate("UserCamera", "Assign", Q_NULLPTR));

@@ -1,6 +1,6 @@
 #include "UserCamera.h"
 
-UserCamera::UserCamera(QWidget *parent)
+UserCamera::UserCamera(QWidget *parent, int userID)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -13,6 +13,7 @@ UserCamera::UserCamera(QWidget *parent)
 	connect(ui.PBAdd, SIGNAL(clicked()), this, SLOT(AddClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
 	connect(ui.CBAssign, SIGNAL(stateChanged(int)), this, SLOT(AssignChecked()));
+	this->userID = userID;
 }
 
 UserCamera::~UserCamera()
@@ -51,7 +52,6 @@ std::vector<QString>*  UserCamera::GetValuesFromControls()
 }
 void UserCamera::AddClicked() 
 {	
-	//TODO
 	designB->gif->start();
 
 	if (ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
@@ -69,10 +69,25 @@ void UserCamera::AddClicked()
 		return;
 	}
 
+	QSqlQuery query;
+	query.prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ?");
+	query.bindValue(0, userID);
+	query.bindValue(1, ui.LEDescripton->text());
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		int counter = query.value(0).toInt();
+		if (counter > 0)
+		{
+			designB->gif->stop();
+			Utilities::MBAlarm("This name is occupied by your another camera. Please type another one", false);
+			return;
+		}
+	}
+
 	designB->gif->stop();
 	this->done(QDialog::Accepted);
-	//this->setResult(QDialog::Accepted);
-	//this->close();
 }
 void UserCamera::BackClicked() 
 {

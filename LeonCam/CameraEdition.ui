@@ -26,7 +26,7 @@
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>260</y>
+     <y>240</y>
      <width>251</width>
      <height>25</height>
     </rect>
@@ -38,27 +38,11 @@
     <string>Description</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="LEModel">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>230</y>
-     <width>251</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="placeholderText">
-    <string>Model</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="LEIPv4Address">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>290</y>
+     <y>270</y>
      <width>251</width>
      <height>25</height>
     </rect>
@@ -74,13 +58,13 @@
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>260</y>
+     <y>265</y>
      <width>31</width>
      <height>31</height>
     </rect>
    </property>
    <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#LTip{background-image: url(:/Resources/Images/bulb.png);}
@@ -184,7 +168,7 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>320</y>
+     <y>300</y>
      <width>251</width>
      <height>25</height>
     </rect>
@@ -200,7 +184,7 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>360</y>
+     <y>350</y>
      <width>251</width>
      <height>115</height>
     </rect>
@@ -223,6 +207,9 @@ padding: 0px;*/</string>
     <property name="text">
      <string/>
     </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
     <property name="placeholderText">
      <string>Old password</string>
     </property>
@@ -238,6 +225,9 @@ padding: 0px;*/</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
     </property>
     <property name="placeholderText">
      <string>New password</string>
@@ -263,7 +253,6 @@ padding: 0px;*/</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>LEModel</tabstop>
   <tabstop>LEDescripton</tabstop>
   <tabstop>LEIPv4Address</tabstop>
   <tabstop>LELogin</tabstop>

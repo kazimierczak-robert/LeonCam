@@ -77,7 +77,7 @@ void MainApp::AddCamera()
 			return;
 		}
 	}
-	UserCamera *UserCam = new UserCamera(this);
+	UserCamera *UserCam = new UserCamera(this, loggedID);
 	bool result = UserCam->exec();
 	if (result == QDialog::Accepted)
 	{
@@ -170,7 +170,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
-		connect(btn, &QPushButton::clicked, this, [this, btn] {EditCamera(btn); });
+		connect(btn, &QPushButton::clicked, this, [this, CameraID, label] {EditCamera(CameraID, label); });
 		layout->addWidget(btn, 2, 3);
 
 		btn = new QPushButton();
@@ -307,11 +307,40 @@ void MainApp::RecognationCamera(QPushButton* button)
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}
 }
-void MainApp::EditCamera(QPushButton* button)
+void MainApp::EditCamera(int CameraID, QLabel *label)
 {
-	CameraEdition *cameraEdition = new CameraEdition(this);
-	//TODO
-	cameraEdition->exec();
+	CameraEdition *cameraEdition = new CameraEdition(this, loggedID, CameraID, passHash);
+	bool result = cameraEdition->exec();
+	if (result == QDialog::Accepted)
+	{
+		//vector includes values from QDialog
+		std::vector<QString>* controlsValues = cameraEdition->GetValuesFromControls();
+
+		QSqlQuery query;
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		if (controlsValues->at(3) == "")
+		{
+			query.prepare("UPDATE Cameras SET Name = ?, IPAddress = ?, Login = ?, LastEditDate = ? WHERE CameraID = ?");
+			query.bindValue(4, CameraID);
+		}
+		else
+		{
+			query.prepare("UPDATE Cameras SET Name = ?, IPAddress = ?, Login = ?, LastEditDate = ?, Password = ? WHERE CameraID = ?");
+			std::string encryptedMsg = Utilities::GetEncrypted(passHash, controlsValues->at(3).toStdString());
+			query.bindValue(4, QString::fromStdString(encryptedMsg));
+			query.bindValue(5, CameraID);
+		}
+		query.bindValue(0, controlsValues->at(0));
+		query.bindValue(1, controlsValues->at(1));
+		query.bindValue(2, controlsValues->at(2));
+		query.bindValue(3, Utilities::GetCurrentDateTime());
+		result = query.exec() == true ? true : false;
+		if (result == true)
+		{
+			query.exec("COMMIT");
+			label->setText(controlsValues->at(0) + " (" + controlsValues->at(1) + ")");
+		}
+	}
 	delete cameraEdition;
 }
 void MainApp::RemoveCamera(QGridLayout* layout)

@@ -44,7 +44,7 @@ private:
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);
 	void RecognationCamera(QPushButton* button);
-	void EditCamera(QPushButton* button);
+	void EditCamera(int CameraID, QLabel *label);
 	void RemoveCamera(QGridLayout* layout);
 	void AddCameraFromDB(int CameraID);
 	int activeCameraPage;

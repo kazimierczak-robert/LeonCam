@@ -26,7 +26,6 @@ class Ui_CameraEdition
 {
 public:
     QLineEdit *LEDescripton;
-    QLineEdit *LEModel;
     QLineEdit *LEIPv4Address;
     QLabel *LTip;
     QLabel *LHelp;
@@ -49,16 +48,13 @@ public:
         CameraEdition->setModal(true);
         LEDescripton = new QLineEdit(CameraEdition);
         LEDescripton->setObjectName(QStringLiteral("LEDescripton"));
-        LEDescripton->setGeometry(QRect(250, 260, 251, 25));
-        LEModel = new QLineEdit(CameraEdition);
-        LEModel->setObjectName(QStringLiteral("LEModel"));
-        LEModel->setGeometry(QRect(250, 230, 251, 25));
+        LEDescripton->setGeometry(QRect(250, 240, 251, 25));
         LEIPv4Address = new QLineEdit(CameraEdition);
         LEIPv4Address->setObjectName(QStringLiteral("LEIPv4Address"));
-        LEIPv4Address->setGeometry(QRect(250, 290, 251, 25));
+        LEIPv4Address->setGeometry(QRect(250, 270, 251, 25));
         LTip = new QLabel(CameraEdition);
         LTip->setObjectName(QStringLiteral("LTip"));
-        LTip->setGeometry(QRect(510, 260, 31, 31));
+        LTip->setGeometry(QRect(510, 265, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         LHelp = new QLabel(CameraEdition);
@@ -100,22 +96,23 @@ public:
         Lloading->setStyleSheet(QStringLiteral("background-color:none"));
         LELogin = new QLineEdit(CameraEdition);
         LELogin->setObjectName(QStringLiteral("LELogin"));
-        LELogin->setGeometry(QRect(250, 320, 251, 25));
+        LELogin->setGeometry(QRect(250, 300, 251, 25));
         GBChangePassword = new QGroupBox(CameraEdition);
         GBChangePassword->setObjectName(QStringLiteral("GBChangePassword"));
-        GBChangePassword->setGeometry(QRect(250, 360, 251, 115));
+        GBChangePassword->setGeometry(QRect(250, 350, 251, 115));
         GBChangePassword->setStyleSheet(QStringLiteral("#GBChangePassword{color: rgb(255, 255, 255);}"));
         LEOldPassword = new QLineEdit(GBChangePassword);
         LEOldPassword->setObjectName(QStringLiteral("LEOldPassword"));
         LEOldPassword->setGeometry(QRect(10, 20, 231, 25));
+        LEOldPassword->setEchoMode(QLineEdit::Password);
         LEPassword = new QLineEdit(GBChangePassword);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
         LEPassword->setGeometry(QRect(10, 50, 231, 25));
+        LEPassword->setEchoMode(QLineEdit::Password);
         LEConfPass = new QLineEdit(GBChangePassword);
         LEConfPass->setObjectName(QStringLiteral("LEConfPass"));
         LEConfPass->setGeometry(QRect(10, 80, 231, 25));
         LEConfPass->setEchoMode(QLineEdit::Password);
-        QWidget::setTabOrder(LEModel, LEDescripton);
         QWidget::setTabOrder(LEDescripton, LEIPv4Address);
         QWidget::setTabOrder(LEIPv4Address, LELogin);
         QWidget::setTabOrder(LELogin, LEOldPassword);
@@ -137,12 +134,10 @@ public:
         CameraEdition->setWindowTitle(QApplication::translate("CameraEdition", "LeonCam", Q_NULLPTR));
         LEDescripton->setText(QString());
         LEDescripton->setPlaceholderText(QApplication::translate("CameraEdition", "Description", Q_NULLPTR));
-        LEModel->setText(QString());
-        LEModel->setPlaceholderText(QApplication::translate("CameraEdition", "Model", Q_NULLPTR));
         LEIPv4Address->setText(QString());
         LEIPv4Address->setPlaceholderText(QApplication::translate("CameraEdition", "IPv4 address", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        LTip->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Model</span> and <span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>", Q_NULLPTR));
+        LTip->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Model</span> have <span style=\" font-weight:600;\">X</span> letters limits and must be unique</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
         LHelp->setText(QApplication::translate("CameraEdition", "<html><head/><body><p align=\"center\">Edit selected fields. If you do not want to change password, </p><p align=\"center\">skip <span style=\" font-weight:600; color:#bdf0ff;\">Change password</span> section!</p></body></html>", Q_NULLPTR));
