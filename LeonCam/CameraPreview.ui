@@ -168,7 +168,7 @@ background-image: url(:/Resources/Images/snapshotHover.png);
     <enum>QFrame::Box</enum>
    </property>
    <property name="text">
-    <string>Preview</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

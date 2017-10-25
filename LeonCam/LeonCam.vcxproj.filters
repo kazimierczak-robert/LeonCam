@@ -279,6 +279,15 @@
     <ClCompile Include="onvifgen\soapSubscriptionManagerBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CapturingFrame.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CapturingFrame.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CapturingFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -334,6 +343,9 @@
     </CustomBuild>
     <CustomBuild Include="NewPhoto.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CapturingFrame.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

@@ -236,7 +236,7 @@ public:
         PBSnapshot->setToolTip(QApplication::translate("CameraPreview", "Take a snapshot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBSnapshot->setText(QString());
-        LPreviewScreen->setText(QApplication::translate("CameraPreview", "Preview", Q_NULLPTR));
+        LPreviewScreen->setText(QString());
         LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBHome->setToolTip(QApplication::translate("CameraPreview", "Go to home position", Q_NULLPTR));

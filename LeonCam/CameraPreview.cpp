@@ -1,40 +1,15 @@
 #include "CameraPreview.h"
 
-void CameraPreview::CameraPreviewUpdate()
-{
-	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
-	cv::VideoCapture vcap;
-	cv::Mat img;
-	if (vcap.open(this->streamURI))
-	{
-		while (ui.PBCameraOnOff->text() == "On")
-		{
-			if (vcap.read(img))
-			{
-				cvtColor(img, img, CV_BGR2RGB);
-				ui.LPreviewScreen->setPixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
-			}
-		}
-	}
-}
-
-
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, string profileToken, string streamURI)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->buttonIsEnabledFromParent = buttonIsEnabledFromParent;
 	this->buttonRecognationFromParent = buttonRecognationFromParent;
 	this->numberOfEnabledCameras = numberOfEnabledCameras;
+	this->onvifDevice = onvifDevice;
 
-	this->profileToken = profileToken;
-	this->ptz = new OnvifClientPTZ(*onvifDevice);
-	this->streamURI = streamURI;
-
-	std::string login="";
-	std::string pass = "";
-	onvifDevice->GetUserPasswd(login, pass);
-	this->streamURI.insert(this->streamURI.find("//") + 2, login + ":" + pass + "@");
+	this->capThread = new CapturingFrame(this);
 
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
@@ -53,6 +28,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBHome, SIGNAL(clicked()), this, SLOT(GoHomeCamera()));
 
+	connect(capThread, SIGNAL(UpdatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
 
@@ -62,14 +39,18 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
-		future = QtConcurrent::run([=]() {CameraPreviewUpdate();});
-		ui.PBCameraOnOff->setText("On");
-		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+		StartShowingPreview();
 	}
 	else
 	{
 		ui.PBCameraOnOff->setText("Off");
 		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+		ui.PBUp->setEnabled(false);
+		ui.PBDown->setEnabled(false);
+		ui.PBLeft->setEnabled(false);
+		ui.PBRight->setEnabled(false);
+		ui.PBHome->setEnabled(false);
+		ui.PBPatrol->setEnabled(false);
 	}
 
 	if (buttonRecognationFromParent->text() == "On")
@@ -85,34 +66,70 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 }
 
+bool CameraPreview::StartShowingPreview()
+{
+	if (onvifDevice->GetCapabilities() == 0)
+	{
+		OnvifClientMedia media(*onvifDevice);
+		_trt__GetProfilesResponse profiles;
+		media.GetProfiles(profiles);
+
+		if (profiles.Profiles.size() > 0)
+		{
+			this->profileToken = profiles.Profiles[0]->token;
+			_trt__GetStreamUriResponse link;
+			media.GetStreamUrl(this->profileToken, link);
+
+			if (&link.MediaUri != NULL)
+			{
+				this->ptz = new OnvifClientPTZ(*onvifDevice);
+
+				std::string login = "";
+				std::string pass = "";
+				onvifDevice->GetUserPasswd(login, pass);
+				std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, login + ":" + pass + "@");
+
+				capThread->setStreamURI(streamURI);
+				capThread->start();
+
+				ui.PBCameraOnOff->setText("On");
+				ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+				ui.PBUp->setEnabled(true);
+				ui.PBDown->setEnabled(true);
+				ui.PBLeft->setEnabled(true);
+				ui.PBRight->setEnabled(true);
+				ui.PBHome->setEnabled(true);
+				ui.PBPatrol->setEnabled(true);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 CameraPreview::~CameraPreview()
 {
 }
 
+void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
+{
+	ui.LPreviewScreen->setPixmap(pixmap);
+}
+
 void CameraPreview::BackButtonClicked()
 {
-	if (future.isRunning()==true)
+	if (capThread->isRunning()==true)
 	{
-		if (ui.PBCameraOnOff->text() == "On")
-		{
-			ui.PBCameraOnOff->setText("Off");
-			future.waitForFinished();
-			ui.PBCameraOnOff->setText("On");
-		}
+		capThread->StopThread();
 	}
 	this->close();
 }
 
 void CameraPreview::closeEvent(QCloseEvent *event)
 {
-	if (future.isRunning() == true)
+	if (capThread->isRunning() == true)
 	{
-		if (ui.PBCameraOnOff->text() == "On")
-		{
-			ui.PBCameraOnOff->setText("Off");
-			future.waitForFinished();
-			ui.PBCameraOnOff->setText("On");
-		}
+		capThread->StopThread();
 	}
 
 	event->accept();
@@ -124,21 +141,30 @@ void CameraPreview::TurnOnOffCamera()
 
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
-		future = QtConcurrent::run([=]() {CameraPreviewUpdate(); });
-		ui.PBCameraOnOff->setText("On");
-		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-		buttonIsEnabledFromParent->setText("On");
-		buttonIsEnabledFromParent->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-		number += 1;
+		if (StartShowingPreview())
+		{
+			buttonIsEnabledFromParent->setText("On");
+			buttonIsEnabledFromParent->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+			number += 1;
+		}
 	}
 	else
 	{
+		capThread->StopThread();
+		ui.LPreviewScreen->clear();
+
 		ui.PBCameraOnOff->setText("Off");
 		ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 
 		buttonIsEnabledFromParent->setText("Off");
 		buttonIsEnabledFromParent->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		number -= 1;
+		ui.PBUp->setEnabled(false);
+		ui.PBDown->setEnabled(false);
+		ui.PBLeft->setEnabled(false);
+		ui.PBRight->setEnabled(false);
+		ui.PBHome->setEnabled(false);
+		ui.PBPatrol->setEnabled(false);
 	}
 
 	numberOfEnabledCameras->setText("Number of enabled cameras: " + QVariant(number).toString());
