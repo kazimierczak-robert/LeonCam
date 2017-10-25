@@ -2,16 +2,14 @@
 
 #include <QDialog>
 #include "ui_CameraPreview.h"
-
 #include "onvifclientptz.hpp"
 #include "onvifclientmedia.hpp"
 #include "onvifclientdevice.hpp"
-
 #include <QCloseEvent>
-
 #include "CapturingFrame.h"
 
-#define MAXTRIES 5
+#define MAXCONNECTIONTRIES 5
+
 class CameraPreview : public QDialog
 {
 	Q_OBJECT
@@ -19,6 +17,10 @@ class CameraPreview : public QDialog
 public:
 	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QLabel *numberOfEnabledCameras=nullptr, OnvifClientDevice* onvifDevice = nullptr);
 	~CameraPreview();
+signals:
+	void turnOnOffCam(bool isTurnedOn);
+	void turnOnOffRecoMode(bool isTurnedOn);
+	void changeCamNoLabel(int cameraNo);
 private slots:
 	void BackButtonClicked();
 	void TurnOnOffCamera();
@@ -36,7 +38,8 @@ private:
 	OnvifClientPTZ *ptz;
 	string profileToken;
 	OnvifClientDevice *onvifDevice;
-	void closeEvent(QCloseEvent *event);
 	CapturingFrame *capThread;
-	bool CameraPreview::StartShowingPreview();
+	bool StartShowingPreview();
+	void StopShowingPreview();
+	void closeEvent(QCloseEvent *event);
 };

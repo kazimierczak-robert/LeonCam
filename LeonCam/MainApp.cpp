@@ -246,6 +246,7 @@ void MainApp::CameraSelected(QGridLayout* layout)
 
 		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice);
 		cameraPreview->exec();
+		delete cameraPreview;
 	}
 }
 void MainApp::TurnOnOffCamera(QGridLayout* layout)

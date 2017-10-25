@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QThread>
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/contrib/contrib.hpp"
@@ -15,12 +14,12 @@ class CapturingFrame : public QThread
 public:
 	CapturingFrame(QObject *parent);
 	~CapturingFrame();
-	void run() override;
-	void setStreamURI(std::string streamURI);
+	void SetStreamURI(std::string streamURI);
 	void StopThread();
 signals:
-	void UpdatePixmap(const QPixmap& pixmap);
+	void updatePixmap(const QPixmap& pixmap);
 private:
 	std::string streamURI;
 	bool isWorking;
+	void run() override;
 };

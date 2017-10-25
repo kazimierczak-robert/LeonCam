@@ -3,7 +3,7 @@
 CapturingFrame::CapturingFrame(QObject *parent)
 	: QThread(parent)
 {
-	this->isWorking = true;
+
 }
 
 CapturingFrame::~CapturingFrame()
@@ -11,13 +11,15 @@ CapturingFrame::~CapturingFrame()
 
 }
 
-void CapturingFrame::setStreamURI(std::string streamURI)
+void CapturingFrame::SetStreamURI(std::string streamURI)
 {
 	this->streamURI = streamURI;
 }
 
 void CapturingFrame::run() 
 {
+	this->isWorking = true;
+
 	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
 	cv::VideoCapture vcap;
 	cv::Mat img;
@@ -28,9 +30,11 @@ void CapturingFrame::run()
 			if (vcap.read(img))
 			{
 				cvtColor(img, img, CV_BGR2RGB);
-				emit UpdatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+				emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
 			}
 		}
+		vcap.release();
+		img.release();
 	}
 }
 
