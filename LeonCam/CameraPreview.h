@@ -15,12 +15,10 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QLabel *numberOfEnabledCameras=nullptr, OnvifClientDevice* onvifDevice = nullptr);
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QLabel *numberOfEnabledCameras=nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1);
 	~CameraPreview();
 signals:
-	void turnOnOffCam(bool isTurnedOn);
-	void turnOnOffRecoMode(bool isTurnedOn);
-	void changeCamNoLabel(int cameraNo);
+	void openCameraEdit(int camID);
 private slots:
 	void BackButtonClicked();
 	void TurnOnOffCamera();
@@ -30,6 +28,7 @@ private slots:
 	void GoHomeCamera();
 public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
+	void CloseCameraEdit(const QString& cameraDetails);
 private:
 	Ui::CameraPreview ui;
 	QPushButton *buttonIsEnabledFromParent;

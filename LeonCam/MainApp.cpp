@@ -244,7 +244,8 @@ void MainApp::CameraSelected(QGridLayout* layout)
 
 		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
 
-		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice);
+		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), ui.LEnabledNumber, onvifDevice, CameraID);
+		connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
 		cameraPreview->exec();
 		delete cameraPreview;
 	}
@@ -329,6 +330,23 @@ void MainApp::EditCamera(int CameraID, QLabel *label)
 	}
 	delete cameraEdition;
 }
+
+void MainApp::OpenCameraEdit(int camID)
+{
+	for (std::vector<QGridLayout*> *vec : *vectorCameraLayoutsPages)
+	{
+		for (QGridLayout *lt : *vec)
+		{
+			if (((QPushButton *)lt->itemAtPosition(0, 0)->widget())->text().toInt() == camID)
+			{
+				EditCamera(camID, (QLabel*)lt->itemAtPosition(1, 0)->widget());
+				emit closeCameraEdit(((QLabel*)lt->itemAtPosition(1, 0)->widget())->text());
+				return;
+			}
+		}
+	}
+}
+
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();

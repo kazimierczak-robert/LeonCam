@@ -1,6 +1,6 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, int camID)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -19,6 +19,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
 
+	connect(ui.PBEdit, &QPushButton::clicked, this, [this, camID] {emit openCameraEdit(camID); });
+
 	connect(ui.PBLeft, &QPushButton::pressed, this, [this] {MoveCamera(-0.2, 0.0); });
 	connect(ui.PBRight, &QPushButton::pressed, this, [this] {MoveCamera(0.2, 0.0); });
 	connect(ui.PBUp, &QPushButton::pressed, this, [this] {MoveCamera(0.0, 0.2); });
@@ -32,6 +34,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	connect(ui.PBHome, SIGNAL(clicked()), this, SLOT(GoHomeCamera()));
 
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
@@ -126,6 +129,12 @@ void CameraPreview::StopShowingPreview()
 void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
 {
 	ui.LPreviewScreen->setPixmap(pixmap);
+}
+
+void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
+{
+	ui.LCameraDetails->setText(cameraDetails);
+	//TODO zamykaæ i uruchamiaæ w¹tek je¿eli siê zmieni³y dane 
 }
 
 void CameraPreview::BackButtonClicked()

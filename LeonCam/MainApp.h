@@ -22,6 +22,8 @@ class MainApp : public QMainWindow
 public:
 	MainApp(QWidget *parent = Q_NULLPTR, int loggedID=-1, std::string passHash="");
 	~MainApp();
+signals:
+	void closeCameraEdit(const QString& cameraDetails);
 private slots:
 	void AddCamera();
 	void LogOut();
@@ -35,6 +37,8 @@ private slots:
 	void EditPerson(int FaceID);
 	void RemovePerson(int FaceID);
 	void ChangeTWReport();
+public slots:
+	void OpenCameraEdit(int camID);
 private:
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
