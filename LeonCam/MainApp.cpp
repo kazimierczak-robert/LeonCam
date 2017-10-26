@@ -690,13 +690,13 @@ void MainApp::UpdateDBAfterCellChanged(int row, int column)
 	//TODO
 	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
 }
-void MainApp::TakePicture(int FaceID)
+void MainApp::TakePicture(int faceID)
 {
 	QString name;
 	QString surname;
 	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
-		if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		if (faceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
 			name=ui.TWFacesBase->item(i, 1)->text();
 			surname = ui.TWFacesBase->item(i, 2)->text();
@@ -724,7 +724,7 @@ void MainApp::TakePicture(int FaceID)
 		return;
 	}
 
-	NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, FaceID, this);
+	NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, this);
 	newPhoto->exec();
 	delete newPhoto;
 }

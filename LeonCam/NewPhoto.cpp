@@ -1,42 +1,69 @@
 #include "NewPhoto.h"
 
-NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname, int loggedID, QWidget *parent)
+NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID, QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
-	this->setWindowTitle(name + " " + surname +" (ID: " + (QVariant(loggedID)).toString() + ") - LeonCam");
+	this->setWindowTitle(name + " " + surname +" (ID: " + (QVariant(faceID)).toString() + ") - LeonCam");
+	capThread = new CapturingFrame(this);
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
-	connect(ui.PBFolder, &QPushButton::clicked, this, [this, loggedID] {Utilities::OpenFileExplorer(loggedID); });
+	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(faceID); });
 	GetCamerasInfo(loggedID, cameraIDs);
 	FillCBWithCamerasToCB();
 	//connect(ui.PBFolder, SIGNAL(clicked()), this, SLOT(OpenFileExplorer(ID)));
 	//future = QtConcurrent::run([=]() {CameraPreviewUpdate(cameraURIs); }); //run preview from camera
 	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-		[=](int index) {CurrentIndexChanged(); });
-	CurrentIndexChanged();
+		[=](int index) {CurrentIndexChanged(passHash); });
+	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
+	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	CurrentIndexChanged(passHash);
 }
 
+//TODO: close event for thread
 NewPhoto::~NewPhoto()
 {
 }
 
+//https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
+void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
+{
+	ui.LPreviewScreen->setPixmap(pixmap);
+
+	QImage   swapped = pixmap.toImage();
+	if (pixmap.toImage().format() == QImage::Format_RGB32)
+	{
+		swapped = swapped.convertToFormat(QImage::Format_RGB888);
+	}
+	swapped = swapped.rgbSwapped();
+	matImg = cv::Mat(
+		swapped.height(), swapped.width(),
+		CV_8UC3,
+		const_cast<uchar*>(swapped.bits()),
+		static_cast<size_t>(swapped.bytesPerLine())).clone();
+}
 void NewPhoto::BackButtonClicked()
 {
 	this->close();
+}
+void NewPhoto::PBSnapshotClicked(int faceID)
+{
+	//TODO: <date.jpg>
+	//create folder if not exists
+	cv::Mat tmp = matImg;
+	cv::imwrite(".\\FaceBase\\"+ std::to_string(faceID) + "\\date.jpg", tmp);
 }
 void NewPhoto::CameraPreviewUpdate(std::string streamURI)
 {
 	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
 	cv::VideoCapture vcap;
-	cv::Mat img;
 	if (vcap.open(streamURI))
 	{
 		while (true)
 		{
-			if (vcap.read(img))
+			if (vcap.read(matImg))
 			{
-				cvtColor(img, img, CV_BGR2RGB);
-				ui.LPreviewScreen->setPixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+				cvtColor(matImg, matImg, CV_BGR2RGB);
+				ui.LPreviewScreen->setPixmap(QPixmap::fromImage(QImage(matImg.data, 760, 427, matImg.step, QImage::Format_RGB888)));
 			}
 		}
 	}
@@ -79,7 +106,37 @@ void NewPhoto::FillCBWithCamerasToCB()
 	}
 
 }
-void NewPhoto::CurrentIndexChanged()
+void NewPhoto::CurrentIndexChanged(std::string passHash)
 {
-	//Utilities::MBAlarm(ui.CBPresets->currentData().toString(), true);
+	//Get camera
+	int cameraID = ui.CBPresets->currentData().toInt();
+	struct Camera *cam = cameras[cameraID];
+	
+	//Decrypt passorrd
+	std::string password = Utilities::GetDecrypted(passHash, cam->Password);
+	//Get stream URI & start capturing frames thread 
+	std::string url = "http://" + cam->IPAddress + "/onvif/device_service";
+	OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, cam->Login, password);
+	if (onvifDevice->GetCapabilities() == 0)
+	{
+		OnvifClientMedia media(*onvifDevice);
+		_trt__GetProfilesResponse profiles;
+		media.GetProfiles(profiles);
+
+		if (profiles.Profiles.size() > 0)
+		{
+			this->profileToken = profiles.Profiles[0]->token;
+			_trt__GetStreamUriResponse link;
+			media.GetStreamUrl(this->profileToken, link);
+
+			if (&link.MediaUri != NULL)
+			{
+				this->ptz = new OnvifClientPTZ(*onvifDevice);
+				std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");
+
+				capThread->SetStreamURI(streamURI);
+				capThread->start();
+			}
+		}
+	}
 }

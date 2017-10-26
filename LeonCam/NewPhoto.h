@@ -9,6 +9,10 @@
 #include <QFuture> 
 #include <QtConcurrent\qtconcurrentrun.h>
 #include "qsqlquery.h"
+#include "onvifclientptz.hpp"
+#include "onvifclientmedia.hpp"
+#include "onvifclientdevice.hpp"
+#include "CapturingFrame.h"
 
 class NewPhoto : public QDialog
 {
@@ -16,10 +20,13 @@ class NewPhoto : public QDialog
 
 public:
 	//ID - photo is saved in the folder named .\\FaceBase\\<ID>
-	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, QWidget *parent = Q_NULLPTR);
+	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
-private slots:
+	public slots:
+	void UpdatePixmap(const QPixmap& pixmap);
+	private slots:
 	void BackButtonClicked();
+	void PBSnapshotClicked(int faceID);
 private:
 	Ui::NewPhoto ui;
 	QFuture<void> future; //"thread" field
@@ -35,6 +42,10 @@ private:
 	};
 	std::map<int, struct Camera*> cameras;
 	std::map<int, std::string> camerasToCB;
+	string profileToken;
+	OnvifClientPTZ *ptz;
+	CapturingFrame *capThread;
+	cv::Mat matImg;
 	void FillCBWithCamerasToCB();
-	void CurrentIndexChanged();
+	void CurrentIndexChanged(std::string passHash);
 };
