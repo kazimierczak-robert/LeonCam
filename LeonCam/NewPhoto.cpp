@@ -74,10 +74,15 @@ void NewPhoto::BackButtonClicked()
 }
 void NewPhoto::PBSnapshotClicked(int faceID)
 {
-	//TODO: <date.jpg>
-	//create folder if not exists
+	QString folderPath = ".\\FaceBase\\" + QVariant(faceID).toString();
+	Utilities::CreateFolderIfNotExists(folderPath);
+	QString dateTime=Utilities::GetCurrentDateTime();
 	cv::Mat tmp = matImg;
-	cv::imwrite(".\\FaceBase\\"+ std::to_string(faceID) + "\\date.jpg", tmp);
+	QString picturePath = folderPath + "\\" + dateTime + ".jpg";
+	std::string pathToFile = picturePath.toStdString();
+	replace(pathToFile.begin(), pathToFile.end(),':', '-');
+	cv::imwrite(pathToFile, tmp);
+	Utilities::MBAlarm("Picture has been taken", true);
 }
 void NewPhoto::CameraPreviewUpdate(std::string streamURI)
 {
