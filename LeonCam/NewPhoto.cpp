@@ -16,12 +16,38 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 		[=](int index) {CurrentIndexChanged(passHash); });
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	//fill profileToken & ptz
 	CurrentIndexChanged(passHash);
+	//Camera control
+	cameraControl = new CameraControl(this->ptz, this->profileToken);
+	//left, right, up, down control
+	connect(ui.PBLeft, &QPushButton::pressed, this, [this] {cameraControl->MoveCamera(-0.2, 0.0); });
+	connect(ui.PBRight, &QPushButton::pressed, this, [this] {cameraControl->MoveCamera(0.2, 0.0); });
+	connect(ui.PBUp, &QPushButton::pressed, this, [this] {cameraControl->MoveCamera(0.0, 0.2); });
+	connect(ui.PBDown, &QPushButton::pressed, this, [this] {cameraControl->MoveCamera(0.0, -0.2); });
+
+	connect(ui.PBLeft, &QPushButton::released, this, [this] {cameraControl->StopCamera(); });
+	connect(ui.PBRight, &QPushButton::released, this, [this] {cameraControl->StopCamera(); });
+	connect(ui.PBUp, &QPushButton::released, this, [this] {cameraControl->StopCamera(); });
+	connect(ui.PBDown, &QPushButton::released, this, [this] {cameraControl->StopCamera(); });
+	//home position
+	connect(ui.PBHome, &QPushButton::clicked, this, [this] {cameraControl->GoHomeCamera(); });
 }
 
-//TODO: close event for thread
 NewPhoto::~NewPhoto()
 {
+	//Close thread
+	capThread->StopThread();
+	capThread->wait();
+	delete capThread;
+	if (ptz != nullptr)
+	{
+		delete ptz;
+	}
+	if (cameraControl != nullptr)
+	{
+		delete cameraControl;
+	}
 }
 
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
@@ -43,6 +69,7 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 }
 void NewPhoto::BackButtonClicked()
 {
+	//Close window
 	this->close();
 }
 void NewPhoto::PBSnapshotClicked(int faceID)

@@ -13,6 +13,7 @@
 #include "onvifclientmedia.hpp"
 #include "onvifclientdevice.hpp"
 #include "CapturingFrame.h"
+#include "CameraControl.h"
 
 class NewPhoto : public QDialog
 {
@@ -46,6 +47,7 @@ private:
 	OnvifClientPTZ *ptz;
 	CapturingFrame *capThread;
 	cv::Mat matImg;
+	CameraControl* cameraControl;
 	void FillCBWithCamerasToCB();
 	void CurrentIndexChanged(std::string passHash);
 };

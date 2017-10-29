@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraControl.cpp" />
     <ClCompile Include="CameraEdition.cpp" />
     <ClCompile Include="CameraPreview.cpp" />
     <ClCompile Include="CapturingFrame.cpp" />
@@ -361,6 +362,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -DQT_UITOOLS_LIB -DQT_SQL_LIB -DWITH_OPENSSL -DWITH_DOM -DWITH_PURE_VIRTUAL -DWITH_NONAMESPACES "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtUiTools" "-I$(QTDIR)\include\QtSql" "-I.\openssl-win64\include" "-I.\onvifgen" "-I.\gsoap\runtime" "-I.\ONVIF\include" "-I.\ONVIF"</Command>
     </CustomBuild>
+    <ClInclude Include="CameraControl.h" />
     <ClInclude Include="GeneratedFiles\ui_NewPhoto.h" />
     <ClInclude Include="gsoap\runtime\duration.h" />
     <ClInclude Include="gsoap\runtime\smdevp.h" />

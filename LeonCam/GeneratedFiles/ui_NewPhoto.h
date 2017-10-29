@@ -170,9 +170,6 @@ public:
     void retranslateUi(QDialog *NewPhoto)
     {
         NewPhoto->setWindowTitle(QApplication::translate("NewPhoto", "LeonCam", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        NewPhoto->setToolTip(QApplication::translate("NewPhoto", "<html><head/><body><p>Go to the folder</p></body></html>", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
         LPreviewScreen->setText(QApplication::translate("NewPhoto", "Preview", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBDown->setToolTip(QApplication::translate("NewPhoto", "Move the camera down", Q_NULLPTR));

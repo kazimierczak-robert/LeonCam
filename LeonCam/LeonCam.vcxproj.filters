@@ -288,6 +288,9 @@
     <ClCompile Include="CapturingFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CameraControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -525,6 +528,9 @@
     </ClInclude>
     <ClInclude Include="onvifgen\soapSubscriptionManagerBindingService.h">
       <Filter>onvifgen</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraControl.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
