@@ -1,6 +1,7 @@
 #pragma once
 #include "onvifclientptz.hpp"
-#define MAXCONNECTIONTRIES 5
+
+#define MAXCONNECTIONTRIES 10
 
 class CameraControl
 {

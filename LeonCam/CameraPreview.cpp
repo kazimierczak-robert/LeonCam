@@ -1,12 +1,11 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, int camID, std::string passHash)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, OnvifClientDevice *onvifDevice, int camID, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->buttonIsEnabledFromParent = buttonIsEnabledFromParent;
 	this->buttonRecognationFromParent = buttonRecognationFromParent;
-	this->numberOfEnabledCameras = numberOfEnabledCameras;
 	this->onvifDevice = onvifDevice;
 	this->camID = camID;
 	this->passHash = passHash;
@@ -15,6 +14,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	this->capThread = new CapturingFrame(this);
 	ptz = nullptr;
+	ctrl = nullptr;
 
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
@@ -23,17 +23,17 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBEdit, &QPushButton::clicked, this, [this, camID] {emit openCameraEdit(camID); });
 
-	connect(ui.PBLeft, &QPushButton::pressed, this, [this] {MoveCamera(-0.2, 0.0); });
-	connect(ui.PBRight, &QPushButton::pressed, this, [this] {MoveCamera(0.2, 0.0); });
-	connect(ui.PBUp, &QPushButton::pressed, this, [this] {MoveCamera(0.0, 0.2); });
-	connect(ui.PBDown, &QPushButton::pressed, this, [this] {MoveCamera(0.0, -0.2); });
+	connect(ui.PBLeft, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(-0.2, 0.0); });
+	connect(ui.PBRight, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(0.2, 0.0); });
+	connect(ui.PBUp, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(0.0, 0.2); });
+	connect(ui.PBDown, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(0.0, -0.2); });
 
-	connect(ui.PBLeft, SIGNAL(released()), this, SLOT(StopCamera()));
-	connect(ui.PBRight, SIGNAL(released()), this, SLOT(StopCamera()));
-	connect(ui.PBUp, SIGNAL(released()), this, SLOT(StopCamera()));
-	connect(ui.PBDown, SIGNAL(released()), this, SLOT(StopCamera()));
+	connect(ui.PBLeft, &QPushButton::released, this, [this] {ctrl->StopCamera(); });
+	connect(ui.PBRight, &QPushButton::released, this, [this] {ctrl->StopCamera(); });
+	connect(ui.PBUp, &QPushButton::released, this, [this] {ctrl->StopCamera(); });
+	connect(ui.PBDown, &QPushButton::released, this, [this] {ctrl->StopCamera(); });
 
-	connect(ui.PBHome, SIGNAL(clicked()), this, SLOT(GoHomeCamera()));
+	connect(ui.PBHome, &QPushButton::clicked, this, [this] {ctrl->GoHomeCamera(); });
 
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
@@ -44,26 +44,28 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	_tptz__GetPresetsResponse *res = new _tptz__GetPresetsResponse();
 	ptz->GetPresets(*res, profileToken);*/
 
+	ui.PBCameraOnOff->setText(buttonIsEnabledFromParent->text());
+	ui.PBCameraOnOff->setStyleSheet(buttonIsEnabledFromParent->styleSheet());
+
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
-		StartShowingPreview();
+		int counter = 0;
+		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+		{
+			counter += 1;
+		}
+		if (counter == MAXCONNECTIONTRIES)
+		{
+			TurnOnOffCamera();
+		}
 	}
 	else
 	{
 		StopShowingPreview();
 	}
 
-	if (buttonRecognationFromParent->text() == "On")
-	{
-		ui.PBRecognize->setText("On");
-		ui.PBRecognize->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-	}
-	else
-	{
-		ui.PBRecognize->setText("Off");
-		ui.PBRecognize->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
-	}
-
+	ui.PBRecognize->setText(buttonRecognationFromParent->text());
+	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
 }
 
 CameraPreview::~CameraPreview()
@@ -73,30 +75,36 @@ CameraPreview::~CameraPreview()
 	{
 		delete ptz;
 	}
+	if (ctrl != nullptr)
+	{
+		delete ctrl;
+	}
 }
 
 bool CameraPreview::StartShowingPreview()
 {
 	if (onvifDevice->GetCapabilities() == 0)
 	{
-		OnvifClientMedia media(*onvifDevice);
-		_trt__GetProfilesResponse profiles;
-		media.GetProfiles(profiles);
+		OnvifClientMedia *media = new OnvifClientMedia(*onvifDevice);
+		_trt__GetProfilesResponse *profiles = new _trt__GetProfilesResponse();
+		media->GetProfiles(*profiles);
 
-		if (profiles.Profiles.size() > 0)
+		if (profiles->Profiles.size() > 0)
 		{
-			this->profileToken = profiles.Profiles[0]->token;
-			_trt__GetStreamUriResponse link;
-			media.GetStreamUrl(this->profileToken, link);
+			this->profileToken = profiles->Profiles[0]->token;
+			_trt__GetStreamUriResponse *link = new _trt__GetStreamUriResponse();
+			media->GetStreamUrl(this->profileToken, *link);
 
-			if (&link.MediaUri != NULL)
+			if (link->MediaUri != NULL)
 			{
 				this->ptz = new OnvifClientPTZ(*onvifDevice);
+
+				ctrl = new CameraControl(ptz, profileToken);
 
 				std::string login = "";
 				std::string pass = "";
 				onvifDevice->GetUserPasswd(login, pass);
-				std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, login + ":" + pass + "@");
+				std::string streamURI = link->MediaUri->Uri.insert(link->MediaUri->Uri.find("//") + 2, login + ":" + pass + "@");
 
 				capThread->SetStreamURI(streamURI);
 				capThread->start();
@@ -109,9 +117,16 @@ bool CameraPreview::StartShowingPreview()
 				ui.PBRight->setEnabled(true);
 				ui.PBHome->setEnabled(true);
 				ui.PBPatrol->setEnabled(true);
+
+				delete media;
+				delete profiles;
+				delete link;
 				return true;
 			}
+			delete link;
 		}
+		delete media;
+		delete profiles;
 	}
 	return false;
 }
@@ -127,7 +142,6 @@ void CameraPreview::StopShowingPreview()
 	ui.PBPatrol->setEnabled(false);
 }
 
-
 void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
 {
 	ui.LPreviewScreen->setPixmap(pixmap);
@@ -138,22 +152,30 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 	ui.LCameraDetails->setText(cameraDetails);
 	if (ui.PBCameraOnOff->text()=="On")
 	{
+		capThread->StopThread();
+		capThread->wait();
 		StopShowingPreview();
-		QSqlQuery query;
-		query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-		query.bindValue(0, camID);
-		bool result = query.exec() == true ? true : false;
-		if (result == true)
-		{
-			query.next();
-			string url = "http://" + query.value(1).toString().toStdString() + "/onvif/device_service";
-			string user = query.value(2).toString().toStdString();
-			string pass = Utilities::GetDecrypted(passHash, query.value(3).toString().toStdString());
+	}
 
-			onvifDevice = new OnvifClientDevice(url, user, pass);
-		}
+	QSqlQuery *query = new QSqlQuery();
+	query->prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+	query->bindValue(0, camID);
+	bool result = query->exec() == true ? true : false;
+	if (result == true)
+	{
+		query->next();
+		string url = "http://" + query->value(0).toString().toStdString() + "/onvif/device_service";
+		string user = query->value(1).toString().toStdString();
+		string pass = Utilities::GetDecrypted(passHash, query->value(2).toString().toStdString());
+
+		onvifDevice = new OnvifClientDevice(url, user, pass);
+	}
+
+	if (ui.PBCameraOnOff->text() == "On")
+	{
 		StartShowingPreview();
 	}
+	delete query;
 }
 
 void CameraPreview::BackButtonClicked()
@@ -173,15 +195,16 @@ void CameraPreview::closeEvent(QCloseEvent *event)
 
 void CameraPreview::TurnOnOffCamera()
 {
-	int number = numberOfEnabledCameras->text().split(" ").last().toInt();
-
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
-		if (StartShowingPreview())
+		int counter = 0;
+		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
 		{
-			buttonIsEnabledFromParent->setText("On");
-			buttonIsEnabledFromParent->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-			number += 1;
+			counter += 1;
+		}
+		if (counter < MAXCONNECTIONTRIES)
+		{
+			buttonIsEnabledFromParent->click();
 		}
 	}
 	else
@@ -190,93 +213,14 @@ void CameraPreview::TurnOnOffCamera()
 		capThread->wait();
 
 		StopShowingPreview();
-		buttonIsEnabledFromParent->setText("Off");
-		buttonIsEnabledFromParent->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
-		number -= 1;
-
+		buttonIsEnabledFromParent->click();
 		ui.LPreviewScreen->clear();
 	}
-
-	numberOfEnabledCameras->setText("Number of enabled cameras: " + QVariant(number).toString());
 }
 
 void CameraPreview::TurnOnOffRecognizeMode()
 {
-	if (buttonRecognationFromParent->text() == "Off")
-	{
-		buttonRecognationFromParent->setText("On");
-		buttonRecognationFromParent->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-		ui.PBRecognize->setText("On");
-		ui.PBRecognize->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-	}
-	else
-	{
-		buttonRecognationFromParent->setText("Off");
-		buttonRecognationFromParent->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
-		ui.PBRecognize->setText("Off");
-		ui.PBRecognize->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
-	}
-}
-void CameraPreview::MoveCamera(float panSpeed, float tiltSpeed)
-{
-	_tptz__ContinuousMoveResponse *res = new _tptz__ContinuousMoveResponse();
-	LONG64 timeout = 1;
-
-	tt__PTZSpeed *ptzSpeed = new tt__PTZSpeed();
-	ptzSpeed->PanTilt = new tt__Vector2D();
-	ptzSpeed->PanTilt->x = panSpeed;
-	ptzSpeed->PanTilt->y = tiltSpeed;
-
-	ptzSpeed->Zoom = new tt__Vector1D();
-	ptzSpeed->Zoom->x = 0.0;
-
-	for (int i = 0; i < MAXCONNECTIONTRIES; i++)
-	{
-		ptz->ContinuousMove(*res, *ptzSpeed, timeout, profileToken);
-		if (res->soap != nullptr)
-		{
-			if (res->soap->status == 200)
-			{
-				break;
-			}
-		}
-	}
-
-	delete ptzSpeed->Zoom;
-	delete ptzSpeed;
-	delete res;
-}
-void CameraPreview::StopCamera()
-{
-	_tptz__StopResponse *res = new _tptz__StopResponse();
-	for (int i = 0; i < MAXCONNECTIONTRIES; i++)
-	{
-		ptz->Stop(*res, 1, 1, profileToken);
-		if (res->soap != nullptr)
-		{
-			if (res->soap->status == 200)
-			{
-				break;
-			}
-		}
-	}
-
-	delete res;
-}
-void CameraPreview::GoHomeCamera()
-{
-	_tptz__GotoHomePositionResponse *res = new _tptz__GotoHomePositionResponse();
-	for (int i = 0; i < MAXCONNECTIONTRIES; i++)
-	{
-		ptz->GoToHomePosition(*res, profileToken);
-		if (res->soap != nullptr)
-		{
-			if (res->soap->status == 200)
-			{
-				break;
-			}
-		}
-	}
-
-	delete res;
+	buttonRecognationFromParent->click();
+	ui.PBRecognize->setText(buttonRecognationFromParent->text());
+	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
 }
