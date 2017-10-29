@@ -47,9 +47,10 @@ private:
 	QString username = "";
 	std::vector<std::vector<QGridLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
+	std::map<int, std::string> alertDeleteSettingsToCB;
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);
-	void RecognationCamera(QPushButton* button);
+	void RecognitionCamera(QPushButton* button);
 	void EditCamera(int CameraID, QLabel *label);
 	void RemoveCamera(QGridLayout* layout);
 	void AddCameraFromDB(int CameraID);
@@ -61,6 +62,9 @@ private:
 	void AdjustGreenReportsTW();
 	void AdjustRedReportsTW();
 	void FillFacesBaseTW();
+	void GetAlertDeleteSettings();
+	void FillCBSetsWithAlertDelSets();
 	void FillReportsTW();
 	void AddRowToFB(int ID, QString name, QString surname);
+	void CurrentIndexChanged();
 };
