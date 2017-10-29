@@ -7,6 +7,8 @@
 #include "onvifclientdevice.hpp"
 #include <QCloseEvent>
 #include "CapturingFrame.h"
+#include "qsqlquery.h"
+#include "Utilities.h"
 
 #define MAXCONNECTIONTRIES 5
 
@@ -15,7 +17,7 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QLabel *numberOfEnabledCameras=nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1);
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QLabel *numberOfEnabledCameras=nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, std::string passHash = "");
 	~CameraPreview();
 signals:
 	void openCameraEdit(int camID);
@@ -38,6 +40,8 @@ private:
 	string profileToken;
 	OnvifClientDevice *onvifDevice;
 	CapturingFrame *capThread;
+	int camID;
+	std::string passHash;
 	bool StartShowingPreview();
 	void StopShowingPreview();
 	void closeEvent(QCloseEvent *event);

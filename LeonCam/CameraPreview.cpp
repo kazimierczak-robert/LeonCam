@@ -1,6 +1,6 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, int camID)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QLabel *numberOfEnabledCameras, OnvifClientDevice *onvifDevice, int camID, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -8,6 +8,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	this->buttonRecognationFromParent = buttonRecognationFromParent;
 	this->numberOfEnabledCameras = numberOfEnabledCameras;
 	this->onvifDevice = onvifDevice;
+	this->camID = camID;
+	this->passHash = passHash;
 
 	ui.LCameraDetails->setText(cameraDetails);
 
@@ -134,7 +136,24 @@ void CameraPreview::UpdatePixmap(const QPixmap& pixmap)
 void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 {
 	ui.LCameraDetails->setText(cameraDetails);
-	//TODO zamykaæ i uruchamiaæ w¹tek je¿eli siê zmieni³y dane 
+	if (ui.PBCameraOnOff->text()=="On")
+	{
+		StopShowingPreview();
+		QSqlQuery query;
+		query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+		query.bindValue(0, camID);
+		bool result = query.exec() == true ? true : false;
+		if (result == true)
+		{
+			query.next();
+			string url = "http://" + query.value(1).toString().toStdString() + "/onvif/device_service";
+			string user = query.value(2).toString().toStdString();
+			string pass = Utilities::GetDecrypted(passHash, query.value(3).toString().toStdString());
+
+			onvifDevice = new OnvifClientDevice(url, user, pass);
+		}
+		StartShowingPreview();
+	}
 }
 
 void CameraPreview::BackButtonClicked()
