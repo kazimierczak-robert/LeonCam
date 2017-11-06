@@ -37,7 +37,7 @@ void DiscoveryLookupBindingProxy::DiscoveryLookupBindingProxy_init(soap_mode imo
 	{"ds", "http://www.w3.org/2000/09/xmldsig#", NULL, NULL},
 	{"wsse", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd", NULL},
 	{"wsa5", "http://www.w3.org/2005/08/addressing", "http://schemas.xmlsoap.org/ws/2004/08/addressing", NULL},
-	{"ns1", "http://schemas.xmlsoap.org/ws/2005/04/discovery", NULL, NULL},
+	{"wsdd", "http://schemas.xmlsoap.org/ws/2005/04/discovery", NULL, NULL},
 	{"xmime", "http://tempuri.org/xmime.xsd", NULL, NULL},
 	{"xop", "http://www.w3.org/2004/08/xop/include", NULL, NULL},
 	{"tt", "http://www.onvif.org/ver10/schema", NULL, NULL},
@@ -173,18 +173,27 @@ int DiscoveryLookupBindingProxy::Probe(ns1__ProbeType *tdn__Probe, ns1__ProbeMat
 	if (!tdn__ProbeResponse)
 		return soap_closesock(soap);
 	tdn__ProbeResponse->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tdn__ProbeResponse->soap_get(soap, "tdn:ProbeResponse", "ns1:ProbeMatchesType");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
+	while (!soap->error)
+	{
+		if (soap_begin_recv(soap)
+			|| soap_envelope_begin_in(soap)
+			|| soap_recv_header(soap)
+			|| soap_body_begin_in(soap))
+		{
+			if (tdn__ProbeResponse->ProbeMatch.size() > 0)
+			{
+				soap->error = SOAP_OK;
+			}
+			return soap_closesock(soap);
+		}
+		tdn__ProbeResponse->soap_get(soap, "wsdd:ProbeMatches", "ns1:ProbeMatchesType");
+		if (soap->error)
+			return soap_recv_fault(soap, 0);
+		if (soap_body_end_in(soap)
+			|| soap_envelope_end_in(soap)
+			|| soap_end_recv(soap))
+			return soap_closesock(soap);
+	}
 	return soap_closesock(soap);
 }
 /* End of client proxy code */

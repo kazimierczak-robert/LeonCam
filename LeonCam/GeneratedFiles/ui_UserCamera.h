@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGroupBox>
@@ -40,7 +39,6 @@ public:
     QLineEdit *LEPassword;
     QPushButton *PBAdd;
     QLabel *LTip;
-    QCheckBox *CBAssign;
     QLabel *LTipLoginPass;
 
     void setupUi(QDialog *UserCamera)
@@ -67,7 +65,7 @@ public:
 "background-color: rgb(46, 147, 222);"));
         CBAvailableCameras = new QComboBox(UserCamera);
         CBAvailableCameras->setObjectName(QStringLiteral("CBAvailableCameras"));
-        CBAvailableCameras->setGeometry(QRect(250, 217, 231, 25));
+        CBAvailableCameras->setGeometry(QRect(250, 217, 271, 25));
         LAvailableCameras = new QLabel(UserCamera);
         LAvailableCameras->setObjectName(QStringLiteral("LAvailableCameras"));
         LAvailableCameras->setGeometry(QRect(250, 197, 281, 16));
@@ -130,21 +128,12 @@ public:
         LTip->setGeometry(QRect(530, 290, 31, 31));
         LTip->setStyleSheet(QLatin1String("#LTip{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTip:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
-        CBAssign = new QCheckBox(UserCamera);
-        CBAssign->setObjectName(QStringLiteral("CBAssign"));
-        CBAssign->setGeometry(QRect(490, 220, 61, 25));
-        CBAssign->setStyleSheet(QLatin1String("#CBAssign{color: rgb(35, 167, 255);}\n"
-"#CBAssign:hover\n"
-"{\n"
-"	color: rgb(89, 178, 255);\n"
-"}"));
         LTipLoginPass = new QLabel(UserCamera);
         LTipLoginPass->setObjectName(QStringLiteral("LTipLoginPass"));
         LTipLoginPass->setGeometry(QRect(530, 380, 31, 31));
         LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
-        QWidget::setTabOrder(CBAvailableCameras, CBAssign);
-        QWidget::setTabOrder(CBAssign, LEDescripton);
+        QWidget::setTabOrder(CBAvailableCameras, LEDescripton);
         QWidget::setTabOrder(LEDescripton, LEIPv4Address);
         QWidget::setTabOrder(LEIPv4Address, LELogin);
         QWidget::setTabOrder(LELogin, LEPassword);
@@ -181,7 +170,6 @@ public:
         LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits and must be unique</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
-        CBAssign->setText(QApplication::translate("UserCamera", "Assign", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTipLoginPass->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Login</span> and <span style=\" font-weight:600;\">Password</span> must be filled.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

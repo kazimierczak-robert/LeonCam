@@ -30,6 +30,7 @@ void CapturingFrame::run()
 			if (vcap.read(img))
 			{
 				cvtColor(img, img, CV_BGR2RGB);
+				cv::resize(img, img, cv::Size(760, 427));
 				emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
 			}
 		}

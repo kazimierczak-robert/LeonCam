@@ -6,6 +6,7 @@
 #include "Utilities.h"
 #include <regex>
 #include <qsqlquery.h>
+#include "soapDiscoveryLookupBindingProxy.h"
 
 class UserCamera : public QDialog
 {
@@ -18,10 +19,9 @@ public:
 private slots:
 	void AddClicked();
 	void BackClicked();
-	void AssignChecked();
 private:
-	void DisableIfAssignChanged(bool flag);
 	Ui::UserCamera ui;
 	DesignBase *designB;
 	int userID;
+	void SearchForCameraIPs();
 };

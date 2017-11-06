@@ -53,29 +53,6 @@ font-weight:600;</string>
     <string>Camera details</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="PBPatrol">
-   <property name="geometry">
-    <rect>
-     <x>420</x>
-     <y>460</y>
-     <width>40</width>
-     <height>40</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>Turn on camera patrol</string>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} 
-QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PBRecognize">
    <property name="geometry">
     <rect>
@@ -127,7 +104,7 @@ QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}
   <widget class="QPushButton" name="PBSnapshot">
    <property name="geometry">
     <rect>
-     <x>570</x>
+     <x>420</x>
      <y>460</y>
      <width>40</width>
      <height>40</height>
@@ -432,6 +409,19 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="Lloading">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>190</y>
+     <width>61</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
@@ -439,7 +429,6 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
   <tabstop>CBPresets</tabstop>
   <tabstop>PBGoToPreset</tabstop>
   <tabstop>PBSavePreset</tabstop>
-  <tabstop>PBPatrol</tabstop>
   <tabstop>PBRecognize</tabstop>
   <tabstop>PBEdit</tabstop>
   <tabstop>PBSnapshot</tabstop>

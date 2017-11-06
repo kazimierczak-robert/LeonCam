@@ -25,7 +25,6 @@ class Ui_CameraPreview
 {
 public:
     QLabel *LCameraDetails;
-    QPushButton *PBPatrol;
     QPushButton *PBRecognize;
     QPushButton *PBEdit;
     QPushButton *PBSnapshot;
@@ -41,6 +40,7 @@ public:
     QPushButton *PBBack;
     QPushButton *PBCameraOnOff;
     QPushButton *PBGoToPreset;
+    QLabel *Lloading;
 
     void setupUi(QDialog *CameraPreview)
     {
@@ -62,12 +62,6 @@ public:
         LCameraDetails->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
-        PBPatrol = new QPushButton(CameraPreview);
-        PBPatrol->setObjectName(QStringLiteral("PBPatrol"));
-        PBPatrol->setGeometry(QRect(420, 460, 40, 40));
-        PBPatrol->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/patrol.png); border: none; margin: 0px; padding: 0px;} \n"
-"QPushButton:hover{background-image: url(:/Resources/Images/patrolHover.png);}"));
-        PBPatrol->setFlat(true);
         PBRecognize = new QPushButton(CameraPreview);
         PBRecognize->setObjectName(QStringLiteral("PBRecognize"));
         PBRecognize->setGeometry(QRect(470, 460, 40, 40));
@@ -84,7 +78,7 @@ public:
         PBEdit->setFlat(true);
         PBSnapshot = new QPushButton(CameraPreview);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
-        PBSnapshot->setGeometry(QRect(570, 460, 40, 40));
+        PBSnapshot->setGeometry(QRect(420, 460, 40, 40));
         PBSnapshot->setStyleSheet(QLatin1String("#PBSnapshot{\n"
 "background-image: url(:/Resources/Images/snapshot.png);\n"
 "border: none;\n"
@@ -197,11 +191,13 @@ public:
         PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
         PBGoToPreset->setFlat(true);
+        Lloading = new QLabel(CameraPreview);
+        Lloading->setObjectName(QStringLiteral("Lloading"));
+        Lloading->setGeometry(QRect(370, 190, 61, 61));
         QWidget::setTabOrder(PBCameraOnOff, CBPresets);
         QWidget::setTabOrder(CBPresets, PBGoToPreset);
         QWidget::setTabOrder(PBGoToPreset, PBSavePreset);
-        QWidget::setTabOrder(PBSavePreset, PBPatrol);
-        QWidget::setTabOrder(PBPatrol, PBRecognize);
+        QWidget::setTabOrder(PBSavePreset, PBRecognize);
         QWidget::setTabOrder(PBRecognize, PBEdit);
         QWidget::setTabOrder(PBEdit, PBSnapshot);
         QWidget::setTabOrder(PBSnapshot, PBHome);
@@ -220,10 +216,6 @@ public:
     {
         CameraPreview->setWindowTitle(QApplication::translate("CameraPreview", "LeonCam", Q_NULLPTR));
         LCameraDetails->setText(QApplication::translate("CameraPreview", "Camera details", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        PBPatrol->setToolTip(QApplication::translate("CameraPreview", "Turn on camera patrol", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        PBPatrol->setText(QString());
 #ifndef QT_NO_TOOLTIP
         PBRecognize->setToolTip(QApplication::translate("CameraPreview", "Recognation mode: On", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -268,6 +260,7 @@ public:
         PBGoToPreset->setToolTip(QApplication::translate("CameraPreview", "Go to selected preset", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBGoToPreset->setText(QString());
+        Lloading->setText(QString());
     } // retranslateUi
 
 };

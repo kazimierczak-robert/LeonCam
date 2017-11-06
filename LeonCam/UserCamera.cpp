@@ -12,8 +12,8 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	//Signals and slots
 	connect(ui.PBAdd, SIGNAL(clicked()), this, SLOT(AddClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
-	connect(ui.CBAssign, SIGNAL(stateChanged(int)), this, SLOT(AssignChecked()));
 	this->userID = userID;
+	SearchForCameraIPs();
 }
 
 UserCamera::~UserCamera()
@@ -21,26 +21,56 @@ UserCamera::~UserCamera()
 	
 }
 
-void UserCamera::DisableIfAssignChanged(bool flag)
+std::string generateUuid()
 {
-	ui.LEDescripton->setDisabled(flag);
-	ui.LEIPv4Address->setDisabled(flag);
+	const int kGUIDSize = 39;
+
+	GUID guid;
+	HRESULT guid_result = CoCreateGuid(&guid);
+	if (!SUCCEEDED(guid_result))
+		return std::string();
+
+	wchar_t buffer[48] = { 0 };
+	::StringFromGUID2(guid, buffer, 48);
+	std::wstring guid_string = buffer;
+
+	guid_string = guid_string.substr(1, guid_string.length() - 2);
+
+	return std::string(guid_string.begin(), guid_string.end());
 }
-void UserCamera::AssignChecked()
+void UserCamera::SearchForCameraIPs()
 {
-	if (ui.CBAssign->isChecked())
+	DiscoveryLookupBindingProxy proxy;
+	std::string tmpuuid = "uuid:" + generateUuid();
+	proxy.soap_endpoint = "soap.udp://239.255.255.250:3702/";
+	proxy.header = new SOAP_ENV__Header();
+	proxy.header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
+	proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
+	//proxy.header->wsa__ReplyTo = new wsa__EndpointReferenceType();
+	//proxy.header->wsa__ReplyTo->Address = (char*)"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous";
+	proxy.header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
+	
+	//proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
+	//proxy.soap_header((char*)tmpuuid.c_str(), NULL, NULL, NULL, NULL, (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery", (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	proxy.recv_timeout = 2;
+	ns1__ProbeType probe;
+	//probe.Scopes = new ns1__ScopesType();
+	probe.Types = new std::string("tdn:NetworkVideoTransmitter");
+	ns1__ProbeMatchesType probeMatches;
+
+	//while (proxy.Probe(&probe, &probeMatches) != SOAP_OK);
+
+	if (proxy.Probe(&probe, &probeMatches) != SOAP_OK)
 	{
-		//TODO: write values from combobox (it must be map)
-		DisableIfAssignChanged(true);
-		ui.LTip->setToolTip("");
+		int y = 0;
 	}
 	else
 	{
-		DisableIfAssignChanged(false);
-		ui.LTip->setToolTip("<html><head/><body><p><span style=\"font-weight:600;\">Model</span> and <span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits.</p></body></html>");
+		int x = 0;
 	}
 }
-std::vector<QString>*  UserCamera::GetValuesFromControls()
+
+std::vector<QString>* UserCamera::GetValuesFromControls()
 {
 	std::vector<QString>* controlsValues = new std::vector<QString>();
 	controlsValues->push_back(ui.LEDescripton->text());

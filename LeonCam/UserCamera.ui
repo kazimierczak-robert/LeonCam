@@ -71,7 +71,7 @@ background-color: rgb(46, 147, 222);</string>
     <rect>
      <x>250</x>
      <y>217</y>
-     <width>231</width>
+     <width>271</width>
      <height>25</height>
     </rect>
    </property>
@@ -278,26 +278,6 @@ padding: 0px;*/</string>
     <string/>
    </property>
   </widget>
-  <widget class="QCheckBox" name="CBAssign">
-   <property name="geometry">
-    <rect>
-     <x>490</x>
-     <y>220</y>
-     <width>61</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">#CBAssign{color: rgb(35, 167, 255);}
-#CBAssign:hover
-{
-	color: rgb(89, 178, 255);
-}</string>
-   </property>
-   <property name="text">
-    <string>Assign</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="LTipLoginPass">
    <property name="geometry">
     <rect>
@@ -322,7 +302,6 @@ padding: 0px;*/</string>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>CBAvailableCameras</tabstop>
-  <tabstop>CBAssign</tabstop>
   <tabstop>LEDescripton</tabstop>
   <tabstop>LEIPv4Address</tabstop>
   <tabstop>LELogin</tabstop>

@@ -10,6 +10,7 @@
 #include "qsqlquery.h"
 #include "Utilities.h"
 #include "CameraControl.h"
+#include "DesignBase.h"
 
 class CameraPreview : public QDialog
 {
@@ -29,6 +30,7 @@ public slots:
 	void CloseCameraEdit(const QString& cameraDetails);
 private:
 	Ui::CameraPreview ui;
+	DesignBase *designB;
 	QPushButton *buttonIsEnabledFromParent;
 	QPushButton *buttonRecognationFromParent;
 	OnvifClientPTZ *ptz;

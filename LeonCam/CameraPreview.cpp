@@ -10,6 +10,11 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	this->camID = camID;
 	this->passHash = passHash;
 
+	designB = new DesignBase(this);
+	ui.Lloading->setVisible(false);
+	designB->SetGifInLabel(ui.Lloading);
+	designB->gif->start();
+
 	ui.LCameraDetails->setText(cameraDetails);
 
 	this->capThread = new CapturingFrame(this);
@@ -49,6 +54,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
+		ui.Lloading->setVisible(true);
 		int counter = 0;
 		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
 		{
@@ -58,6 +64,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 		{
 			TurnOnOffCamera();
 		}
+		ui.Lloading->setVisible(false);
 	}
 	else
 	{
@@ -116,7 +123,6 @@ bool CameraPreview::StartShowingPreview()
 				ui.PBLeft->setEnabled(true);
 				ui.PBRight->setEnabled(true);
 				ui.PBHome->setEnabled(true);
-				ui.PBPatrol->setEnabled(true);
 
 				delete media;
 				delete profiles;
@@ -139,7 +145,6 @@ void CameraPreview::StopShowingPreview()
 	ui.PBLeft->setEnabled(false);
 	ui.PBRight->setEnabled(false);
 	ui.PBHome->setEnabled(false);
-	ui.PBPatrol->setEnabled(false);
 }
 
 void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
@@ -173,7 +178,13 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 
 	if (ui.PBCameraOnOff->text() == "On")
 	{
-		StartShowingPreview();
+		ui.Lloading->setVisible(true);
+		int counter = 0;
+		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+		{
+			counter += 1;
+		}
+		ui.Lloading->setVisible(false);
 	}
 	delete query;
 }
@@ -197,6 +208,7 @@ void CameraPreview::TurnOnOffCamera()
 {
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
+		ui.Lloading->setVisible(true);
 		int counter = 0;
 		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
 		{
@@ -206,6 +218,7 @@ void CameraPreview::TurnOnOffCamera()
 		{
 			buttonIsEnabledFromParent->click();
 		}
+		ui.Lloading->setVisible(false);
 	}
 	else
 	{
