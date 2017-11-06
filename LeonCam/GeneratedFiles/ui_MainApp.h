@@ -49,9 +49,9 @@ public:
     QTableWidget *TWGreenReport;
     QPushButton *PBGreenAlert;
     QPushButton *PBRedAlert;
-    QLabel *LHelp_2;
+    QLabel *LChooseAlertDelSet;
     QTableWidget *TWRedReport;
-    QComboBox *CBSetting;
+    QComboBox *CBSettings;
     QWidget *TSettings;
     QPushButton *PBLogout;
 
@@ -337,11 +337,11 @@ public:
 "margin: 0px;\n"
 "padding: 0px;\n"
 "background-color:none*/"));
-        LHelp_2 = new QLabel(TReports);
-        LHelp_2->setObjectName(QStringLiteral("LHelp_2"));
-        LHelp_2->setGeometry(QRect(550, 30, 161, 31));
-        LHelp_2->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color: rgb(46, 147, 222);"));
+        LChooseAlertDelSet = new QLabel(TReports);
+        LChooseAlertDelSet->setObjectName(QStringLiteral("LChooseAlertDelSet"));
+        LChooseAlertDelSet->setGeometry(QRect(550, 30, 161, 30));
+        LChooseAlertDelSet->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59);"));
         TWRedReport = new QTableWidget(TReports);
         if (TWRedReport->columnCount() < 4)
             TWRedReport->setColumnCount(4);
@@ -380,10 +380,10 @@ public:
         TWRedReport->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         TWRedReport->verticalHeader()->setVisible(false);
         TWRedReport->verticalHeader()->setHighlightSections(false);
-        CBSetting = new QComboBox(TReports);
-        CBSetting->setObjectName(QStringLiteral("CBSetting"));
-        CBSetting->setGeometry(QRect(550, 72, 161, 22));
-        CBSetting->setStyleSheet(QStringLiteral("background-color: none;"));
+        CBSettings = new QComboBox(TReports);
+        CBSettings->setObjectName(QStringLiteral("CBSettings"));
+        CBSettings->setGeometry(QRect(550, 72, 161, 22));
+        CBSettings->setStyleSheet(QStringLiteral("background-color: none;"));
         TWMenu->addTab(TReports, QString());
         TSettings = new QWidget();
         TSettings->setObjectName(QStringLiteral("TSettings"));
@@ -468,7 +468,7 @@ public:
         ___qtablewidgetitem13->setText(QApplication::translate("MainApp", "Delete alert", Q_NULLPTR));
         PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
         PBRedAlert->setText(QApplication::translate("MainApp", "Manage and view Red Alerts", Q_NULLPTR));
-        LHelp_2->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert delete settings</p></body></html>", Q_NULLPTR));
+        LChooseAlertDelSet->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert delete settings</p></body></html>", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem14 = TWRedReport->horizontalHeaderItem(0);
         ___qtablewidgetitem14->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem15 = TWRedReport->horizontalHeaderItem(1);

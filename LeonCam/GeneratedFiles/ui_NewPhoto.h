@@ -35,6 +35,7 @@ public:
     QLabel *LHelp;
     QPushButton *PBFolder;
     QPushButton *PBHome;
+    QLabel *LWarning;
 
     void setupUi(QDialog *NewPhoto)
     {
@@ -161,6 +162,11 @@ public:
 "background-image: url(:/Resources/Images/homeHover.png);\n"
 "}"));
         PBHome->setFlat(true);
+        LWarning = new QLabel(NewPhoto);
+        LWarning->setObjectName(QStringLiteral("LWarning"));
+        LWarning->setGeometry(QRect(270, 550, 271, 31));
+        LWarning->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: rgb(255, 77, 61);"));
 
         retranslateUi(NewPhoto);
 
@@ -204,6 +210,7 @@ public:
         PBHome->setToolTip(QApplication::translate("NewPhoto", "Go to home position", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBHome->setText(QString());
+        LWarning->setText(QApplication::translate("NewPhoto", "<html><head/><body><p align=\"center\">No faces has been detected</p></body></html>", Q_NULLPTR));
     } // retranslateUi
 
 };

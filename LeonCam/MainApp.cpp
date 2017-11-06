@@ -53,6 +53,9 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.LESurname, SIGNAL(returnPressed()), this, SLOT(AddPerson()));
 	connect(ui.PBGreenAlert, SIGNAL(clicked()), this, SLOT(ChangeTWReport()));
 	connect(ui.PBRedAlert, SIGNAL(clicked()), this, SLOT(ChangeTWReport()));
+	//Reports
+	connect(ui.CBSettings, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+		[=]() {CurrentIndexChanged(); });
 
 	query.prepare("SELECT CameraID FROM Cameras");
 	result = query.exec() == true ? true : false;
@@ -67,6 +70,10 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 
 MainApp::~MainApp()
 {
+	if (imgProc != nullptr)
+	{
+		delete imgProc;
+	}
 }
 
 void MainApp::AddCamera()
@@ -115,7 +122,6 @@ void MainApp::AddCamera()
 		}	
 	}
 }
-
 void MainApp::AddCameraFromDB(int CameraID)
 {
 	QSqlQuery query;
@@ -166,7 +172,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 		btn->setToolTip("Recognation mode: On");
-		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognationCamera(btn); });
+		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognitionCamera(btn); });
 		layout->addWidget(btn, 2, 2);
 
 		btn = new QPushButton();
@@ -211,8 +217,6 @@ void MainApp::AddCameraFromDB(int CameraID)
 		//TODO
 	}
 }
-
-
 void MainApp::addTab()
 {
 	QGridLayout *newLayout = new QGridLayout();
@@ -281,7 +285,7 @@ void MainApp::TakePictureCamera(QPushButton* button)
 {
 	
 }
-void MainApp::RecognationCamera(QPushButton* button)
+void MainApp::RecognitionCamera(QPushButton* button)
 {
 	if (button->text() == "Off")
 	{
@@ -330,7 +334,6 @@ void MainApp::EditCamera(int CameraID, QLabel *label)
 	}
 	delete cameraEdition;
 }
-
 void MainApp::OpenCameraEdit(int camID)
 {
 	for (std::vector<QGridLayout*> *vec : *vectorCameraLayoutsPages)
@@ -346,7 +349,6 @@ void MainApp::OpenCameraEdit(int camID)
 		}
 	}
 }
-
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
@@ -483,8 +485,8 @@ void MainApp::LogOut()
 {
 	//Get proper user from DB
 	QSqlQuery query;
-	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
-	query.bindValue(0, username);
+	query.prepare("SELECT COUNT (*) FROM Users WHERE UserID = ?");
+	query.bindValue(0, loggedID);
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
@@ -495,9 +497,9 @@ void MainApp::LogOut()
 			//set LastLogoutDate
 			query.clear();
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
-			query.prepare("UPDATE Users SET LastLogoutDate = ?  WHERE Username = ?");
+			query.prepare("UPDATE Users SET LastLogoutDate = ?  WHERE UserID = ?");
 			query.bindValue(0, Utilities::GetCurrentDateTime());
-			query.bindValue(1, username);
+			query.bindValue(1, loggedID);
 			bool result = query.exec() == true ? true : false;
 			query.exec("COMMIT");
 			if (result == false)
@@ -681,7 +683,6 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 void MainApp::FillFacesBaseTW()
 {
 	AdjustFaceBaseTW();
-	//TODO: Get data from DB
 	//http://doc.qt.io/qt-5/qhboxlayout.html
 	//http://www.qtcentre.org/threads/3416-Center-a-widget-in-a-cell-on-a-QTableWidget
 	//https://stackoverflow.com/a/14715980
@@ -697,11 +698,34 @@ void MainApp::FillFacesBaseTW()
 		}
 	}
 }
+void MainApp::GetAlertDeleteSettings()
+{
+	QSqlQuery query;
+	query.prepare("SELECT * FROM AlertsDeleteSettings");
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		while (query.next())
+		{
+			alertDeleteSettingsToCB.insert(std::pair<int, std::string>(query.value(0).toInt(), query.value(1).toString().toStdString()));
+		}
+	}
+}
+void MainApp::FillCBSetsWithAlertDelSets()
+{
+	for (std::pair<int, std::string> elem : alertDeleteSettingsToCB)
+	{
+		ui.CBSettings->addItem(QString::fromStdString(elem.second), elem.first);
+	}
+}
 void MainApp::FillReportsTW()
 {
 	AdjustGreenReportsTW();
 	AdjustRedReportsTW();
 	ui.TWRedReport->setVisible(false);
+	GetAlertDeleteSettings();
+	FillCBSetsWithAlertDelSets();
+
 }
 void MainApp::UpdateDBAfterCellChanged(int row, int column)
 {
@@ -741,10 +765,18 @@ void MainApp::TakePicture(int faceID)
 		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
 		return;
 	}
-
-	NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, this);
-	newPhoto->exec();
-	delete newPhoto;
+	//imgProc = new ImgProc();
+	//if (imgProc->CheckIfFaceCascadeLoaded() == false)
+	//{
+	//	Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);
+	//	delete imgProc;
+	//}
+	//else 
+	//{
+		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, /*imgProc,*/ this);
+		newPhoto->exec();
+		delete newPhoto;
+	//}
 }
 void MainApp::LESearchFBChanged()
 {
@@ -938,11 +970,58 @@ void MainApp::ChangeTWReport()
 		greenOrRedAlert = 1;
 		ui.TWGreenReport->setVisible(false);
 		ui.TWRedReport->setVisible(true);
+		ui.LChooseAlertDelSet->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
 	}
 	else
 	{
 		greenOrRedAlert = 0;
 		ui.TWGreenReport->setVisible(true);
 		ui.TWRedReport->setVisible(false);
+		ui.LChooseAlertDelSet->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color:rgb(36, 118, 59);}");
+	}
+}
+void MainApp::CurrentIndexChanged()
+{
+	//Get selected ID
+	int settingID = ui.CBSettings->currentData().toInt();
+	//Get User from DB with ID <loggedID>
+	QSqlQuery query;
+	query.prepare("SELECT COUNT(*) FROM Users WHERE UserID=?");
+	query.bindValue(0, loggedID);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		query.next();
+		int counter = query.value(0).toInt();
+		if (counter == 1) //Somebody delete account...
+		{
+			//Update <loggedID> user settings
+			query.clear();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			//Check if green or Red
+			if (greenOrRedAlert == 0)//0 - green
+			{
+				query.prepare("UPDATE Users SET GreenAlertDeleteSettingID = ?  WHERE UserID = ?");
+			}
+			else //1 - red
+			{
+				query.prepare("UPDATE Users SET RedAlertDeleteSettingID = ?  WHERE UserID = ?");
+			}			
+
+			query.bindValue(0, settingID);
+			query.bindValue(1, loggedID);
+			bool result = query.exec() == true ? true : false;
+			query.exec("COMMIT");
+			if (result == false)
+			{
+				Utilities::MBAlarm("Acount error has occured. Please log in again", false);
+				LogOut();
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("Acount error has occured. Please log in again", false);
+			LogOut();
+		}
 	}
 }
