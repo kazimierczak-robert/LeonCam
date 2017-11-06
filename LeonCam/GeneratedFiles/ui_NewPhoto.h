@@ -54,7 +54,7 @@ public:
         LPreviewScreen = new QLabel(NewPhoto);
         LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
         LPreviewScreen->setGeometry(QRect(19, 107, 760, 427));
-        LPreviewScreen->setFrameShape(QFrame::Box);
+        LPreviewScreen->setFrameShape(QFrame::StyledPanel);
         LPreviewScreen->setAlignment(Qt::AlignCenter);
         PBDown = new QPushButton(NewPhoto);
         PBDown->setObjectName(QStringLiteral("PBDown"));

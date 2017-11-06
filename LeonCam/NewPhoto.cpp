@@ -1,11 +1,11 @@
 #include "NewPhoto.h"
 
-NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID,/* ImgProc *imgProc,*/ QWidget *parent)
+NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID, ImgProc *imgProc, QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
-	/*this->imgProc = imgProc;*/
-	imgProc = new ImgProc();
-	imgProc->LoadFaceCascade();
+	this->imgProc = imgProc;
+	/*imgProc = new ImgProc();*/
+	/*imgProc->LoadFaceCascade();*/
 	ui.setupUi(this);
 	this->setWindowTitle(name + " " + surname +" (ID: " + (QVariant(faceID)).toString() + ") - LeonCam");
 	capThread = new CapturingFrame(this);
@@ -54,6 +54,10 @@ NewPhoto::~NewPhoto()
 	if (cameraControl != nullptr)
 	{
 		delete cameraControl;
+	}
+	if (imgProc != nullptr)
+	{
+		delete imgProc;
 	}
 }
 

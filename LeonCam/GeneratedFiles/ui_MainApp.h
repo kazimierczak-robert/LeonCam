@@ -415,7 +415,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(2);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 

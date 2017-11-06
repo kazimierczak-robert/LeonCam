@@ -24,7 +24,7 @@ class NewPhoto : public QDialog
 
 public:
 	//ID - photo is saved in the folder named .\\FaceBase\\<ID>
-	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, /*ImgProc *imgProc,*/ QWidget *parent = Q_NULLPTR);
+	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, ImgProc *imgProc, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
 	public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
@@ -47,11 +47,11 @@ private:
 	std::map<int, struct Camera*> cameras;
 	std::map<int, std::string> camerasToCB;
 	string profileToken;
-	OnvifClientPTZ *ptz;
-	CapturingFrame *capThread;
+	OnvifClientPTZ *ptz=nullptr;
+	CapturingFrame *capThread = nullptr;
 	cv::Mat matImg;
-	CameraControl* cameraControl;
-	ImgProc *imgProc;
+	CameraControl *cameraControl = nullptr;
+	ImgProc *imgProc = nullptr;
 	void FillCBWithCamerasToCB();
 	void CurrentIndexChanged(std::string passHash);
 };

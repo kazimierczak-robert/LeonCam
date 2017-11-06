@@ -70,6 +70,24 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 
 MainApp::~MainApp()
 {
+	for each (QGridLayout *layout in *vectorQGridLayouts)
+	{
+		DeleteCameraFromMemory(layout);
+	}
+	if (vectorQGridLayouts->size() != 0)
+	{
+		delete vectorQGridLayouts;
+	}
+
+	for each (std::vector<QGridLayout*> *layoutVector in *vectorCameraLayoutsPages)
+	{
+		delete layoutVector;
+	}
+	if (vectorCameraLayoutsPages->size() != 0)
+	{
+		delete vectorCameraLayoutsPages;
+	}
+
 	if (imgProc != nullptr)
 	{
 		delete imgProc;
@@ -349,6 +367,110 @@ void MainApp::OpenCameraEdit(int camID)
 		}
 	}
 }
+void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
+{
+	int pageIndex = 0;
+	for (const auto& item : *vectorCameraLayoutsPages)
+	{
+		if (std::find(item->begin(), item->end(), layout) != item->end())
+		{
+			int indexOfLayoutInPage = 0;
+			for (indexOfLayoutInPage = 0; indexOfLayoutInPage < item->size(); indexOfLayoutInPage++)
+			{
+				if (item->at(indexOfLayoutInPage) == layout)
+				{
+					break;
+				}
+			}
+
+			if (((QPushButton*)(layout->itemAt(2)->widget()))->text() == "On")
+			{
+				int numberEnabled = ui.LEnabledNumber->text().split(" ").last().toInt();
+				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(numberEnabled - 1).toString());
+			}
+			int number = ui.LTotalNumber->text().split(" ").last().toInt();
+			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(number - 1).toString());
+
+			//Removing all item in layout
+			QLayoutItem * itemLayout;
+			QWidget * widget;
+			while ((itemLayout = layout->takeAt(0)))
+			{
+				if ((widget = itemLayout->widget()) != 0)
+				{
+					widget->hide();
+					delete widget;
+				}
+				else
+				{
+					delete itemLayout;
+				}
+			}
+			delete layout;
+
+			item->erase(std::remove(item->begin(), item->end(), layout), item->end());
+
+			while (pageIndex < vectorCameraLayoutsPages->size())
+			{
+				while (indexOfLayoutInPage < vectorCameraLayoutsPages->at(pageIndex)->size())
+				{
+					QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex)->itemAtPosition((indexOfLayoutInPage + 1) / 3, (indexOfLayoutInPage + 1) % 3);
+					vectorQGridLayouts->at(pageIndex)->removeItem(layoutToMove);
+
+					vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, indexOfLayoutInPage / 3, indexOfLayoutInPage % 3);
+					indexOfLayoutInPage += 1;
+				}
+
+				if ((pageIndex + 1) < vectorCameraLayoutsPages->size())
+				{
+					if (vectorCameraLayoutsPages->at(pageIndex + 1)->size() > 0)
+					{
+						QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex + 1)->itemAtPosition(0, 0);
+						vectorQGridLayouts->at(pageIndex + 1)->removeItem(layoutToMove);
+
+						vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, 1, 2);
+
+						vectorCameraLayoutsPages->at(pageIndex + 1)->erase(vectorCameraLayoutsPages->at(pageIndex + 1)->begin(), vectorCameraLayoutsPages->at(pageIndex + 1)->begin() + 1);
+						vectorCameraLayoutsPages->at(pageIndex)->push_back((QGridLayout *)layoutToMove);
+
+					}
+					indexOfLayoutInPage = 0;
+				}
+				pageIndex += 1;
+			}
+			if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 0 && vectorQGridLayouts->size() > 1)
+			{
+				QGridLayout *qgridlayout = vectorQGridLayouts->at(vectorQGridLayouts->size() - 1);
+				delete qgridlayout;
+				vectorQGridLayouts->pop_back();
+
+				std::vector<QGridLayout*> *vectorqlayout = vectorCameraLayoutsPages->at(vectorQGridLayouts->size());
+				delete vectorqlayout;
+				vectorCameraLayoutsPages->pop_back();
+
+				if (activeCameraPage == vectorQGridLayouts->size())
+				{
+					ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size() - 1);
+					TWCameraPagesChanged(vectorQGridLayouts->size() - 1);
+				}
+
+				ui.TWCameraPages->removeTab(vectorQGridLayouts->size());
+				ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
+
+			}
+			if (vectorQGridLayouts->size() == 1)
+			{
+				ui.TWCameraPages->setTabText(0, "");
+				ui.TWCameraPages->setFocusPolicy(Qt::NoFocus);
+			}
+			break;
+		}
+		else
+		{
+			pageIndex += 1;
+		}
+	}
+}
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
@@ -358,107 +480,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
-		int pageIndex = 0;
-		for (const auto& item : *vectorCameraLayoutsPages)
-		{
-			if (std::find(item->begin(), item->end(), layout) != item->end())
-			{
-				int indexOfLayoutInPage = 0;
-				for (indexOfLayoutInPage = 0; indexOfLayoutInPage < item->size(); indexOfLayoutInPage++)
-				{
-					if (item->at(indexOfLayoutInPage) == layout)
-					{
-						break;
-					}
-				}
-
-				if (((QPushButton*)(layout->itemAt(2)->widget()))->text() == "On")
-				{
-					int numberEnabled = ui.LEnabledNumber->text().split(" ").last().toInt();
-					ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(numberEnabled - 1).toString());
-				}
-				int number = ui.LTotalNumber->text().split(" ").last().toInt();
-				ui.LTotalNumber->setText("Total number of cameras: " + QVariant(number - 1).toString());
-
-				//Removing all item in layout
-				QLayoutItem * itemLayout;
-				QWidget * widget;
-				while ((itemLayout = layout->takeAt(0)))
-				{
-					if ((widget = itemLayout->widget()) != 0)
-					{
-						widget->hide();
-						delete widget;
-					}
-					else
-					{
-						delete itemLayout;
-					}
-				}
-				delete layout;
-
-				item->erase(std::remove(item->begin(), item->end(), layout), item->end());
-
-				while (pageIndex < vectorCameraLayoutsPages->size())
-				{
-					while (indexOfLayoutInPage < vectorCameraLayoutsPages->at(pageIndex)->size())
-					{
-						QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex)->itemAtPosition((indexOfLayoutInPage + 1) / 3, (indexOfLayoutInPage + 1) % 3);
-						vectorQGridLayouts->at(pageIndex)->removeItem(layoutToMove);
-
-						vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, indexOfLayoutInPage / 3, indexOfLayoutInPage % 3);
-						indexOfLayoutInPage += 1;
-					}
-
-					if ((pageIndex + 1) < vectorCameraLayoutsPages->size())
-					{
-						if (vectorCameraLayoutsPages->at(pageIndex + 1)->size() > 0)
-						{
-							QLayoutItem* layoutToMove = vectorQGridLayouts->at(pageIndex + 1)->itemAtPosition(0, 0);
-							vectorQGridLayouts->at(pageIndex + 1)->removeItem(layoutToMove);
-
-							vectorQGridLayouts->at(pageIndex)->addLayout((QGridLayout *)layoutToMove, 1, 2);
-
-							vectorCameraLayoutsPages->at(pageIndex + 1)->erase(vectorCameraLayoutsPages->at(pageIndex + 1)->begin(), vectorCameraLayoutsPages->at(pageIndex + 1)->begin() + 1);
-							vectorCameraLayoutsPages->at(pageIndex)->push_back((QGridLayout *)layoutToMove);
-
-						}
-						indexOfLayoutInPage = 0;
-					}
-					pageIndex += 1;
-				}
-				if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 0 && vectorQGridLayouts->size() > 1)
-				{
-					QGridLayout *qgridlayout = vectorQGridLayouts->at(vectorQGridLayouts->size() - 1);
-					delete qgridlayout;
-					vectorQGridLayouts->pop_back();
-
-					std::vector<QGridLayout*> *vectorqlayout = vectorCameraLayoutsPages->at(vectorQGridLayouts->size());
-					delete vectorqlayout;
-					vectorCameraLayoutsPages->pop_back();
-
-					if (activeCameraPage == vectorQGridLayouts->size())
-					{
-						ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size() - 1);
-						TWCameraPagesChanged(vectorQGridLayouts->size() - 1);
-					}
-
-					ui.TWCameraPages->removeTab(vectorQGridLayouts->size());
-					ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
-
-				}
-				if (vectorQGridLayouts->size() == 1)
-				{
-					ui.TWCameraPages->setTabText(0, "");
-					ui.TWCameraPages->setFocusPolicy(Qt::NoFocus);
-				}
-				break;
-			}
-			else
-			{
-				pageIndex += 1;
-			}
-		}
+		DeleteCameraFromMemory(layout);
 	}
 }
 void MainApp::LESearchChanged()
@@ -483,32 +505,6 @@ void MainApp::TWCameraPagesChanged(int newIndex)
 }
 void MainApp::LogOut()
 {
-	//Get proper user from DB
-	QSqlQuery query;
-	query.prepare("SELECT COUNT (*) FROM Users WHERE UserID = ?");
-	query.bindValue(0, loggedID);
-	bool result = query.exec() == true ? true : false;
-	if (result == true)
-	{
-		query.next();
-		int result = query.value(0).toInt();
-		if (result == 1)
-		{
-			//set LastLogoutDate
-			query.clear();
-			query.exec("BEGIN IMMEDIATE TRANSACTION");
-			query.prepare("UPDATE Users SET LastLogoutDate = ?  WHERE UserID = ?");
-			query.bindValue(0, Utilities::GetCurrentDateTime());
-			query.bindValue(1, loggedID);
-			bool result = query.exec() == true ? true : false;
-			query.exec("COMMIT");
-			if (result == false)
-			{
-				Utilities::MBAlarm("User has not been logged out properly. Please, restart application.", false);
-			}
-		}
-	}
-
 	LogIn *login = new LogIn(nullptr);
 	login->show();
 	this->close();
@@ -543,6 +539,7 @@ void MainApp::closeEvent(QCloseEvent *event)
 	}
 
 	event->accept();
+	delete this;
 }
 //Faces base
 void MainApp::AdjustFaceBaseTW()
@@ -765,18 +762,19 @@ void MainApp::TakePicture(int faceID)
 		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
 		return;
 	}
-	//imgProc = new ImgProc();
-	//if (imgProc->CheckIfFaceCascadeLoaded() == false)
-	//{
-	//	Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);
-	//	delete imgProc;
-	//}
-	//else 
-	//{
-		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, /*imgProc,*/ this);
+	imgProc = new ImgProc();
+	imgProc->LoadFaceCascade();
+	if (imgProc->CheckIfFaceCascadeLoaded() == false)
+	{
+		Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);
+		delete imgProc;
+	}
+	else 
+	{
+		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, imgProc, this);
 		newPhoto->exec();
 		delete newPhoto;
-	//}
+	}
 }
 void MainApp::LESearchFBChanged()
 {

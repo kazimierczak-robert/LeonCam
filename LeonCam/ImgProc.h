@@ -14,7 +14,7 @@ public:
 	void LoadFaceCascade();
 private:
 	bool loadedFaceCascade = false;
-	std::string face_cascade_name;
+	std::string face_cascade_name="";
 	cv::CascadeClassifier face_cascade;
 
 };

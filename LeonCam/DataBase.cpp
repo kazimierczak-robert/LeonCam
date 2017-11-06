@@ -96,7 +96,7 @@ bool DataBase::CreateCameras()
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS Cameras("
 					"CameraID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					"Name TEXT NOT NULL,"
-					"IPAddress VARCHAR(39) NOT NULL,"
+					"IPAddress VARCHAR(45) NOT NULL," /*With port No*/
 					"Login TEXT NOT NULL,"
 					"Password TEXT NOT NULL,"
 					"UserID INTEGER REFERENCES Users(UserID),"
