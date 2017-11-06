@@ -45,5 +45,6 @@ public:
 		unsigned char *iv, unsigned char *ciphertext);
 	static std::string  GetEncrypted(std::string yourHashKey, std::string msg);
 	static std::string  GetDecrypted(std::string yourHashKey, std::string encMsg);
+	static bool Utilities::NotEmptyFileExists(QString path);
 };
 

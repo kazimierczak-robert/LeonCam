@@ -55,10 +55,7 @@ NewPhoto::~NewPhoto()
 	{
 		delete cameraControl;
 	}
-	if (imgProc != nullptr)
-	{
-		delete imgProc;
-	}
+
 }
 
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/

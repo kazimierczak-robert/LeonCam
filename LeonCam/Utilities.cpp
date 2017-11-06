@@ -401,3 +401,13 @@ std::string Utilities::GetDecrypted(std::string yourHashKey, std::string encMsg)
 	std::string decTmp(reinterpret_cast<char const*>(decryptedtext));
 	return decTmp;
 }
+//https://stackoverflow.com/a/26991243
+bool Utilities::NotEmptyFileExists(QString path) 
+{
+	QFileInfo file(path);
+	qint64 fileSize=file.size();
+	bool sizeResult = fileSize == 0 ? false : true;
+	bool existsResult = file.exists();
+	bool isFileResult = file.isFile();
+	return  sizeResult && existsResult && isFileResult;
+}

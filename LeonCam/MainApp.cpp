@@ -763,6 +763,10 @@ void MainApp::TakePicture(int faceID)
 		return;
 	}
 	imgProc = new ImgProc();
+	/*
+		Check if working
+	*/
+	imgProc->TrainFaceRecognizer();
 	imgProc->LoadFaceCascade();
 	if (imgProc->CheckIfFaceCascadeLoaded() == false)
 	{

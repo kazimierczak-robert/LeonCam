@@ -1,14 +1,10 @@
 #include "ImgProc.h"
 
-
-
 ImgProc::ImgProc()
 {
 	//face_cascade_name = ".\\opencv\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
 	face_cascade_name = ".\\opencv\\data\\lbpcascades\\lbpcascade_frontalface.xml";
 }
-
-
 ImgProc::~ImgProc()
 {
 }
@@ -23,6 +19,97 @@ void ImgProc::LoadFaceCascade()
 	{
 		loadedFaceCascade = true;
 	}
+}
+bool ImgProc::CreateCSV()
+{
+	//<FilePath;label>
+	QFile corpFile(QString(CorpFilePath));
+	if (corpFile.open(QIODevice::WriteOnly))
+	{
+		//https://stackoverflow.com/a/8057236
+		QString dirPath = ".\\FaceBase\\";
+		QTextStream stream(&corpFile);
+		QFileInfo filInfo;
+		int peopleCounter = -1;
+		QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files|QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories );
+		while (iter.hasNext())
+		{
+			iter.next();
+			filInfo = iter.fileInfo();
+			if (filInfo.isDir())
+			{
+				peopleCounter++;
+				peopleBase[peopleCounter] = filInfo.fileName();
+			}
+			else if (filInfo.isFile())
+			{
+				stream << iter.filePath() << ";" << peopleCounter << "\n";
+			}
+		}
+		corpFile.close();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool ImgProc::ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels)
+{
+	CreateCSV();
+	QFile file(filename);
+	QString readLine = "";
+	if (file.open(QIODevice::ReadOnly))
+	{
+		QTextStream stream(&file);
+		QStringList csvParts;
+		QString path = "";
+		QString label = "";
+		while (stream.atEnd() == false)
+		{
+			readLine = stream.readLine();
+			csvParts = readLine.split(";");
+			path = csvParts.at(0);
+			label = csvParts.at(1);
+			if (!path.isEmpty() && !label.isEmpty())
+			{
+				images.push_back(cv::imread(path.toStdString(), 0));
+				labels.push_back(atoi(label.toStdString().c_str()));
+			}
+		}
+		file.close();
+		return true;
+	}
+	else
+	{
+		file.close();
+		return false;
+	}
+}
+void ImgProc::TrainFaceRecognizer()
+{
+	//ReadCSV(QString(CorpFilePath), images, labels);
+	//bool result = false;
+	//if (Utilities::NotEmptyFileExists(TrainedFaceRecognizerPathFile) == true)
+	//{
+	//	result = Utilities::MBQuestion("Do you want to load training data from " + QString(TrainedFaceRecognizerPathFile) + " file?");
+	//	if (result == true)
+	//	{
+	//		model->load(TrainedFaceRecognizerPathFile);
+	//		CreateCSV();
+	//		isModelTrained = true;
+	//		return;
+	//	}
+	//}
+	//CreateCSV();
+	//Read_csv("corp.csv", images, labels);
+	//model->train(images, labels);
+	//isModelTrained = true;
+	//result = Utilities::MBQuestion("Do you want to save training data in "+ QString(TrainedFaceRecognizerPathFile) +" file?");
+	//if (result == true)
+	//{
+	//	model->save(TrainedFaceRecognizerPathFile);
+	//}
 }
 bool ImgProc::CheckIfFaceCascadeLoaded()
 {
