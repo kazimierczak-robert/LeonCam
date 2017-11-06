@@ -11,6 +11,8 @@
 #include "Utilities.h"
 #include "CameraControl.h"
 #include "DesignBase.h"
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
 
 class CameraPreview : public QDialog
 {
@@ -28,6 +30,7 @@ private slots:
 public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
 	void CloseCameraEdit(const QString& cameraDetails);
+	void TurnOnLabels();
 private:
 	Ui::CameraPreview ui;
 	DesignBase *designB;

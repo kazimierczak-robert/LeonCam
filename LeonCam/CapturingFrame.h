@@ -18,6 +18,7 @@ public:
 	void StopThread();
 signals:
 	void updatePixmap(const QPixmap& pixmap);
+	void turnOnLabels();
 private:
 	std::string streamURI;
 	bool isWorking;

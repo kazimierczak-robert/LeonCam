@@ -29,7 +29,6 @@ public:
     QPushButton *PBEdit;
     QPushButton *PBSnapshot;
     QLabel *LPreviewScreen;
-    QLabel *LDetectedPeople;
     QPushButton *PBHome;
     QPushButton *PBUp;
     QPushButton *PBRight;
@@ -95,12 +94,6 @@ public:
         LPreviewScreen->setGeometry(QRect(19, 20, 760, 427));
         LPreviewScreen->setFrameShape(QFrame::Box);
         LPreviewScreen->setAlignment(Qt::AlignCenter);
-        LDetectedPeople = new QLabel(CameraPreview);
-        LDetectedPeople->setObjectName(QStringLiteral("LDetectedPeople"));
-        LDetectedPeople->setGeometry(QRect(315, 560, 241, 16));
-        LDetectedPeople->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color: transparent;\n"
-"font-weight:600;"));
         PBHome = new QPushButton(CameraPreview);
         PBHome->setObjectName(QStringLiteral("PBHome"));
         PBHome->setGeometry(QRect(710, 379, 40, 40));
@@ -229,7 +222,6 @@ public:
 #endif // QT_NO_TOOLTIP
         PBSnapshot->setText(QString());
         LPreviewScreen->setText(QString());
-        LDetectedPeople->setText(QApplication::translate("CameraPreview", "Number of detected people: 0", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBHome->setToolTip(QApplication::translate("CameraPreview", "Go to home position", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

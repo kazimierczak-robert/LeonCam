@@ -151,24 +151,6 @@ background-image: url(:/Resources/Images/snapshotHover.png);
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="LDetectedPeople">
-   <property name="geometry">
-    <rect>
-     <x>315</x>
-     <y>560</y>
-     <width>241</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-background-color: transparent;
-font-weight:600;</string>
-   </property>
-   <property name="text">
-    <string>Number of detected people: 0</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PBHome">
    <property name="geometry">
     <rect>

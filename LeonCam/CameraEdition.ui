@@ -51,7 +51,7 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>IPv4 address</string>
+    <string>IPv4 address : port number</string>
    </property>
   </widget>
   <widget class="QLabel" name="LTip">
@@ -64,7 +64,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Model&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique.&lt;br/&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;IP Address&lt;/span&gt; is typed without port number, it takes &lt;span style=&quot; font-weight:600;&quot;&gt;default&lt;/span&gt; port (&lt;span style=&quot; font-weight:600;&quot;&gt;80&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#LTip{background-image: url(:/Resources/Images/bulb.png);}

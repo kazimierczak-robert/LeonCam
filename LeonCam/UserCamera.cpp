@@ -4,6 +4,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
+	ui.CBAvailableCameras->lineEdit()->setPlaceholderText("IPv4 address : port number");
 	this->setResult(QDialog::Rejected);
 	//Create DesignB instance
 	designB = new DesignBase(this);
@@ -18,7 +19,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 
 UserCamera::~UserCamera()
 {
-	
+	delete designB;
 }
 
 std::string generateUuid()
@@ -40,41 +41,45 @@ std::string generateUuid()
 }
 void UserCamera::SearchForCameraIPs()
 {
-	DiscoveryLookupBindingProxy proxy;
+	DiscoveryLookupBindingProxy *proxy = new DiscoveryLookupBindingProxy();
 	std::string tmpuuid = "uuid:" + generateUuid();
-	proxy.soap_endpoint = "soap.udp://239.255.255.250:3702/";
-	proxy.header = new SOAP_ENV__Header();
-	proxy.header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
-	proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
+	proxy->soap_endpoint = "soap.udp://239.255.255.250:3702/";
+	proxy->header = new SOAP_ENV__Header();
+	proxy->header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
+	proxy->header->wsa__MessageID = (char*)tmpuuid.c_str();
 	//proxy.header->wsa__ReplyTo = new wsa__EndpointReferenceType();
 	//proxy.header->wsa__ReplyTo->Address = (char*)"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous";
-	proxy.header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
+	proxy->header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
 	
-	//proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
-	//proxy.soap_header((char*)tmpuuid.c_str(), NULL, NULL, NULL, NULL, (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery", (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	proxy.recv_timeout = 2;
-	ns1__ProbeType probe;
-	//probe.Scopes = new ns1__ScopesType();
-	probe.Types = new std::string("tdn:NetworkVideoTransmitter");
-	ns1__ProbeMatchesType probeMatches;
+	proxy->recv_timeout = 2;
+	ns1__ProbeType *probe = new ns1__ProbeType();
+	probe->Types = new std::string("tdn:NetworkVideoTransmitter");
+	ns1__ProbeMatchesType *probeMatches = new ns1__ProbeMatchesType();
 
-	//while (proxy.Probe(&probe, &probeMatches) != SOAP_OK);
+	for (int i = 0; i < 5; i++)
+	{
+		if (proxy->Probe(probe, probeMatches) == SOAP_OK)
+		{
+			break;
+		}
+	}
+	for each (ns1__ProbeMatchType* device in probeMatches->ProbeMatch)
+	{
+		ui.CBAvailableCameras->addItem(QString::fromStdString(device->XAddrs->c_str()).split('/')[2]);
+	}
 
-	if (proxy.Probe(&probe, &probeMatches) != SOAP_OK)
-	{
-		int y = 0;
-	}
-	else
-	{
-		int x = 0;
-	}
+	delete proxy->header;
+	delete proxy;
+	delete probe->Types;
+	delete probe;
+	delete probeMatches;
 }
 
 std::vector<QString>* UserCamera::GetValuesFromControls()
 {
 	std::vector<QString>* controlsValues = new std::vector<QString>();
 	controlsValues->push_back(ui.LEDescripton->text());
-	controlsValues->push_back(ui.LEIPv4Address->text());
+	controlsValues->push_back(ui.CBAvailableCameras->currentText());
 	controlsValues->push_back(ui.LELogin->text());
 	controlsValues->push_back(ui.LEPassword->text());
 
@@ -84,15 +89,15 @@ void UserCamera::AddClicked()
 {	
 	designB->gif->start();
 
-	if (ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
+	if (ui.LEDescripton->text() == "" || ui.CBAvailableCameras->currentText() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
 	{
 		designB->gif->stop();
 		Utilities::MBAlarm("At least one field is incomplete", false);
 		return;
 	}
 
-	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
-	if (std::regex_match(ui.LEIPv4Address->text().toStdString(), IPv4AddressPattern) == false)
+	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
+	if (std::regex_match(ui.CBAvailableCameras->currentText().toStdString(), IPv4AddressPattern) == false)
 	{
 		designB->gif->stop();
 		Utilities::MBAlarm("IPv4 address incompatible format", false);

@@ -70,34 +70,20 @@ background-color: rgb(46, 147, 222);</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>217</y>
+     <y>287</y>
      <width>271</width>
      <height>25</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QLabel" name="LAvailableCameras">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>197</y>
-     <width>281</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: none;
-color: rgb(255, 255, 255)</string>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cameras from Data Base &lt;span style=&quot; font-weight:600; color:#fe7e5d;&quot;&gt;not assigned&lt;/span&gt; to your account&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   <property name="editable">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="LNewCamera">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>257</y>
+     <y>237</y>
      <width>261</width>
      <height>16</height>
     </rect>
@@ -110,30 +96,11 @@ color: rgb(255, 255, 255)</string>
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define &lt;span style=&quot; font-weight:600; color:#fe7e5d;&quot;&gt;New Camera&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="LEIPv4Address">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>307</y>
-     <width>271</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="maxLength">
-    <number>24</number>
-   </property>
-   <property name="placeholderText">
-    <string>IPv4 address</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="LEDescripton">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>277</y>
+     <y>257</y>
      <width>271</width>
      <height>25</height>
     </rect>
@@ -177,7 +144,7 @@ background-color:none*/</string>
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>357</y>
+     <y>337</y>
      <width>271</width>
      <height>75</height>
     </rect>
@@ -262,13 +229,13 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>290</y>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
    </property>
    <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique.&lt;br/&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;IP Address&lt;/span&gt; is typed without port number, it takes &lt;span style=&quot; font-weight:600;&quot;&gt;default&lt;/span&gt; port (&lt;span style=&quot; font-weight:600;&quot;&gt;80&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#LTip{background-image: url(:/Resources/Images/bulb.png);}
@@ -282,7 +249,7 @@ padding: 0px;*/</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>380</y>
+     <y>360</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -303,7 +270,6 @@ padding: 0px;*/</string>
  <tabstops>
   <tabstop>CBAvailableCameras</tabstop>
   <tabstop>LEDescripton</tabstop>
-  <tabstop>LEIPv4Address</tabstop>
   <tabstop>LELogin</tabstop>
   <tabstop>LEPassword</tabstop>
   <tabstop>PBAdd</tabstop>

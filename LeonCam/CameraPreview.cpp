@@ -13,7 +13,6 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	designB = new DesignBase(this);
 	ui.Lloading->setVisible(false);
 	designB->SetGifInLabel(ui.Lloading);
-	designB->gif->start();
 
 	ui.LCameraDetails->setText(cameraDetails);
 
@@ -40,6 +39,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {ctrl->GoHomeCamera(); });
 
+	connect(capThread, SIGNAL(turnOnLabels()), this, SLOT(TurnOnLabels()));
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
@@ -52,27 +52,31 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	ui.PBCameraOnOff->setText(buttonIsEnabledFromParent->text());
 	ui.PBCameraOnOff->setStyleSheet(buttonIsEnabledFromParent->styleSheet());
 
+	ui.PBRecognize->setText(buttonRecognationFromParent->text());
+	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
+
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
+		designB->gif->start();
 		ui.Lloading->setVisible(true);
-		int counter = 0;
-		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+		QFuture<void> future = QtConcurrent::run([=]()
 		{
-			counter += 1;
-		}
-		if (counter == MAXCONNECTIONTRIES)
-		{
-			TurnOnOffCamera();
-		}
-		ui.Lloading->setVisible(false);
+			int counter = 0;
+			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+			{
+				counter += 1;
+			}
+			if (counter == MAXCONNECTIONTRIES)
+			{
+				buttonIsEnabledFromParent->click();
+			}
+			designB->gif->stop();
+		});
 	}
 	else
 	{
 		StopShowingPreview();
 	}
-
-	ui.PBRecognize->setText(buttonRecognationFromParent->text());
-	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
 }
 
 CameraPreview::~CameraPreview()
@@ -88,6 +92,18 @@ CameraPreview::~CameraPreview()
 	}
 }
 
+void CameraPreview::TurnOnLabels()
+{
+	ui.PBCameraOnOff->setText("On");
+	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+	ui.PBUp->setEnabled(true);
+	ui.PBDown->setEnabled(true);
+	ui.PBLeft->setEnabled(true);
+	ui.PBRight->setEnabled(true);
+	ui.PBHome->setEnabled(true);
+	ui.Lloading->setVisible(false);
+}
+
 bool CameraPreview::StartShowingPreview()
 {
 	if (onvifDevice->GetCapabilities() == 0)
@@ -95,7 +111,6 @@ bool CameraPreview::StartShowingPreview()
 		OnvifClientMedia *media = new OnvifClientMedia(*onvifDevice);
 		_trt__GetProfilesResponse *profiles = new _trt__GetProfilesResponse();
 		media->GetProfiles(*profiles);
-
 		if (profiles->Profiles.size() > 0)
 		{
 			this->profileToken = profiles->Profiles[0]->token;
@@ -105,24 +120,13 @@ bool CameraPreview::StartShowingPreview()
 			if (link->MediaUri != NULL)
 			{
 				this->ptz = new OnvifClientPTZ(*onvifDevice);
-
 				ctrl = new CameraControl(ptz, profileToken);
-
 				std::string login = "";
 				std::string pass = "";
 				onvifDevice->GetUserPasswd(login, pass);
 				std::string streamURI = link->MediaUri->Uri.insert(link->MediaUri->Uri.find("//") + 2, login + ":" + pass + "@");
-
 				capThread->SetStreamURI(streamURI);
 				capThread->start();
-
-				ui.PBCameraOnOff->setText("On");
-				ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-				ui.PBUp->setEnabled(true);
-				ui.PBDown->setEnabled(true);
-				ui.PBLeft->setEnabled(true);
-				ui.PBRight->setEnabled(true);
-				ui.PBHome->setEnabled(true);
 
 				delete media;
 				delete profiles;
@@ -178,13 +182,21 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 
 	if (ui.PBCameraOnOff->text() == "On")
 	{
+		designB->gif->start();
 		ui.Lloading->setVisible(true);
-		int counter = 0;
-		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+		QFuture<void> future = QtConcurrent::run([=]()
 		{
-			counter += 1;
-		}
-		ui.Lloading->setVisible(false);
+			int counter = 0;
+			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+			{
+				counter += 1;
+			}
+			if (counter == MAXCONNECTIONTRIES)
+			{
+				TurnOnOffCamera();
+			}
+			designB->gif->stop();
+		});
 	}
 	delete query;
 }
@@ -208,17 +220,21 @@ void CameraPreview::TurnOnOffCamera()
 {
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
+		designB->gif->start();
 		ui.Lloading->setVisible(true);
-		int counter = 0;
-		while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+		QFuture<void> future = QtConcurrent::run([=]() 
 		{
-			counter += 1;
-		}
-		if (counter < MAXCONNECTIONTRIES)
-		{
-			buttonIsEnabledFromParent->click();
-		}
-		ui.Lloading->setVisible(false);
+			int counter = 0;
+			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
+			{
+				counter += 1;
+			}
+			if (counter < MAXCONNECTIONTRIES)
+			{
+				buttonIsEnabledFromParent->click();
+			}
+			designB->gif->stop();
+		});
 	}
 	else
 	{

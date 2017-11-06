@@ -25,6 +25,7 @@ void CapturingFrame::run()
 	cv::Mat img;
 	if (vcap.open(streamURI))
 	{
+		emit turnOnLabels();
 		while (isWorking)
 		{
 			if (vcap.read(img))

@@ -70,7 +70,7 @@ void CameraEdition::EditClicked()
 		return;
 	}
 
-	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
 	if (std::regex_match(ui.LEIPv4Address->text().toStdString(), IPv4AddressPattern) == false)
 	{
 		designB->gif->stop();
