@@ -48,6 +48,7 @@ private:
 	std::vector<std::vector<QGridLayout*>*> *vectorCameraLayoutsPages;
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	std::map<int, std::string> alertDeleteSettingsToCB;
+	ImgProc *imgProc;
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);
 	void RecognitionCamera(QPushButton* button);

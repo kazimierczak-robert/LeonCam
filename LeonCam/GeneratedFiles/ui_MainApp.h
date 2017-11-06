@@ -341,7 +341,7 @@ public:
         LChooseAlertDelSet->setObjectName(QStringLiteral("LChooseAlertDelSet"));
         LChooseAlertDelSet->setGeometry(QRect(550, 30, 161, 30));
         LChooseAlertDelSet->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)"));
+"background-color:rgb(36, 118, 59);"));
         TWRedReport = new QTableWidget(TReports);
         if (TWRedReport->columnCount() < 4)
             TWRedReport->setColumnCount(4);

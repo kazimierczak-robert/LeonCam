@@ -70,6 +70,10 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 
 MainApp::~MainApp()
 {
+	if (imgProc != nullptr)
+	{
+		delete imgProc;
+	}
 }
 
 void MainApp::AddCamera()
@@ -761,10 +765,18 @@ void MainApp::TakePicture(int faceID)
 		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
 		return;
 	}
-
-	NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, this);
-	newPhoto->exec();
-	delete newPhoto;
+	//imgProc = new ImgProc();
+	//if (imgProc->CheckIfFaceCascadeLoaded() == false)
+	//{
+	//	Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);
+	//	delete imgProc;
+	//}
+	//else 
+	//{
+		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, /*imgProc,*/ this);
+		newPhoto->exec();
+		delete newPhoto;
+	//}
 }
 void MainApp::LESearchFBChanged()
 {

@@ -235,6 +235,7 @@
     <ClCompile Include="gsoap\runtime\threads.c" />
     <ClCompile Include="gsoap\runtime\wsaapi.c" />
     <ClCompile Include="gsoap\runtime\wsseapi.cpp" />
+    <ClCompile Include="ImgProc.cpp" />
     <ClCompile Include="LogIn.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApp.cpp" />
@@ -370,6 +371,7 @@
     <ClInclude Include="gsoap\runtime\threads.h" />
     <ClInclude Include="gsoap\runtime\wsaapi.h" />
     <ClInclude Include="gsoap\runtime\wsseapi.h" />
+    <ClInclude Include="ImgProc.h" />
     <ClInclude Include="onvifgen\soapCreatePullPointBindingProxy.h" />
     <ClInclude Include="onvifgen\soapCreatePullPointBindingService.h" />
     <ClInclude Include="onvifgen\soapDeviceBindingProxy.h" />

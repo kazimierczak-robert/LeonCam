@@ -638,7 +638,7 @@ background-color:none*/</string>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)</string>
+background-color:rgb(36, 118, 59);</string>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Choose alert delete settings&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
