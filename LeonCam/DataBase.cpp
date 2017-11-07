@@ -38,7 +38,9 @@ bool DataBase::CreateRedAlerts()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS RedAlerts("
 					"RedAlertID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Date DATETIME NOT NULL,"
+					"CameraID INTEGER REFERENCES Cameras(CameraID),"
+					"StartDate DATETIME NOT NULL,"
+					"StopDate DATETIME NOT NULL,"
 					"UserID INTEGER REFERENCES Users(UserID));");
 
 	bool result;
@@ -49,8 +51,10 @@ bool DataBase::CreateGreenAlerts()
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS GreenAlerts("
 					"GreenAlertID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					"Date DATETIME NOT NULL,"
 					"FaceID INTEGER REFERENCES Faces(FaceID),"
+					"CameraID INTEGER REFERENCES Cameras(CameraID),"
+					"StartDate DATETIME NOT NULL,"
+					"StopDate DATETIME NOT NULL,"
 					"UserID INTEGER REFERENCES Users(UserID));");
 
 	bool result;
