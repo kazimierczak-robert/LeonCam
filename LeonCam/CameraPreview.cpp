@@ -169,8 +169,7 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 	QSqlQuery *query = new QSqlQuery();
 	query->prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
 	query->bindValue(0, camID);
-	bool result = query->exec() == true ? true : false;
-	if (result == true)
+	if (query->exec() == true)
 	{
 		query->next();
 		string url = "http://" + query->value(0).toString().toStdString() + "/onvif/device_service";
@@ -180,7 +179,7 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 		onvifDevice = new OnvifClientDevice(url, user, pass);
 	}
 
-	if (ui.PBCameraOnOff->text() == "On")
+	if (buttonIsEnabledFromParent->text() == "On")
 	{
 		designB->gif->start();
 		ui.Lloading->setVisible(true);

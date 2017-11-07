@@ -6,6 +6,9 @@
 #include "Utilities.h"
 #include <regex>
 #include <qsqlquery.h>
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
 
 class CameraEdition : public QDialog
 {
@@ -16,7 +19,6 @@ public:
 	~CameraEdition();
 	std::vector<QString>* GetValuesFromControls();
 private slots:
-	void BackClicked();
 	void EditClicked();
 private:
 	DesignBase *designB;
@@ -24,4 +26,7 @@ private:
 	int userID;
 	int camID;
 	std::string passHash;
+	std::string result;
+	QFuture<void> *future;
+	QFutureWatcher<void> *watcher;
 };

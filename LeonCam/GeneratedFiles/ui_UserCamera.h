@@ -123,8 +123,8 @@ public:
         LTipLoginPass->setGeometry(QRect(530, 360, 31, 31));
         LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
 "#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
-        QWidget::setTabOrder(CBAvailableCameras, LEDescripton);
-        QWidget::setTabOrder(LEDescripton, LELogin);
+        QWidget::setTabOrder(LEDescripton, CBAvailableCameras);
+        QWidget::setTabOrder(CBAvailableCameras, LELogin);
         QWidget::setTabOrder(LELogin, LEPassword);
         QWidget::setTabOrder(LEPassword, PBAdd);
         QWidget::setTabOrder(PBAdd, PBBack);

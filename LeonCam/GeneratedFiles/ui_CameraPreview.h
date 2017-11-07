@@ -92,7 +92,7 @@ public:
         LPreviewScreen = new QLabel(CameraPreview);
         LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
         LPreviewScreen->setGeometry(QRect(19, 20, 760, 427));
-        LPreviewScreen->setFrameShape(QFrame::Box);
+        LPreviewScreen->setFrameShape(QFrame::StyledPanel);
         LPreviewScreen->setAlignment(Qt::AlignCenter);
         PBHome = new QPushButton(CameraPreview);
         PBHome->setObjectName(QStringLiteral("PBHome"));

@@ -268,8 +268,8 @@ padding: 0px;*/</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>CBAvailableCameras</tabstop>
   <tabstop>LEDescripton</tabstop>
+  <tabstop>CBAvailableCameras</tabstop>
   <tabstop>LELogin</tabstop>
   <tabstop>LEPassword</tabstop>
   <tabstop>PBAdd</tabstop>

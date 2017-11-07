@@ -8,7 +8,6 @@ CameraControl::CameraControl(OnvifClientPTZ *ptz, std::string profileToken)
 	this->profileToken = profileToken;
 }
 
-
 CameraControl::~CameraControl()
 {
 }
@@ -39,7 +38,6 @@ void CameraControl::MoveCamera(float panSpeed, float tiltSpeed)
 				}
 			}
 		}
-
 		delete ptzSpeed->Zoom;
 		delete ptzSpeed;
 		delete res;
@@ -61,7 +59,6 @@ void CameraControl::StopCamera()
 				}
 			}
 		}
-
 		delete res;
 	}
 }
@@ -81,7 +78,6 @@ void CameraControl::GoHomeCamera()
 				}
 			}
 		}
-
 		delete res;
 	}
 }

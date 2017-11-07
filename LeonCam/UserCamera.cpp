@@ -56,7 +56,7 @@ void UserCamera::SearchForCameraIPs()
 	probe->Types = new std::string("tdn:NetworkVideoTransmitter");
 	ns1__ProbeMatchesType *probeMatches = new ns1__ProbeMatchesType();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (proxy->Probe(probe, probeMatches) == SOAP_OK)
 		{
