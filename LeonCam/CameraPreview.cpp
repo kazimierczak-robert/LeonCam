@@ -23,7 +23,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
 
-	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
+	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();	});
 
 	connect(ui.PBEdit, &QPushButton::clicked, this, [this, camID] {emit openCameraEdit(camID); });
 
@@ -198,11 +198,6 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 		});
 	}
 	delete query;
-}
-
-void CameraPreview::BackButtonClicked()
-{
-	this->close();
 }
 
 void CameraPreview::closeEvent(QCloseEvent *event)

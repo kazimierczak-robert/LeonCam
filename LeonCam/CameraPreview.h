@@ -24,7 +24,6 @@ public:
 signals:
 	void openCameraEdit(int camID);
 private slots:
-	void BackButtonClicked();
 	void TurnOnOffCamera();
 	void TurnOnOffRecognizeMode();
 public slots:

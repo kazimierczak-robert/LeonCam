@@ -12,7 +12,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBAdd, SIGNAL(clicked()), this, SLOT(AddClicked()));
-	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
+	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();	});
 	this->userID = userID;
 	SearchForCameraIPs();
 }
@@ -20,6 +20,10 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 UserCamera::~UserCamera()
 {
 	delete designB;
+	if (watcher != nullptr)
+	{
+		watcher->waitForFinished();
+	}
 }
 
 std::string generateUuid()
@@ -82,49 +86,57 @@ std::vector<QString>* UserCamera::GetValuesFromControls()
 	controlsValues->push_back(ui.CBAvailableCameras->currentText());
 	controlsValues->push_back(ui.LELogin->text());
 	controlsValues->push_back(ui.LEPassword->text());
-
 	return controlsValues;
 }
 void UserCamera::AddClicked() 
 {	
 	designB->gif->start();
-
-	if (ui.LEDescripton->text() == "" || ui.CBAvailableCameras->currentText() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
+	result = "";
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
+	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
-		designB->gif->stop();
-		Utilities::MBAlarm("At least one field is incomplete", false);
-		return;
-	}
-
-	std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
-	if (std::regex_match(ui.CBAvailableCameras->currentText().toStdString(), IPv4AddressPattern) == false)
-	{
-		designB->gif->stop();
-		Utilities::MBAlarm("IPv4 address incompatible format", false);
-		return;
-	}
-
-	QSqlQuery query;
-	query.prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ?");
-	query.bindValue(0, userID);
-	query.bindValue(1, ui.LEDescripton->text());
-	bool result = query.exec() == true ? true : false;
-	if (result == true)
-	{
-		query.next();
-		int counter = query.value(0).toInt();
-		if (counter > 0)
+		if (result == "")
 		{
-			designB->gif->stop();
-			Utilities::MBAlarm("This name is occupied by your another camera. Please type another one", false);
+			this->done(QDialog::Accepted);
+		}
+		else
+		{
+			Utilities::MBAlarm(QString::fromStdString(result), false);
+		}
+		designB->gif->stop();
+	});
+	*future = QtConcurrent::run([=]()
+	{
+		if (ui.LEDescripton->text() == "" || ui.CBAvailableCameras->currentText() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
+		{
+			result = "At least one field is incomplete";
 			return;
 		}
-	}
 
-	designB->gif->stop();
-	this->done(QDialog::Accepted);
-}
-void UserCamera::BackClicked() 
-{
-	this->close();
+		std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
+		if (std::regex_match(ui.CBAvailableCameras->currentText().toStdString(), IPv4AddressPattern) == false)
+		{
+			result = "IPv4 address incompatible format";
+			return;
+		}
+
+		QSqlQuery *query = new QSqlQuery();
+		query->prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ?");
+		query->bindValue(0, userID);
+		query->bindValue(1, ui.LEDescripton->text());
+		if (query->exec() == true)
+		{
+			query->next();
+			int counter = query->value(0).toInt();
+			if (counter > 0)
+			{
+				delete query;
+				result = "This name is occupied by your another camera. Please type another one";
+				return;
+			}
+		}
+		delete query;
+	});
+	watcher->setFuture(*future);
 }

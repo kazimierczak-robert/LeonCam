@@ -7,6 +7,9 @@
 #include <regex>
 #include <qsqlquery.h>
 #include "soapDiscoveryLookupBindingProxy.h"
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
 
 class UserCamera : public QDialog
 {
@@ -18,10 +21,12 @@ public:
 	std::vector<QString>* GetValuesFromControls();
 private slots:
 	void AddClicked();
-	void BackClicked();
 private:
 	Ui::UserCamera ui;
 	DesignBase *designB;
 	int userID;
 	void SearchForCameraIPs();
+	std::string result;
+	QFuture<void> *future;
+	QFutureWatcher<void> *watcher;
 };
