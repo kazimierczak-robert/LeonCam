@@ -102,6 +102,7 @@ public:
         PBUp->setFlat(true);
         PBSnapshot = new QPushButton(NewPhoto);
         PBSnapshot->setObjectName(QStringLiteral("PBSnapshot"));
+        PBSnapshot->setEnabled(false);
         PBSnapshot->setGeometry(QRect(360, 60, 40, 40));
         PBSnapshot->setStyleSheet(QLatin1String("#PBSnapshot{\n"
 "background-image: url(:/Resources/Images/snapshot.png);\n"

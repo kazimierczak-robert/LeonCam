@@ -27,9 +27,13 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 		}
 	}
 	this->setWindowTitle(username + " - LeonCam");
-
+	//
 	vectorCameraLayoutsPages = new std::vector<std::vector<QGridLayout*>*>();
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
+	cameraThread = new map<int, MainAppCamera *>();
+	//Create ImgProc object and load face Cascade
+	imgProc = new ImgProc();
+	imgProc->LoadFaceCascade();
 
 	FillFacesBaseTW();
 	FillReportsTW();
@@ -70,20 +74,22 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 
 MainApp::~MainApp()
 {
-	for each (QGridLayout *layout in *vectorQGridLayouts)
+	//Vector 1 level
+	for (int j = vectorCameraLayoutsPages->size() - 1; j >= 0;j--)
 	{
-		DeleteCameraFromMemory(layout);
+		//Vector 2 level
+		for (int i= vectorCameraLayoutsPages->at(j)->size()-1; i >=0; i--)
+		{
+			DeleteCameraFromMemory(vectorCameraLayoutsPages->at(j)->at(i));
+		}
+		if (j == 0)
+		{
+			delete vectorCameraLayoutsPages->at(j);
+		}
 	}
-	if (vectorQGridLayouts->size() != 0)
-	{
-		delete vectorQGridLayouts;
-	}
-
-	for each (std::vector<QGridLayout*> *layoutVector in *vectorCameraLayoutsPages)
-	{
-		delete layoutVector;
-	}
-	if (vectorCameraLayoutsPages->size() != 0)
+	//Only this, above was deleting it content
+	delete vectorQGridLayouts;
+	if (vectorCameraLayoutsPages->size() == 0)
 	{
 		delete vectorCameraLayoutsPages;
 	}
@@ -186,11 +192,14 @@ void MainApp::AddCameraFromDB(int CameraID)
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
-		btn->setText("On");
+		btn->setText("Off");
 		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-		btn->setToolTip("Recognation mode: On");
-		connect(btn, &QPushButton::clicked, this, [this, btn] {RecognitionCamera(btn); });
+		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
+		btn->setToolTip("Recognation mode: Off");
+		if (imgProc->CheckIfModelTrained())
+		{
+			connect(btn, &QPushButton::clicked, this, [this, btn] {RecognitionCamera(btn); });
+		}
 		layout->addWidget(btn, 2, 2);
 
 		btn = new QPushButton();
@@ -272,20 +281,87 @@ void MainApp::CameraSelected(QGridLayout* layout)
 		delete cameraPreview;
 	}
 }
+struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
+{
+	Camera *cam = nullptr;
+
+	QSqlQuery query;
+	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+	query.bindValue(0, CameraID);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
+	{
+		while (query.next())
+		{
+			//fill cameras
+			cam = new struct Camera;
+			cam->CameraID = CameraID;
+			cam->Name = query.value(0).toString().toStdString();
+			cam->IPAddress = query.value(1).toString().toStdString();
+			cam->Login = query.value(2).toString().toStdString();
+			cam->Password = query.value(3).toString().toStdString();
+		}
+	}
+	return cam;
+}
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
 	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+	int cameraID = ((QPushButton*)layout->itemAtPosition(0, 0)->widget())->text().toInt();
 
 	QPushButton *button = (QPushButton*)layout->itemAtPosition(2, 0)->widget();
 
 	if (button->text() == "Off")
 	{
-		button->setText("On");
-		button->setToolTip("Stop monitoring camera");
-		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
-		layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture");
-		layout->itemAtPosition(2, 1)->widget()->setEnabled(true);
-		number += 1;
+		/*Face recognition*/
+		//Add thread do cameraThread map (combines layout camera with thread)
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, this)));
+		//Set state of face recognition module
+		bool state = ((QPushButton*)layout->itemAtPosition(2, 2)->widget())->text() == "On";
+		cameraThread->at(cameraID)->ChangeFaceRecoState(state);
+		//Set stream URI
+		struct Camera *cam = GetCameraFromDBByID(cameraID);
+		if (cam != nullptr)
+		{
+			//Decrypt passorrd
+			std::string password = Utilities::GetDecrypted(passHash, cam->Password);
+			//Get stream URI & start capturing frames thread 
+			std::string url = "http://" + cam->IPAddress + "/onvif/device_service";
+			OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, cam->Login, password);
+			if (onvifDevice->GetCapabilities() == 0)
+			{
+				OnvifClientMedia media(*onvifDevice);
+				_trt__GetProfilesResponse profiles;
+				media.GetProfiles(profiles);
+
+				if (profiles.Profiles.size() > 0)
+				{
+					string profileToken;
+					OnvifClientPTZ *ptz = nullptr;
+					profileToken = profiles.Profiles[0]->token;
+					_trt__GetStreamUriResponse link;
+					media.GetStreamUrl(profileToken, link);
+
+					if (&link.MediaUri != 0)//Error
+					{
+						std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");
+						//Set stream URI
+						cameraThread->at(cameraID)->SetStreamURI(streamURI);
+						//Set camera ID
+						cameraThread->at(cameraID)->SetCameraID(cameraID);
+						//Start thread
+						cameraThread->at(cameraID)->start();
+						button->setText("On");
+						button->setToolTip("Stop monitoring camera");
+						button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+						layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture");
+						layout->itemAtPosition(2, 1)->widget()->setEnabled(true);
+						number += 1;
+
+					}
+				}
+			}
+		}
 	}
 	else
 	{
@@ -295,6 +371,9 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 		layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture (disabled)");
 		layout->itemAtPosition(2, 1)->widget()->setEnabled(false);
 		number -= 1;
+		/*Face recognition*/
+		//Stop thread
+		cameraThread->at(cameraID)->StopThread();
 	}
 
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
@@ -369,6 +448,17 @@ void MainApp::OpenCameraEdit(int camID)
 }
 void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 {
+	if (layout->count() > 1)
+	{
+		int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+		if (cameraThread->find(CameraID) != cameraThread->end())
+		{
+			cameraThread->at(CameraID)->StopThread();
+			cameraThread->at(CameraID)->wait();
+			delete cameraThread->at(CameraID);
+			cameraThread->erase(CameraID);
+		}
+	}
 	int pageIndex = 0;
 	for (const auto& item : *vectorCameraLayoutsPages)
 	{
@@ -406,9 +496,9 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 					delete itemLayout;
 				}
 			}
-			delete layout;
 
 			item->erase(std::remove(item->begin(), item->end(), layout), item->end());
+			delete layout;
 
 			while (pageIndex < vectorCameraLayoutsPages->size())
 			{
@@ -762,12 +852,12 @@ void MainApp::TakePicture(int faceID)
 		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
 		return;
 	}
-	imgProc = new ImgProc();
 	/*
 		Check if working
 	*/
-	imgProc->TrainFaceRecognizer();
-	imgProc->LoadFaceCascade();
+	
+	//imgProc->TrainFaceRecognizer();
+	
 	if (imgProc->CheckIfFaceCascadeLoaded() == false)
 	{
 		Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);

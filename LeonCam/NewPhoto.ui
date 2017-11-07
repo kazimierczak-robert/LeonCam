@@ -167,6 +167,9 @@ background-image: url(:/Resources/Images/upHover.png);}</string>
    </property>
   </widget>
   <widget class="QPushButton" name="PBSnapshot">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>360</x>

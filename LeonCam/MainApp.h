@@ -14,6 +14,7 @@
 #include <qdialogbuttonbox.h>
 #include "NewPhoto.h"
 #include <map>
+#include "MainAppCamera.h"
 
 class MainApp : public QMainWindow
 {
@@ -49,6 +50,17 @@ private:
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	std::map<int, std::string> alertDeleteSettingsToCB;
 	ImgProc *imgProc = nullptr;
+	map<int, MainAppCamera *> *cameraThread;
+	int activeCameraPage;
+	struct Camera
+	{
+		int CameraID;
+		std::string Name;
+		std::string IPAddress;
+		std::string Login;
+		std::string Password;
+	};
+	Camera* GetCameraFromDBByID(int CameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);
 	void RecognitionCamera(QPushButton* button);
@@ -56,7 +68,6 @@ private:
 	void DeleteCameraFromMemory(QGridLayout* layout);
 	void RemoveCamera(QGridLayout* layout);
 	void AddCameraFromDB(int CameraID);
-	int activeCameraPage;
 	void addTab();
 	void CameraSelected(QGridLayout* layout);
 	void closeEvent(QCloseEvent *event);

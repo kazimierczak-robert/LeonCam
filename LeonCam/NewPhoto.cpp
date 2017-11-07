@@ -126,7 +126,6 @@ void NewPhoto::BackButtonClicked()
 }
 void NewPhoto::PBSnapshotClicked(int faceID)
 {
-
 	QString folderPath = ".\\FaceBase\\" + QVariant(faceID).toString();
 	Utilities::CreateFolderIfNotExists(folderPath);
 	QString dateTime=Utilities::GetCurrentDateTime();

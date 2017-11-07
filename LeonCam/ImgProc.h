@@ -8,8 +8,10 @@
 #include <qdiriterator.h>
 #include "Utilities.h"
 
-#define TrainedFaceRecognizerFilePath "TrainedFaceRecognizer.xml"
-#define CorpFilePath "corp.csv"
+#define trainedFaceRecognizerFilePath "TrainedFaceRecognizer.xml"
+#define corpFilePath "corp.csv"
+//".\\opencv\\data\\haarcascades\\haarcascade_frontalface_alt.xml"
+#define faceCascadeFilePath ".\\opencv\\data\\lbpcascades\\lbpcascade_frontalface.xml"
 
 class ImgProc
 {
@@ -20,10 +22,31 @@ public:
 	bool CheckIfFaceCascadeLoaded();
 	void LoadFaceCascade();
 	void TrainFaceRecognizer();
+	cv::CascadeClassifier getFaceCascade() { return faceCascade; }
+	bool PredictPerson(cv::Mat matImg, int cameraID);
+	bool CheckIfModelTrained() {return isModelTrained;}
 private:
-	bool loadedFaceCascade = false;
-	std::string face_cascade_name="";
-	cv::CascadeClassifier face_cascade;
+	struct GreenAlert
+	{
+		int FaceID;
+		int CameraID;
+		QString StartDate;
+		QString StopDate;
+		int GreenAlertID;
+	};
+	struct RedAlert
+	{
+		int CameraID;
+		QString StartDate;
+		QString StopDate;
+		int RedAlertID;
+
+	};
+	std::vector<GreenAlert> *greenAlertVector;
+	std::vector<RedAlert> *redAlertVector;
+	bool loadedFaceCascade;
+	std::string faceCascadeName="";
+	cv::CascadeClassifier faceCascade;
 	cv::Ptr<cv::FaceRecognizer> model;
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
