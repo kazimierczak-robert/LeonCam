@@ -135,6 +135,10 @@ void NewPhoto::PBSnapshotClicked(int faceID)
 	std::string pathToFile = picturePath.toStdString();
 	replace(pathToFile.begin(), pathToFile.end(),':', '-');
 	cv::imwrite(pathToFile, tmp);
+	//Add to images
+	imgProc->PushBackImage(tmp);
+	//Add to labels
+	imgProc->PushBackLabel(faceID);
 	Utilities::MBAlarm("Picture has been taken", true);
 }
 //Delete this method

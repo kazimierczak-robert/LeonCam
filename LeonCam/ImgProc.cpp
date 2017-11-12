@@ -106,26 +106,31 @@ bool ImgProc::ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vecto
 void ImgProc::TrainFaceRecognizer()
 {
 	//ReadCSV(QString(CorpFilePath), images, labels);
-	bool result = false;
+	//bool result = false;
 	if (Utilities::NotEmptyFileExists(QString(trainedFaceRecognizerFilePath)) == true)
 	{
-		result = Utilities::MBQuestion("Do you want to load training data from " + QString(trainedFaceRecognizerFilePath) + " file?");
-		if (result == true)
-		{
+		//result = Utilities::MBQuestion("Do you want to load training data from " + QString(trainedFaceRecognizerFilePath) + " file?");
+		//if (result == true)
+		//{
 			model->load(trainedFaceRecognizerFilePath);
 			CreateCSV();
 			isModelTrained = true;
 			return;
-		}
+		//}
 	}
 	CreateCSV();
 	ReadCSV(QString(corpFilePath), images, labels);
-	model->train(images, labels);
-	isModelTrained = true;
-	result = Utilities::MBQuestion("Do you want to save training data in "+ QString(trainedFaceRecognizerFilePath) +" file?");
-	if (result == true)
+	if (images.size() > 0 && labels.size() > 0)
 	{
+		model->train(images, labels);
+		images.clear();
+		labels.clear();
+		isModelTrained = true;
+		//result = Utilities::MBQuestion("Do you want to save training data in "+ QString(trainedFaceRecognizerFilePath) +" file?");
+		//if (result == true)
+		//{
 		model->save(trainedFaceRecognizerFilePath);
+		//}
 	}
 }
 bool ImgProc::CheckIfFaceCascadeLoaded()

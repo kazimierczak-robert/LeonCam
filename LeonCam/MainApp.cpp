@@ -921,6 +921,10 @@ void MainApp::TakePicture(int faceID)
 		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, imgProc, this);
 		newPhoto->exec();
 		delete newPhoto;
+		//update model
+		imgProc->GetModel()->update(imgProc->GetImages(), imgProc->GetLabels());
+		imgProc->ClearImagesVector();
+		imgProc->ClearLabelsVector();
 	}
 }
 void MainApp::LESearchFBChanged()

@@ -26,6 +26,25 @@ public:
 	cv::CascadeClassifier getFaceCascade() { return faceCascade; }
 	bool PredictPerson(cv::Mat matImg);
 	bool CheckIfModelTrained() {return isModelTrained;}
+	std::vector<cv::Mat> GetImages() { return images; }
+	std::vector<int> GetLabels() { return labels; }
+	cv::Ptr<cv::FaceRecognizer> GetModel() { return model; }
+	void PushBackImage(cv::Mat mat)
+	{
+		images.push_back(mat);	
+	}
+	void PushBackLabel(int label)
+	{
+		labels.push_back(label);
+	}
+	void ClearImagesVector()
+	{
+		images.clear();
+	}
+	void ClearLabelsVector()
+	{
+		labels.clear();
+	}
 private:
 	int cameraID;
 	struct GreenAlert
