@@ -104,14 +104,17 @@ public:
         LEOldPassword = new QLineEdit(GBChangePassword);
         LEOldPassword->setObjectName(QStringLiteral("LEOldPassword"));
         LEOldPassword->setGeometry(QRect(10, 20, 231, 25));
+        LEOldPassword->setMaxLength(127);
         LEOldPassword->setEchoMode(QLineEdit::Password);
         LEPassword = new QLineEdit(GBChangePassword);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
         LEPassword->setGeometry(QRect(10, 50, 231, 25));
+        LEPassword->setMaxLength(127);
         LEPassword->setEchoMode(QLineEdit::Password);
         LEConfPass = new QLineEdit(GBChangePassword);
         LEConfPass->setObjectName(QStringLiteral("LEConfPass"));
         LEConfPass->setGeometry(QRect(10, 80, 231, 25));
+        LEConfPass->setMaxLength(127);
         LEConfPass->setEchoMode(QLineEdit::Password);
         QWidget::setTabOrder(LEDescripton, LEIPv4Address);
         QWidget::setTabOrder(LEIPv4Address, LELogin);

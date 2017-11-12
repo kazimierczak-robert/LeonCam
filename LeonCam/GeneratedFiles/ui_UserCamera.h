@@ -97,7 +97,7 @@ public:
         LEPassword = new QLineEdit(groupBox);
         LEPassword->setObjectName(QStringLiteral("LEPassword"));
         LEPassword->setGeometry(QRect(10, 40, 251, 25));
-        LEPassword->setMaxLength(24);
+        LEPassword->setMaxLength(127);
         LEPassword->setEchoMode(QLineEdit::Password);
         PBAdd = new QPushButton(UserCamera);
         PBAdd->setObjectName(QStringLiteral("PBAdd"));

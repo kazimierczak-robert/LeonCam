@@ -163,6 +163,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setFixedSize(216, 123);
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setText(QString::number(CameraID));
+		btn->setIconSize(QSize(216, 123));
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
 
@@ -199,7 +200,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setToolTip("Recognation mode: Off");
 		if (imgProc->CheckIfModelTrained())
 		{
-			connect(btn, &QPushButton::clicked, this, [this, btn] {RecognitionCamera(btn); });
+			connect(btn, &QPushButton::clicked, this, [this, btn, CameraID] {RecognitionCamera(btn, CameraID); });
 		}
 		layout->addWidget(btn, 2, 2);
 
@@ -305,6 +306,22 @@ struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
 	}
 	return cam;
 }
+
+void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
+{
+	for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+	{
+		for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+		{
+			if (((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(0, 0)->widget())->text().toInt() == cameraID)
+			{
+				((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(0, 0)->widget())->setIcon(QIcon(pixmap));
+				break;
+			}
+		}
+	}
+}
+
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
 	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
@@ -350,7 +367,9 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 						cameraThread->at(cameraID)->SetStreamURI(streamURI);
 						//Set camera ID
 						cameraThread->at(cameraID)->SetCameraID(cameraID);
+						connect(cameraThread->at(cameraID), SIGNAL(updateThumbnail(const QPixmap&, int)), this, SLOT(UpdateThumbnail(const QPixmap&, int)));
 						//Start thread
+					//layout->itemAtPosition(0, 0)->widget()->setStyleSheet("color: transparent;");
 						cameraThread->at(cameraID)->start();
 						button->setText("On");
 						button->setToolTip("Stop monitoring camera");
@@ -383,15 +402,17 @@ void MainApp::TakePictureCamera(QPushButton* button)
 {
 	
 }
-void MainApp::RecognitionCamera(QPushButton* button)
+void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
 	if (button->text() == "Off")
 	{
+		cameraThread->at(cameraID)->ChangeFaceRecoState(true);
 		button->setText("On");
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 	}
 	else
 	{
+		cameraThread->at(cameraID)->ChangeFaceRecoState(true);
 		button->setText("Off");
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}

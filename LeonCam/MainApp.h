@@ -41,6 +41,7 @@ private slots:
 	void ChangeTWReport();
 public slots:
 	void OpenCameraEdit(int camID);
+	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
 private:
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
@@ -64,7 +65,7 @@ private:
 	Camera* GetCameraFromDBByID(int CameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void TakePictureCamera(QPushButton* button);
-	void RecognitionCamera(QPushButton* button);
+	void RecognitionCamera(QPushButton* button, int cameraID);
 	void EditCamera(int CameraID, QLabel *label);
 	void DeleteCameraFromMemory(QGridLayout* layout);
 	void RemoveCamera(QGridLayout* layout);

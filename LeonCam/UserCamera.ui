@@ -184,7 +184,7 @@ background-color:none*/</string>
      <string/>
     </property>
     <property name="maxLength">
-     <number>24</number>
+     <number>127</number>
     </property>
     <property name="echoMode">
      <enum>QLineEdit::Password</enum>
