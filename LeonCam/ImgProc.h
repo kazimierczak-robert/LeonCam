@@ -72,7 +72,7 @@ private:
 	std::vector<int> labels;
 	bool isModelTrained;
 	//std::map <int, QString> peopleBase; //Label, dir name
-	bool CreateCSV();
-	bool ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels);
+	void FillLabelsAndImagesVectors();
+	//bool ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels);
 };
 

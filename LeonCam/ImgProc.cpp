@@ -37,15 +37,15 @@ void ImgProc::LoadFaceCascade()
 		loadedFaceCascade = true;
 	}
 }
-bool ImgProc::CreateCSV()
+void ImgProc::FillLabelsAndImagesVectors()
 {
 	//<FilePath;label>
-	QFile corpFile(QString(corpFilePath));
-	if (corpFile.open(QIODevice::WriteOnly))
-	{
-		//https://stackoverflow.com/a/8057236
+	//QFile corpFile(QString(corpFilePath));
+	//if (corpFile.open(QIODevice::WriteOnly))
+	//{
+	//	//https://stackoverflow.com/a/8057236
 		QString dirPath = ".\\FaceBase\\";
-		QTextStream stream(&corpFile);
+	//	QTextStream stream(&corpFile);
 		QFileInfo filInfo;
 		int label = -1;
 		QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files|QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories );
@@ -55,54 +55,51 @@ bool ImgProc::CreateCSV()
 			filInfo = iter.fileInfo();
 			if (filInfo.isDir())
 			{
-				label = QString(filInfo.fileName()).toInt();
+				labels.push_back((filInfo.fileName()).toInt());
+				//label = QString(filInfo.fileName()).toInt();
 				//peopleBase[label] = filInfo.fileName();
 			}
 			else if (filInfo.isFile())
 			{
-				stream << iter.filePath() << ";" << label << "\n";
+				images.push_back(cv::imread(iter.filePath().toStdString(), 0));
+				//stream << iter.filePath() << ";" << label << "\n";
 			}
 		}
-		corpFile.close();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+		//corpFile.close();
+	//}
 }
-bool ImgProc::ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels)
-{
-	CreateCSV();
-	QFile file(filename);
-	QString readLine = "";
-	if (file.open(QIODevice::ReadOnly))
-	{
-		QTextStream stream(&file);
-		QStringList csvParts;
-		QString path = "";
-		QString label = "";
-		while (stream.atEnd() == false)
-		{
-			readLine = stream.readLine();
-			csvParts = readLine.split(";");
-			path = csvParts.at(0);
-			label = csvParts.at(1);
-			if (!path.isEmpty() && !label.isEmpty())
-			{
-				images.push_back(cv::imread(path.toStdString(), 0));
-				labels.push_back(atoi(label.toStdString().c_str()));
-			}
-		}
-		file.close();
-		return true;
-	}
-	else
-	{
-		file.close();
-		return false;
-	}
-}
+//bool ImgProc::ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels)
+//{
+//	CreateCSV();
+//	QFile file(filename);
+//	QString readLine = "";
+//	if (file.open(QIODevice::ReadOnly))
+//	{
+//		QTextStream stream(&file);
+//		QStringList csvParts;
+//		QString path = "";
+//		QString label = "";
+//		while (stream.atEnd() == false)
+//		{
+//			readLine = stream.readLine();
+//			csvParts = readLine.split(";");
+//			path = csvParts.at(0);
+//			label = csvParts.at(1);
+//			if (!path.isEmpty() && !label.isEmpty())
+//			{
+//				images.push_back(cv::imread(path.toStdString(), 0));
+//				labels.push_back(atoi(label.toStdString().c_str()));
+//			}
+//		}
+//		file.close();
+//		return true;
+//	}
+//	else
+//	{
+//		file.close();
+//		return false;
+//	}
+//}
 void ImgProc::TrainFaceRecognizer()
 {
 	//ReadCSV(QString(CorpFilePath), images, labels);
@@ -113,13 +110,11 @@ void ImgProc::TrainFaceRecognizer()
 		//if (result == true)
 		//{
 			model->load(trainedFaceRecognizerFilePath);
-			CreateCSV();
 			isModelTrained = true;
 			return;
 		//}
 	}
-	CreateCSV();
-	ReadCSV(QString(corpFilePath), images, labels);
+	FillLabelsAndImagesVectors();
 	if (images.size() > 0 && labels.size() > 0)
 	{
 		model->train(images, labels);
@@ -193,7 +188,8 @@ bool ImgProc::PredictPerson(cv::Mat matImg)
 	}
 	else
 	{
-			int faceID = predictionLabel;
+
+		int faceID = predictionLabel;
 			int camID = cameraID;
 			QString dateTime = Utilities::GetCurrentDateTime();
 			//TIMER!!!
