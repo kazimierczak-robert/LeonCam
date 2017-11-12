@@ -48,6 +48,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
 	connect(ui.PBLogout, SIGNAL(clicked()), this, SLOT(LogOut()));
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
+	connect(ui.LESearch, SIGNAL(returnPressed()), this, SLOT(LESearchPressed()));
 	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
 	//Faces base
 	connect(ui.TWFacesBase, SIGNAL(CurentCellChanged(int, int)), this, SLOT(UpdateDBAfterCellChanged(int, int)));
@@ -575,17 +576,69 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 }
 void MainApp::LESearchChanged()
 {
-	/*for (int i = 0; i < ui.TLWCameras->rowCount(); i++)
+	if (ui.LESearch->text() == "")
 	{
-		if (ui.TLWCameras->item(i, 2)->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
+		return;
+	}
+	bool loopBreak = false;
+	bool first = true;
+	for (int i = activeCameraPage; i != activeCameraPage || first == true; i = (i + 1) % vectorCameraLayoutsPages->size())
+	{
+		first = false;
+		for each (QGridLayout* oneLayout in *vectorCameraLayoutsPages->at(i))
 		{
-			ui.TLWCameras->showRow(i);
+			if (((QLabel *)oneLayout->itemAtPosition(1, 0)->widget())->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
+			{
+				activeCameraPage = i;
+				ui.TWCameraPages->setCurrentIndex(activeCameraPage);
+				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 100, 100);");
+				loopBreak = true;
+			}
 		}
-		else
+		if (loopBreak == true)
 		{
-			ui.TLWCameras->hideRow(i);
+			QCoreApplication::processEvents();
+			Sleep(500);
+			for each (QGridLayout* oneLayout in *vectorCameraLayoutsPages->at(i))
+			{
+				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 255, 255);");
+			}
+			break;
 		}
-	}*/
+	}
+}
+void MainApp::LESearchPressed()
+{
+	if (ui.LESearch->text() == "")
+	{
+		return;
+	}
+	bool loopBreak = false;
+	bool first = true;
+	for (int i = (activeCameraPage + 1) % vectorCameraLayoutsPages->size(); i != (activeCameraPage + 1) % vectorCameraLayoutsPages->size() || first == true; i = (i + 1) % vectorCameraLayoutsPages->size())
+	{
+		first = false;
+		for each (QGridLayout* oneLayout in *vectorCameraLayoutsPages->at(i))
+		{
+			if (((QLabel *)oneLayout->itemAtPosition(1, 0)->widget())->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
+			{
+				activeCameraPage = i;
+				ui.TWCameraPages->setCurrentIndex(activeCameraPage);
+				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 100, 100);");
+				loopBreak = true;
+			}
+		}
+		if (loopBreak == true)
+		{
+			QCoreApplication::processEvents();
+			Sleep(500);
+			for each (QGridLayout* oneLayout in *vectorCameraLayoutsPages->at(i))
+			{
+				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 255, 255);");
+			}
+			break;
+		}
+	}
 }
 void MainApp::TWCameraPagesChanged(int newIndex)
 {

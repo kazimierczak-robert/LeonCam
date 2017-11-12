@@ -29,6 +29,7 @@ private slots:
 	void AddCamera();
 	void LogOut();
 	void LESearchChanged();
+	void LESearchPressed();
 	void TWCameraPagesChanged(int newIndex);
 	//Faces Base
 	void UpdateDBAfterCellChanged(int row, int column);
