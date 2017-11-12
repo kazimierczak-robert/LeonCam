@@ -9,6 +9,19 @@ ImgProc::ImgProc()
 	isModelTrained = false;
 	TrainFaceRecognizer();
 }
+ImgProc::ImgProc(const ImgProc &imProc)
+{
+	this->greenAlertVector = new std::vector<GreenAlert>();
+	this->redAlertVector = new std::vector<RedAlert>();
+	this->loadedFaceCascade = imProc.loadedFaceCascade;
+	this->faceCascadeName= imProc.faceCascadeName;
+	this->faceCascade=imProc.faceCascade;
+	this->model=imProc.model;
+	this->images=imProc.images;
+	this->labels=imProc.labels;
+	this->isModelTrained=imProc.isModelTrained;
+	//this->peopleBase=imProc.peopleBase; //Label, dir name
+}
 ImgProc::~ImgProc()
 {
 }
@@ -34,7 +47,7 @@ bool ImgProc::CreateCSV()
 		QString dirPath = ".\\FaceBase\\";
 		QTextStream stream(&corpFile);
 		QFileInfo filInfo;
-		int peopleCounter = -1;
+		int label = -1;
 		QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files|QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories );
 		while (iter.hasNext())
 		{
@@ -42,12 +55,12 @@ bool ImgProc::CreateCSV()
 			filInfo = iter.fileInfo();
 			if (filInfo.isDir())
 			{
-				peopleCounter++;
-				peopleBase[peopleCounter] = filInfo.fileName();
+				label = QString(filInfo.fileName()).toInt();
+				//peopleBase[label] = filInfo.fileName();
 			}
 			else if (filInfo.isFile())
 			{
-				stream << iter.filePath() << ";" << peopleCounter << "\n";
+				stream << iter.filePath() << ";" << label << "\n";
 			}
 		}
 		corpFile.close();
@@ -106,11 +119,7 @@ void ImgProc::TrainFaceRecognizer()
 		}
 	}
 	CreateCSV();
-	ReadCSV(QString(corpFilePath),images, labels);
-	if (images.size() == 0 && labels.size() == 0)
-	{
-		return;
-	}
+	ReadCSV(QString(corpFilePath), images, labels);
 	model->train(images, labels);
 	isModelTrained = true;
 	result = Utilities::MBQuestion("Do you want to save training data in "+ QString(trainedFaceRecognizerFilePath) +" file?");
@@ -155,7 +164,7 @@ std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 	}
 	return faces;
 }
-bool ImgProc::PredictPerson(cv::Mat matImg, int cameraID)
+bool ImgProc::PredictPerson(cv::Mat matImg)
 {
 	cv::VideoCapture vcap;
 	cv::Mat image;
@@ -179,9 +188,7 @@ bool ImgProc::PredictPerson(cv::Mat matImg, int cameraID)
 	}
 	else
 	{
-		if (peopleBase.find(predictionLabel) != peopleBase.end())
-		{
-			int faceID = peopleBase.at(predictionLabel).toInt();
+			int faceID = predictionLabel;
 			int camID = cameraID;
 			QString dateTime = Utilities::GetCurrentDateTime();
 			//TIMER!!!
@@ -191,7 +198,6 @@ bool ImgProc::PredictPerson(cv::Mat matImg, int cameraID)
 				//No
 					//Add tuple to BD
 					//Add to vecotr
-		}
 		
 		int y = 0;//Rozpoznano osobe peopleBase[predictionLabel]
 		

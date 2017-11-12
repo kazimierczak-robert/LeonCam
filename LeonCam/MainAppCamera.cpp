@@ -1,9 +1,10 @@
 #include "MainAppCamera.h"
 
-MainAppCamera::MainAppCamera(ImgProc *imgProc, QObject *parent)
+MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	: QThread(parent)
 {
-	this->imgProc = imgProc;
+	this->imgProc = new ImgProc(*imgProc);
+	this->cameraID = cameraID;
 }
 
 MainAppCamera::~MainAppCamera()
@@ -63,7 +64,7 @@ void MainAppCamera::run()
 								//save to debug
 								//cv::imwrite(".\\x.jpg", imgCropped);
 								//Predict person
-								imgProc->PredictPerson(imgCropped, cameraID);
+								imgProc->PredictPerson(imgCropped);
 							}
 						}
 					}
@@ -74,7 +75,7 @@ void MainAppCamera::run()
 				cvtColor(img, img, CV_BGR2RGB);
 				cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
 				//View on thumbnail
-				emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)));
+				emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)), cameraID);
 			}
 		}
 		vcap.release();

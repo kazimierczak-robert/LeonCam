@@ -315,7 +315,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	{
 		/*Face recognition*/
 		//Add thread do cameraThread map (combines layout camera with thread)
-		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, this)));
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
 		//Set state of face recognition module
 		bool state = ((QPushButton*)layout->itemAtPosition(2, 2)->widget())->text() == "On";
 		cameraThread->at(cameraID)->ChangeFaceRecoState(state);

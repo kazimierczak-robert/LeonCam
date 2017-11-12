@@ -17,15 +17,17 @@ class ImgProc
 {
 public:
 	ImgProc();
+	ImgProc(const ImgProc &imProc);
 	~ImgProc();
 	std::vector<cv::Rect> DetectFace(cv::Mat &img);
 	bool CheckIfFaceCascadeLoaded();
 	void LoadFaceCascade();
 	void TrainFaceRecognizer();
 	cv::CascadeClassifier getFaceCascade() { return faceCascade; }
-	bool PredictPerson(cv::Mat matImg, int cameraID);
+	bool PredictPerson(cv::Mat matImg);
 	bool CheckIfModelTrained() {return isModelTrained;}
 private:
+	int cameraID;
 	struct GreenAlert
 	{
 		int FaceID;
@@ -36,7 +38,6 @@ private:
 	};
 	struct RedAlert
 	{
-		int CameraID;
 		QString StartDate;
 		QString StopDate;
 		int RedAlertID;
@@ -51,7 +52,7 @@ private:
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
 	bool isModelTrained;
-	std::map <int, QString> peopleBase; //Label, dir name
+	//std::map <int, QString> peopleBase; //Label, dir name
 	bool CreateCSV();
 	bool ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels);
 };

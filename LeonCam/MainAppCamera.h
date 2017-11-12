@@ -17,14 +17,14 @@ class MainAppCamera : public QThread
 	Q_OBJECT
 
 public:
-	MainAppCamera(ImgProc *imgProc, QObject *parent);
+	MainAppCamera(ImgProc *imgProc,int cameraID, QObject *parent);
 	~MainAppCamera();
 	void SetStreamURI(std::string streamURI);
 	void StopThread();
 	void ChangeFaceRecoState(bool state);
 	void SetCameraID(int CameraID) { this->cameraID = CameraID; }
 signals:
-	void updateThumbnail(const QPixmap& pixmap);
+	void updateThumbnail(const QPixmap& pixmap, int cameraID);
 private:
 	int cameraID = -1;
 	ImgProc *imgProc = nullptr;
