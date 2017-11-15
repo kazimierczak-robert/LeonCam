@@ -3,6 +3,7 @@
 NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID, ImgProc *imgProc, QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
+	this->loggedID = loggedID;
 	this->imgProc = imgProc;
 	/*imgProc = new ImgProc();*/
 	/*imgProc->LoadFaceCascade();*/
@@ -146,7 +147,7 @@ bool NewPhoto::CameraPreviewUpdate(std::string streamURI)
 {
 	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
 	cv::VideoCapture vcap;
-	ImgProc *imgproc = new ImgProc();
+	ImgProc *imgproc = new ImgProc(loggedID);
 	bool result = true;
 	if (vcap.open(streamURI))
 	{

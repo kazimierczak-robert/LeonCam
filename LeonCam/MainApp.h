@@ -43,6 +43,7 @@ public slots:
 	void OpenCameraEdit(int camID);
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
 private:
+	//QThread *t;//TODO
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
 	std::string passHash;

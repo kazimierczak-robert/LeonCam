@@ -32,7 +32,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	vectorQGridLayouts = new std::vector<QGridLayout*>();
 	cameraThread = new map<int, MainAppCamera *>();
 	//Create ImgProc object and load face Cascade
-	imgProc = new ImgProc();
+	imgProc = new ImgProc(loggedID);
 	imgProc->LoadFaceCascade();
 
 	FillFacesBaseTW();
@@ -362,15 +362,16 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 
 					if (&link.MediaUri != 0)//Error
 					{
-						std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");
+						std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");							
 						//Set stream URI
 						cameraThread->at(cameraID)->SetStreamURI(streamURI);
 						//Set camera ID
 						cameraThread->at(cameraID)->SetCameraID(cameraID);
-						connect(cameraThread->at(cameraID), SIGNAL(updateThumbnail(const QPixmap&, int)), this, SLOT(UpdateThumbnail(const QPixmap&, int)));
 						//Start thread
-					//layout->itemAtPosition(0, 0)->widget()->setStyleSheet("color: transparent;");
 						cameraThread->at(cameraID)->start();
+						connect(cameraThread->at(cameraID), SIGNAL(updateThumbnail(const QPixmap&, int)), this, SLOT(UpdateThumbnail(const QPixmap&, int)));
+	
+						//layout->itemAtPosition(0, 0)->widget()->setStyleSheet("color: transparent;");
 						button->setText("On");
 						button->setToolTip("Stop monitoring camera");
 						button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
@@ -476,7 +477,7 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 		if (cameraThread->find(CameraID) != cameraThread->end())
 		{
 			cameraThread->at(CameraID)->StopThread();
-			cameraThread->at(CameraID)->wait();
+			cameraThread->at(CameraID)->wait();//TODO
 			delete cameraThread->at(CameraID);
 			cameraThread->erase(CameraID);
 		}

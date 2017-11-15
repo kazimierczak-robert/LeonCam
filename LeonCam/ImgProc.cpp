@@ -1,6 +1,6 @@
 #include "ImgProc.h"
 
-ImgProc::ImgProc()
+ImgProc::ImgProc(int loggedID)
 {
 	faceCascadeName = faceCascadeFilePath;
 	model = cv::createLBPHFaceRecognizer();//cv::createFisherFaceRecognizer();
@@ -8,11 +8,14 @@ ImgProc::ImgProc()
 	model->set("threshold", 100.0);
 	isModelTrained = false;
 	TrainFaceRecognizer();
+	this->loggedID = loggedID;
+	this->cameraID = -1;
 }
-ImgProc::ImgProc(const ImgProc &imProc)
+ImgProc::ImgProc(const ImgProc &imProc, int cameraID)
 {
-	this->greenAlertVector = new std::vector<GreenAlert>();
-	this->redAlertVector = new std::vector<RedAlert>();
+	this->greenAlertList = new std::list<GreenAlert>();
+	redAlert = new RedAlert();
+	redAlert->redAlertID = -1;
 	this->loadedFaceCascade = imProc.loadedFaceCascade;
 	this->faceCascadeName= imProc.faceCascadeName;
 	this->faceCascade=imProc.faceCascade;
@@ -20,6 +23,8 @@ ImgProc::ImgProc(const ImgProc &imProc)
 	this->images=imProc.images;
 	this->labels=imProc.labels;
 	this->isModelTrained=imProc.isModelTrained;
+	this->loggedID = imProc.loggedID;
+	this->cameraID = cameraID;
 	//this->peopleBase=imProc.peopleBase; //Label, dir name
 }
 ImgProc::~ImgProc()
@@ -181,27 +186,109 @@ bool ImgProc::PredictPerson(cv::Mat matImg)
 	double predicted_confidence = 0.0;
 	int unrecogizedPeople = 0;
 	model->predict(matImg, predictionLabel, predicted_confidence);
+	QString dateTimeNow;
+	QSqlQuery query;
+	bool result = false;
+	/*	 RED SECTION	*/
 	if (predictionLabel < 0)
 	{
-		int x = 0;
-		//Nie rozpoznano osoby
-	}
-	else
-	{
+		//Person hasn't been recognized
+		//Check if 1 minute has passed : 1 * 60 * 1000
+		result = redAlert->redAlertID < 0 ? true : false;
+		//YES
+		if (result == true)
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("INSERT INTO RedAlerts (CameraID, StartDate, StopDate, UserID) "
+				"VALUES (:CameraID, :StartDate, :StopDate, :UserID)");
+			query.bindValue(":CameraID", cameraID);
+			query.bindValue(":StartDate", dateTimeNow);
+			query.bindValue(":StopDate", dateTimeNow);
+			query.bindValue(":UserID", loggedID);
+			result = query.exec() == true ? true : false;
 
+			//Get inserted redAlertID
+			query.exec("COMMIT");
+			query.prepare("SELECT RedAlertID FROM RedAlerts WHERE CameraID = ? AND StartDate = ?");
+			query.bindValue(0, cameraID);
+			query.bindValue(1, dateTimeNow);
+			result = query.exec() == true ? true : false;
+			//Add to object
+			if (result == true)
+			{
+				query.next();
+				redAlert->redAlertID = query.value(0).toInt();
+				redAlert->startDate = dateTimeNow;
+				redAlert->stopDate = dateTimeNow;
+			}
+			//TODO: start movie
+		}
+		else
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+			//NO
+			//Update stopDate in redAlert object
+			redAlert->stopDate = dateTimeNow;
+		}
+	}
+	/*	 GREEN SECTION	*/
+	else //Person has been recognized
+	{
 		int faceID = predictionLabel;
-			int camID = cameraID;
-			QString dateTime = Utilities::GetCurrentDateTime();
-			//TIMER!!!
-			//Check if faceID is is in vector
-				//Yes
-					//Update STOP
-				//No
-					//Add tuple to BD
-					//Add to vecotr
-		
-		int y = 0;//Rozpoznano osobe peopleBase[predictionLabel]
-		
+		int camID = cameraID;
+		bool contains = false;
+		for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end(); iter++)
+		{
+			if (iter->faceID == faceID)
+			{
+				contains = true;
+				dateTimeNow = Utilities::GetCurrentDateTime();
+				//Update stopDate in greenAlertVector
+				iter->stopDate = dateTimeNow;
+				break;
+			}
+		}
+		if (contains == false)
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+
+			//Add tuple to BD
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("INSERT INTO GreenAlerts (FaceID, CameraID, StartDate, StopDate, UserID) "
+				"VALUES (:FaceID, :CameraID, :StartDate, :StopDate, :UserID)");
+			query.bindValue(":FaceID", faceID);
+			query.bindValue(":CameraID", cameraID);
+			query.bindValue(":StartDate", dateTimeNow);
+			query.bindValue(":StopDate", dateTimeNow);
+			query.bindValue(":UserID", loggedID);
+			result = query.exec() == true ? true : false;
+			if (result == true)
+			{
+				//Get inserted greenAlertID
+				query.exec("COMMIT");
+				query.prepare("SELECT GreenAlertID FROM GreenAlerts WHERE CameraID = ? AND StartDate = ?");
+				query.bindValue(0, cameraID);
+				query.bindValue(1, dateTimeNow);
+				result = query.exec() == true ? true : false;
+				if (result == true)
+				{
+					query.next();
+					//Add to greenAlertVector vector
+					struct GreenAlert greenAlert;
+					greenAlert.faceID = faceID;
+					greenAlert.cameraID = cameraID;
+					greenAlert.greenAlertID = query.value(0).toInt();
+					greenAlert.startDate = dateTimeNow;
+					greenAlert.stopDate = dateTimeNow;
+					greenAlertList->push_back(greenAlert);
+				}
+			}
+			else 
+			{
+				//TODO
+			}
+		}	
 	}
 	return true;
 

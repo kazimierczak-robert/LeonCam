@@ -7,7 +7,8 @@
 #include <qtextstream.h>
 #include <qdiriterator.h>
 #include "Utilities.h"
-
+#include <qsqlquery.h>
+#include <iterator>
 #define trainedFaceRecognizerFilePath "TrainedFaceRecognizer.xml"
 #define corpFilePath "corp.csv"
 //".\\opencv\\data\\haarcascades\\haarcascade_frontalface_alt.xml"
@@ -16,8 +17,22 @@
 class ImgProc
 {
 public:
-	ImgProc();
-	ImgProc(const ImgProc &imProc);
+	struct GreenAlert
+	{
+		int faceID;
+		int cameraID;
+		QString startDate;
+		QString stopDate;
+		int greenAlertID;
+	};
+	struct RedAlert
+	{
+		QString startDate;
+		QString stopDate;
+		int redAlertID;
+	};
+	ImgProc(int loggedID);
+	ImgProc(const ImgProc &imProc, int cameraID);
 	~ImgProc();
 	std::vector<cv::Rect> DetectFace(cv::Mat &img);
 	bool CheckIfFaceCascadeLoaded();
@@ -45,32 +60,22 @@ public:
 	{
 		labels.clear();
 	}
+	int GetLoggedID() { return loggedID; }
+	std::list<GreenAlert> *GetGreenAlertList() { return greenAlertList; }
+	RedAlert *GetRedAlert() { return redAlert; }
+	void SetRedAlertID(int redAlertID) { redAlert->redAlertID = redAlertID; }
 private:
 	int cameraID;
-	struct GreenAlert
-	{
-		int FaceID;
-		int CameraID;
-		QString StartDate;
-		QString StopDate;
-		int GreenAlertID;
-	};
-	struct RedAlert
-	{
-		QString StartDate;
-		QString StopDate;
-		int RedAlertID;
-
-	};
-	std::vector<GreenAlert> *greenAlertVector;
-	std::vector<RedAlert> *redAlertVector;
+	int loggedID;
+	bool isModelTrained;
 	bool loadedFaceCascade;
-	std::string faceCascadeName="";
-	cv::CascadeClassifier faceCascade;
-	cv::Ptr<cv::FaceRecognizer> model;
+	std::string faceCascadeName = "";
+	std::list<GreenAlert> *greenAlertList;
+	RedAlert *redAlert=nullptr;
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
-	bool isModelTrained;
+	cv::CascadeClassifier faceCascade;
+	cv::Ptr<cv::FaceRecognizer> model;
 	//std::map <int, QString> peopleBase; //Label, dir name
 	void FillLabelsAndImagesVectors();
 	//bool ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels);

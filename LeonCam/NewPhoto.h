@@ -32,6 +32,7 @@ public:
 	void BackButtonClicked();
 	void PBSnapshotClicked(int faceID);
 private:
+	int loggedID;
 	Ui::NewPhoto ui;
 	QFuture<void> future; //"thread" field
 	bool CameraPreviewUpdate(std::string streamUri);//Update video frames
