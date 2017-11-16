@@ -50,6 +50,11 @@ void MainAppCamera::run()
 		//stop timers
 		greenTimer.stop();
 		redTimer.stop();
+
+		//TODO:
+		//update green alerts
+		//update red alerts
+
 		//processTimer.stop();
 	}
 }
@@ -125,7 +130,7 @@ void MainAppCamera::UpdateRedAlerts()
 }
 void MainAppCamera::Process()
 {
-	//processTimer.stop();
+	//Frame number
 	int frameID;
 
 	while (isWorking)
@@ -133,6 +138,7 @@ void MainAppCamera::Process()
 		QCoreApplication::processEvents();
 		if (vcap.read(img))
 		{
+			frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
 			if (faceRecognitionState == true) //OK
 			{
 				if (imgProc->CheckIfFaceCascadeLoaded() == false)
@@ -141,7 +147,6 @@ void MainAppCamera::Process()
 				}
 				else
 				{
-					frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
 					if (frameID % 10 == 0 && frameID != 0)
 					{
 						//Get gray picture 20x20
@@ -155,7 +160,7 @@ void MainAppCamera::Process()
 						cv::Mat imgCropped;
 						//rectangle
 						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
-						for (size_t i = 0; i < faces.size(); i++)
+						for (int i = 0; i < faces.size(); i++)
 						{
 							//Get rect to crop
 							cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
@@ -176,8 +181,11 @@ void MainAppCamera::Process()
 			//Resize oroginal image
 			cvtColor(img, img, CV_BGR2RGB);
 
-			cv::resize(img, img, cv::Size(760, 427));
-			emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+			if (frameID% 2 == 0)
+			{
+				cv::resize(img, img, cv::Size(760, 427));
+				emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+			}
 
 			cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
 			//View on thumbnail

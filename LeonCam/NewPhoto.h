@@ -16,6 +16,7 @@
 #include "CapturingFrame.h"
 #include "CameraControl.h"
 #include "ImgProc.h"
+#include "MainAppCamera.h"
 
 
 class NewPhoto : public QDialog
@@ -24,7 +25,7 @@ class NewPhoto : public QDialog
 
 public:
 	//ID - photo is saved in the folder named .\\FaceBase\\<ID>
-	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, ImgProc *imgProc, QWidget *parent = Q_NULLPTR);
+	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, ImgProc *imgProc, map<int, MainAppCamera *> *cameraThread, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
 	public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
@@ -32,27 +33,17 @@ public:
 	void BackButtonClicked();
 	void PBSnapshotClicked(int faceID);
 private:
+	int currentCameraID;
 	int loggedID;
 	Ui::NewPhoto ui;
-	QFuture<void> future; //"thread" field
-	bool CameraPreviewUpdate(std::string streamUri);//Update video frames
-	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);
-	struct Camera
-	{
-		int CameraID;
-		std::string Name;
-		std::string IPAddress;
-		std::string Login;
-		std::string Password;
-	};
-	std::map<int, struct Camera*> cameras;
-	std::map<int, std::string> camerasToCB;
 	string profileToken;
 	OnvifClientPTZ *ptz=nullptr;
-	CapturingFrame *capThread = nullptr;
 	cv::Mat matImg;
 	CameraControl *cameraControl = nullptr;
 	ImgProc *imgProc = nullptr;
-	void FillCBWithCamerasToCB();
+	map<int, MainAppCamera *> *cameraThread;
 	void CurrentIndexChanged(std::string passHash);
+	bool CameraPreviewUpdate(std::string streamUri);//Update video frames
+	void NewPhoto::FillPtzAndProfileToken(std::string passHash);
+	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);
 };

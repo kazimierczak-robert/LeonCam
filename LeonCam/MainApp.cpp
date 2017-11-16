@@ -1,7 +1,5 @@
 ﻿#include "MainApp.h"
 
-//TODO: Delete buttons from Faces Base
-
 MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	: QMainWindow(parent)
 {
@@ -98,6 +96,19 @@ MainApp::~MainApp()
 	if (imgProc != nullptr)
 	{
 		delete imgProc;
+	}
+
+	//delete map;
+	delete cameraThread;
+
+	//Remove row from table
+	for (int i = ui.TWFacesBase->rowCount()-1; i >= 0; i--)
+	{
+			ui.TWFacesBase->removeCellWidget(i, 3);
+			ui.TWFacesBase->removeCellWidget(i, 4);
+			ui.TWFacesBase->removeCellWidget(i, 5);
+			ui.TWFacesBase->removeCellWidget(i, 6);
+			ui.TWFacesBase->removeRow(i);
 	}
 }
 
@@ -478,7 +489,8 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 		if (cameraThread->find(CameraID) != cameraThread->end())
 		{
 			cameraThread->at(CameraID)->StopThread();
-			cameraThread->at(CameraID)->wait();//TODO
+			cameraThread->at(CameraID)->quit();//equivakent to exit(0==success)
+			cameraThread->at(CameraID)->wait();
 			delete cameraThread->at(CameraID);
 			cameraThread->erase(CameraID);
 		}
@@ -892,14 +904,14 @@ void MainApp::FillReportsTW()
 }
 void MainApp::UpdateDBAfterCellChanged(int row, int column)
 {
-	//TODO
 	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
 }
 void MainApp::TakePicture(int faceID)
 {
 	QString name;
 	QString surname;
-	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+	//Search in table
+	for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
 		if (faceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
@@ -928,12 +940,6 @@ void MainApp::TakePicture(int faceID)
 		Utilities::MBAlarm("No camera is turned on! You can't take a photo", false);
 		return;
 	}
-	/*
-		Check if working
-	*/
-	
-	//imgProc->TrainFaceRecognizer();
-	
 	if (imgProc->CheckIfFaceCascadeLoaded() == false)
 	{
 		Utilities::MBAlarm("CascadeClassifier hasn't been loaded, please try take photo again", false);
@@ -941,7 +947,7 @@ void MainApp::TakePicture(int faceID)
 	}
 	else 
 	{
-		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, imgProc, this);
+		NewPhoto *newPhoto = new NewPhoto(cameraIDs, passHash, name, surname, loggedID, faceID, imgProc, cameraThread, this);
 		newPhoto->exec();
 		delete newPhoto;
 		//update model
@@ -1006,7 +1012,7 @@ void MainApp::AddPerson()
 }
 void MainApp::EditPerson(int FaceID)
 {
-	for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+	for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
 		if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
@@ -1109,10 +1115,14 @@ void MainApp::RemovePerson(int FaceID)
 	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)FaceID).toString() + "?"))
 	{
 		//Remove row from table
-		for (size_t i = 0; i < ui.TWFacesBase->rowCount(); i++)
+		for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
 		{
 			if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 			{
+				ui.TWFacesBase->removeCellWidget(i, 3);
+				ui.TWFacesBase->removeCellWidget(i, 4);
+				ui.TWFacesBase->removeCellWidget(i, 5);
+				ui.TWFacesBase->removeCellWidget(i, 6);
 				ui.TWFacesBase->removeRow(i);
 				break;
 			}

@@ -1,28 +1,28 @@
 #include "NewPhoto.h"
 
-NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID, ImgProc *imgProc, QWidget *parent)
+NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString name, QString surname,int loggedID, int faceID, ImgProc *imgProc, map<int, MainAppCamera *> *cameraThread, QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	this->loggedID = loggedID;
 	this->imgProc = imgProc;
+	this->cameraThread = cameraThread;
 	/*imgProc = new ImgProc();*/
 	/*imgProc->LoadFaceCascade();*/
 	ui.setupUi(this);
 	this->setWindowTitle(name + " " + surname +" (ID: " + (QVariant(faceID)).toString() + ") - LeonCam");
-	capThread = new CapturingFrame(this);
+//	capThread = new CapturingFrame(this);
 
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
 	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(faceID); });
 	GetCamerasInfo(loggedID, cameraIDs);
-	FillCBWithCamerasToCB();
+	currentCameraID = ui.CBPresets->currentData().toInt();
 	//connect(ui.PBFolder, SIGNAL(clicked()), this, SLOT(OpenFileExplorer(ID)));
 	//future = QtConcurrent::run([=]() {CameraPreviewUpdate(cameraURIs); }); //run preview from camera
 	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=](int index) {CurrentIndexChanged(passHash); });
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
-	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
-	//fill profileToken & ptz
-	CurrentIndexChanged(passHash);
+	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	FillPtzAndProfileToken(passHash);
 	//Camera control
 	cameraControl = new CameraControl(this->ptz, this->profileToken);
 	//left, right, up, down control
@@ -42,12 +42,12 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 NewPhoto::~NewPhoto()
 {
 	//Close thread
-	if (capThread != nullptr)
-	{
-		capThread->StopThread();
-		capThread->wait();
-		delete capThread;
-	}
+	//if (capThread != nullptr)
+	//{
+	//	capThread->StopThread();
+	//	capThread->wait();
+	//	delete capThread;
+	//}
 	if (ptz != nullptr)
 	{
 		delete ptz;
@@ -62,7 +62,7 @@ NewPhoto::~NewPhoto()
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
 void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 {
-	disconnect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	disconnect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	bool result = true;
 
 	//Keep the last frame
@@ -77,7 +77,6 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 		CV_8UC3,
 		const_cast<uchar*>(swapped.bits()),
 		static_cast<size_t>(swapped.bytesPerLine())).clone();
-	//
 
 	//Detect face
 	//cv::Mat tmpMatImg = matImg;
@@ -118,7 +117,7 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 	QImage imgIn = QImage((uchar*)tmpMatImg.data, tmpMatImg.cols, tmpMatImg.rows, tmpMatImg.step, QImage::Format_RGB888);
 	ui.LPreviewScreen->setPixmap(QPixmap::fromImage(imgIn));
 	//ui.LPreviewScreen->setPixmap(tmp);
-	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 }
 void NewPhoto::BackButtonClicked()
 {
@@ -168,7 +167,7 @@ void NewPhoto::GetCamerasInfo(int loggedID, std::vector<int> cameraIDs)
 {
 	//Get Cameras where UserID equals loggedID
 	QSqlQuery query;
-	query.prepare("SELECT CameraID, Name, IPAddress, Login, Password FROM Cameras WHERE UserID=?");
+	query.prepare("SELECT CameraID, Name FROM Cameras WHERE UserID=?");
 	query.bindValue(0, loggedID);
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
@@ -179,60 +178,52 @@ void NewPhoto::GetCamerasInfo(int loggedID, std::vector<int> cameraIDs)
 			//if cameraIDs contains
 			if (std::find(cameraIDs.begin(), cameraIDs.end(), query.value(0).toInt()) != cameraIDs.end())
 			{
-				//fill camerasToCB
-				camerasToCB.insert(std::pair<int, std::string>(query.value(0).toInt(), query.value(1).toString().toStdString()));
-				//fill cameras
-				struct Camera *cam = new struct Camera;
-				cam->CameraID = query.value(0).toInt();
-				cam->Name = query.value(1).toString().toStdString();
-				cam->IPAddress = query.value(2).toString().toStdString();
-				cam->Login = query.value(3).toString().toStdString();
-				cam->Password = query.value(4).toString().toStdString();
-
-				cameras.insert(std::pair<int, struct Camera*>(query.value(0).toInt(), cam));
+				//fill camerasToCB: CameraID and Name
+				ui.CBPresets->addItem(query.value(1).toString(), query.value(0).toInt());
 			}
 		}
 	}
 }
-void NewPhoto::FillCBWithCamerasToCB()
+void NewPhoto::FillPtzAndProfileToken(std::string passHash)
 {
-	for (std::pair<int, std::string> elem : camerasToCB)
+	//Get cameras IPAddress, Login, Password
+	QSqlQuery query;
+	query.prepare("Select IPAddress, Login, Password FROM Cameras WHERE CameraID = ?");
+	query.bindValue(0, currentCameraID);
+	bool result = query.exec() == true ? true : false;
+	if (result == true)
 	{
-		ui.CBPresets->addItem(QString::fromStdString(elem.second), elem.first);
-	}
+		query.next();
+		QString iPAddress = query.value(0).toString();
+		QString login = query.value(1).toString();
+		QString password = query.value(2).toString();
 
+		//Decrypt password
+		std::string DecPass = Utilities::GetDecrypted(passHash, password.toStdString());
+		//Get stream URI
+		std::string url = "http://" + iPAddress.toStdString() + "/onvif/device_service";
+		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, login.toStdString(), DecPass);
+		if (onvifDevice->GetCapabilities() == 0) 
+		{
+			OnvifClientMedia media(*onvifDevice);
+			_trt__GetProfilesResponse profiles;
+			media.GetProfiles(profiles);
+			if (profiles.Profiles.size() > 0)
+			{
+				this->profileToken = profiles.Profiles[0]->token;
+				this->ptz = new OnvifClientPTZ(*onvifDevice);
+			}
+		}
+	}
 }
 void NewPhoto::CurrentIndexChanged(std::string passHash)
 {
-	//Get camera
-	int cameraID = ui.CBPresets->currentData().toInt();
-	struct Camera *cam = cameras[cameraID];
-	
-	//Decrypt passorrd
-	std::string password = Utilities::GetDecrypted(passHash, cam->Password);
-	//Get stream URI & start capturing frames thread 
-	std::string url = "http://" + cam->IPAddress + "/onvif/device_service";
-	OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, cam->Login, password);
-	if (onvifDevice->GetCapabilities() == 0)
-	{
-		OnvifClientMedia media(*onvifDevice);
-		_trt__GetProfilesResponse profiles;
-		media.GetProfiles(profiles);
-
-		if (profiles.Profiles.size() > 0)
-		{
-			this->profileToken = profiles.Profiles[0]->token;
-			_trt__GetStreamUriResponse link;
-			media.GetStreamUrl(this->profileToken, link);
-
-			if (&link.MediaUri != NULL)
-			{
-				this->ptz = new OnvifClientPTZ(*onvifDevice);
-				std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");
-
-				capThread->SetStreamURI(streamURI);
-				capThread->start();
-			}
-		}
-	}
+	//Get previousCameraID
+	int previousCameraID = currentCameraID;
+	//Change currentCameraID
+	currentCameraID = ui.CBPresets->currentData().toInt();
+	FillPtzAndProfileToken(passHash);
+	//Disconnect 'old' thread
+	disconnect(cameraThread->at(previousCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 }

@@ -153,7 +153,7 @@ std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 	int h = 0;
 	int w = 0;
 	
-	for (size_t i = 0; i < faces.size(); i++)
+	for (int i = 0; i < faces.size(); i++)
 	{
 		//10% https://stackoverflow.com/a/30842913
 		cv::Size deltaSize( faces[i].width * 0.1f, faces[i].height * 0.1f ); // 0.1f = 10/100
