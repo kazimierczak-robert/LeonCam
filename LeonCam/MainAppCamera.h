@@ -30,6 +30,7 @@ public:
 	QTimer *redTimer;
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
+	void updatePixmap(const QPixmap& pixmap);
 //private slots:
 //	void UpdateGreenAlerts();
 //	void UpdateRedAlerts();
@@ -47,5 +48,6 @@ public slots:
 	void UpdateGreenAlerts();
 	void UpdateRedAlerts();
 	void Process();
-
+signals:
+	void starkWorking();
 };

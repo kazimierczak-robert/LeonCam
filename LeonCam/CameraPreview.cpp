@@ -1,12 +1,11 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, OnvifClientDevice *onvifDevice, int camID, std::string passHash)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, OnvifClientDevice *onvifDevice, int camID, std::string passHash, MainAppCamera *thread)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->buttonIsEnabledFromParent = buttonIsEnabledFromParent;
 	this->buttonRecognationFromParent = buttonRecognationFromParent;
-	this->onvifDevice = onvifDevice;
 	this->camID = camID;
 	this->passHash = passHash;
 
@@ -16,7 +15,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	ui.LCameraDetails->setText(cameraDetails);
 
-	this->capThread = new CapturingFrame(this);
+	this->capThread = thread;
 	ptz = nullptr;
 	ctrl = nullptr;
 
@@ -39,9 +38,9 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {ctrl->GoHomeCamera(); });
 
-	connect(capThread, SIGNAL(turnOnLabels()), this, SLOT(TurnOnLabels()));
+//	connect(capThread, SIGNAL(turnOnLabels()), this, SLOT(TurnOnLabels()));
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
-	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
+	//connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
@@ -54,8 +53,9 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	ui.PBRecognize->setText(buttonRecognationFromParent->text());
 	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
-
-	if (buttonIsEnabledFromParent->text() == "On")
+	this->ptz = new OnvifClientPTZ(*onvifDevice);
+	ctrl = new CameraControl(ptz, profileToken);
+/*	if (buttonIsEnabledFromParent->text() == "On")
 	{
 		designB->gif->start();
 		ui.Lloading->setVisible(true);
@@ -76,7 +76,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	else
 	{
 		StopShowingPreview();
-	}
+	}*/
 }
 
 CameraPreview::~CameraPreview()
@@ -104,7 +104,7 @@ void CameraPreview::TurnOnLabels()
 	ui.Lloading->setVisible(false);
 }
 
-bool CameraPreview::StartShowingPreview()
+/*bool CameraPreview::StartShowingPreview()
 {
 	if (onvifDevice->GetCapabilities() == 0)
 	{
@@ -139,7 +139,7 @@ bool CameraPreview::StartShowingPreview()
 		delete profiles;
 	}
 	return false;
-}
+}*/
 void CameraPreview::StopShowingPreview()
 {
 	ui.PBCameraOnOff->setText("Off");
@@ -156,7 +156,7 @@ void CameraPreview::UpdatePixmap(const QPixmap& pixmap)
 	ui.LPreviewScreen->setPixmap(pixmap);
 }
 
-void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
+/*void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 {
 	ui.LCameraDetails->setText(cameraDetails);
 	if (ui.PBCameraOnOff->text()=="On")
@@ -198,15 +198,15 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 		});
 	}
 	delete query;
-}
+}*/
 
 void CameraPreview::closeEvent(QCloseEvent *event)
 {
-	if (capThread->isRunning() == true)
+/*	if (capThread->isRunning() == true)
 	{
 		capThread->StopThread();
 		capThread->wait();
-	}
+	}*/
 	event->accept();
 }
 
@@ -215,7 +215,7 @@ void CameraPreview::TurnOnOffCamera()
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
 		designB->gif->start();
-		ui.Lloading->setVisible(true);
+/*		ui.Lloading->setVisible(true);
 		QFuture<void> future = QtConcurrent::run([=]() 
 		{
 			int counter = 0;
@@ -227,13 +227,18 @@ void CameraPreview::TurnOnOffCamera()
 			{
 				buttonIsEnabledFromParent->click();
 			}
-			designB->gif->stop();
-		});
+			
+		});*/
+
+		buttonIsEnabledFromParent->click();
+		TurnOnLabels();
+		designB->gif->stop();
+
 	}
 	else
 	{
-		capThread->StopThread();
-		capThread->wait();
+		/*capThread->StopThread();
+		capThread->wait();*/
 
 		StopShowingPreview();
 		buttonIsEnabledFromParent->click();

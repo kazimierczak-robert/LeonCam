@@ -27,26 +27,30 @@ void MainAppCamera::run()
 	if (vcap.open(streamURI)) //OK
 	{
 		int frameID = -1;
-		QTimer greenTimer, redTimer, processTimer;
+		QTimer greenTimer, redTimer;// , processTimer;
 		//conects
 		connect(&greenTimer, SIGNAL(timeout()), this, SLOT(UpdateGreenAlerts()), Qt::DirectConnection);
 		connect(&redTimer, SIGNAL(timeout()), this, SLOT(UpdateRedAlerts()), Qt::DirectConnection);
-		connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
+		//connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
 		//set intervals
 		greenTimer.setInterval(1*60*1000); //5 minutes
 		redTimer.setInterval(1*60*1000); //1 minutes
-		processTimer.setInterval(20);
+		//processTimer.setInterval(40);
 		//start timers
 		greenTimer.start();
 		redTimer.start();
-		processTimer.start();
+		//processTimer.start();
+
+		//start processing frames
+		connect(this, SIGNAL(starkWorking()), this, SLOT(Process()), Qt::DirectConnection);
+		emit starkWorking();
 
 		exec();
 
 		//stop timers
 		greenTimer.stop();
 		redTimer.stop();
-		processTimer.stop();
+		//processTimer.stop();
 	}
 }
 
@@ -121,56 +125,66 @@ void MainAppCamera::UpdateRedAlerts()
 }
 void MainAppCamera::Process()
 {
+	//processTimer.stop();
 	int frameID;
 
-	if (vcap.read(img))
+	while (isWorking)
 	{
-		if (faceRecognitionState == true) //OK
+		QCoreApplication::processEvents();
+		if (vcap.read(img))
 		{
-			if (imgProc->CheckIfFaceCascadeLoaded() == false)
+			if (faceRecognitionState == true) //OK
 			{
-				Utilities::MBAlarm("CascadeClassifier hasn't been loaded, recognition is disabled", false);
-			}
-			else
-			{
-				frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
-				if (frameID % 10 == 0 && frameID != 0)
+				if (imgProc->CheckIfFaceCascadeLoaded() == false)
 				{
-					//Get gray picture 20x20
-					std::vector<cv::Rect> faces;
-					cv::Mat imgGray;
-
-					cvtColor(img, imgGray, CV_BGR2GRAY);
-					cv::equalizeHist(imgGray, imgGray);
-
-					//cv::resize(imgGray, imgGray, cv::Size(380, 213));
-					cv::Mat imgCropped;
-					//rectangle
-					imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
-					for (size_t i = 0; i < faces.size(); i++)
+					Utilities::MBAlarm("CascadeClassifier hasn't been loaded, recognition is disabled", false);
+				}
+				else
+				{
+					frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
+					if (frameID % 10 == 0 && frameID != 0)
 					{
-						//Get rect to crop
-						cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-						//Crop the full image to that image contained by the rectangle myROI
-						imgCropped = imgGray(myROI);
-						//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
-						cv::resize(imgCropped, imgCropped, cv::Size(200, 200), 1.0, 1.0, cv::INTER_CUBIC);
-						//save to debug
-						//cv::imwrite(".\\x.jpg", imgCropped);
-						//Predict person
-						imgProc->PredictPerson(imgCropped);
+						//Get gray picture 20x20
+						std::vector<cv::Rect> faces;
+						cv::Mat imgGray;
+
+						cvtColor(img, imgGray, CV_BGR2GRAY);
+						cv::equalizeHist(imgGray, imgGray);
+
+						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
+						cv::Mat imgCropped;
+						//rectangle
+						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
+						for (size_t i = 0; i < faces.size(); i++)
+						{
+							//Get rect to crop
+							cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+							//Crop the full image to that image contained by the rectangle myROI
+							imgCropped = imgGray(myROI);
+							//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
+							cv::resize(imgCropped, imgCropped, cv::Size(200, 200), 1.0, 1.0, cv::INTER_CUBIC);
+							//save to debug
+							//cv::imwrite(".\\x.jpg", imgCropped);
+							//Predict person
+							imgProc->PredictPerson(imgCropped);
+						}
 					}
 				}
+
 			}
 
+			//Resize oroginal image
+			cvtColor(img, img, CV_BGR2RGB);
+
+			cv::resize(img, img, cv::Size(760, 427));
+			emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+
+			cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
+			//View on thumbnail
+			emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)), cameraID);
+
+
 		}
-
-		//Resize oroginal image
-		cvtColor(img, img, CV_BGR2RGB);
-		cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
-		//View on thumbnail
-		emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)), cameraID);
 	}
-
 }
 

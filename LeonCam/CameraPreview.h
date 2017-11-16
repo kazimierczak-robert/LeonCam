@@ -13,13 +13,14 @@
 #include "DesignBase.h"
 #include <qfuture.h>
 #include <QtConcurrent\qtconcurrentrun.h>
+#include "MainAppCamera.h"
 
 class CameraPreview : public QDialog
 {
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, std::string passHash = "");
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, std::string passHash = "", MainAppCamera *thread = nullptr);
 	~CameraPreview();
 signals:
 	void openCameraEdit(int camID);
@@ -28,7 +29,7 @@ private slots:
 	void TurnOnOffRecognizeMode();
 public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
-	void CloseCameraEdit(const QString& cameraDetails);
+	//void CloseCameraEdit(const QString& cameraDetails);
 	void TurnOnLabels();
 private:
 	Ui::CameraPreview ui;
@@ -37,12 +38,12 @@ private:
 	QPushButton *buttonRecognationFromParent;
 	OnvifClientPTZ *ptz;
 	string profileToken;
-	OnvifClientDevice *onvifDevice;
-	CapturingFrame *capThread;
+	//OnvifClientDevice *onvifDevice;
+	MainAppCamera *capThread;
 	int camID;
 	std::string passHash;
 	CameraControl *ctrl;
-	bool StartShowingPreview();
+	//bool StartShowingPreview();
 	void StopShowingPreview();
 	void closeEvent(QCloseEvent *event);
 };

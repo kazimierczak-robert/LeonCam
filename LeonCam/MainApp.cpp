@@ -147,11 +147,11 @@ void MainApp::AddCamera()
 		}	
 	}
 }
-void MainApp::AddCameraFromDB(int CameraID)
+void MainApp::AddCameraFromDB(int cameraID)
 {
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, CameraID);
+	query.bindValue(0, cameraID);
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
@@ -162,7 +162,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
 		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setText(QString::number(CameraID));
+		btn->setText(QString::number(cameraID));
 		btn->setIconSize(QSize(216, 123));
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
@@ -200,7 +200,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setToolTip("Recognation mode: Off");
 		if (imgProc->CheckIfModelTrained())
 		{
-			connect(btn, &QPushButton::clicked, this, [this, btn, CameraID] {RecognitionCamera(btn, CameraID); });
+			connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
 		}
 		layout->addWidget(btn, 2, 2);
 
@@ -209,7 +209,7 @@ void MainApp::AddCameraFromDB(int CameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
-		connect(btn, &QPushButton::clicked, this, [this, CameraID, label] {EditCamera(CameraID, label); });
+		connect(btn, &QPushButton::clicked, this, [this, cameraID, label] {EditCamera(cameraID, label); });
 		layout->addWidget(btn, 2, 3);
 
 		btn = new QPushButton();
@@ -225,6 +225,8 @@ void MainApp::AddCameraFromDB(int CameraID)
 
 		//layout->itemAtPosition(2,0)->widget()->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 
+		//Add thread do cameraThread map (combines layout camera with thread)
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
 
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 6)
 		{
@@ -263,10 +265,10 @@ void MainApp::addTab()
 }
 void MainApp::CameraSelected(QGridLayout* layout)
 {
-	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+	int cameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, CameraID);
+	query.bindValue(0, cameraID);
 	bool result = query.exec() == true ? true : false;
 	if (result == true)
 	{
@@ -277,7 +279,7 @@ void MainApp::CameraSelected(QGridLayout* layout)
 
 		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
 
-		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), onvifDevice, CameraID, passHash);
+		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), onvifDevice, cameraID, passHash, cameraThread->at(cameraID));
 		connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
 		cameraPreview->exec();
 		delete cameraPreview;
@@ -332,8 +334,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	if (button->text() == "Off")
 	{
 		/*Face recognition*/
-		//Add thread do cameraThread map (combines layout camera with thread)
-		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
+
 		//Set state of face recognition module
 		bool state = ((QPushButton*)layout->itemAtPosition(2, 2)->widget())->text() == "On";
 		cameraThread->at(cameraID)->ChangeFaceRecoState(state);
