@@ -6,7 +6,6 @@
 #include "onvifclientmedia.hpp"
 #include "onvifclientdevice.hpp"
 #include <QCloseEvent>
-#include "CapturingFrame.h"
 #include "qsqlquery.h"
 #include "Utilities.h"
 #include "CameraControl.h"
@@ -20,7 +19,7 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, std::string passHash = "", MainAppCamera *thread = nullptr);
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QPushButton *buttonTakePhotoFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, MainAppCamera *thread = nullptr, std::string passHash = "");
 	~CameraPreview();
 signals:
 	void openCameraEdit(int camID);
@@ -29,21 +28,21 @@ private slots:
 	void TurnOnOffRecognizeMode();
 public slots:
 	void UpdatePixmap(const QPixmap& pixmap);
-	//void CloseCameraEdit(const QString& cameraDetails);
+	void CloseCameraEdit(const QString& cameraDetails);
 	void TurnOnLabels();
 private:
 	Ui::CameraPreview ui;
 	DesignBase *designB;
 	QPushButton *buttonIsEnabledFromParent;
 	QPushButton *buttonRecognationFromParent;
+	QPushButton *buttonTakePhotoFromParent;
 	OnvifClientPTZ *ptz;
 	string profileToken;
-	//OnvifClientDevice *onvifDevice;
 	MainAppCamera *capThread;
 	int camID;
-	std::string passHash;
 	CameraControl *ctrl;
-	//bool StartShowingPreview();
-	void StopShowingPreview();
+	std::string passHash;
+	bool SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice);
+	void TurnOffLabels();
 	void closeEvent(QCloseEvent *event);
 };

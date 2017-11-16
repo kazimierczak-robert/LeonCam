@@ -1,14 +1,14 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, OnvifClientDevice *onvifDevice, int camID, std::string passHash, MainAppCamera *thread)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QPushButton *buttonTakePhotoFromParent, OnvifClientDevice *onvifDevice, int camID, MainAppCamera *thread, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
 	this->buttonIsEnabledFromParent = buttonIsEnabledFromParent;
 	this->buttonRecognationFromParent = buttonRecognationFromParent;
+	this->buttonTakePhotoFromParent = buttonTakePhotoFromParent;
 	this->camID = camID;
 	this->passHash = passHash;
-
 	designB = new DesignBase(this);
 	ui.Lloading->setVisible(false);
 	designB->SetGifInLabel(ui.Lloading);
@@ -38,9 +38,10 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {ctrl->GoHomeCamera(); });
 
-//	connect(capThread, SIGNAL(turnOnLabels()), this, SLOT(TurnOnLabels()));
+	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, buttonTakePhotoFromParent] {buttonTakePhotoFromParent->click(); });
+
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
-	//connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
+	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
@@ -53,35 +54,25 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	ui.PBRecognize->setText(buttonRecognationFromParent->text());
 	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
-	this->ptz = new OnvifClientPTZ(*onvifDevice);
-	ctrl = new CameraControl(ptz, profileToken);
-/*	if (buttonIsEnabledFromParent->text() == "On")
+	
+	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
+
+	if (buttonIsEnabledFromParent->text() == "On")
 	{
-		designB->gif->start();
-		ui.Lloading->setVisible(true);
-		QFuture<void> future = QtConcurrent::run([=]()
+		TurnOnLabels();
+		if (!SetProfileTokenAndPTZ(onvifDevice))
 		{
-			int counter = 0;
-			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
-			{
-				counter += 1;
-			}
-			if (counter == MAXCONNECTIONTRIES)
-			{
-				buttonIsEnabledFromParent->click();
-			}
-			designB->gif->stop();
-		});
+			TurnOnOffCamera();
+		}
 	}
 	else
 	{
-		StopShowingPreview();
-	}*/
+		TurnOffLabels();
+	}
 }
 
 CameraPreview::~CameraPreview()
 {
-	delete capThread;
 	if (ptz != nullptr)
 	{
 		delete ptz;
@@ -101,10 +92,10 @@ void CameraPreview::TurnOnLabels()
 	ui.PBLeft->setEnabled(true);
 	ui.PBRight->setEnabled(true);
 	ui.PBHome->setEnabled(true);
-	ui.Lloading->setVisible(false);
+	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 }
 
-/*bool CameraPreview::StartShowingPreview()
+bool CameraPreview::SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice)
 {
 	if (onvifDevice->GetCapabilities() == 0)
 	{
@@ -114,33 +105,19 @@ void CameraPreview::TurnOnLabels()
 		if (profiles->Profiles.size() > 0)
 		{
 			this->profileToken = profiles->Profiles[0]->token;
-			_trt__GetStreamUriResponse *link = new _trt__GetStreamUriResponse();
-			media->GetStreamUrl(this->profileToken, *link);
-
-			if (link->MediaUri != NULL)
-			{
-				this->ptz = new OnvifClientPTZ(*onvifDevice);
-				ctrl = new CameraControl(ptz, profileToken);
-				std::string login = "";
-				std::string pass = "";
-				onvifDevice->GetUserPasswd(login, pass);
-				std::string streamURI = link->MediaUri->Uri.insert(link->MediaUri->Uri.find("//") + 2, login + ":" + pass + "@");
-				capThread->SetStreamURI(streamURI);
-				capThread->start();
-
-				delete media;
-				delete profiles;
-				delete link;
-				return true;
-			}
-			delete link;
+			this->ptz = new OnvifClientPTZ(*onvifDevice);
+			ctrl = new CameraControl(ptz, profileToken);
+			delete media;
+			delete profiles;
+			return true;
 		}
 		delete media;
 		delete profiles;
 	}
 	return false;
-}*/
-void CameraPreview::StopShowingPreview()
+}
+
+void CameraPreview::TurnOffLabels()
 {
 	ui.PBCameraOnOff->setText("Off");
 	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
@@ -149,6 +126,7 @@ void CameraPreview::StopShowingPreview()
 	ui.PBLeft->setEnabled(false);
 	ui.PBRight->setEnabled(false);
 	ui.PBHome->setEnabled(false);
+	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 }
 
 void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
@@ -156,15 +134,15 @@ void CameraPreview::UpdatePixmap(const QPixmap& pixmap)
 	ui.LPreviewScreen->setPixmap(pixmap);
 }
 
-/*void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
+void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 {
-	ui.LCameraDetails->setText(cameraDetails);
+	bool wasTurnedOn = false;
 	if (ui.PBCameraOnOff->text()=="On")
 	{
-		capThread->StopThread();
-		capThread->wait();
-		StopShowingPreview();
+		TurnOnOffCamera();
+		wasTurnedOn = true;
 	}
+	ui.LCameraDetails->setText(cameraDetails);
 
 	QSqlQuery *query = new QSqlQuery();
 	query->prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
@@ -176,72 +154,42 @@ void CameraPreview::UpdatePixmap(const QPixmap& pixmap)
 		string user = query->value(1).toString().toStdString();
 		string pass = Utilities::GetDecrypted(passHash, query->value(2).toString().toStdString());
 
-		onvifDevice = new OnvifClientDevice(url, user, pass);
+		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
+		if (!SetProfileTokenAndPTZ(onvifDevice))
+		{
+			delete onvifDevice;
+			return;
+		}
+		delete onvifDevice;
 	}
 
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
-		designB->gif->start();
-		ui.Lloading->setVisible(true);
-		QFuture<void> future = QtConcurrent::run([=]()
-		{
-			int counter = 0;
-			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
-			{
-				counter += 1;
-			}
-			if (counter == MAXCONNECTIONTRIES)
-			{
-				TurnOnOffCamera();
-			}
-			designB->gif->stop();
-		});
+		TurnOnOffCamera();
 	}
 	delete query;
-}*/
+}
 
 void CameraPreview::closeEvent(QCloseEvent *event)
 {
-/*	if (capThread->isRunning() == true)
-	{
-		capThread->StopThread();
-		capThread->wait();
-	}*/
 	event->accept();
 }
 
 void CameraPreview::TurnOnOffCamera()
 {
+	if (ptz == nullptr)
+	{
+		CloseCameraEdit(ui.LCameraDetails->text());
+	}
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
-		designB->gif->start();
-/*		ui.Lloading->setVisible(true);
-		QFuture<void> future = QtConcurrent::run([=]() 
-		{
-			int counter = 0;
-			while (!StartShowingPreview() && counter < MAXCONNECTIONTRIES)
-			{
-				counter += 1;
-			}
-			if (counter < MAXCONNECTIONTRIES)
-			{
-				buttonIsEnabledFromParent->click();
-			}
-			
-		});*/
-
 		buttonIsEnabledFromParent->click();
 		TurnOnLabels();
-		designB->gif->stop();
-
 	}
 	else
 	{
-		/*capThread->StopThread();
-		capThread->wait();*/
-
-		StopShowingPreview();
 		buttonIsEnabledFromParent->click();
+		TurnOffLabels();
 		ui.LPreviewScreen->clear();
 	}
 }

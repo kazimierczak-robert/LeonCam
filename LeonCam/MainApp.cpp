@@ -290,7 +290,7 @@ void MainApp::CameraSelected(QGridLayout* layout)
 
 		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
 
-		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), onvifDevice, cameraID, passHash, cameraThread->at(cameraID));
+		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), onvifDevice, cameraID, cameraThread->at(cameraID), passHash);
 		connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
 		cameraPreview->exec();
 		delete cameraPreview;

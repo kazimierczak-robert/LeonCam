@@ -13,7 +13,6 @@
 #include "onvifclientptz.hpp"
 #include "onvifclientmedia.hpp"
 #include "onvifclientdevice.hpp"
-#include "CapturingFrame.h"
 #include "CameraControl.h"
 #include "ImgProc.h"
 #include "MainAppCamera.h"
