@@ -206,14 +206,14 @@ bool ImgProc::PredictPerson(cv::Mat matImg)
 			query.bindValue(":StartDate", dateTimeNow);
 			query.bindValue(":StopDate", dateTimeNow);
 			query.bindValue(":UserID", loggedID);
-			result = query.exec() == true ? true : false;
+			result = query.exec();
 
 			//Get inserted redAlertID
 			query.exec("COMMIT");
 			query.prepare("SELECT RedAlertID FROM RedAlerts WHERE CameraID = ? AND StartDate = ?");
 			query.bindValue(0, cameraID);
 			query.bindValue(1, dateTimeNow);
-			result = query.exec() == true ? true : false;
+			result = query.exec();
 			//Add to object
 			if (result == true)
 			{
@@ -262,7 +262,7 @@ bool ImgProc::PredictPerson(cv::Mat matImg)
 			query.bindValue(":StartDate", dateTimeNow);
 			query.bindValue(":StopDate", dateTimeNow);
 			query.bindValue(":UserID", loggedID);
-			result = query.exec() == true ? true : false;
+			result = query.exec();
 			if (result == true)
 			{
 				//Get inserted greenAlertID
@@ -270,7 +270,7 @@ bool ImgProc::PredictPerson(cv::Mat matImg)
 				query.prepare("SELECT GreenAlertID FROM GreenAlerts WHERE CameraID = ? AND StartDate = ?");
 				query.bindValue(0, cameraID);
 				query.bindValue(1, dateTimeNow);
-				result = query.exec() == true ? true : false;
+				result = query.exec();
 				if (result == true)
 				{
 					query.next();

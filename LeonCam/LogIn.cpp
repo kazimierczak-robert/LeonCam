@@ -41,7 +41,7 @@ void LogIn::LogInClicked()
 	query.prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
 	query.bindValue(0, username);
 	query.bindValue(1, passwordHash);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -94,7 +94,7 @@ void LogIn::ForgotPasswordClicked()
 		QSqlQuery query;
 		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
 		query.bindValue(0, ui.LEUsername->text());
-		bool result = query.exec() == true ? true : false;
+		bool result = query.exec();
 		if (result == true)
 		{
 			query.next();
@@ -132,7 +132,7 @@ void LogIn::UpdateAttempts(int loginAttemptCounter, QString username)
 	query.bindValue(0, loginAttemptCounter);
 	query.bindValue(1, Utilities::GetCurrentDateTime());
 	query.bindValue(2, username);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	query.exec("COMMIT");
 	if (result == false)
 	{
@@ -145,7 +145,7 @@ void LogIn::UpdateCounter(QString username)
 	query.clear();
 	query.prepare("SELECT LoginAttemptCounter FROM Users WHERE Username = ?");
 	query.bindValue(0, username);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();

@@ -26,7 +26,7 @@ void ForgottenPassword::SetSecurityQuestion(QString username)
 	QSqlQuery query;
 	query.exec("SELECT SecurityQuestion FROM Users WHERE Username = ?");
 	query.bindValue(0, this->username);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -58,7 +58,7 @@ void ForgottenPassword::VerifyClicked()
 		query.bindValue(0, username);
 		QString answerHash = QString::fromStdString(Utilities::sha256HEX(concatHelp));
 		query.bindValue(1, answerHash);
-		bool result = query.exec() == true ? true : false;
+		bool result = query.exec();
 		if (result == true)
 		{
 			query.next();
@@ -69,7 +69,7 @@ void ForgottenPassword::VerifyClicked()
 				query.clear();
 				query.prepare("SELECT LastLoginAttemptDate, LoginAttemptCounter FROM Users WHERE Username=?");
 				query.bindValue(0, username);
-				bool result = query.exec() == true ? true : false;
+				bool result = query.exec();
 				if (result == true)
 				{
 					query.next();

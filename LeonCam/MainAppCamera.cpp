@@ -51,11 +51,42 @@ void MainAppCamera::run()
 		greenTimer.stop();
 		redTimer.stop();
 
-		//TODO:
-		//update green alerts
-		//update red alerts
+		while (isWorking);
 
-		//processTimer.stop();
+		QSqlQuery query;
+		bool result = false;
+		//update green alerts
+		if (imgProc->GetGreenAlertList()->size() > 0)
+		{
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			//Go through GreenAlertVector
+			for (std::list<ImgProc::GreenAlert>::iterator iter = imgProc->GetGreenAlertList()->begin(); iter != imgProc->GetGreenAlertList()->end(); iter++)
+			{
+				query.prepare("UPDATE GreenAlerts SET StopDate = ? WHERE GreenAlertID = ?");
+				query.bindValue(0, iter->stopDate);
+				query.bindValue(1, iter->greenAlertID);
+				result = query.exec();
+				if (result == true)
+				{
+					//TODO
+				}
+			}
+			query.exec("COMMIT");
+		}
+
+		//update red alerts
+		if (imgProc->GetRedAlert()->redAlertID > 0)
+		{
+			//TODO: Stop movie
+			//update BD
+			result = false;
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("UPDATE RedAlerts SET StopDate = ? WHERE RedAlertID = ?");
+			query.bindValue(0, imgProc->GetRedAlert()->stopDate);
+			query.bindValue(1, imgProc->GetRedAlert()->redAlertID);
+			result = query.exec();
+			query.exec("COMMIT");
+		}
 	}
 }
 
@@ -84,7 +115,7 @@ void MainAppCamera::UpdateGreenAlerts()
 		query.prepare("UPDATE GreenAlerts SET StopDate = ? WHERE GreenAlertID = ?");
 		query.bindValue(0, iter->stopDate);
 		query.bindValue(1, iter->greenAlertID);
-		result = query.exec() == true ? true : false;
+		result = query.exec();
 		if (result == true)
 		{
 			//TODO
@@ -115,7 +146,7 @@ void MainAppCamera::UpdateRedAlerts()
 	query.prepare("UPDATE RedAlerts SET StopDate = ? WHERE RedAlertID = ?");
 	query.bindValue(0, imgProc->GetRedAlert()->stopDate);
 	query.bindValue(1, imgProc->GetRedAlert()->redAlertID);
-	result = query.exec() == true ? true : false;
+	result = query.exec();
 
 	query.exec("COMMIT");
 	//if 1 minute has passed set RedAlert to -1

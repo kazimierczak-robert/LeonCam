@@ -169,7 +169,7 @@ void NewPhoto::GetCamerasInfo(int loggedID, std::vector<int> cameraIDs)
 	QSqlQuery query;
 	query.prepare("SELECT CameraID, Name FROM Cameras WHERE UserID=?");
 	query.bindValue(0, loggedID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		while (query.next())
@@ -190,7 +190,7 @@ void NewPhoto::FillPtzAndProfileToken(std::string passHash)
 	QSqlQuery query;
 	query.prepare("Select IPAddress, Login, Password FROM Cameras WHERE CameraID = ?");
 	query.bindValue(0, currentCameraID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();

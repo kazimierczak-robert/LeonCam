@@ -10,7 +10,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	QSqlQuery query;
 	query.prepare("SELECT Username FROM Users WHERE UserID = ?");
 	query.bindValue(0, loggedID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();;
 	if (result == true)
 	{
 		query.next();
@@ -61,7 +61,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 		[=]() {CurrentIndexChanged(); });
 
 	query.prepare("SELECT CameraID FROM Cameras");
-	result = query.exec() == true ? true : false;
+	result = query.exec();
 	if (result == true)
 	{
 		while (query.next())
@@ -142,14 +142,14 @@ void MainApp::AddCamera()
 		query.bindValue(":Password", QString::fromStdString(encryptedMsg));
 		query.bindValue(":UserID", loggedID);
 		query.bindValue(":LastEditDate", Utilities::GetCurrentDateTime());
-		result = query.exec() == true ? true : false;
+		result = query.exec();
 		if (result == true)
 		{
 			query.exec("COMMIT");
 			query.prepare("SELECT CameraID FROM Cameras WHERE Name = ? AND UserID = ?");
 			query.bindValue(0, controlsValues->at(0));
 			query.bindValue(1, loggedID);
-			result = query.exec() == true ? true : false;
+			result = query.exec();
 			if (result == true)
 			{
 				query.next();
@@ -163,7 +163,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, cameraID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -280,7 +280,7 @@ void MainApp::CameraSelected(QGridLayout* layout)
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, cameraID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -303,7 +303,7 @@ struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, CameraID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		while (query.next())
@@ -457,7 +457,7 @@ void MainApp::EditCamera(int CameraID, QLabel *label)
 		query.bindValue(1, controlsValues->at(1));
 		query.bindValue(2, controlsValues->at(2));
 		query.bindValue(3, Utilities::GetCurrentDateTime());
-		result = query.exec() == true ? true : false;
+		result = query.exec();
 		if (result == true)
 		{
 			query.exec("COMMIT");
@@ -489,7 +489,7 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 		if (cameraThread->find(CameraID) != cameraThread->end())
 		{
 			cameraThread->at(CameraID)->StopThread();
-			cameraThread->at(CameraID)->quit();//equivakent to exit(0==success)
+			cameraThread->at(CameraID)->quit();//equivalent to exit(0==success)
 			cameraThread->at(CameraID)->wait();
 			delete cameraThread->at(CameraID);
 			cameraThread->erase(CameraID);
@@ -603,7 +603,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 	QSqlQuery query;
 	query.prepare("DELETE FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, CameraID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		DeleteCameraFromMemory(layout);
@@ -693,7 +693,7 @@ void MainApp::closeEvent(QCloseEvent *event)
 	QSqlQuery query;
 	query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ?");
 	query.bindValue(0, username);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -706,7 +706,7 @@ void MainApp::closeEvent(QCloseEvent *event)
 			query.prepare("UPDATE Users SET LastLogoutDate = ? WHERE Username = ?");
 			query.bindValue(0, Utilities::GetCurrentDateTime());
 			query.bindValue(1, username);
-			bool result = query.exec() == true ? true : false;
+			bool result = query.exec();
 			query.exec("COMMIT");
 			if (result == false)
 			{
@@ -864,7 +864,7 @@ void MainApp::FillFacesBaseTW()
 
 	QSqlQuery query;
 	query.prepare("SELECT * FROM Faces");
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		while (query.next())
@@ -877,7 +877,7 @@ void MainApp::GetAlertDeleteSettings()
 {
 	QSqlQuery query;
 	query.prepare("SELECT * FROM AlertsDeleteSettings");
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		while (query.next())
@@ -989,7 +989,7 @@ void MainApp::AddPerson()
 		QString currentDateTimeS = Utilities::GetCurrentDateTime();
 		query.addBindValue(currentDateTimeS);
 		bool result;
-		result = query.exec() == true ? true : false;
+		result = query.exec();
 		if (result == true)
 		{
 			query.exec("COMMIT");
@@ -1093,7 +1093,7 @@ void MainApp::EditPerson(int FaceID)
 					query.bindValue(2, this->loggedID);
 					query.bindValue(3, Utilities::GetCurrentDateTime());
 					query.bindValue(4, FaceID);
-					bool result = query.exec() == true ? true : false;
+					bool result = query.exec();
 					query.exec("COMMIT");
 					if (result == false)
 					{
@@ -1134,7 +1134,7 @@ void MainApp::RemovePerson(int FaceID)
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
 	query.exec("DELETE FROM Faces WHERE FaceID = ?");
 	query.bindValue(0, FaceID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	query.exec("COMMIT");
 	if (result == false)
 	{
@@ -1170,7 +1170,7 @@ void MainApp::CurrentIndexChanged()
 	QSqlQuery query;
 	query.prepare("SELECT COUNT(*) FROM Users WHERE UserID=?");
 	query.bindValue(0, loggedID);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	if (result == true)
 	{
 		query.next();
@@ -1192,7 +1192,7 @@ void MainApp::CurrentIndexChanged()
 
 			query.bindValue(0, settingID);
 			query.bindValue(1, loggedID);
-			bool result = query.exec() == true ? true : false;
+			bool result = query.exec();
 			query.exec("COMMIT");
 			if (result == false)
 			{

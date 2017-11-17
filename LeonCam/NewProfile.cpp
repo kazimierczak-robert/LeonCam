@@ -87,7 +87,7 @@ void NewProfile::CreateClicked()
 	query.bindValue(":LastLoginAttemptDate", currentDateTimeS);
 	query.bindValue(":LoginAttemptCounter", 0);
 	query.bindValue(":RegistrationDate", currentDateTimeS);
-	bool result = query.exec() == true ? true : false;
+	bool result = query.exec();
 	
 	designB->gif->stop();
 	if (result == true)

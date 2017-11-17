@@ -31,7 +31,7 @@ bool DataBase::CreateUsers()
 					"RegistrationDate DATETIME NOT NULL);");
 
 	bool result;
-	result=query.isActive() == true ? true : false;
+	result=query.isActive();
 	return result;
 }
 bool DataBase::CreateRedAlerts() 
@@ -44,7 +44,7 @@ bool DataBase::CreateRedAlerts()
 					"UserID INTEGER REFERENCES Users(UserID));");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 bool DataBase::CreateGreenAlerts() 
@@ -58,7 +58,7 @@ bool DataBase::CreateGreenAlerts()
 					"UserID INTEGER REFERENCES Users(UserID));");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 bool DataBase::CreateAlertsDeleteSettings()
@@ -68,14 +68,14 @@ bool DataBase::CreateAlertsDeleteSettings()
 					"Date TEXT NOT NULL);");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	
 	if (result == true) 
 	{
 		query.clear();
 		query.prepare("SELECT COUNT(*) FROM AlertsDeleteSettings");
 		query.exec();
-		result = query.isActive() == true ? true : false;
+		result = query.isActive();
 
 		query.next();
 		int queryResult = query.value(0).toInt();
@@ -88,7 +88,7 @@ bool DataBase::CreateAlertsDeleteSettings()
 			times << "never" << "1 day" << "1 week" << "1 month" << "half a year" << "1 year";
 			query.addBindValue(times);
 
-			result = query.execBatch() == true ? true : false;
+			result = query.execBatch();
 			query.exec("COMMIT");
 		}
 	}
@@ -107,7 +107,7 @@ bool DataBase::CreateCameras()
 					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 
@@ -121,7 +121,7 @@ bool DataBase::CreateFaces()
 					"LastEditDate DATETIME NOT NULL);");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 bool DataBase::CreateMoviesSettings() 
@@ -131,7 +131,7 @@ bool DataBase::CreateMoviesSettings()
 					"CameraID INTEGER REFERENCES Cameras(CameraID));");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 bool DataBase::CreateFacesModulesSettings() 
@@ -141,7 +141,7 @@ bool DataBase::CreateFacesModulesSettings()
 					"Time TIME NOT NULL);");
 
 	bool result;
-	result = query.isActive() == true ? true : false;
+	result = query.isActive();
 	return result;
 }
 bool DataBase::CreateDB()
