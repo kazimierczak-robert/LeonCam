@@ -32,6 +32,7 @@ public:
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
 	void updatePixmap(const QPixmap& pixmap);
+
 //private slots:
 //	void UpdateGreenAlerts();
 //	void UpdateRedAlerts();

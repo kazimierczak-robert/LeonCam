@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -345,7 +345,7 @@ QHeaderView::section
       </column>
       <column>
        <property name="text">
-        <string>Go to the folder</string>
+        <string>Go to</string>
        </property>
       </column>
       <column>
@@ -472,10 +472,10 @@ padding: 0px;*/</string>
      <widget class="QTableWidget" name="TWGreenReport">
       <property name="geometry">
        <rect>
-        <x>28</x>
+        <x>8</x>
         <y>70</y>
-        <width>515</width>
-        <height>211</height>
+        <width>641</width>
+        <height>209</height>
        </rect>
       </property>
       <property name="focusPolicy">
@@ -491,12 +491,13 @@ padding: 0px;*/</string>
        <string notr="true">QTableWidget
 {
 	color: rgb(255, 255, 255);
-    alternate-background-color: rgb(28, 93, 45);
+    alternate-background-color: /*rgb(28, 93, 45);*/rgb(53, 89, 127);
 }
 QHeaderView::section
 {
-	background-color: rgb(28, 93, 45);
-	color: rgb(203, 203, 203);
+	/*background-color: rgb(28, 93, 45);*/	
+	background-color:rgb(36, 118, 59);
+	color: rgb(255, 255, 255);
 }</string>
       </property>
       <property name="frameShape">
@@ -542,7 +543,7 @@ QHeaderView::section
       </column>
       <column>
        <property name="text">
-        <string>Date</string>
+        <string>Camera ID</string>
        </property>
       </column>
       <column>
@@ -562,7 +563,17 @@ QHeaderView::section
       </column>
       <column>
        <property name="text">
-        <string>Go to the folder</string>
+        <string>Start date</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Stop date</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Go to</string>
        </property>
       </column>
       <column>
@@ -574,9 +585,9 @@ QHeaderView::section
      <widget class="QPushButton" name="PBGreenAlert">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>10</x>
         <y>30</y>
-        <width>251</width>
+        <width>311</width>
         <height>31</height>
        </rect>
       </property>
@@ -605,9 +616,9 @@ padding: 0px;*/</string>
      <widget class="QPushButton" name="PBRedAlert">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>330</x>
         <y>30</y>
-        <width>251</width>
+        <width>311</width>
         <height>31</height>
        </rect>
       </property>
@@ -630,10 +641,10 @@ background-color:none*/</string>
      <widget class="QLabel" name="LChooseAlertDelSet">
       <property name="geometry">
        <rect>
-        <x>550</x>
+        <x>650</x>
         <y>30</y>
-        <width>161</width>
-        <height>30</height>
+        <width>81</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -641,16 +652,16 @@ background-color:none*/</string>
 background-color:rgb(36, 118, 59);</string>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Choose alert delete settings&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Choose alert &lt;br/&gt;delete settings&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QTableWidget" name="TWRedReport">
       <property name="geometry">
        <rect>
-        <x>28</x>
+        <x>8</x>
         <y>70</y>
-        <width>515</width>
-        <height>211</height>
+        <width>641</width>
+        <height>209</height>
        </rect>
       </property>
       <property name="focusPolicy">
@@ -666,12 +677,14 @@ background-color:rgb(36, 118, 59);</string>
        <string notr="true">QTableWidget
 {
 	color: rgb(255, 255, 255);
-    alternate-background-color:  rgb(227, 66, 54);
+    alternate-background-color:  /*rgb(255, 99, 85);*/rgb(53, 89, 127);
+
 }
 QHeaderView::section
 {
-	background-color: rgb(227, 66, 54);
-	color: rgb(203, 203, 203);
+	background-color: rgb(255, 77, 61);
+	color: rgb(255, 255, 255);
+
 }</string>
       </property>
       <property name="frameShape">
@@ -717,26 +730,41 @@ QHeaderView::section
       </column>
       <column>
        <property name="text">
-        <string>Date</string>
+        <string>Camera ID</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Go to the folder</string>
+        <string>Start date</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Delete alert and photo</string>
+        <string>Stop date</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Go to</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Open movie</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Delete alert and movie</string>
        </property>
       </column>
      </widget>
      <widget class="QComboBox" name="CBSettings">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>72</y>
-        <width>161</width>
+        <x>650</x>
+        <y>70</y>
+        <width>81</width>
         <height>22</height>
        </rect>
       </property>

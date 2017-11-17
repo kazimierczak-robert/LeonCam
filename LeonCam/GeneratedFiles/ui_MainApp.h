@@ -266,8 +266,8 @@ public:
         TReports->setObjectName(QStringLiteral("TReports"));
         TReports->setStyleSheet(QStringLiteral("background-color: transparent;"));
         TWGreenReport = new QTableWidget(TReports);
-        if (TWGreenReport->columnCount() < 7)
-            TWGreenReport->setColumnCount(7);
+        if (TWGreenReport->columnCount() < 9)
+            TWGreenReport->setColumnCount(9);
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
         TWGreenReport->setHorizontalHeaderItem(0, __qtablewidgetitem7);
         QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
@@ -282,20 +282,25 @@ public:
         TWGreenReport->setHorizontalHeaderItem(5, __qtablewidgetitem12);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
         TWGreenReport->setHorizontalHeaderItem(6, __qtablewidgetitem13);
+        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
+        TWGreenReport->setHorizontalHeaderItem(7, __qtablewidgetitem14);
+        QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
+        TWGreenReport->setHorizontalHeaderItem(8, __qtablewidgetitem15);
         TWGreenReport->setObjectName(QStringLiteral("TWGreenReport"));
-        TWGreenReport->setGeometry(QRect(28, 70, 515, 211));
+        TWGreenReport->setGeometry(QRect(8, 70, 641, 209));
         TWGreenReport->setFocusPolicy(Qt::NoFocus);
         TWGreenReport->setAcceptDrops(false);
         TWGreenReport->setAutoFillBackground(false);
         TWGreenReport->setStyleSheet(QLatin1String("QTableWidget\n"
 "{\n"
 "	color: rgb(255, 255, 255);\n"
-"    alternate-background-color: rgb(28, 93, 45);\n"
+"    alternate-background-color: /*rgb(28, 93, 45);*/rgb(53, 89, 127);\n"
 "}\n"
 "QHeaderView::section\n"
 "{\n"
-"	background-color: rgb(28, 93, 45);\n"
-"	color: rgb(203, 203, 203);\n"
+"	/*background-color: rgb(28, 93, 45);*/	\n"
+"	background-color:rgb(36, 118, 59);\n"
+"	color: rgb(255, 255, 255);\n"
 "}"));
         TWGreenReport->setFrameShape(QFrame::Box);
         TWGreenReport->setFrameShadow(QFrame::Sunken);
@@ -311,7 +316,7 @@ public:
         TWGreenReport->verticalHeader()->setHighlightSections(false);
         PBGreenAlert = new QPushButton(TReports);
         PBGreenAlert->setObjectName(QStringLiteral("PBGreenAlert"));
-        PBGreenAlert->setGeometry(QRect(30, 30, 251, 31));
+        PBGreenAlert->setGeometry(QRect(10, 30, 311, 31));
         PBGreenAlert->setStyleSheet(QLatin1String("#PBGreenAlert{\n"
 "color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59)}\n"
@@ -326,7 +331,7 @@ public:
         PBGreenAlert->setFlat(false);
         PBRedAlert = new QPushButton(TReports);
         PBRedAlert->setObjectName(QStringLiteral("PBRedAlert"));
-        PBRedAlert->setGeometry(QRect(290, 30, 251, 31));
+        PBRedAlert->setGeometry(QRect(330, 30, 311, 31));
         PBRedAlert->setStyleSheet(QLatin1String("#PBRedAlert{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -339,34 +344,42 @@ public:
 "background-color:none*/"));
         LChooseAlertDelSet = new QLabel(TReports);
         LChooseAlertDelSet->setObjectName(QStringLiteral("LChooseAlertDelSet"));
-        LChooseAlertDelSet->setGeometry(QRect(550, 30, 161, 30));
+        LChooseAlertDelSet->setGeometry(QRect(650, 30, 81, 31));
         LChooseAlertDelSet->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color:rgb(36, 118, 59);"));
         TWRedReport = new QTableWidget(TReports);
-        if (TWRedReport->columnCount() < 4)
-            TWRedReport->setColumnCount(4);
-        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        TWRedReport->setHorizontalHeaderItem(0, __qtablewidgetitem14);
-        QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
-        TWRedReport->setHorizontalHeaderItem(1, __qtablewidgetitem15);
+        if (TWRedReport->columnCount() < 7)
+            TWRedReport->setColumnCount(7);
         QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
-        TWRedReport->setHorizontalHeaderItem(2, __qtablewidgetitem16);
+        TWRedReport->setHorizontalHeaderItem(0, __qtablewidgetitem16);
         QTableWidgetItem *__qtablewidgetitem17 = new QTableWidgetItem();
-        TWRedReport->setHorizontalHeaderItem(3, __qtablewidgetitem17);
+        TWRedReport->setHorizontalHeaderItem(1, __qtablewidgetitem17);
+        QTableWidgetItem *__qtablewidgetitem18 = new QTableWidgetItem();
+        TWRedReport->setHorizontalHeaderItem(2, __qtablewidgetitem18);
+        QTableWidgetItem *__qtablewidgetitem19 = new QTableWidgetItem();
+        TWRedReport->setHorizontalHeaderItem(3, __qtablewidgetitem19);
+        QTableWidgetItem *__qtablewidgetitem20 = new QTableWidgetItem();
+        TWRedReport->setHorizontalHeaderItem(4, __qtablewidgetitem20);
+        QTableWidgetItem *__qtablewidgetitem21 = new QTableWidgetItem();
+        TWRedReport->setHorizontalHeaderItem(5, __qtablewidgetitem21);
+        QTableWidgetItem *__qtablewidgetitem22 = new QTableWidgetItem();
+        TWRedReport->setHorizontalHeaderItem(6, __qtablewidgetitem22);
         TWRedReport->setObjectName(QStringLiteral("TWRedReport"));
-        TWRedReport->setGeometry(QRect(28, 70, 515, 211));
+        TWRedReport->setGeometry(QRect(8, 70, 641, 209));
         TWRedReport->setFocusPolicy(Qt::NoFocus);
         TWRedReport->setAcceptDrops(false);
         TWRedReport->setAutoFillBackground(false);
         TWRedReport->setStyleSheet(QLatin1String("QTableWidget\n"
 "{\n"
 "	color: rgb(255, 255, 255);\n"
-"    alternate-background-color:  rgb(227, 66, 54);\n"
+"    alternate-background-color:  /*rgb(255, 99, 85);*/rgb(53, 89, 127);\n"
+"\n"
 "}\n"
 "QHeaderView::section\n"
 "{\n"
-"	background-color: rgb(227, 66, 54);\n"
-"	color: rgb(203, 203, 203);\n"
+"	background-color: rgb(255, 77, 61);\n"
+"	color: rgb(255, 255, 255);\n"
+"\n"
 "}"));
         TWRedReport->setFrameShape(QFrame::Box);
         TWRedReport->setFrameShadow(QFrame::Sunken);
@@ -382,7 +395,7 @@ public:
         TWRedReport->verticalHeader()->setHighlightSections(false);
         CBSettings = new QComboBox(TReports);
         CBSettings->setObjectName(QStringLiteral("CBSettings"));
-        CBSettings->setGeometry(QRect(550, 72, 161, 22));
+        CBSettings->setGeometry(QRect(650, 70, 81, 22));
         CBSettings->setStyleSheet(QStringLiteral("background-color: none;"));
         TWMenu->addTab(TReports, QString());
         TSettings = new QWidget();
@@ -415,7 +428,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(2);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -439,7 +452,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem2 = TWFacesBase->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem3 = TWFacesBase->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Go to the folder", Q_NULLPTR));
+        ___qtablewidgetitem3->setText(QApplication::translate("MainApp", "Go to", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem4 = TWFacesBase->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QApplication::translate("MainApp", "Take a photo", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem5 = TWFacesBase->horizontalHeaderItem(5);
@@ -455,7 +468,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem7 = TWGreenReport->horizontalHeaderItem(0);
         ___qtablewidgetitem7->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem8 = TWGreenReport->horizontalHeaderItem(1);
-        ___qtablewidgetitem8->setText(QApplication::translate("MainApp", "Date", Q_NULLPTR));
+        ___qtablewidgetitem8->setText(QApplication::translate("MainApp", "Camera ID", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem9 = TWGreenReport->horizontalHeaderItem(2);
         ___qtablewidgetitem9->setText(QApplication::translate("MainApp", "FaceID", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem10 = TWGreenReport->horizontalHeaderItem(3);
@@ -463,20 +476,30 @@ public:
         QTableWidgetItem *___qtablewidgetitem11 = TWGreenReport->horizontalHeaderItem(4);
         ___qtablewidgetitem11->setText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem12 = TWGreenReport->horizontalHeaderItem(5);
-        ___qtablewidgetitem12->setText(QApplication::translate("MainApp", "Go to the folder", Q_NULLPTR));
+        ___qtablewidgetitem12->setText(QApplication::translate("MainApp", "Start date", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem13 = TWGreenReport->horizontalHeaderItem(6);
-        ___qtablewidgetitem13->setText(QApplication::translate("MainApp", "Delete alert", Q_NULLPTR));
+        ___qtablewidgetitem13->setText(QApplication::translate("MainApp", "Stop date", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem14 = TWGreenReport->horizontalHeaderItem(7);
+        ___qtablewidgetitem14->setText(QApplication::translate("MainApp", "Go to", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem15 = TWGreenReport->horizontalHeaderItem(8);
+        ___qtablewidgetitem15->setText(QApplication::translate("MainApp", "Delete alert", Q_NULLPTR));
         PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
         PBRedAlert->setText(QApplication::translate("MainApp", "Manage and view Red Alerts", Q_NULLPTR));
-        LChooseAlertDelSet->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert delete settings</p></body></html>", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem14 = TWRedReport->horizontalHeaderItem(0);
-        ___qtablewidgetitem14->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem15 = TWRedReport->horizontalHeaderItem(1);
-        ___qtablewidgetitem15->setText(QApplication::translate("MainApp", "Date", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem16 = TWRedReport->horizontalHeaderItem(2);
-        ___qtablewidgetitem16->setText(QApplication::translate("MainApp", "Go to the folder", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem17 = TWRedReport->horizontalHeaderItem(3);
-        ___qtablewidgetitem17->setText(QApplication::translate("MainApp", "Delete alert and photo", Q_NULLPTR));
+        LChooseAlertDelSet->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert <br/>delete settings</p></body></html>", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem16 = TWRedReport->horizontalHeaderItem(0);
+        ___qtablewidgetitem16->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem17 = TWRedReport->horizontalHeaderItem(1);
+        ___qtablewidgetitem17->setText(QApplication::translate("MainApp", "Camera ID", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem18 = TWRedReport->horizontalHeaderItem(2);
+        ___qtablewidgetitem18->setText(QApplication::translate("MainApp", "Start date", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem19 = TWRedReport->horizontalHeaderItem(3);
+        ___qtablewidgetitem19->setText(QApplication::translate("MainApp", "Stop date", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem20 = TWRedReport->horizontalHeaderItem(4);
+        ___qtablewidgetitem20->setText(QApplication::translate("MainApp", "Go to", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem21 = TWRedReport->horizontalHeaderItem(5);
+        ___qtablewidgetitem21->setText(QApplication::translate("MainApp", "Open movie", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem22 = TWRedReport->horizontalHeaderItem(6);
+        ___qtablewidgetitem22->setText(QApplication::translate("MainApp", "Delete alert and movie", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP

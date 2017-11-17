@@ -38,5 +38,7 @@
 		    <file>Resources/Images/logoutHover.png</file>
         <file>Resources/Images/folder.png</file>
         <file>Resources/Images/folderHover.png</file>
+        <file>Resources/Images/movie.png</file>
+       <file>Resources/Images/movieHover.png</file>
     </qresource>
 </RCC>

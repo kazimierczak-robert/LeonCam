@@ -13,7 +13,8 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 //	capThread = new CapturingFrame(this);
 
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
-	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(faceID); });
+
+	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(faceID).toString()); });
 	GetCamerasInfo(loggedID, cameraIDs);
 	currentCameraID = ui.CBPresets->currentData().toInt();
 	//connect(ui.PBFolder, SIGNAL(clicked()), this, SLOT(OpenFileExplorer(ID)));

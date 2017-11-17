@@ -15,6 +15,7 @@
 #include "NewPhoto.h"
 #include <map>
 #include "MainAppCamera.h"
+#include "qsqlresult.h"
 
 class MainApp : public QMainWindow
 {
@@ -38,6 +39,8 @@ private slots:
 	void AddPerson();
 	void EditPerson(int FaceID);
 	void RemovePerson(int FaceID);
+	void RemoveGreenAlert(int greenAlertID);
+	void RemoveRedAlert(int redAlertID);
 	void ChangeTWReport();
 public slots:
 	void OpenCameraEdit(int camID);
@@ -81,5 +84,7 @@ private:
 	void FillCBSetsWithAlertDelSets();
 	void FillReportsTW();
 	void AddRowToFB(int ID, QString name, QString surname);
+	void AddRowToGreenReports(int greenAlertID, int cameraID, int faceID, QString name, QString surname, QString startDate, QString stopDate);
+	void AddRowToRedReports(int redAlertID, int cameraID, QString startDate, QString stopDate);
 	void CurrentIndexChanged();
 };

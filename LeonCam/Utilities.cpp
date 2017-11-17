@@ -163,9 +163,9 @@ std::string Utilities::sha256(const std::string str)
 	}
 	return ss.str();
 }
-void Utilities::OpenFileExplorer(int ID)
+void Utilities::OpenFileExplorer(QString path)
 {
-	QString path = ".\\FaceBase\\" + QVariant(ID).toString();
+	//QString path = ".\\FaceBase\\" + QVariant(ID).toString();
 	//https://stackoverflow.com/a/11517874
 	QDir folder(path);
 	if (!folder.exists())

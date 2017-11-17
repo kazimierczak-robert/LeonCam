@@ -730,10 +730,10 @@ void MainApp::AdjustFaceBaseTW()
 	ui.TWFacesBase->setColumnWidth(0, 0);//ID
 	ui.TWFacesBase->setColumnWidth(1, 150);//Name
 	ui.TWFacesBase->setColumnWidth(2, 150);//Surname
-	ui.TWFacesBase->setColumnWidth(3, 110);//Go to the folder
-	ui.TWFacesBase->setColumnWidth(4, 90);//Take a photo
-	ui.TWFacesBase->setColumnWidth(5, 90);//Edit
-	ui.TWFacesBase->setColumnWidth(6, 90);//Delete
+	ui.TWFacesBase->setColumnWidth(3, 95);//Go to the folder
+	ui.TWFacesBase->setColumnWidth(4, 95);//Take a photo
+	ui.TWFacesBase->setColumnWidth(5, 95);//Edit
+	ui.TWFacesBase->setColumnWidth(6, 95);//Delete
 	ui.TWFacesBase->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	//Disable dotted border
 	ui.TWFacesBase->setFocusPolicy(Qt::NoFocus);
@@ -741,12 +741,14 @@ void MainApp::AdjustFaceBaseTW()
 void MainApp::AdjustGreenReportsTW()
 {
 	ui.TWGreenReport->setColumnWidth(0, 0);//ID
-	ui.TWGreenReport->setColumnWidth(1, 102);//Date
+	ui.TWGreenReport->setColumnWidth(1, 72);//CameraID
 	ui.TWGreenReport->setColumnWidth(2, 0);//FaceID
-	ui.TWGreenReport->setColumnWidth(3, 102);//Name
-	ui.TWGreenReport->setColumnWidth(4, 102);//Surname
-	ui.TWGreenReport->setColumnWidth(5, 102);//Go to the folder
-	ui.TWGreenReport->setColumnWidth(6, 102);//Delete alert
+	ui.TWGreenReport->setColumnWidth(3, 80);//Name
+	ui.TWGreenReport->setColumnWidth(4, 80);//Surname
+	ui.TWGreenReport->setColumnWidth(5, 118);//StartDate
+	ui.TWGreenReport->setColumnWidth(6, 118);//StopDate
+	ui.TWGreenReport->setColumnWidth(7, 68);//Go to the folder
+	ui.TWGreenReport->setColumnWidth(8, 84);//Delete alert
 	ui.TWGreenReport->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	//Disable dotted border
 	ui.TWGreenReport->setFocusPolicy(Qt::NoFocus);
@@ -754,9 +756,12 @@ void MainApp::AdjustGreenReportsTW()
 void MainApp::AdjustRedReportsTW()
 {
 	ui.TWRedReport->setColumnWidth(0, 0);//ID
-	ui.TWRedReport->setColumnWidth(1, 170);//Date
-	ui.TWRedReport->setColumnWidth(2, 170);//Go to the folder
-	ui.TWRedReport->setColumnWidth(3, 170);//Delete alert and photo
+	ui.TWRedReport->setColumnWidth(1, 72);//CameraID
+	ui.TWRedReport->setColumnWidth(2, 118);//StartDate
+	ui.TWRedReport->setColumnWidth(3, 118);//StopDate
+	ui.TWRedReport->setColumnWidth(4, 87);//Go to the folder
+	ui.TWRedReport->setColumnWidth(5, 87);//Open Movie
+	ui.TWRedReport->setColumnWidth(6, 138);//Delete alert and photo
 	ui.TWRedReport->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	//Disable dotted border
 	ui.TWRedReport->setFocusPolicy(Qt::NoFocus);
@@ -801,7 +806,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	//Set the layout on the widget
 	widget->setLayout(layout);
 	ui.TWFacesBase->setCellWidget(rowCount, 3, widget);
-	connect(button, &QPushButton::clicked, this, [this, FaceID] {Utilities::OpenFileExplorer(FaceID); });
+	connect(button, &QPushButton::clicked, this, [this, FaceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(FaceID).toString()); });
 
 	//New widget
 	widget = new QWidget();
@@ -858,6 +863,168 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	connect(button, &QPushButton::clicked, this, [this, FaceID] {RemovePerson(FaceID); });
 	ui.TWFacesBase->setSortingEnabled(true);
 }
+void MainApp::AddRowToGreenReports(int greenAlertID, int cameraID, int faceID, QString name, QString surname, QString startDate, QString stopDate)
+{
+	ui.TWGreenReport->setSortingEnabled(false);
+	QWidget *widget;
+	QPushButton *button;
+	QHBoxLayout *layout;
+	QTableWidgetItem *item;
+	int rowCount = ui.TWGreenReport->rowCount();
+
+	//Inserts an empty row into the table at row
+	ui.TWGreenReport->insertRow(ui.TWGreenReport->rowCount());
+
+	//Set the widget in the cell
+	item = new QTableWidgetItem(QVariant(greenAlertID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 0, item);
+
+	item = new QTableWidgetItem(QVariant(cameraID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 1, item);
+
+	item = new QTableWidgetItem(QVariant(faceID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 2, item);
+
+	item = new QTableWidgetItem(name);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 3, item);
+
+	item = new QTableWidgetItem(surname);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 4, item);
+
+	item = new QTableWidgetItem(startDate);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 5, item);
+
+	item = new QTableWidgetItem(stopDate);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWGreenReport->setItem(rowCount, 6, item);
+
+	//New widget
+	widget = new QWidget();
+	//Button to go to the folder (in the cell)
+	button = new QPushButton(ui.TWGreenReport);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/folder.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/folderHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWGreenReport);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	ui.TWGreenReport->setCellWidget(rowCount, 7, widget);
+	connect(button, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(faceID).toString()); });
+
+	//New widget
+	widget = new QWidget();
+	//Button to delete alert (in the cell)
+	button = new QPushButton(ui.TWGreenReport);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/remove.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/removeHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWGreenReport);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWGreenReport->setCellWidget(rowCount, 8, widget);
+	connect(button, &QPushButton::clicked, this, [this, greenAlertID] {RemoveGreenAlert(greenAlertID); });
+	ui.TWGreenReport->setSortingEnabled(true);
+}
+void MainApp::AddRowToRedReports(int redAlertID, int cameraID, QString startDate, QString stopDate)
+{
+	ui.TWRedReport->setSortingEnabled(false);
+	QWidget *widget;
+	QPushButton *button;
+	QHBoxLayout *layout;
+	QTableWidgetItem *item;
+	int rowCount = ui.TWRedReport->rowCount();
+
+	//Inserts an empty row into the table at row
+	ui.TWRedReport->insertRow(ui.TWRedReport->rowCount());
+
+	//Set the widget in the cell
+	item = new QTableWidgetItem(QVariant(redAlertID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWRedReport->setItem(rowCount, 0, item);
+
+	item = new QTableWidgetItem(QVariant(cameraID).toString());
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWRedReport->setItem(rowCount, 1, item);
+
+	item = new QTableWidgetItem(startDate);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWRedReport->setItem(rowCount, 2, item);
+
+	item = new QTableWidgetItem(stopDate);
+	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+	ui.TWRedReport->setItem(rowCount, 3, item);
+
+	//New widget
+	widget = new QWidget();
+	//Button to go to the folder (in the cell)
+	button = new QPushButton(ui.TWRedReport);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/folder.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/folderHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWRedReport);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	ui.TWRedReport->setCellWidget(rowCount, 4, widget);
+
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	Utilities::OpenFileExplorer(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString()); });
+
+	//New widget
+	widget = new QWidget();
+	//Button to open movie (in the cell)
+	button = new QPushButton(ui.TWRedReport);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/movie.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/movieHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWRedReport);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWRedReport->setCellWidget(rowCount, 5, widget);
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	Utilities::OpenFileExplorer(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString()); });
+	ui.TWRedReport->setSortingEnabled(true);
+
+	//New widget
+	widget = new QWidget();
+	//Button to delete alert (in the cell)
+	button = new QPushButton(ui.TWRedReport);
+	button->setFixedSize(25, 25);
+	button->setStyleSheet("QPushButton{border-image: url(:/Resources/Images/remove.png) 0 0 0 0 stretch stretch; border: none; margin: 0px; padding: 0px;} QPushButton:hover{border-image: url(:/Resources/Images/removeHover.png) 0 0 0 0 stretch stretch;}");
+	button->setFocusPolicy(Qt::NoFocus);
+	//Layout
+	layout = new QHBoxLayout(ui.TWRedReport);
+	layout->addWidget(button);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(0, 0, 0, 0);
+	//Set the layout on the widget
+	widget->setLayout(layout);
+	//Set the widget in the cell
+	ui.TWRedReport->setCellWidget(rowCount, 6, widget);
+	connect(button, &QPushButton::clicked, this, [this, redAlertID] {RemoveRedAlert(redAlertID); });
+	ui.TWRedReport->setSortingEnabled(true);
+}
 void MainApp::FillFacesBaseTW()
 {
 	AdjustFaceBaseTW();
@@ -903,7 +1070,47 @@ void MainApp::FillReportsTW()
 	ui.TWRedReport->setVisible(false);
 	GetAlertDeleteSettings();
 	FillCBSetsWithAlertDelSets();
-
+	//Fill green alerts
+	QSqlQuery query;
+	query.prepare("SELECT * FROM GreenAlerts");
+	bool result = query.exec();
+	int si;
+	if (result == true)
+	{
+		if (query.next())
+		{		
+			QSqlQuery queryFaces;
+			queryFaces.prepare("SELECT FaceID, Name, Surname FROM Faces");
+			result = queryFaces.exec();
+			if (result == true)
+			{
+				do
+				{
+					queryFaces.seek(-1, false);
+					//size() no supported
+					while (queryFaces.next())
+					{
+						if (queryFaces.value(0).toInt() == query.value(1).toInt())
+						{
+							AddRowToGreenReports(query.value(0).toInt(), query.value(2).toInt(), query.value(1).toInt(), queryFaces.value(1).toString(), queryFaces.value(2).toString(), query.value(3).toString(), query.value(4).toString());
+							break;
+						}
+					}
+				} while (query.next());
+			}
+		}
+	}
+	//Fill red alerts
+	query.clear();
+	query.prepare("SELECT * FROM RedAlerts");
+	result = query.exec();
+	if (result == true)
+	{
+		while (query.next())
+		{
+				AddRowToRedReports(query.value(0).toInt(), query.value(1).toInt(), query.value(2).toString(), query.value(3).toString());
+		}
+	}
 }
 void MainApp::UpdateDBAfterCellChanged(int row, int column)
 {
@@ -1132,7 +1339,7 @@ void MainApp::RemovePerson(int FaceID)
 		}
 	}
 
-	//Remove from DB
+	//Remove from Faces DB
 	QSqlQuery query;
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
 	query.exec("DELETE FROM Faces WHERE FaceID = ?");
@@ -1146,6 +1353,76 @@ void MainApp::RemovePerson(int FaceID)
 	else
 	{
 		Utilities::RemoveFolderRecursively(".\\FaceBase\\" + QVariant(FaceID).toString());
+	}
+	//Delete from GreenAlert
+	query.clear();
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
+	query.exec("DELETE FROM GreenAlerts WHERE FaceID = ?");
+	query.bindValue(0, FaceID);
+	result = query.exec();
+	query.exec("COMMIT");
+}
+void MainApp::RemoveGreenAlert(int greenAlertID)
+{
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> green alert with ID: " + ((QVariant)greenAlertID).toString() + "?"))
+	{
+		//Remove row from table
+		for (int i = 0; i < ui.TWGreenReport->rowCount(); i++)
+		{
+			if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
+			{
+				ui.TWGreenReport->removeCellWidget(i, 7);
+				ui.TWGreenReport->removeCellWidget(i, 8);
+				ui.TWGreenReport->removeRow(i);
+				break;
+			}
+		}
+	}
+
+	//Remove from DB
+	QSqlQuery query;
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
+	query.exec("DELETE FROM GreenAlerts WHERE GreenAlertID = ?");
+	query.bindValue(0, greenAlertID);
+	bool result = query.exec();
+	query.exec("COMMIT");
+	if (result == false)
+	{
+		Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+	}
+}
+void MainApp::RemoveRedAlert(int redAlertID)
+{
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> red alert with ID: " + ((QVariant)redAlertID).toString() + "?"))
+	{
+		//Remove row from table
+		for (int i = 0; i < ui.TWRedReport->rowCount(); i++)
+		{
+			if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
+			{
+				ui.TWRedReport->removeCellWidget(i, 4);
+				ui.TWRedReport->removeCellWidget(i, 5);
+				ui.TWRedReport->removeCellWidget(i, 6);
+				ui.TWRedReport->removeRow(i);
+				break;
+			}
+		}
+	}
+
+	//Remove from DB
+	QSqlQuery query;
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
+	query.exec("DELETE FROM RedAlerts WHERE RedAlertID = ?");
+	query.bindValue(0, redAlertID);
+	bool result = query.exec();
+	query.exec("COMMIT");
+	if (result == false)
+	{
+		Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+	}
+	else
+	{
+		//TODO:: Remove video
 	}
 }
 void MainApp::ChangeTWReport()
