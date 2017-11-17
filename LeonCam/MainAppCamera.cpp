@@ -20,9 +20,16 @@ void MainAppCamera::SetStreamURI(std::string streamURI) //OK
 	this->streamURI = streamURI;
 }
 
+void MainAppCamera::SetSendBigPicture(bool setting)
+{
+	this->sendBigPicture = setting;
+}
+
 void MainAppCamera::run()
 {
 	this->isWorking = true;
+
+	sendBigPicture = false;
 	//Image from camera
 	if (vcap.open(streamURI)) //OK
 	{
@@ -212,7 +219,7 @@ void MainAppCamera::Process()
 			//Resize oroginal image
 			cvtColor(img, img, CV_BGR2RGB);
 
-			if (frameID% 2 == 0)
+			if (frameID % 2 == 0 && sendBigPicture)
 			{
 				cv::resize(img, img, cv::Size(760, 427));
 				emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));

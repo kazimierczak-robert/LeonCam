@@ -16,7 +16,7 @@
 #include "CameraControl.h"
 #include "ImgProc.h"
 #include "MainAppCamera.h"
-
+#include <QCloseEvent>
 
 class NewPhoto : public QDialog
 {
@@ -45,4 +45,5 @@ private:
 	bool CameraPreviewUpdate(std::string streamUri);//Update video frames
 	void NewPhoto::FillPtzAndProfileToken(std::string passHash);
 	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);
+	void closeEvent(QCloseEvent *event);
 };

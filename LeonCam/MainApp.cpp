@@ -292,7 +292,9 @@ void MainApp::CameraSelected(QGridLayout* layout)
 
 		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), onvifDevice, cameraID, cameraThread->at(cameraID), passHash);
 		connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
+		cameraThread->at(cameraID)->SetSendBigPicture(true);
 		cameraPreview->exec();
+		cameraThread->at(cameraID)->SetSendBigPicture(false);
 		delete cameraPreview;
 	}
 }
@@ -398,6 +400,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	}
 	else
 	{
+		cameraThread->at(cameraID)->SetSendBigPicture(false);
 		button->setText("Off");
 		button->setToolTip("Start monitoring camera");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
@@ -425,7 +428,7 @@ void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 	}
 	else
 	{
-		cameraThread->at(cameraID)->ChangeFaceRecoState(true);
+		cameraThread->at(cameraID)->ChangeFaceRecoState(false);
 		button->setText("Off");
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}

@@ -22,6 +22,7 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 		[=](int index) {CurrentIndexChanged(passHash); });
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
 	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
 	FillPtzAndProfileToken(passHash);
 	//Camera control
 	cameraControl = new CameraControl(this->ptz, this->profileToken);
@@ -220,10 +221,18 @@ void NewPhoto::CurrentIndexChanged(std::string passHash)
 {
 	//Get previousCameraID
 	int previousCameraID = currentCameraID;
+	cameraThread->at(previousCameraID)->SetSendBigPicture(false);
 	//Change currentCameraID
 	currentCameraID = ui.CBPresets->currentData().toInt();
 	FillPtzAndProfileToken(passHash);
 	//Disconnect 'old' thread
 	disconnect(cameraThread->at(previousCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
+}
+
+void NewPhoto::closeEvent(QCloseEvent *event)
+{
+	cameraThread->at(currentCameraID)->SetSendBigPicture(false);
+	event->accept();
 }

@@ -26,6 +26,7 @@ public:
 	void StopThread();
 	void ChangeFaceRecoState(bool state);
 	void SetCameraID(int cameraID) { this->cameraID = cameraID; }
+	void SetSendBigPicture(bool setting);
 	QTimer *greenTimer;
 	QTimer *redTimer;
 signals:
@@ -40,6 +41,7 @@ private:
 	ImgProc *imgProc = nullptr;
 	std::string streamURI;
 	bool isWorking;
+	bool sendBigPicture;
 	bool faceRecognitionState = false;
 	cv::VideoCapture vcap;
 	cv::Mat img;

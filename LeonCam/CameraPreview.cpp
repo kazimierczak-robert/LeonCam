@@ -93,6 +93,8 @@ void CameraPreview::TurnOnLabels()
 	ui.PBRight->setEnabled(true);
 	ui.PBHome->setEnabled(true);
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
+	ui.PBSnapshot->setEnabled(true);
+	capThread->SetSendBigPicture(true);
 }
 
 bool CameraPreview::SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice)
@@ -119,6 +121,7 @@ bool CameraPreview::SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice)
 
 void CameraPreview::TurnOffLabels()
 {
+	capThread->SetSendBigPicture(false);
 	ui.PBCameraOnOff->setText("Off");
 	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 	ui.PBUp->setEnabled(false);
@@ -127,6 +130,7 @@ void CameraPreview::TurnOffLabels()
 	ui.PBRight->setEnabled(false);
 	ui.PBHome->setEnabled(false);
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
+	ui.PBSnapshot->setEnabled(false);
 }
 
 void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
@@ -181,16 +185,19 @@ void CameraPreview::TurnOnOffCamera()
 	{
 		CloseCameraEdit(ui.LCameraDetails->text());
 	}
-	if (ui.PBCameraOnOff->text() == "Off")
-	{
-		buttonIsEnabledFromParent->click();
-		TurnOnLabels();
-	}
 	else
 	{
-		buttonIsEnabledFromParent->click();
-		TurnOffLabels();
-		ui.LPreviewScreen->clear();
+		if (ui.PBCameraOnOff->text() == "Off")
+		{
+			buttonIsEnabledFromParent->click();
+			TurnOnLabels();
+		}
+		else
+		{
+			buttonIsEnabledFromParent->click();
+			TurnOffLabels();
+			ui.LPreviewScreen->clear();
+		}
 	}
 }
 
