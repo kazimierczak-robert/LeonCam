@@ -153,11 +153,11 @@ public:
         LEPassword->setPlaceholderText(QApplication::translate("UserCamera", "Password", Q_NULLPTR));
         PBAdd->setText(QApplication::translate("UserCamera", "Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits and must be unique.<br/>If <span style=\" font-weight:600;\">IP Address</span> is typed without port number, it takes <span style=\" font-weight:600;\">default</span> port (<span style=\" font-weight:600;\">80</span>)</p></body></html>", Q_NULLPTR));
+        LTip->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> must be unique.<br/>If <span style=\" font-weight:600;\">IP Address</span> is typed without port number, it takes <span style=\" font-weight:600;\">default</span> port (<span style=\" font-weight:600;\">80</span>)</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        LTipLoginPass->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Login</span> and <span style=\" font-weight:600;\">Password</span> must be filled.</p></body></html>", Q_NULLPTR));
+        LTipLoginPass->setToolTip(QApplication::translate("UserCamera", "<html><head/><body><p><span style=\" font-weight:600;\">Login</span> and <span style=\" font-weight:600;\">Password</span> must be filled.<br/><span style=\" font-weight:600;\">Password</span> has <span style=\" font-weight:600;\">127</span> letters limits.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTipLoginPass->setText(QString());
     } // retranslateUi

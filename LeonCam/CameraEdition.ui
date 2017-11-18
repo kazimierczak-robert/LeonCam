@@ -64,7 +64,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; have &lt;span style=&quot; font-weight:600;&quot;&gt;X&lt;/span&gt; letters limits and must be unique.&lt;br/&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;IP Address&lt;/span&gt; is typed without port number, it takes &lt;span style=&quot; font-weight:600;&quot;&gt;default&lt;/span&gt; port (&lt;span style=&quot; font-weight:600;&quot;&gt;80&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt; must be unique.&lt;br/&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;IP Address&lt;/span&gt; is typed without port number, it takes &lt;span style=&quot; font-weight:600;&quot;&gt;default&lt;/span&gt; port (&lt;span style=&quot; font-weight:600;&quot;&gt;80&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">#LTip{background-image: url(:/Resources/Images/bulb.png);}
@@ -258,6 +258,26 @@ padding: 0px;*/</string>
      <string>Confirm new password</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QLabel" name="LTipLoginPass">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>395</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Password&lt;/span&gt; has &lt;span style=&quot; font-weight:600;&quot;&gt;127&lt;/span&gt; letters limits.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}
+#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

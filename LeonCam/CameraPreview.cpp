@@ -43,6 +43,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
+
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
 

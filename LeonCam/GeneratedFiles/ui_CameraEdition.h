@@ -37,6 +37,7 @@ public:
     QLineEdit *LEOldPassword;
     QLineEdit *LEPassword;
     QLineEdit *LEConfPass;
+    QLabel *LTipLoginPass;
 
     void setupUi(QDialog *CameraEdition)
     {
@@ -116,6 +117,11 @@ public:
         LEConfPass->setGeometry(QRect(10, 80, 231, 25));
         LEConfPass->setMaxLength(127);
         LEConfPass->setEchoMode(QLineEdit::Password);
+        LTipLoginPass = new QLabel(CameraEdition);
+        LTipLoginPass->setObjectName(QStringLiteral("LTipLoginPass"));
+        LTipLoginPass->setGeometry(QRect(510, 395, 31, 31));
+        LTipLoginPass->setStyleSheet(QLatin1String("#LTipLoginPass{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipLoginPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
         QWidget::setTabOrder(LEDescripton, LEIPv4Address);
         QWidget::setTabOrder(LEIPv4Address, LELogin);
         QWidget::setTabOrder(LELogin, LEOldPassword);
@@ -140,7 +146,7 @@ public:
         LEIPv4Address->setText(QString());
         LEIPv4Address->setPlaceholderText(QApplication::translate("CameraEdition", "IPv4 address : port number", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        LTip->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> have <span style=\" font-weight:600;\">X</span> letters limits and must be unique.<br/>If <span style=\" font-weight:600;\">IP Address</span> is typed without port number, it takes <span style=\" font-weight:600;\">default</span> port (<span style=\" font-weight:600;\">80</span>)</p></body></html>", Q_NULLPTR));
+        LTip->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> must be unique.<br/>If <span style=\" font-weight:600;\">IP Address</span> is typed without port number, it takes <span style=\" font-weight:600;\">default</span> port (<span style=\" font-weight:600;\">80</span>)</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTip->setText(QString());
         LHelp->setText(QApplication::translate("CameraEdition", "<html><head/><body><p align=\"center\">Edit selected fields. If you do not want to change password, </p><p align=\"center\">skip <span style=\" font-weight:600; color:#bdf0ff;\">Change password</span> section!</p></body></html>", Q_NULLPTR));
@@ -155,6 +161,10 @@ public:
         LEPassword->setText(QString());
         LEPassword->setPlaceholderText(QApplication::translate("CameraEdition", "New password", Q_NULLPTR));
         LEConfPass->setPlaceholderText(QApplication::translate("CameraEdition", "Confirm new password", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        LTipLoginPass->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Password</span> has <span style=\" font-weight:600;\">127</span> letters limits.</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        LTipLoginPass->setText(QString());
     } // retranslateUi
 
 };

@@ -356,18 +356,20 @@ void MainAppCamera::Process()
 
 			}
 
+			cv::Mat resizedMat;
 			//Resize oroginal image
-			cvtColor(img, img, CV_BGR2RGB);
+			cvtColor(img, resizedMat, CV_BGR2RGB);
 
 			if (frameID % 2 == 0 && sendBigPicture)
 			{
-				cv::resize(img, img, cv::Size(760, 427));
-				emit updatePixmap(QPixmap::fromImage(QImage(img.data, 760, 427, img.step, QImage::Format_RGB888)));
+
+				cv::resize(resizedMat, resizedMat, cv::Size(760, 427));
+				emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
 			}
 
-			cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
+			cv::resize(resizedMat, resizedMat, cv::Size(thumbnailWidth, thumbnailHeight));
 			//View on thumbnail
-			emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)), cameraID);
+			emit updateThumbnail(QPixmap::fromImage(QImage(resizedMat.data, thumbnailWidth, thumbnailHeight, resizedMat.step, QImage::Format_RGB888)), cameraID);
 		}
 	}
 }
@@ -375,7 +377,9 @@ void MainAppCamera::SaveMat()
 {
 	QString filePath = ".\\Pictures\\PhotoFromCameras\\" + QVariant(cameraID).toString();
 	Utilities::CreateFolderIfNotExists(filePath);
-	filePath = filePath + "\\" + Utilities::GetCurrentDateTime() + ".jpg";
+	QString fileName= Utilities::GetCurrentDateTime() + ".jpg";
+	std::replace(fileName.begin(), fileName.end(), ':', '-');
+	filePath = filePath + "\\" + fileName;
 	cv::imwrite(filePath.toStdString(), img);
 	Utilities::MBAlarm("Picture has been taken", true);
 }

@@ -169,6 +169,9 @@ void MainApp::AddCameraFromDB(int cameraID)
 		query.next();
 		QGridLayout *layout = new QGridLayout();
 
+		//Add thread do cameraThread map (combines layout camera with thread)
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
+
 		QPushButton* btn = new QPushButton();
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
@@ -200,7 +203,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/snapshot.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/snapshotHover.png);}");
 		btn->setToolTip("Take a picture (disabled)");
 		btn->setEnabled(false);
-		connect(btn, &QPushButton::clicked, this, [this, btn] {TakePictureCamera(btn); });
+		connect(btn, SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
 		layout->addWidget(btn, 2, 1);
 
 		btn = new QPushButton();
@@ -236,8 +239,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 
 		//layout->itemAtPosition(2,0)->widget()->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 
-		//Add thread do cameraThread map (combines layout camera with thread)
-		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
+
 
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 6)
 		{
@@ -414,10 +416,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
 }
-void MainApp::TakePictureCamera(QPushButton* button)
-{
-	
-}
+
 void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
 	if (button->text() == "Off")
@@ -610,6 +609,14 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 	if (result == true)
 	{
 		DeleteCameraFromMemory(layout);
+		query.clear();
+		query.prepare("DELETE FROM GreenAlerts WHERE CameraID=?");
+		query.bindValue(0, CameraID);
+		query.exec();
+		query.clear();
+		query.prepare("DELETE FROM RedAlerts WHERE CameraID=?");
+		query.bindValue(0, CameraID);
+		query.exec();
 	}
 }
 void MainApp::LESearchChanged()

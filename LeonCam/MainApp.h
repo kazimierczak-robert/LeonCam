@@ -74,7 +74,6 @@ private:
 	};
 	Camera* GetCameraFromDBByID(int CameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
-	void TakePictureCamera(QPushButton* button);
 	void RecognitionCamera(QPushButton* button, int cameraID);
 	void EditCamera(int CameraID, QLabel *label);
 	void DeleteCameraFromMemory(QGridLayout* layout);
