@@ -373,6 +373,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 					string profileToken;
 					OnvifClientPTZ *ptz = nullptr;
 					profileToken = profiles.Profiles[0]->token;
+					int cameraFPS = profiles.Profiles[0]->VideoEncoderConfiguration->RateControl->FrameRateLimit;
 					_trt__GetStreamUriResponse link;
 					media.GetStreamUrl(profileToken, link);
 
@@ -383,6 +384,8 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 						cameraThread->at(cameraID)->SetStreamURI(streamURI);
 						//Set camera ID
 						cameraThread->at(cameraID)->SetCameraID(cameraID);
+						//Set camera FPS
+						cameraThread->at(cameraID)->SetFPS(cameraFPS);
 						//Start thread
 						cameraThread->at(cameraID)->start();
 						connect(cameraThread->at(cameraID), SIGNAL(updateThumbnail(const QPixmap&, int)), this, SLOT(UpdateThumbnail(const QPixmap&, int)));

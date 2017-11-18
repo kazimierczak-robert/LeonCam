@@ -27,6 +27,7 @@ public:
 	void StopThread();
 	void ChangeFaceRecoState(bool state);
 	void SetCameraID(int cameraID) { this->cameraID = cameraID; }
+	void SetFPS(int fps) { this->cameraFPS = fps; }
 	void SetSendBigPicture(bool setting);
 	QTimer *greenTimer;
 	QTimer *redTimer;
@@ -63,6 +64,7 @@ private:
 	cv::Mat img;
 	std::list<GreenAlert> *greenAlertList;
 	RedAlert *redAlert = nullptr;
+	int cameraFPS;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
 public slots:
