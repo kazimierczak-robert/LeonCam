@@ -12,6 +12,7 @@
 #include <iterator>
 #include <QCoreApplication>
 #include <qrunnable.h>
+#include "Utilities.h"
 
 #define thumbnailWidth 216
 #define thumbnailHeight 123
@@ -70,6 +71,7 @@ public slots:
 	void CheckGreenAlertInList(int greenAlertID);
 	void CheckRedAlertID(int redAlertID);
 	void Process();
+	void SaveMat();
 signals:
 	void starkWorking();
 	void insertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);

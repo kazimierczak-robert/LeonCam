@@ -371,4 +371,11 @@ void MainAppCamera::Process()
 		}
 	}
 }
-
+void MainAppCamera::SaveMat()
+{
+	QString filePath = ".\\Pictures\\PhotoFromCameras\\" + QVariant(cameraID).toString();
+	Utilities::CreateFolderIfNotExists(filePath);
+	filePath = filePath + "\\" + Utilities::GetCurrentDateTime() + ".jpg";
+	cv::imwrite(filePath.toStdString(), img);
+	Utilities::MBAlarm("Picture has been taken", true);
+}
