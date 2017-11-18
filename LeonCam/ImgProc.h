@@ -17,20 +17,6 @@
 class ImgProc
 {
 public:
-	struct GreenAlert
-	{
-		int faceID;
-		int cameraID;
-		QString startDate;
-		QString stopDate;
-		int greenAlertID;
-	};
-	struct RedAlert
-	{
-		QString startDate;
-		QString stopDate;
-		int redAlertID;
-	};
 	ImgProc(int loggedID);
 	ImgProc(const ImgProc &imProc, int cameraID);
 	~ImgProc();
@@ -39,7 +25,7 @@ public:
 	void LoadFaceCascade();
 	void TrainFaceRecognizer();
 	cv::CascadeClassifier getFaceCascade() { return faceCascade; }
-	bool PredictPerson(cv::Mat matImg);
+	int PredictPerson(cv::Mat matImg);
 	bool CheckIfModelTrained() {return isModelTrained;}
 	std::vector<cv::Mat> GetImages() { return images; }
 	std::vector<int> GetLabels() { return labels; }
@@ -61,17 +47,12 @@ public:
 		labels.clear();
 	}
 	int GetLoggedID() { return loggedID; }
-	std::list<GreenAlert> *GetGreenAlertList() { return greenAlertList; }
-	RedAlert *GetRedAlert() { return redAlert; }
-	void SetRedAlertID(int redAlertID) { redAlert->redAlertID = redAlertID; }
 private:
 	int cameraID;
 	int loggedID;
 	bool isModelTrained;
 	bool loadedFaceCascade;
 	std::string faceCascadeName = "";
-	std::list<GreenAlert> *greenAlertList;
-	RedAlert *redAlert=nullptr;
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
 	cv::CascadeClassifier faceCascade;

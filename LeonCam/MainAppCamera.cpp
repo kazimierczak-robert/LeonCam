@@ -5,8 +5,9 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 {
 	this->imgProc = new ImgProc(*imgProc, cameraID);
 	this->cameraID = cameraID;
-
-	
+	this->greenAlertList = new std::list<GreenAlert>();
+	redAlert = new RedAlert();
+	redAlert->redAlertID = -1;
 }
 
 MainAppCamera::~MainAppCamera()
@@ -24,7 +25,115 @@ void MainAppCamera::SetSendBigPicture(bool setting)
 {
 	this->sendBigPicture = setting;
 }
+void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
+{
+	QString dateTimeNow;
+	QSqlQuery query;
+	bool result = false;
+	/*	 RED SECTION	*/
+	if (predictionLabel < 0)
+	{
+		//Person hasn't been recognized
+		//Check if 1 minute has passed : 1 * 60 * 1000
+		result = redAlert->redAlertID < 0 ? true : false;
+		//YES
+		if (result == true)
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("INSERT INTO RedAlerts (CameraID, StartDate, StopDate, UserID) "
+				"VALUES (:CameraID, :StartDate, :StopDate, :UserID)");
+			query.bindValue(":CameraID", cameraID);
+			query.bindValue(":StartDate", dateTimeNow);
+			query.bindValue(":StopDate", dateTimeNow);
+			query.bindValue(":UserID", imgProc->GetLoggedID());
+			result = query.exec();
 
+			//Get inserted redAlertID
+			query.exec("COMMIT");
+			query.prepare("SELECT RedAlertID FROM RedAlerts WHERE CameraID = ? AND StartDate = ?");
+			query.bindValue(0, cameraID);
+			query.bindValue(1, dateTimeNow);
+			result = query.exec();
+			//Add to object
+			if (result == true)
+			{
+				query.next();
+				redAlert->redAlertID = query.value(0).toInt();
+				redAlert->startDate = dateTimeNow;
+				redAlert->stopDate = dateTimeNow;
+				/*emit insertRedAlert(query.value(0).toInt(), cameraID, dateTimeNow);*/
+			}
+			//TODO: start movie
+		}
+		else
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+			//NO
+			//Update stopDate in redAlert object
+			redAlert->stopDate = dateTimeNow;
+		}
+	}
+	/*	 GREEN SECTION	*/
+	else //Person has been recognized
+	{
+		int faceID = predictionLabel;
+		int camID = cameraID;
+		bool contains = false;
+		for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end(); iter++)
+		{
+			if (iter->faceID == faceID)
+			{
+				contains = true;
+				dateTimeNow = Utilities::GetCurrentDateTime();
+				//Update stopDate in greenAlertVector
+				iter->stopDate = dateTimeNow;
+				break;
+			}
+		}
+		if (contains == false)
+		{
+			dateTimeNow = Utilities::GetCurrentDateTime();
+
+			//Add tuple to BD
+			query.exec("BEGIN IMMEDIATE TRANSACTION");
+			query.prepare("INSERT INTO GreenAlerts (FaceID, CameraID, StartDate, StopDate, UserID) "
+				"VALUES (:FaceID, :CameraID, :StartDate, :StopDate, :UserID)");
+			query.bindValue(":FaceID", faceID);
+			query.bindValue(":CameraID", cameraID);
+			query.bindValue(":StartDate", dateTimeNow);
+			query.bindValue(":StopDate", dateTimeNow);
+			query.bindValue(":UserID", imgProc->GetLoggedID());
+			result = query.exec();
+			if (result == true)
+			{
+				//Get inserted greenAlertID
+				query.exec("COMMIT");
+				query.prepare("SELECT GreenAlertID FROM GreenAlerts WHERE CameraID = ? AND StartDate = ?");
+				query.bindValue(0, cameraID);
+				query.bindValue(1, dateTimeNow);
+				result = query.exec();
+				if (result == true)
+				{
+					query.next();
+					//Add to greenAlertVector vector
+					struct GreenAlert greenAlert;
+					greenAlert.faceID = faceID;
+					greenAlert.cameraID = cameraID;
+					greenAlert.greenAlertID = query.value(0).toInt();
+					greenAlert.startDate = dateTimeNow;
+					greenAlert.stopDate = dateTimeNow;
+					greenAlertList->push_back(greenAlert);
+					//emit insertGreenAlert(query.value(0).toInt(), faceID, cameraID, dateTimeNow);
+				}
+			}
+			else
+			{
+				//TODO
+			}
+		}
+	}
+}
 void MainAppCamera::run()
 {
 	this->isWorking = true;
@@ -63,11 +172,11 @@ void MainAppCamera::run()
 		QSqlQuery query;
 		bool result = false;
 		//update green alerts
-		if (imgProc->GetGreenAlertList()->size() > 0)
+		if (greenAlertList->size() > 0)
 		{
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
 			//Go through GreenAlertVector
-			for (std::list<ImgProc::GreenAlert>::iterator iter = imgProc->GetGreenAlertList()->begin(); iter != imgProc->GetGreenAlertList()->end(); iter++)
+			for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end(); iter++)
 			{
 				query.prepare("UPDATE GreenAlerts SET StopDate = ? WHERE GreenAlertID = ?");
 				query.bindValue(0, iter->stopDate);
@@ -82,15 +191,15 @@ void MainAppCamera::run()
 		}
 
 		//update red alerts
-		if (imgProc->GetRedAlert()->redAlertID > 0)
+		if (redAlert->redAlertID > 0)
 		{
 			//TODO: Stop movie
 			//update BD
 			result = false;
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
 			query.prepare("UPDATE RedAlerts SET StopDate = ? WHERE RedAlertID = ?");
-			query.bindValue(0, imgProc->GetRedAlert()->stopDate);
-			query.bindValue(1, imgProc->GetRedAlert()->redAlertID);
+			query.bindValue(0, redAlert->stopDate);
+			query.bindValue(1, redAlert->redAlertID);
 			result = query.exec();
 			query.exec("COMMIT");
 		}
@@ -108,7 +217,7 @@ void MainAppCamera::ChangeFaceRecoState(bool state)
 
 void MainAppCamera::UpdateGreenAlerts()
 {
-	if (imgProc->GetGreenAlertList()->size() == 0) return;
+	if (greenAlertList->size() == 0) return;
 	QSqlQuery query;
 	bool result = false;
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
@@ -117,7 +226,7 @@ void MainAppCamera::UpdateGreenAlerts()
 	QDateTime dTNow;
 	QDateTime dtStop;
 	//Go through GreenAlertVector
-	for (std::list<ImgProc::GreenAlert>::iterator iter = imgProc->GetGreenAlertList()->begin(); iter != imgProc->GetGreenAlertList()->end(); iter++)
+	for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end(); iter++)
 	{
 		query.prepare("UPDATE GreenAlerts SET StopDate = ? WHERE GreenAlertID = ?");
 		query.bindValue(0, iter->stopDate);
@@ -135,14 +244,14 @@ void MainAppCamera::UpdateGreenAlerts()
 		msDifferece = dtStop.msecsTo(dTNow);
 		if (msDifferece > (5 * 60 * 1000))
 		{
-			iter = imgProc->GetGreenAlertList()->erase(iter);
+			iter = greenAlertList->erase(iter);
 		}
 	}
 	query.exec("COMMIT");		
 }
 void MainAppCamera::UpdateRedAlerts()
 {
-	if (imgProc->GetRedAlert()->redAlertID < 0) return;
+	if (redAlert->redAlertID < 0) return;
 	//TODO: Stop movie
 	//update BD
 	QSqlQuery query;
@@ -151,19 +260,19 @@ void MainAppCamera::UpdateRedAlerts()
 	QString dateTimeNow = Utilities::GetCurrentDateTime();
 
 	query.prepare("UPDATE RedAlerts SET StopDate = ? WHERE RedAlertID = ?");
-	query.bindValue(0, imgProc->GetRedAlert()->stopDate);
-	query.bindValue(1, imgProc->GetRedAlert()->redAlertID);
+	query.bindValue(0, redAlert->stopDate);
+	query.bindValue(1, redAlert->redAlertID);
 	result = query.exec();
 
 	query.exec("COMMIT");
 	//if 1 minute has passed set RedAlert to -1
 	int msDifferece = -1;
 	QDateTime dTNow = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
-	QDateTime dtStop = QDateTime::fromString(imgProc->GetRedAlert()->stopDate, "yyyy-MM-dd HH:mm:ss");
+	QDateTime dtStop = QDateTime::fromString(redAlert->stopDate, "yyyy-MM-dd HH:mm:ss");
 	msDifferece = dtStop.msecsTo(dTNow);
 	if (msDifferece > (1 * 60 * 1000))
 	{
-		imgProc->SetRedAlertID(-1);
+		redAlert->redAlertID = -1;
 	}
 }
 void MainAppCamera::Process()
@@ -209,7 +318,11 @@ void MainAppCamera::Process()
 							//save to debug
 							//cv::imwrite(".\\x.jpg", imgCropped);
 							//Predict person
-							imgProc->PredictPerson(imgCropped);
+							int predictionLabel = imgProc->PredictPerson(imgCropped);
+							if (predictionLabel > -2)
+							{
+								UpdateDBAfterPrediction(predictionLabel);
+							}
 						}
 					}
 				}
@@ -228,8 +341,6 @@ void MainAppCamera::Process()
 			cv::resize(img, img, cv::Size(thumbnailWidth, thumbnailHeight));
 			//View on thumbnail
 			emit updateThumbnail(QPixmap::fromImage(QImage(img.data, thumbnailWidth, thumbnailHeight, img.step, QImage::Format_RGB888)), cameraID);
-
-
 		}
 	}
 }

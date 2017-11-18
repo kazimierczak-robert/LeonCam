@@ -38,6 +38,20 @@ signals:
 //	void UpdateRedAlerts();
 
 private:
+	struct GreenAlert
+	{
+		int faceID;
+		int cameraID;
+		QString startDate;
+		QString stopDate;
+		int greenAlertID;
+	};
+	struct RedAlert
+	{
+		QString startDate;
+		QString stopDate;
+		int redAlertID;
+	};
 	int cameraID = -1;
 	ImgProc *imgProc = nullptr;
 	std::string streamURI;
@@ -46,6 +60,9 @@ private:
 	bool faceRecognitionState = false;
 	cv::VideoCapture vcap;
 	cv::Mat img;
+	std::list<GreenAlert> *greenAlertList;
+	RedAlert *redAlert = nullptr;
+	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
 public slots:
 	void UpdateGreenAlerts();
