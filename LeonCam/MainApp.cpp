@@ -1364,6 +1364,7 @@ void MainApp::RemovePerson(int FaceID)
 }
 void MainApp::RemoveGreenAlert(int greenAlertID)
 {
+	int cameraID = -1;
 	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> green alert with ID: " + ((QVariant)greenAlertID).toString() + "?"))
 	{
 		//Remove row from table
@@ -1371,6 +1372,7 @@ void MainApp::RemoveGreenAlert(int greenAlertID)
 		{
 			if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
 			{
+				cameraID = ui.TWGreenReport->item(i, 1)->text().toInt();
 				ui.TWGreenReport->removeCellWidget(i, 7);
 				ui.TWGreenReport->removeCellWidget(i, 8);
 				ui.TWGreenReport->removeRow(i);
@@ -1390,9 +1392,16 @@ void MainApp::RemoveGreenAlert(int greenAlertID)
 	{
 		Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
 	}
+	if (cameraID > -1)
+	{
+		connect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
+		emit checkGreenAlertInList(greenAlertID);
+		disconnect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
+	}
 }
 void MainApp::RemoveRedAlert(int redAlertID)
 {
+	int cameraID = -1;
 	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> red alert with ID: " + ((QVariant)redAlertID).toString() + "?"))
 	{
 		//Remove row from table
@@ -1400,6 +1409,7 @@ void MainApp::RemoveRedAlert(int redAlertID)
 		{
 			if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
 			{
+				cameraID = ui.TWRedReport->item(i, 1)->text().toInt();
 				ui.TWRedReport->removeCellWidget(i, 4);
 				ui.TWRedReport->removeCellWidget(i, 5);
 				ui.TWRedReport->removeCellWidget(i, 6);
@@ -1422,6 +1432,12 @@ void MainApp::RemoveRedAlert(int redAlertID)
 	}
 	else
 	{
+		if (cameraID > -1)
+		{
+			connect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
+			emit checkRedAlertID(redAlertID);
+			disconnect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
+		}
 		//TODO:: Remove video
 	}
 }
@@ -1505,4 +1521,26 @@ void MainApp::InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QStri
 void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 {
 	AddRowToRedReports(redAlertID, cameraID, dateTimeNow, dateTimeNow);
+}
+void MainApp::UpdateGreenAlert(int greenAlertID, QString stopDate)
+{
+	for (int i = 0; i < ui.TWGreenReport->rowCount(); i++)
+	{
+		if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
+		{
+			ui.TWGreenReport->item(i, 6)->setText(stopDate);
+			break;
+		}
+	}
+}
+void MainApp::UpdateRedAlert(int redAlertID, QString stopDate)
+{
+	for (int i = 0; i < ui.TWRedReport->rowCount(); i++)
+	{
+		if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
+		{
+			ui.TWRedReport->item(i, 3)->setText(stopDate);
+			break;
+		}
+	}
 }

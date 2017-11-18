@@ -10,6 +10,8 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	redAlert->redAlertID = -1;
 	connect(this, SIGNAL(insertGreenAlert(int, int, int, QString)), parent, SLOT(InsertGreenAlert(int, int, int, QString)));
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
+	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
+	connect(this, SIGNAL(updateRedAlert(int, QString)), parent, SLOT(UpdateRedAlert(int, QString)));
 }
 
 MainAppCamera::~MainAppCamera()
@@ -186,7 +188,7 @@ void MainAppCamera::run()
 				result = query.exec();
 				if (result == true)
 				{
-					//TODO
+					emit updateGreenAlert(iter->greenAlertID, iter->stopDate);
 				}
 			}
 			query.exec("COMMIT");
@@ -204,6 +206,7 @@ void MainAppCamera::run()
 			query.bindValue(1, redAlert->redAlertID);
 			result = query.exec();
 			query.exec("COMMIT");
+			emit updateRedAlert(redAlert->redAlertID, redAlert->stopDate);
 		}
 	}
 }
@@ -236,7 +239,7 @@ void MainAppCamera::UpdateGreenAlerts()
 		result = query.exec();
 		if (result == true)
 		{
-			//TODO
+			emit updateGreenAlert(iter->greenAlertID, iter->stopDate);
 		}
 		//Check if 5 minutes has passed
 		//Yes: delete from vector
@@ -267,6 +270,7 @@ void MainAppCamera::UpdateRedAlerts()
 	result = query.exec();
 
 	query.exec("COMMIT");
+	emit updateRedAlert(redAlert->redAlertID, redAlert->stopDate);
 	//if 1 minute has passed set RedAlert to -1
 	int msDifferece = -1;
 	QDateTime dTNow = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
@@ -275,6 +279,27 @@ void MainAppCamera::UpdateRedAlerts()
 	if (msDifferece > (1 * 60 * 1000))
 	{
 		redAlert->redAlertID = -1;
+	}
+}
+void MainAppCamera::CheckGreenAlertInList(int greenAlertID)
+{
+	for (std::list<GreenAlert>::iterator it = greenAlertList->begin(); it != greenAlertList->end(); ++it)
+	{
+		if (it->greenAlertID == greenAlertID)
+		{
+			it = greenAlertList->erase(it);
+			break;
+		}
+	}
+}
+void MainAppCamera::CheckRedAlertID(int redAlertID)
+{
+	if (redAlert != nullptr)
+	{
+		if (redAlert->redAlertID == redAlertID)
+		{
+			redAlert->redAlertID = -1;
+		}
 	}
 }
 void MainAppCamera::Process()

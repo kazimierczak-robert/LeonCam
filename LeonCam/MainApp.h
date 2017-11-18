@@ -26,6 +26,9 @@ public:
 	~MainApp();
 signals:
 	void closeCameraEdit(const QString& cameraDetails);
+public: signals:
+		void checkGreenAlertInList(int greenAlertID);
+		void checkRedAlertID(int redAlertID);
 private slots:
 	void AddCamera();
 	void LogOut();
@@ -47,6 +50,8 @@ public slots:
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
 	void InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
 	void InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
+	void UpdateGreenAlert(int greenAlertID, QString stopDate);
+	void UpdateRedAlert(int redAlertID, QString stopDate);
 private:
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;

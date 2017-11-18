@@ -67,9 +67,13 @@ private:
 public slots:
 	void UpdateGreenAlerts();
 	void UpdateRedAlerts();
+	void CheckGreenAlertInList(int greenAlertID);
+	void CheckRedAlertID(int redAlertID);
 	void Process();
 signals:
 	void starkWorking();
 	void insertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
 	void insertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
+	void updateGreenAlert(int greenAlertID, QString stopDate);
+	void updateRedAlert(int redAlertID, QString stopDate);
 };
