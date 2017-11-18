@@ -8,6 +8,8 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	this->greenAlertList = new std::list<GreenAlert>();
 	redAlert = new RedAlert();
 	redAlert->redAlertID = -1;
+	connect(this, SIGNAL(insertGreenAlert(int, int, int, QString)), parent, SLOT(InsertGreenAlert(int, int, int, QString)));
+	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 }
 
 MainAppCamera::~MainAppCamera()
@@ -62,7 +64,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 				redAlert->redAlertID = query.value(0).toInt();
 				redAlert->startDate = dateTimeNow;
 				redAlert->stopDate = dateTimeNow;
-				/*emit insertRedAlert(query.value(0).toInt(), cameraID, dateTimeNow);*/
+				emit insertRedAlert(query.value(0).toInt(), cameraID, dateTimeNow);
 			}
 			//TODO: start movie
 		}
@@ -124,7 +126,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 					greenAlert.startDate = dateTimeNow;
 					greenAlert.stopDate = dateTimeNow;
 					greenAlertList->push_back(greenAlert);
-					//emit insertGreenAlert(query.value(0).toInt(), faceID, cameraID, dateTimeNow);
+					emit insertGreenAlert(query.value(0).toInt(), faceID, cameraID, dateTimeNow);
 				}
 			}
 			else

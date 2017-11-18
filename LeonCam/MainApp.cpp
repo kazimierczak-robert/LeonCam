@@ -1487,3 +1487,22 @@ void MainApp::CurrentIndexChanged()
 		}
 	}
 }
+void MainApp::InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow)
+{
+	QSqlQuery query;
+	query.prepare("SELECT Name, Surname FROM Faces WHERE FaceID = ?");
+	query.bindValue(0, faceID);
+	bool result = query.exec();
+
+	if (result == true)
+	{
+		query.next();
+		QString name = query.value(0).toString();
+		QString surname = query.value(1).toString();
+		AddRowToGreenReports(greenAlertID, cameraID, faceID, name, surname, dateTimeNow, dateTimeNow);
+	}
+}
+void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
+{
+	AddRowToRedReports(redAlertID, cameraID, dateTimeNow, dateTimeNow);
+}

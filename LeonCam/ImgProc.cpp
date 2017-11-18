@@ -57,13 +57,15 @@ void ImgProc::FillLabelsAndImagesVectors()
 			filInfo = iter.fileInfo();
 			if (filInfo.isDir())
 			{
-				labels.push_back((filInfo.fileName()).toInt());
+				label = filInfo.fileName().toInt();
+				//labels.push_back(label);
 				//label = QString(filInfo.fileName()).toInt();
 				//peopleBase[label] = filInfo.fileName();
 			}
 			else if (filInfo.isFile())
 			{
 				images.push_back(cv::imread(iter.filePath().toStdString(), 0));
+				labels.push_back(label);
 				//stream << iter.filePath() << ";" << label << "\n";
 			}
 		}

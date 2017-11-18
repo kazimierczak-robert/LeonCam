@@ -70,4 +70,6 @@ public slots:
 	void Process();
 signals:
 	void starkWorking();
+	void insertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
+	void insertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
 };

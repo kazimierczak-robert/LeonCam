@@ -45,6 +45,8 @@ private slots:
 public slots:
 	void OpenCameraEdit(int camID);
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
+	void InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
+	void InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
 private:
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
