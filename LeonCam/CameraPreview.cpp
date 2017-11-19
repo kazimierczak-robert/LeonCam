@@ -102,20 +102,16 @@ bool CameraPreview::SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice)
 {
 	if (onvifDevice->GetCapabilities() == 0)
 	{
-		OnvifClientMedia *media = new OnvifClientMedia(*onvifDevice);
-		_trt__GetProfilesResponse *profiles = new _trt__GetProfilesResponse();
-		media->GetProfiles(*profiles);
-		if (profiles->Profiles.size() > 0)
+		OnvifClientMedia media(*onvifDevice);
+		_trt__GetProfilesResponse profiles;
+		media.GetProfiles(profiles);
+		if (profiles.Profiles.size() > 0)
 		{
-			this->profileToken = profiles->Profiles[0]->token;
+			this->profileToken = profiles.Profiles[0]->token;
 			this->ptz = new OnvifClientPTZ(*onvifDevice);
 			ctrl = new CameraControl(ptz, profileToken);
-			delete media;
-			delete profiles;
 			return true;
 		}
-		delete media;
-		delete profiles;
 	}
 	return false;
 }
@@ -149,15 +145,15 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 	}
 	ui.LCameraDetails->setText(cameraDetails);
 
-	QSqlQuery *query = new QSqlQuery();
-	query->prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-	query->bindValue(0, camID);
-	if (query->exec() == true)
+	QSqlQuery query;
+	query.prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+	query.bindValue(0, camID);
+	if (query.exec() == true)
 	{
-		query->next();
-		string url = "http://" + query->value(0).toString().toStdString() + "/onvif/device_service";
-		string user = query->value(1).toString().toStdString();
-		string pass = Utilities::GetDecrypted(passHash, query->value(2).toString().toStdString());
+		query.next();
+		string url = "http://" + query.value(0).toString().toStdString() + "/onvif/device_service";
+		string user = query.value(1).toString().toStdString();
+		string pass = Utilities::GetDecrypted(passHash, query.value(2).toString().toStdString());
 
 		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
 		if (!SetProfileTokenAndPTZ(onvifDevice))
@@ -172,7 +168,6 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 	{
 		TurnOnOffCamera();
 	}
-	delete query;
 }
 
 void CameraPreview::closeEvent(QCloseEvent *event)

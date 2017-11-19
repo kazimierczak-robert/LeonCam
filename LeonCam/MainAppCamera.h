@@ -29,6 +29,7 @@ public:
 	void SetCameraID(int cameraID) { this->cameraID = cameraID; }
 	void SetFPS(int fps) { this->cameraFPS = fps; }
 	void SetSendBigPicture(bool setting);
+	void SetSendThumbnail(bool setting);
 	QTimer *greenTimer;
 	QTimer *redTimer;
 signals:
@@ -59,6 +60,7 @@ private:
 	std::string streamURI;
 	bool isWorking;
 	bool sendBigPicture;
+	bool sendThumbnail;
 	bool faceRecognitionState = false;
 	cv::VideoCapture vcap;
 	cv::Mat img;

@@ -106,11 +106,11 @@ MainApp::~MainApp()
 	//Remove row from table
 	for (int i = ui.TWFacesBase->rowCount()-1; i >= 0; i--)
 	{
-			ui.TWFacesBase->removeCellWidget(i, 3);
-			ui.TWFacesBase->removeCellWidget(i, 4);
-			ui.TWFacesBase->removeCellWidget(i, 5);
-			ui.TWFacesBase->removeCellWidget(i, 6);
-			ui.TWFacesBase->removeRow(i);
+		ui.TWFacesBase->removeCellWidget(i, 3);
+		ui.TWFacesBase->removeCellWidget(i, 4);
+		ui.TWFacesBase->removeCellWidget(i, 5);
+		ui.TWFacesBase->removeCellWidget(i, 6);
+		ui.TWFacesBase->removeRow(i);
 	}
 }
 
@@ -178,7 +178,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
 		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setText(QString::number(cameraID));
 		btn->setIconSize(QSize(216, 123));
 		connect(btn, &QPushButton::clicked, this, [this, layout] {CameraSelected(layout); });
 		layout->addWidget(btn, 0, 0, 1, 5);
@@ -236,6 +235,13 @@ void MainApp::AddCameraFromDB(int cameraID)
 		connect(btn, &QPushButton::clicked, this, [this, layout] { RemoveCamera(layout); });
 		layout->addWidget(btn, 2, 4);
 
+		label = new QLabel(QString::number(cameraID));
+		label->setFixedSize(216, 1);
+		label->setVisible(false);
+		label->setFocusPolicy(Qt::NoFocus);
+		label->setStyleSheet("color: transparent;");
+		layout->addWidget(label, 3, 0, 1, 5);
+
 		layout->setHorizontalSpacing(4);
 		layout->setVerticalSpacing(2);
 
@@ -269,18 +275,18 @@ void MainApp::addTab()
 	QWidget *newTab = new QWidget(ui.TWCameraPages);
 	newTab->setLayout(newLayout);
 	ui.TWCameraPages->addTab(newTab, "");
-	ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size());
-	TWCameraPagesChanged(vectorQGridLayouts->size());
 
 	vectorCameraLayoutsPages->push_back(new std::vector<QGridLayout*>());
 	vectorQGridLayouts->push_back(newLayout);
+
+	ui.TWCameraPages->setCurrentIndex(vectorQGridLayouts->size() - 1);
 
 	ui.TWCameraPages->setStyleSheet("QTabWidget::pane {color: rgb(213, 235, 255);border: 0px;}QTabWidget::tab-bar {left: " + QString::number(360 - 18 * vectorQGridLayouts->size()) + "px;}QTabBar::tab {background-color: transparent;color: rgb(133, 196, 255);height: 18px;width: 36px;}QTabBar::tab:hover{color: rgb(160, 209, 255);}QTabBar::tab:selected{margin-top: -1px;color:rgb(219, 235, 255);}");
 
 }
 void MainApp::CameraSelected(QGridLayout* layout)
 {
-	int cameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+	int cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, cameraID);
@@ -344,7 +350,7 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
 	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
-	int cameraID = ((QPushButton*)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+	int cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
 
 	QPushButton *button = (QPushButton*)layout->itemAtPosition(2, 0)->widget();
 
@@ -408,6 +414,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	else
 	{
 		cameraThread->at(cameraID)->SetSendBigPicture(false);
+		cameraThread->at(cameraID)->SetSendThumbnail(false);
 		button->setText("Off");
 		button->setToolTip("Start monitoring camera");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
@@ -417,6 +424,8 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 		/*Face recognition*/
 		//Stop thread
 		cameraThread->at(cameraID)->StopThread();
+		cameraThread->at(cameraID)->quit();//equivalent to exit(0==success)
+		cameraThread->at(cameraID)->wait();
 	}
 
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
@@ -479,7 +488,7 @@ void MainApp::OpenCameraEdit(int camID)
 	{
 		for (QGridLayout *lt : *vec)
 		{
-			if (((QPushButton *)lt->itemAtPosition(0, 0)->widget())->text().toInt() == camID)
+			if (((QLabel *)lt->itemAtPosition(3, 0)->widget())->text().toInt() == camID)
 			{
 				EditCamera(camID, (QLabel*)lt->itemAtPosition(1, 0)->widget());
 				emit closeCameraEdit(((QLabel*)lt->itemAtPosition(1, 0)->widget())->text());
@@ -492,7 +501,7 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 {
 	if (layout->count() > 1)
 	{
-		int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+		int CameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
 		if (cameraThread->find(CameraID) != cameraThread->end())
 		{
 			cameraThread->at(CameraID)->StopThread();
@@ -603,10 +612,11 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 			pageIndex += 1;
 		}
 	}
+	TWCameraPagesChanged(activeCameraPage);
 }
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
-	int CameraID = ((QPushButton *)layout->itemAtPosition(0, 0)->widget())->text().toInt();
+	int CameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
 	QSqlQuery query;
 	query.prepare("DELETE FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, CameraID);
@@ -692,9 +702,26 @@ void MainApp::LESearchPressed()
 }
 void MainApp::TWCameraPagesChanged(int newIndex)
 {
+	int cameraID = -1;
+	if (vectorCameraLayoutsPages->size() > activeCameraPage)
+	{
+		for each (QGridLayout* layout in *vectorCameraLayoutsPages->at(activeCameraPage))
+		{
+			cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
+			cameraThread->at(cameraID)->SetSendThumbnail(false);
+		}
+	}
 	ui.TWCameraPages->setTabText(activeCameraPage, QString::fromStdWString(L"\u25CB"));
 	ui.TWCameraPages->setTabText(newIndex, QString::fromStdWString(L"\u25CF"));
 	activeCameraPage = newIndex;
+	if (vectorCameraLayoutsPages->size() > activeCameraPage)
+	{
+		for each (QGridLayout* layout in *vectorCameraLayoutsPages->at(activeCameraPage))
+		{
+			cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
+			cameraThread->at(cameraID)->SetSendThumbnail(true);
+		}
+	}
 }
 void MainApp::LogOut()
 {
@@ -1151,8 +1178,7 @@ void MainApp::TakePicture(int faceID)
 			QPushButton *button = (QPushButton*)lt->itemAtPosition(2, 0)->widget();
 			if (button->text() == "On")
 			{
-				button = (QPushButton*)lt->itemAtPosition(0, 0)->widget();
-				cameraIDs.push_back(button->text().toInt());
+				cameraIDs.push_back(((QLabel *)lt->itemAtPosition(3, 0)->widget())->text().toInt());
 			}
 		}
 	}
@@ -1784,7 +1810,7 @@ int MainApp::GetChartRange()
 	float rangeRes = 0;
 	rangeRes = (float)range / 4;
 	range = ceil(rangeRes) * 4;
-	return range;
+	return max(range, 4);
 }
 void MainApp::StatisticsChart()
 {

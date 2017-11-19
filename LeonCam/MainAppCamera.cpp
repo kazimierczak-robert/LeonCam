@@ -30,6 +30,10 @@ void MainAppCamera::SetSendBigPicture(bool setting)
 {
 	this->sendBigPicture = setting;
 }
+void MainAppCamera::SetSendThumbnail(bool setting)
+{
+	this->sendThumbnail = setting;
+}
 void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 {
 	QString dateTimeNow;
@@ -142,7 +146,8 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 void MainAppCamera::run()
 {
 	this->isWorking = true;
-
+	greenAlertList->clear();
+	sendThumbnail = true;
 	sendBigPicture = false;
 	//Image from camera
 	if (vcap.open(streamURI)) //OK
@@ -372,9 +377,12 @@ void MainAppCamera::Process()
 				emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
 			}
 
-			cv::resize(resizedMat, resizedMat, cv::Size(thumbnailWidth, thumbnailHeight));
-			//View on thumbnail
-			emit updateThumbnail(QPixmap::fromImage(QImage(resizedMat.data, thumbnailWidth, thumbnailHeight, resizedMat.step, QImage::Format_RGB888)), cameraID);
+			if (sendThumbnail)
+			{
+				cv::resize(resizedMat, resizedMat, cv::Size(thumbnailWidth, thumbnailHeight));
+				//View on thumbnail
+				emit updateThumbnail(QPixmap::fromImage(QImage(resizedMat.data, thumbnailWidth, thumbnailHeight, resizedMat.step, QImage::Format_RGB888)), cameraID);
+			}
 		}
 	}
 }

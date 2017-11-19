@@ -45,38 +45,33 @@ std::string generateUuid()
 }
 void UserCamera::SearchForCameraIPs()
 {
-	DiscoveryLookupBindingProxy *proxy = new DiscoveryLookupBindingProxy();
+	DiscoveryLookupBindingProxy proxy;
 	std::string tmpuuid = "uuid:" + generateUuid();
-	proxy->soap_endpoint = "soap.udp://239.255.255.250:3702/";
-	proxy->header = new SOAP_ENV__Header();
-	proxy->header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
-	proxy->header->wsa__MessageID = (char*)tmpuuid.c_str();
-	//proxy.header->wsa__ReplyTo = new wsa__EndpointReferenceType();
-	//proxy.header->wsa__ReplyTo->Address = (char*)"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous";
-	proxy->header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
+	proxy.soap_endpoint = "soap.udp://239.255.255.250:3702/";
+	proxy.header = new SOAP_ENV__Header();
+	proxy.header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
+	proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
+	proxy.header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
 	
-	proxy->recv_timeout = 2;
-	ns1__ProbeType *probe = new ns1__ProbeType();
-	probe->Types = new std::string("tdn:NetworkVideoTransmitter");
-	ns1__ProbeMatchesType *probeMatches = new ns1__ProbeMatchesType();
+	proxy.recv_timeout = 2;
+	ns1__ProbeType probe;
+	probe.Types = new std::string("tdn:NetworkVideoTransmitter");
+	ns1__ProbeMatchesType probeMatches;
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (proxy->Probe(probe, probeMatches) == SOAP_OK)
+		if (proxy.Probe(&probe, &probeMatches) == SOAP_OK)
 		{
 			break;
 		}
 	}
-	for each (ns1__ProbeMatchType* device in probeMatches->ProbeMatch)
+	for each (ns1__ProbeMatchType* device in probeMatches.ProbeMatch)
 	{
 		ui.CBAvailableCameras->addItem(QString::fromStdString(device->XAddrs->c_str()).split('/')[2]);
 	}
 
-	delete proxy->header;
-	delete proxy;
-	delete probe->Types;
-	delete probe;
-	delete probeMatches;
+	delete proxy.header;
+	delete probe.Types;
 }
 
 std::vector<QString>* UserCamera::GetValuesFromControls()
@@ -121,22 +116,20 @@ void UserCamera::AddClicked()
 			return;
 		}
 
-		QSqlQuery *query = new QSqlQuery();
-		query->prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ?");
-		query->bindValue(0, userID);
-		query->bindValue(1, ui.LEDescripton->text());
-		if (query->exec() == true)
+		QSqlQuery query;
+		query.prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ?");
+		query.bindValue(0, userID);
+		query.bindValue(1, ui.LEDescripton->text());
+		if (query.exec() == true)
 		{
-			query->next();
-			int counter = query->value(0).toInt();
+			query.next();
+			int counter = query.value(0).toInt();
 			if (counter > 0)
 			{
-				delete query;
 				result = "This name is occupied by your another camera. Please type another one";
 				return;
 			}
 		}
-		delete query;
 	});
 	watcher->setFuture(*future);
 }

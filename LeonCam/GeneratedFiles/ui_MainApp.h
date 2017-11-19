@@ -387,7 +387,7 @@ public:
         CBSettings->setStyleSheet(QStringLiteral("background-color: none;"));
         verticalLayoutWidget = new QWidget(TReports);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 290, 641, 211));
+        verticalLayoutWidget->setGeometry(QRect(0, 290, 711, 211));
         VLLayout = new QVBoxLayout(verticalLayoutWidget);
         VLLayout->setSpacing(6);
         VLLayout->setContentsMargins(11, 11, 11, 11);
@@ -439,7 +439,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(2);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 

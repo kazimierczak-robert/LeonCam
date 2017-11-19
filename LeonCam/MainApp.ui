@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -746,7 +746,7 @@ QHeaderView::section
        <rect>
         <x>0</x>
         <y>290</y>
-        <width>641</width>
+        <width>711</width>
         <height>211</height>
        </rect>
       </property>

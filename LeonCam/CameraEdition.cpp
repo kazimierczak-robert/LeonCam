@@ -108,18 +108,17 @@ void CameraEdition::EditClicked()
 			return;
 		}
 
-		QSqlQuery *query = new QSqlQuery();
-		query->prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ? AND CameraID != ?");
-		query->bindValue(0, userID);
-		query->bindValue(1, ui.LEDescripton->text());
-		query->bindValue(2, camID);
-		if (query->exec() == true)
+		QSqlQuery query;
+		query.prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ? AND CameraID != ?");
+		query.bindValue(0, userID);
+		query.bindValue(1, ui.LEDescripton->text());
+		query.bindValue(2, camID);
+		if (query.exec() == true)
 		{
-			query->next();
-			int counter = query->value(0).toInt();
+			query.next();
+			int counter = query.value(0).toInt();
 			if (counter > 0)
 			{
-				delete query;
 				result = "This name is occupied by your another camera. Please type another one";
 				return;
 			}
@@ -127,21 +126,20 @@ void CameraEdition::EditClicked()
 
 		if (passCounter == 3)
 		{
-			query->prepare("SELECT Password FROM Cameras WHERE CameraID = ?");
-			query->bindValue(0, camID);
-			if (query->exec() == true)
+			query.clear();
+			query.prepare("SELECT Password FROM Cameras WHERE CameraID = ?");
+			query.bindValue(0, camID);
+			if (query.exec() == true)
 			{
-				query->next();
+				query.next();
 				std::string encryptedMsg = Utilities::GetEncrypted(passHash, ui.LEPassword->text().toStdString());
-				if (QString::fromStdString(encryptedMsg) != query->value(0).toString())
+				if (QString::fromStdString(encryptedMsg) != query.value(0).toString())
 				{
-					delete query;
 					result = "Old password is incorrect";
 					return;
 				}
 			}
 		}
-		delete query;
 	});
 	watcher->setFuture(*future);
 }

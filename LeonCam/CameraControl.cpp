@@ -16,68 +16,65 @@ void CameraControl::MoveCamera(float panSpeed, float tiltSpeed)
 {
 	if (ptz != nullptr) 
 	{
-		_tptz__ContinuousMoveResponse *res = new _tptz__ContinuousMoveResponse();
+		_tptz__ContinuousMoveResponse res;
 		LONG64 timeout = 1;
 
-		tt__PTZSpeed *ptzSpeed = new tt__PTZSpeed();
-		ptzSpeed->PanTilt = new tt__Vector2D();
-		ptzSpeed->PanTilt->x = panSpeed;
-		ptzSpeed->PanTilt->y = tiltSpeed;
+		tt__PTZSpeed ptzSpeed;
+		ptzSpeed.PanTilt = new tt__Vector2D();
+		ptzSpeed.PanTilt->x = panSpeed;
+		ptzSpeed.PanTilt->y = tiltSpeed;
 
-		ptzSpeed->Zoom = new tt__Vector1D();
-		ptzSpeed->Zoom->x = 0.0;
+		ptzSpeed.Zoom = new tt__Vector1D();
+		ptzSpeed.Zoom->x = 0.0;
 
 		for (int i = 0; i < MAXCONNECTIONTRIES; i++)
 		{
-			ptz->ContinuousMove(*res, *ptzSpeed, timeout, profileToken);
-			if (res->soap != nullptr)
+			ptz->ContinuousMove(res, ptzSpeed, timeout, profileToken);
+			if (res.soap != nullptr)
 			{
-				if (res->soap->status == 200)
+				if (res.soap->status == 200)
 				{
 					break;
 				}
 			}
 		}
-		delete ptzSpeed->Zoom;
-		delete ptzSpeed;
-		delete res;
+		delete ptzSpeed.PanTilt;
+		delete ptzSpeed.Zoom;
 	}
 }
 void CameraControl::StopCamera()
 {
 	if (ptz != nullptr)
 	{
-		_tptz__StopResponse *res = new _tptz__StopResponse();
+		_tptz__StopResponse res;
 		for (int i = 0; i < MAXCONNECTIONTRIES; i++)
 		{
-			ptz->Stop(*res, 1, 1, profileToken);
-			if (res->soap != nullptr)
+			ptz->Stop(res, 1, 1, profileToken);
+			if (res.soap != nullptr)
 			{
-				if (res->soap->status == 200)
+				if (res.soap->status == 200)
 				{
 					break;
 				}
 			}
 		}
-		delete res;
 	}
 }
 void CameraControl::GoHomeCamera()
 {
 	if (ptz != nullptr)
 	{
-		_tptz__GotoHomePositionResponse *res = new _tptz__GotoHomePositionResponse();
+		_tptz__GotoHomePositionResponse res;
 		for (int i = 0; i < MAXCONNECTIONTRIES; i++)
 		{
-			ptz->GoToHomePosition(*res, profileToken);
-			if (res->soap != nullptr)
+			ptz->GoToHomePosition(res, profileToken);
+			if (res.soap != nullptr)
 			{
-				if (res->soap->status == 200)
+				if (res.soap->status == 200)
 				{
 					break;
 				}
 			}
 		}
-		delete res;
 	}
 }
