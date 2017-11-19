@@ -16,11 +16,31 @@
 #include <map>
 #include "MainAppCamera.h"
 #include "qsqlresult.h"
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QLegend>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+#include <QDate>
+#include <QLocale>
+#include <algorithm>
+
+using namespace QtCharts;
+
 
 class MainApp : public QMainWindow
 {
 	Q_OBJECT
 
+		enum chartOption
+	{
+		week = 0,
+		day = 1,
+		hour = 2
+	};
+	
 public:
 	MainApp(QWidget *parent = Q_NULLPTR, int loggedID=-1, std::string passHash="");
 	~MainApp();
@@ -44,7 +64,7 @@ private slots:
 	void RemovePerson(int FaceID);
 	void RemoveGreenAlert(int greenAlertID);
 	void RemoveRedAlert(int redAlertID);
-	void ChangeTWReport();
+	void ChangeTWReport(int i);
 public slots:
 	void OpenCameraEdit(int camID);
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
@@ -72,6 +92,9 @@ private:
 		std::string Login;
 		std::string Password;
 	};
+	std::map<int, int> weekChartGreenMap;
+	std::map<int, int> weekChartRedMap;
+	QDateTime todayDateTime;
 	Camera* GetCameraFromDBByID(int CameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void RecognitionCamera(QPushButton* button, int cameraID);
@@ -93,4 +116,6 @@ private:
 	void AddRowToGreenReports(int greenAlertID, int cameraID, int faceID, QString name, QString surname, QString startDate, QString stopDate);
 	void AddRowToRedReports(int redAlertID, int cameraID, QString startDate, QString stopDate);
 	void CurrentIndexChanged();
+	int GetChartRange();
+	void StatisticsChart();
 };

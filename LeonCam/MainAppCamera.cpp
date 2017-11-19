@@ -154,7 +154,7 @@ void MainAppCamera::run()
 		connect(&redTimer, SIGNAL(timeout()), this, SLOT(UpdateRedAlerts()), Qt::DirectConnection);
 		//connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
 		//set intervals
-		greenTimer.setInterval(1*60*1000); //5 minutes
+		greenTimer.setInterval(5*60*1000); //5 minutes
 		redTimer.setInterval(1*60*1000); //1 minutes
 		//processTimer.setInterval(40);
 		//start timers
@@ -232,7 +232,7 @@ void MainAppCamera::UpdateGreenAlerts()
 	QDateTime dTNow;
 	QDateTime dtStop;
 	//Go through GreenAlertVector
-	for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end(); iter++)
+	for (std::list<GreenAlert>::iterator iter = greenAlertList->begin(); iter != greenAlertList->end();)
 	{
 		query.prepare("UPDATE GreenAlerts SET StopDate = ? WHERE GreenAlertID = ?");
 		query.bindValue(0, iter->stopDate);
@@ -251,6 +251,10 @@ void MainAppCamera::UpdateGreenAlerts()
 		if (msDifferece > (5 * 60 * 1000))
 		{
 			iter = greenAlertList->erase(iter);
+		}
+		else
+		{
+			iter++;
 		}
 	}
 	query.exec("COMMIT");		

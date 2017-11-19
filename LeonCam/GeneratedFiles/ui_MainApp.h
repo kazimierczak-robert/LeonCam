@@ -21,6 +21,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -47,11 +48,13 @@ public:
     QPushButton *PBAddPerson;
     QWidget *TReports;
     QTableWidget *TWGreenReport;
-    QPushButton *PBGreenAlert;
     QPushButton *PBRedAlert;
     QLabel *LChooseAlertDelSet;
     QTableWidget *TWRedReport;
     QComboBox *CBSettings;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *VLLayout;
+    QPushButton *PBGreenAlert;
     QWidget *TSettings;
     QPushButton *PBLogout;
 
@@ -314,24 +317,9 @@ public:
         TWGreenReport->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         TWGreenReport->verticalHeader()->setVisible(false);
         TWGreenReport->verticalHeader()->setHighlightSections(false);
-        PBGreenAlert = new QPushButton(TReports);
-        PBGreenAlert->setObjectName(QStringLiteral("PBGreenAlert"));
-        PBGreenAlert->setGeometry(QRect(10, 30, 311, 31));
-        PBGreenAlert->setStyleSheet(QLatin1String("#PBGreenAlert{\n"
-"color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)}\n"
-"#PBGreenAlert:hover\n"
-"{\n"
-"background-color: rgb(39, 129, 63);\n"
-"}\n"
-"/*border: none;\n"
-"margin: 0px;\n"
-"padding: 0px;*/"));
-        PBGreenAlert->setAutoDefault(true);
-        PBGreenAlert->setFlat(false);
         PBRedAlert = new QPushButton(TReports);
         PBRedAlert->setObjectName(QStringLiteral("PBRedAlert"));
-        PBRedAlert->setGeometry(QRect(330, 30, 311, 31));
+        PBRedAlert->setGeometry(QRect(10, 30, 311, 31));
         PBRedAlert->setStyleSheet(QLatin1String("#PBRedAlert{\n"
 "color:rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);}\n"
@@ -397,6 +385,29 @@ public:
         CBSettings->setObjectName(QStringLiteral("CBSettings"));
         CBSettings->setGeometry(QRect(650, 70, 81, 22));
         CBSettings->setStyleSheet(QStringLiteral("background-color: none;"));
+        verticalLayoutWidget = new QWidget(TReports);
+        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(0, 290, 641, 211));
+        VLLayout = new QVBoxLayout(verticalLayoutWidget);
+        VLLayout->setSpacing(6);
+        VLLayout->setContentsMargins(11, 11, 11, 11);
+        VLLayout->setObjectName(QStringLiteral("VLLayout"));
+        VLLayout->setContentsMargins(0, 0, 0, 0);
+        PBGreenAlert = new QPushButton(TReports);
+        PBGreenAlert->setObjectName(QStringLiteral("PBGreenAlert"));
+        PBGreenAlert->setGeometry(QRect(330, 30, 311, 31));
+        PBGreenAlert->setStyleSheet(QLatin1String("#PBGreenAlert{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBGreenAlert:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}\n"
+"/*border: none;\n"
+"margin: 0px;\n"
+"padding: 0px;*/"));
+        PBGreenAlert->setAutoDefault(true);
+        PBGreenAlert->setFlat(false);
         TWMenu->addTab(TReports, QString());
         TSettings = new QWidget();
         TSettings->setObjectName(QStringLiteral("TSettings"));
@@ -428,7 +439,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(2);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -483,7 +494,6 @@ public:
         ___qtablewidgetitem14->setText(QApplication::translate("MainApp", "Go to", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem15 = TWGreenReport->horizontalHeaderItem(8);
         ___qtablewidgetitem15->setText(QApplication::translate("MainApp", "Delete alert", Q_NULLPTR));
-        PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
         PBRedAlert->setText(QApplication::translate("MainApp", "Manage and view Red Alerts", Q_NULLPTR));
         LChooseAlertDelSet->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert <br/>delete settings</p></body></html>", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem16 = TWRedReport->horizontalHeaderItem(0);
@@ -500,6 +510,7 @@ public:
         ___qtablewidgetitem21->setText(QApplication::translate("MainApp", "Open movie", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem22 = TWRedReport->horizontalHeaderItem(6);
         ___qtablewidgetitem22->setText(QApplication::translate("MainApp", "Delete alert and movie", Q_NULLPTR));
+        PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP

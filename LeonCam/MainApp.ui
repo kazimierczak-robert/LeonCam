@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -582,41 +582,10 @@ QHeaderView::section
        </property>
       </column>
      </widget>
-     <widget class="QPushButton" name="PBGreenAlert">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>311</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">#PBGreenAlert{
-color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)}
-#PBGreenAlert:hover
-{
-background-color: rgb(39, 129, 63);
-}
-/*border: none;
-margin: 0px;
-padding: 0px;*/</string>
-      </property>
-      <property name="text">
-       <string>Manage and view Green Alerts</string>
-      </property>
-      <property name="autoDefault">
-       <bool>true</bool>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="PBRedAlert">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>10</x>
         <y>30</y>
         <width>311</width>
         <height>31</height>
@@ -770,6 +739,48 @@ QHeaderView::section
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: none;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>290</y>
+        <width>641</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="VLLayout"/>
+     </widget>
+     <widget class="QPushButton" name="PBGreenAlert">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>311</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#PBGreenAlert{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBGreenAlert:hover
+{
+background-color: rgb(39, 129, 63);
+}
+/*border: none;
+margin: 0px;
+padding: 0px;*/</string>
+      </property>
+      <property name="text">
+       <string>Manage and view Green Alerts</string>
+      </property>
+      <property name="autoDefault">
+       <bool>true</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>
