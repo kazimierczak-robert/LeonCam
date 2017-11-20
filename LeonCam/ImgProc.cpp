@@ -171,8 +171,6 @@ std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 }
 int ImgProc::PredictPerson(cv::Mat matImg)
 {
-	cv::VideoCapture vcap;
-	cv::Mat image;
 	if (CheckIfFaceCascadeLoaded() == false)
 	{
 		LoadFaceCascade();
@@ -184,7 +182,6 @@ int ImgProc::PredictPerson(cv::Mat matImg)
 	}
 	int predictionLabel = -1;
 	double predicted_confidence = 0.0;
-	int unrecogizedPeople = 0;
 	model->predict(matImg, predictionLabel, predicted_confidence);
 	return predictionLabel;
 }

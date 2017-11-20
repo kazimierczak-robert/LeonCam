@@ -13,7 +13,6 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
 	connect(this, SIGNAL(updateRedAlert(int, QString)), parent, SLOT(UpdateRedAlert(int, QString)));
-	//videowriter = new cv::VideoWriter();
 }
 MainAppCamera::~MainAppCamera()
 {
@@ -163,7 +162,7 @@ void MainAppCamera::run()
 		//connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
 		//set intervals
 		greenTimer.setInterval(5*60*1000); //5 minutes
-		redTimer.setInterval(1*30*1000); //1 minutes
+		redTimer.setInterval(1*30*1000); //0.5 minutes
 		//processTimer.setInterval(40);
 		//start timers
 		greenTimer.start();
@@ -323,7 +322,6 @@ void MainAppCamera::Process()
 
 	while (isWorking)
 	{
-		QCoreApplication::processEvents();
 		if (vcap.read(img))
 		{
 			frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
@@ -335,19 +333,20 @@ void MainAppCamera::Process()
 				}
 				else
 				{
-					if (frameID % 10 == 0 && frameID != 0)
+					if (frameID % 10 == 0)
 					{
 						//Get gray picture 20x20
 						std::vector<cv::Rect> faces;
 						cv::Mat imgGray;
 
-						cvtColor(img, imgGray, CV_BGR2GRAY);
+						cv::resize(img, imgGray, cv::Size(640, 360));
+						cvtColor(imgGray, imgGray, CV_BGR2GRAY);
 						cv::equalizeHist(imgGray, imgGray);
 
 						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
 						cv::Mat imgCropped;
 						//rectangle
-						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
+						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
 						for (int i = 0; i < faces.size(); i++)
 						{
 							//Get rect to crop
@@ -355,7 +354,7 @@ void MainAppCamera::Process()
 							//Crop the full image to that image contained by the rectangle myROI
 							imgCropped = imgGray(myROI);
 							//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
-							cv::resize(imgCropped, imgCropped, cv::Size(200, 200), 1.0, 1.0, cv::INTER_CUBIC);
+							cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
 							//save to debug
 							//cv::imwrite(".\\x.jpg", imgCropped);
 							//Predict person
@@ -391,6 +390,10 @@ void MainAppCamera::Process()
 				cv::resize(resizedMat, resizedMat, cv::Size(thumbnailWidth, thumbnailHeight));
 				//View on thumbnail
 				emit updateThumbnail(QPixmap::fromImage(QImage(resizedMat.data, thumbnailWidth, thumbnailHeight, resizedMat.step, QImage::Format_RGB888)), cameraID);
+			}
+			if (frameID % 2 == 0)
+			{
+				QCoreApplication::processEvents();
 			}
 		}
 	}

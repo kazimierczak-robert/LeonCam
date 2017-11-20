@@ -100,7 +100,7 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 		// Crop the full image to that image contained by the rectangle myROI
 		cv::Mat imgCropped = tmpMatImg(myROI);
 		cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
-		cv::resize(imgCropped, imgCropped, cv::Size(200, 200), 1.0, 1.0, cv::INTER_CUBIC);
+		cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
 		matImg = imgCropped;
 	}
 	else
