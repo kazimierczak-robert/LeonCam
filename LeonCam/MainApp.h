@@ -57,16 +57,16 @@ private slots:
 	void TWCameraPagesChanged(int newIndex);
 	//Faces Base
 	void UpdateDBAfterCellChanged(int row, int column);
-	void TakePicture(int FaceID);
+	void TakePicture(int faceID);
 	void LESearchFBChanged();
 	void AddPerson();
-	void EditPerson(int FaceID);
-	void RemovePerson(int FaceID);
+	void EditPerson(int faceID);
+	void RemovePerson(int faceID);
 	void RemoveGreenAlert(int greenAlertID);
 	void RemoveRedAlert(int redAlertID);
 	void ChangeTWReport(int i);
 public slots:
-	void OpenCameraEdit(int camID);
+	void OpenCameraEdit(int cameraID);
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
 	void InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
 	void InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
@@ -95,14 +95,15 @@ private:
 	std::map<int, int> weekChartGreenMap;
 	std::map<int, int> weekChartRedMap;
 	QDateTime todayDateTime;
-	Camera* GetCameraFromDBByID(int CameraID);
+
+	Camera* GetCameraFromDBByID(int cameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void RecognitionCamera(QPushButton* button, int cameraID);
-	void EditCamera(int CameraID, QLabel *label);
+	void EditCamera(int cameraID, QLabel *label);
 	void DeleteCameraFromMemory(QGridLayout* layout);
 	void RemoveCamera(QGridLayout* layout);
-	void AddCameraFromDB(int CameraID);
-	void addTab();
+	void AddCameraFromDB(int cameraID);
+	void AddTab();
 	void CameraSelected(QGridLayout* layout);
 	void closeEvent(QCloseEvent *event);
 	void AdjustFaceBaseTW();
@@ -112,7 +113,7 @@ private:
 	void GetAlertDeleteSettings();
 	void FillCBSetsWithAlertDelSets();
 	void FillReportsTW();
-	void AddRowToFB(int ID, QString name, QString surname);
+	void AddRowToFB(int faceID, QString name, QString surname);
 	void AddRowToGreenReports(int greenAlertID, int cameraID, int faceID, QString name, QString surname, QString startDate, QString stopDate);
 	void AddRowToRedReports(int redAlertID, int cameraID, QString startDate, QString stopDate);
 	void CurrentIndexChanged();

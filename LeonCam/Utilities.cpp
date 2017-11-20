@@ -1,12 +1,8 @@
 #include "Utilities.h"
 
-
-
 Utilities::Utilities()
 {
 }
-
-
 Utilities::~Utilities()
 {
 }
@@ -15,8 +11,8 @@ bool Utilities::MBQuestion(QString message)
 	//http://doc.qt.io/qt-4.8/qmessagebox.html
 	QMessageBox msgBox;
 	QPixmap pixmap(iconPath);
-	QIcon ButtonIcon(pixmap);
-	msgBox.setWindowIcon(ButtonIcon);
+	QIcon buttonIcon(pixmap);
+	msgBox.setWindowIcon(buttonIcon);
 	msgBox.setText(message);
 	//msgBox.setInformativeText(message);
 	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -36,8 +32,8 @@ void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 {
 	QMessageBox msgBox;
 	QPixmap pixmap(iconPath);
-	QIcon ButtonIcon(pixmap);
-	msgBox.setWindowIcon(ButtonIcon);
+	QIcon buttonIcon(pixmap);
+	msgBox.setWindowIcon(buttonIcon);
 	//msgBox.setStyleSheet("QPushButton{background-color: rgb(36, 118, 59);color: rgb(255, 255, 255); }QPushButton:hover{background-color: rgb(39, 129, 63);}");
 
 	if (errorOrSuccess == true) 
@@ -57,8 +53,6 @@ QString Utilities::GetCurrentDateTime()
 	QString currentDateTimeS = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
 	return currentDateTimeS;
 }
-
-
 bool Utilities::SaveToBinFile(std::string fileName, BYTE *data)
 {
 	FILE *file = NULL;
@@ -115,7 +109,6 @@ BYTE * Utilities::ReadFromBinFile(std::string fileName)
 		return NULL;
 	}
 }
-
 int Utilities::BinFileElementsNo(std::string fileName)
 {
 	FILE *file = NULL;
@@ -135,7 +128,7 @@ int Utilities::BinFileElementsNo(std::string fileName)
 	return lSize;
 }
 //https://stackoverflow.com/a/10632725
-std::string Utilities::sha256HEX(const std::string str)
+std::string Utilities::Sha256HEX(const std::string str)
 {
 	unsigned char hash[SHA256_DIGEST_LENGTH];
 	SHA256_CTX sha256;
@@ -149,7 +142,7 @@ std::string Utilities::sha256HEX(const std::string str)
 	}
 	return ss.str();
 }
-std::string Utilities::sha256(const std::string str)
+std::string Utilities::Sha256(const std::string str)
 {
 	unsigned char hash[SHA256_DIGEST_LENGTH];
 	SHA256_CTX sha256;
@@ -204,9 +197,7 @@ int Utilities::encrypt(unsigned char *plaintext, int plaintext_len, unsigned cha
 	unsigned char *iv, unsigned char *ciphertext)
 {
 	EVP_CIPHER_CTX *ctx;
-
 	int len;
-
 	int ciphertext_len;
 
 	/* Create and initialise the context */
@@ -254,9 +245,7 @@ int Utilities::decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned c
 	unsigned char *iv, unsigned char *plaintext)
 {
 	EVP_CIPHER_CTX *ctx;
-
 	int len;
-
 	int plaintext_len;
 
 	/* Create and initialise the context */
@@ -352,7 +341,6 @@ std::string Utilities::GetEncrypted(std::string yourHashKey, std::string msg)
 }
 std::string Utilities::GetDecrypted(std::string yourHashKey, std::string encMsg)
 {
-
 	//Convert string to unsigned char *
 	unsigned char *hashKey = new unsigned char[yourHashKey.length()+1];
 	memcpy(hashKey, yourHashKey.c_str(), yourHashKey.length());

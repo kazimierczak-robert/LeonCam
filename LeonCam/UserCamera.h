@@ -29,4 +29,5 @@ private:
 	std::string result;
 	QFuture<void> *future;
 	QFutureWatcher<void> *watcher;
+	std::string GenerateUuid();
 };

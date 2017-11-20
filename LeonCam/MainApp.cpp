@@ -39,7 +39,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 
 	activeCameraPage = 0;
 
-	addTab();
+	AddTab();
 	ui.TWCameraPages->setTabText(0, "");
 	ui.TWCameraPages->setFocusPolicy(Qt::NoFocus);
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
@@ -72,7 +72,6 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	}
 	
 }
-
 MainApp::~MainApp()
 {
 	//Vector 1 level
@@ -113,7 +112,6 @@ MainApp::~MainApp()
 		ui.TWFacesBase->removeRow(i);
 	}
 }
-
 void MainApp::AddCamera()
 {
 	if (vectorCameraLayoutsPages->size() == 20)
@@ -251,7 +249,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 6)
 		{
-			addTab();
+			AddTab();
 			ui.TWCameraPages->setFocusPolicy(Qt::TabFocus);
 		}
 		else
@@ -269,7 +267,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 		//TODO
 	}
 }
-void MainApp::addTab()
+void MainApp::AddTab()
 {
 	QGridLayout *newLayout = new QGridLayout();
 	QWidget *newTab = new QWidget(ui.TWCameraPages);
@@ -308,13 +306,13 @@ void MainApp::CameraSelected(QGridLayout* layout)
 		delete cameraPreview;
 	}
 }
-struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
+struct MainApp::Camera* MainApp::GetCameraFromDBByID(int cameraID)
 {
 	Camera *cam = nullptr;
 
 	QSqlQuery query;
 	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, CameraID);
+	query.bindValue(0, cameraID);
 	bool result = query.exec();
 	if (result == true)
 	{
@@ -322,7 +320,7 @@ struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
 		{
 			//fill cameras
 			cam = new struct Camera;
-			cam->CameraID = CameraID;
+			cam->CameraID = cameraID;
 			cam->Name = query.value(0).toString().toStdString();
 			cam->IPAddress = query.value(1).toString().toStdString();
 			cam->Login = query.value(2).toString().toStdString();
@@ -331,7 +329,6 @@ struct MainApp::Camera* MainApp::GetCameraFromDBByID(int CameraID)
 	}
 	return cam;
 }
-
 void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 {
 	for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
@@ -346,7 +343,6 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 		}
 	}
 }
-
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
 	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
@@ -430,7 +426,6 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
 }
-
 void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
 	if (button->text() == "Off")
@@ -446,9 +441,9 @@ void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}
 }
-void MainApp::EditCamera(int CameraID, QLabel *label)
+void MainApp::EditCamera(int cameraID, QLabel *label)
 {
-	CameraEdition *cameraEdition = new CameraEdition(this, loggedID, CameraID, passHash);
+	CameraEdition *cameraEdition = new CameraEdition(this, loggedID, cameraID, passHash);
 	bool result = cameraEdition->exec();
 	if (result == QDialog::Accepted)
 	{
@@ -460,14 +455,14 @@ void MainApp::EditCamera(int CameraID, QLabel *label)
 		if (controlsValues->at(3) == "")
 		{
 			query.prepare("UPDATE Cameras SET Name = ?, IPAddress = ?, Login = ?, LastEditDate = ? WHERE CameraID = ?");
-			query.bindValue(4, CameraID);
+			query.bindValue(4, cameraID);
 		}
 		else
 		{
 			query.prepare("UPDATE Cameras SET Name = ?, IPAddress = ?, Login = ?, LastEditDate = ?, Password = ? WHERE CameraID = ?");
 			std::string encryptedMsg = Utilities::GetEncrypted(passHash, controlsValues->at(3).toStdString());
 			query.bindValue(4, QString::fromStdString(encryptedMsg));
-			query.bindValue(5, CameraID);
+			query.bindValue(5, cameraID);
 		}
 		query.bindValue(0, controlsValues->at(0));
 		query.bindValue(1, controlsValues->at(1));
@@ -482,15 +477,15 @@ void MainApp::EditCamera(int CameraID, QLabel *label)
 	}
 	delete cameraEdition;
 }
-void MainApp::OpenCameraEdit(int camID)
+void MainApp::OpenCameraEdit(int cameraID)
 {
 	for (std::vector<QGridLayout*> *vec : *vectorCameraLayoutsPages)
 	{
 		for (QGridLayout *lt : *vec)
 		{
-			if (((QLabel *)lt->itemAtPosition(3, 0)->widget())->text().toInt() == camID)
+			if (((QLabel *)lt->itemAtPosition(3, 0)->widget())->text().toInt() == cameraID)
 			{
-				EditCamera(camID, (QLabel*)lt->itemAtPosition(1, 0)->widget());
+				EditCamera(cameraID, (QLabel*)lt->itemAtPosition(1, 0)->widget());
 				emit closeCameraEdit(((QLabel*)lt->itemAtPosition(1, 0)->widget())->text());
 				return;
 			}
@@ -501,14 +496,14 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 {
 	if (layout->count() > 1)
 	{
-		int CameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
-		if (cameraThread->find(CameraID) != cameraThread->end())
+		int cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
+		if (cameraThread->find(cameraID) != cameraThread->end())
 		{
-			cameraThread->at(CameraID)->StopThread();
-			cameraThread->at(CameraID)->quit();//equivalent to exit(0==success)
-			cameraThread->at(CameraID)->wait();
-			delete cameraThread->at(CameraID);
-			cameraThread->erase(CameraID);
+			cameraThread->at(cameraID)->StopThread();
+			cameraThread->at(cameraID)->quit();//equivalent to exit(0==success)
+			cameraThread->at(cameraID)->wait();
+			delete cameraThread->at(cameraID);
+			cameraThread->erase(cameraID);
 		}
 	}
 	int pageIndex = 0;
@@ -616,21 +611,21 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 }
 void MainApp::RemoveCamera(QGridLayout* layout)
 {
-	int CameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
+	int cameraID = ((QLabel *)layout->itemAtPosition(3, 0)->widget())->text().toInt();
 	QSqlQuery query;
 	query.prepare("DELETE FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, CameraID);
+	query.bindValue(0, cameraID);
 	bool result = query.exec();
 	if (result == true)
 	{
 		DeleteCameraFromMemory(layout);
 		query.clear();
 		query.prepare("DELETE FROM GreenAlerts WHERE CameraID=?");
-		query.bindValue(0, CameraID);
+		query.bindValue(0, cameraID);
 		query.exec();
 		query.clear();
 		query.prepare("DELETE FROM RedAlerts WHERE CameraID=?");
-		query.bindValue(0, CameraID);
+		query.bindValue(0, cameraID);
 		query.exec();
 	}
 }
@@ -805,7 +800,7 @@ void MainApp::AdjustRedReportsTW()
 	//Disable dotted border
 	ui.TWRedReport->setFocusPolicy(Qt::NoFocus);
 }
-void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
+void MainApp::AddRowToFB(int faceID, QString name, QString surname)
 {
 	ui.TWFacesBase->setSortingEnabled(false);
 	QWidget *widget;
@@ -818,7 +813,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	ui.TWFacesBase->insertRow(ui.TWFacesBase->rowCount());
 
 	//Set the widget in the cell
-	item = new QTableWidgetItem(QVariant(FaceID).toString());
+	item = new QTableWidgetItem(QVariant(faceID).toString());
 	item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 	ui.TWFacesBase->setItem(rowCount, 0, item);
 
@@ -845,7 +840,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	//Set the layout on the widget
 	widget->setLayout(layout);
 	ui.TWFacesBase->setCellWidget(rowCount, 3, widget);
-	connect(button, &QPushButton::clicked, this, [this, FaceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(FaceID).toString()); });
+	connect(button, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(faceID).toString()); });
 
 	//New widget
 	widget = new QWidget();
@@ -863,7 +858,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 4, widget);
-	connect(button, &QPushButton::clicked, this, [this, FaceID] {TakePicture(FaceID); });
+	connect(button, &QPushButton::clicked, this, [this, faceID] {TakePicture(faceID); });
 
 	//New widget
 	widget = new QWidget();
@@ -881,7 +876,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 5, widget);
-	connect(button, &QPushButton::clicked, this, [this, FaceID] {EditPerson(FaceID); });
+	connect(button, &QPushButton::clicked, this, [this, faceID] {EditPerson(faceID); });
 
 	//New widget
 	widget = new QWidget();
@@ -899,7 +894,7 @@ void MainApp::AddRowToFB(int FaceID, QString name, QString surname)
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWFacesBase->setCellWidget(rowCount, 6, widget);
-	connect(button, &QPushButton::clicked, this, [this, FaceID] {RemovePerson(FaceID); });
+	connect(button, &QPushButton::clicked, this, [this, faceID] {RemovePerson(faceID); });
 	ui.TWFacesBase->setSortingEnabled(true);
 }
 void MainApp::AddRowToGreenReports(int greenAlertID, int cameraID, int faceID, QString name, QString surname, QString startDate, QString stopDate)
@@ -1258,11 +1253,11 @@ void MainApp::AddPerson()
 	}
 
 }
-void MainApp::EditPerson(int FaceID)
+void MainApp::EditPerson(int faceID)
 {
 	for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
 	{
-		if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
+		if (faceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 		{
 			//Create Qdialog
 			QDialog *qDialog = new QDialog(0, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
@@ -1340,7 +1335,7 @@ void MainApp::EditPerson(int FaceID)
 					query.bindValue(1, surnameLE->text());
 					query.bindValue(2, this->loggedID);
 					query.bindValue(3, Utilities::GetCurrentDateTime());
-					query.bindValue(4, FaceID);
+					query.bindValue(4, faceID);
 					bool result = query.exec();
 					query.exec("COMMIT");
 					if (result == false)
@@ -1358,14 +1353,14 @@ void MainApp::EditPerson(int FaceID)
 		}
 	}
 }
-void MainApp::RemovePerson(int FaceID)
+void MainApp::RemovePerson(int faceID)
 {
-	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)FaceID).toString() + "?"))
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)faceID).toString() + "?"))
 	{
 		//Remove row from table
 		for (int i = 0; i < ui.TWFacesBase->rowCount(); i++)
 		{
-			if (FaceID == ui.TWFacesBase->item(i, 0)->text().toInt())
+			if (faceID == ui.TWFacesBase->item(i, 0)->text().toInt())
 			{
 				ui.TWFacesBase->removeCellWidget(i, 3);
 				ui.TWFacesBase->removeCellWidget(i, 4);
@@ -1381,7 +1376,7 @@ void MainApp::RemovePerson(int FaceID)
 	QSqlQuery query;
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
 	query.exec("DELETE FROM Faces WHERE FaceID = ?");
-	query.bindValue(0, FaceID);
+	query.bindValue(0, faceID);
 	bool result = query.exec();
 	query.exec("COMMIT");
 	if (result == false)
@@ -1390,13 +1385,13 @@ void MainApp::RemovePerson(int FaceID)
 	}
 	else
 	{
-		Utilities::RemoveFolderRecursively(".\\FaceBase\\" + QVariant(FaceID).toString());
+		Utilities::RemoveFolderRecursively(".\\FaceBase\\" + QVariant(faceID).toString());
 	}
 	//Delete from GreenAlert
 	query.clear();
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
 	query.exec("DELETE FROM GreenAlerts WHERE FaceID = ?");
-	query.bindValue(0, FaceID);
+	query.bindValue(0, faceID);
 	result = query.exec();
 	query.exec("COMMIT");
 }

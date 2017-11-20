@@ -6,11 +6,9 @@ DesignBase::DesignBase(QObject *parent)
 	//set proper gif
 	gif = new QMovie(loadingGifPath);
 }
-
 DesignBase::~DesignBase()
 {
 }
-
 void DesignBase::SetGifInLabel(QLabel *qlabel)
 {
 	loadingLabel = qlabel;

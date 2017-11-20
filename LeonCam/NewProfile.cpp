@@ -1,6 +1,5 @@
 #include "NewProfile.h"
 
-
 NewProfile::NewProfile(QWidget *parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
@@ -13,7 +12,6 @@ NewProfile::NewProfile(QWidget *parent)
 	connect(ui.PBCreate, SIGNAL(clicked()), this, SLOT(CreateClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
 }
-
 NewProfile::~NewProfile()
 {
 }
@@ -64,12 +62,12 @@ void NewProfile::CreateClicked()
 	std::string concatHelp = "";
 	//password abbreviation -> password + username
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordAbbreviation = QString::fromStdString(Utilities::sha256HEX(concatHelp));
+	QString passwordAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
 	//answer abbreviation -> username + answer
 	concatHelp = username.toStdString() + answer.toStdString();
 
-	QString answerAbbreviation = QString::fromStdString(Utilities::sha256HEX(concatHelp));
+	QString answerAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
 	QString currentDateTimeS = Utilities::GetCurrentDateTime();
 

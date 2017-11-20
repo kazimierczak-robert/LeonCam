@@ -40,7 +40,6 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	//home position
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {cameraControl->GoHomeCamera(); });
 }
-
 NewPhoto::~NewPhoto()
 {
 	//Close thread
@@ -60,7 +59,6 @@ NewPhoto::~NewPhoto()
 	}
 
 }
-
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
 void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 {
@@ -231,7 +229,6 @@ void NewPhoto::CurrentIndexChanged(std::string passHash)
 	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
 }
-
 void NewPhoto::closeEvent(QCloseEvent *event)
 {
 	cameraThread->at(currentCameraID)->SetSendBigPicture(false);

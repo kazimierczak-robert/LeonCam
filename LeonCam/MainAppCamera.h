@@ -63,6 +63,7 @@ private:
 	bool sendThumbnail;
 	bool faceRecognitionState = false;
 	cv::VideoCapture vcap;
+	cv::VideoWriter videowriter;
 	cv::Mat img;
 	std::list<GreenAlert> *greenAlertList;
 	RedAlert *redAlert = nullptr;

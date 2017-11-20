@@ -1,6 +1,5 @@
 #include "LogIn.h"
 
-
 LogIn::LogIn(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -16,7 +15,6 @@ LogIn::LogIn(QWidget *parent)
 	connect(ui.PBForgotPassword, SIGNAL(clicked()), this, SLOT(ForgotPasswordClicked()));
 	connect(ui.PBNewProfile, SIGNAL(clicked()), this, SLOT(NewProfileClicked()));
 }
-
 void LogIn::LogInClicked()
 {
 	designB->gif->start();
@@ -33,8 +31,8 @@ void LogIn::LogInClicked()
 
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordHash = QString::fromStdString(Utilities::sha256HEX(concatHelp));
-	std::string passHash = Utilities::sha256(password.toStdString());
+	QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+	std::string passHash = Utilities::Sha256(password.toStdString());
 
 	//Get proper user from DB
 	QSqlQuery query;

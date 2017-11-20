@@ -13,19 +13,15 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
 	connect(this, SIGNAL(updateRedAlert(int, QString)), parent, SLOT(UpdateRedAlert(int, QString)));
+	//videowriter = new cv::VideoWriter();
 }
-
 MainAppCamera::~MainAppCamera()
 {
-
-
 }
-
 void MainAppCamera::SetStreamURI(std::string streamURI) //OK
 {
 	this->streamURI = streamURI;
 }
-
 void MainAppCamera::SetSendBigPicture(bool setting)
 {
 	this->sendBigPicture = setting;
@@ -43,7 +39,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 	if (predictionLabel < 0)
 	{
 		//Person hasn't been recognized
-		//Check if 1 minute has passed : 1 * 60 * 1000
+		//Check if 0.5 minute has passed : 1 * 30 * 1000
 		result = redAlert->redAlertID < 0 ? true : false;
 		//YES
 		if (result == true)
@@ -73,7 +69,13 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 				redAlert->stopDate = dateTimeNow;
 				emit insertRedAlert(query.value(0).toInt(), cameraID, dateTimeNow);
 			}
-			//TODO: start movie
+			QString filePath = ".\\Pictures\\RedAlerts\\" + QString::number(cameraID);
+			//Start movie
+			Utilities::CreateFolderIfNotExists(filePath);
+			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
+			//the last parameter: color or not video
+			//CV_FOURCC('M', 'J', 'P', 'G')
+			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , cameraFPS, cv::Size(426, 240), true);
 		}
 		else
 		{
@@ -147,6 +149,7 @@ void MainAppCamera::run()
 {
 	this->isWorking = true;
 	greenAlertList->clear();
+	redAlert->redAlertID = -1;
 	sendThumbnail = true;
 	sendBigPicture = false;
 	//Image from camera
@@ -160,7 +163,7 @@ void MainAppCamera::run()
 		//connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
 		//set intervals
 		greenTimer.setInterval(5*60*1000); //5 minutes
-		redTimer.setInterval(1*60*1000); //1 minutes
+		redTimer.setInterval(1*30*1000); //1 minutes
 		//processTimer.setInterval(40);
 		//start timers
 		greenTimer.start();
@@ -203,7 +206,8 @@ void MainAppCamera::run()
 		//update red alerts
 		if (redAlert->redAlertID > 0)
 		{
-			//TODO: Stop movie
+			//Stop movie
+			videowriter.release();
 			//update BD
 			result = false;
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
@@ -216,7 +220,6 @@ void MainAppCamera::run()
 		}
 	}
 }
-
 void MainAppCamera::StopThread()
 {
 	this->isWorking = false;
@@ -225,7 +228,6 @@ void MainAppCamera::ChangeFaceRecoState(bool state)
 {
 	faceRecognitionState = state;
 }
-
 void MainAppCamera::UpdateGreenAlerts()
 {
 	if (greenAlertList->size() == 0) return;
@@ -267,7 +269,7 @@ void MainAppCamera::UpdateGreenAlerts()
 void MainAppCamera::UpdateRedAlerts()
 {
 	if (redAlert->redAlertID < 0) return;
-	//TODO: Stop movie
+
 	//update BD
 	QSqlQuery query;
 	bool result = false;
@@ -286,9 +288,11 @@ void MainAppCamera::UpdateRedAlerts()
 	QDateTime dTNow = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
 	QDateTime dtStop = QDateTime::fromString(redAlert->stopDate, "yyyy-MM-dd HH:mm:ss");
 	msDifferece = dtStop.msecsTo(dTNow);
-	if (msDifferece > (1 * 60 * 1000))
+	if (msDifferece > (1 * 30 * 1000))
 	{
 		redAlert->redAlertID = -1;
+		//Stop movie
+		videowriter.release();
 	}
 }
 void MainAppCamera::CheckGreenAlertInList(int greenAlertID)
@@ -367,14 +371,19 @@ void MainAppCamera::Process()
 			}
 
 			cv::Mat resizedMat;
+			cv::Mat videoImg;
 			//Resize oroginal image
 			cvtColor(img, resizedMat, CV_BGR2RGB);
-
 			if (frameID % 2 == 0 && sendBigPicture)
 			{
-
 				cv::resize(resizedMat, resizedMat, cv::Size(760, 427));
 				emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
+			}
+
+			if (videowriter.isOpened())
+			{
+				cv::resize(img, videoImg, cv::Size(426, 240));
+				videowriter.write(videoImg);
 			}
 
 			if (sendThumbnail)

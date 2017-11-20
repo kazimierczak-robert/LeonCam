@@ -1,6 +1,6 @@
 #include "CameraEdition.h"
 
-CameraEdition::CameraEdition(QWidget *parent, int userID, int camID, std::string passHash)
+CameraEdition::CameraEdition(QWidget *parent, int userID, int cameraID, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -13,7 +13,7 @@ CameraEdition::CameraEdition(QWidget *parent, int userID, int camID, std::string
 	connect(ui.PBBack, &QPushButton::clicked, this, [this]	{this->close();	});
 	connect(ui.PBEdit, SIGNAL(clicked()), this, SLOT(EditClicked()));
 	this->userID = userID;
-	this->camID = camID;
+	this->cameraID = cameraID;
 	this->passHash = passHash;
 
 	future = nullptr;
@@ -21,7 +21,7 @@ CameraEdition::CameraEdition(QWidget *parent, int userID, int camID, std::string
 
 	QSqlQuery *query = new QSqlQuery();
 	query->prepare("SELECT Name, IPAddress, Login FROM Cameras WHERE CameraID=?");
-	query->bindValue(0, camID);
+	query->bindValue(0, cameraID);
 	if (query->exec() == true)
 	{
 		query->next();
@@ -31,7 +31,6 @@ CameraEdition::CameraEdition(QWidget *parent, int userID, int camID, std::string
 	}
 	delete query;
 }
-
 CameraEdition::~CameraEdition()
 {
 	delete designB;
@@ -48,7 +47,6 @@ CameraEdition::~CameraEdition()
 		delete watcher;
 	}*/
 }
-
 std::vector<QString>* CameraEdition::GetValuesFromControls()
 {
 	std::vector<QString>* controlsValues = new std::vector<QString>();
@@ -58,7 +56,6 @@ std::vector<QString>* CameraEdition::GetValuesFromControls()
 	controlsValues->push_back(ui.LEPassword->text());
 	return controlsValues;
 }
-
 void CameraEdition::EditClicked()
 {
 	designB->gif->start();
@@ -112,7 +109,7 @@ void CameraEdition::EditClicked()
 		query.prepare("SELECT COUNT (*) FROM Cameras WHERE UserID = ? AND Name = ? AND CameraID != ?");
 		query.bindValue(0, userID);
 		query.bindValue(1, ui.LEDescripton->text());
-		query.bindValue(2, camID);
+		query.bindValue(2, cameraID);
 		if (query.exec() == true)
 		{
 			query.next();
@@ -128,7 +125,7 @@ void CameraEdition::EditClicked()
 		{
 			query.clear();
 			query.prepare("SELECT Password FROM Cameras WHERE CameraID = ?");
-			query.bindValue(0, camID);
+			query.bindValue(0, cameraID);
 			if (query.exec() == true)
 			{
 				query.next();

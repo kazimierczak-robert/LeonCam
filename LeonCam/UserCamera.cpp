@@ -16,7 +16,6 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	this->userID = userID;
 	SearchForCameraIPs();
 }
-
 UserCamera::~UserCamera()
 {
 	delete designB;
@@ -25,8 +24,7 @@ UserCamera::~UserCamera()
 		watcher->waitForFinished();
 	}
 }
-
-std::string generateUuid()
+std::string UserCamera::GenerateUuid()
 {
 	const int kGUIDSize = 39;
 
@@ -46,7 +44,7 @@ std::string generateUuid()
 void UserCamera::SearchForCameraIPs()
 {
 	DiscoveryLookupBindingProxy proxy;
-	std::string tmpuuid = "uuid:" + generateUuid();
+	std::string tmpuuid = "uuid:" + GenerateUuid();
 	proxy.soap_endpoint = "soap.udp://239.255.255.250:3702/";
 	proxy.header = new SOAP_ENV__Header();
 	proxy.header->wsa__Action = (char*)"http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe";
@@ -73,7 +71,6 @@ void UserCamera::SearchForCameraIPs()
 	delete proxy.header;
 	delete probe.Types;
 }
-
 std::vector<QString>* UserCamera::GetValuesFromControls()
 {
 	std::vector<QString>* controlsValues = new std::vector<QString>();

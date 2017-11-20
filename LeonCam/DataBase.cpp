@@ -1,15 +1,11 @@
 #include "DataBase.h"
 
-
 DataBase::DataBase()
 {	
 }
-
-
 DataBase::~DataBase()
 {
 }
-
 void DataBase::SetPathToDB()
 {
 	QDir databasePath;
@@ -110,7 +106,6 @@ bool DataBase::CreateCameras()
 	result = query.isActive();
 	return result;
 }
-
 bool DataBase::CreateFaces() 
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS Faces("

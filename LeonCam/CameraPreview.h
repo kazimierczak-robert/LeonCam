@@ -19,10 +19,10 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QPushButton *buttonTakePhotoFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int camID = -1, MainAppCamera *thread = nullptr, std::string passHash = "");
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QPushButton *buttonTakePhotoFromParent = nullptr, OnvifClientDevice* onvifDevice = nullptr, int cameraID = -1, MainAppCamera *thread = nullptr, std::string passHash = "");
 	~CameraPreview();
 signals:
-	void openCameraEdit(int camID);
+	void openCameraEdit(int cameraID);
 private slots:
 	void TurnOnOffCamera();
 	void TurnOnOffRecognizeMode();
@@ -39,7 +39,7 @@ private:
 	OnvifClientPTZ *ptz;
 	string profileToken;
 	MainAppCamera *capThread;
-	int camID;
+	int cameraID;
 	CameraControl *ctrl;
 	std::string passHash;
 	bool SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice);

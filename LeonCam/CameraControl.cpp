@@ -1,17 +1,13 @@
 #include "CameraControl.h"
 
-
-
 CameraControl::CameraControl(OnvifClientPTZ *ptz, std::string profileToken)
 {
 	this->ptz = ptz;
 	this->profileToken = profileToken;
 }
-
 CameraControl::~CameraControl()
 {
 }
-
 void CameraControl::MoveCamera(float panSpeed, float tiltSpeed)
 {
 	if (ptz != nullptr) 

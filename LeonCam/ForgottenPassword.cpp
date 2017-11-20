@@ -14,11 +14,9 @@ ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 	SetSecurityQuestion(username);
 	this->setResult(QDialog::Rejected);
 }
-
 ForgottenPassword::~ForgottenPassword()
 {
 }
-
 void ForgottenPassword::SetSecurityQuestion(QString username)
 {
 	this->username = username;
@@ -38,7 +36,6 @@ void ForgottenPassword::SetSecurityQuestion(QString username)
 		Utilities::MBAlarm("Problem with loading <i> Security Question </i>", false);
 	}
 }
-
 void ForgottenPassword::VerifyClicked()
 {
 	designB->gif->start();
@@ -56,7 +53,7 @@ void ForgottenPassword::VerifyClicked()
 		QSqlQuery query;
 		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND ANSWER = ?");
 		query.bindValue(0, username);
-		QString answerHash = QString::fromStdString(Utilities::sha256HEX(concatHelp));
+		QString answerHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 		query.bindValue(1, answerHash);
 		bool result = query.exec();
 		if (result == true)

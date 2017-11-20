@@ -27,7 +27,6 @@ ImgProc::ImgProc(const ImgProc &imProc, int cameraID)
 ImgProc::~ImgProc()
 {
 }
-
 void ImgProc::LoadFaceCascade()
 {
 	if (!faceCascade.load(faceCascadeName))
@@ -147,10 +146,12 @@ std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 	cv::resize(img_gray, img_gray, cv::Size(380, 213));
 	faceCascade.detectMultiScale(img_gray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
 	
+	//Coordinates of the top left corner
 	int x = 0;
 	int y = 0;
-	int h = 0;
-	int w = 0;
+
+	int h = 0; //Height
+	int w = 0; //Width
 	
 	for (int i = 0; i < faces.size(); i++)
 	{
