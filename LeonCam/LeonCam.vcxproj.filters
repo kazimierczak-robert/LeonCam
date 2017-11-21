@@ -294,6 +294,15 @@
     <ClCompile Include="MainAppCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CVImageWidget.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CVImageWidget.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CVImageWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LogIn.h">
@@ -351,6 +360,9 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="MainAppCamera.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CVImageWidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

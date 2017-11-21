@@ -138,35 +138,35 @@ bool ImgProc::CheckIfFaceCascadeLoaded()
 std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 {
 	std::vector<cv::Rect> faces;
-	cv::Mat img_gray;
+	//cv::Mat img_gray;
 
-	cvtColor(img, img_gray, CV_BGR2GRAY);
-	cv::equalizeHist(img_gray, img_gray);
-	
-	cv::resize(img_gray, img_gray, cv::Size(380, 213));
-	faceCascade.detectMultiScale(img_gray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
+	//cvtColor(img, img_gray, CV_BGR2GRAY);
+	//cv::equalizeHist(img, img);
+	//cv::resize(img_gray, img_gray, cv::Size(380, 213));
+	faceCascade.detectMultiScale(img, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
 	
 	//Coordinates of the top left corner
-	int x = 0;
-	int y = 0;
+	//int x = 0;
+	//int y = 0;
 
-	int h = 0; //Height
-	int w = 0; //Width
-	
-	for (int i = 0; i < faces.size(); i++)
+	//int h = 0; //Height
+	//int w = 0; //Width
+	//
+	if (faces.size() == 1)
 	{
 		//10% https://stackoverflow.com/a/30842913
-		cv::Size deltaSize( faces[i].width * 0.1f, faces[i].height * 0.1f ); // 0.1f = 10/100
-		cv::Point offset( deltaSize.width/2, deltaSize.height/2);
-		faces[i] += deltaSize;
-		faces[i] -= offset;
-
-		x = faces[i].x*2;
-		y = faces[i].y*2;
-		h = faces[i].height*2;
-		w = faces[i].width*2;
-		cv::rectangle(img, cv::Point(x, y), cv::Point(x + w, y + h), cv::Scalar(255, 0, 0), 1, 8, 0);
+		cv::Size deltaSize(faces[0].width * 0.1f, faces[0].height * 0.1f); // 0.1f = 10/100
+		cv::Point offset(deltaSize.width / 2, deltaSize.height / 2);
+		faces[0] += deltaSize;
+		faces[0] -= offset;
 	}
+
+	//	x = faces[0].x/**2*/;
+	//	y = faces[0].y/**2*/;
+	//	h = faces[0].height/**2*/;
+	//	w = faces[0].width/**2*/;
+	//	cv::rectangle(img, cv::Point(x, y), cv::Point(x + w, y + h), cv::Scalar(255, 0, 0), 1, 8, 0);
+	//}
 	return faces;
 }
 int ImgProc::PredictPerson(cv::Mat matImg)

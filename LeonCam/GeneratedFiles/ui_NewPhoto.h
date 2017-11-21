@@ -18,13 +18,14 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_NewPhoto
 {
 public:
-    QLabel *LPreviewScreen;
     QPushButton *PBDown;
     QPushButton *PBRight;
     QPushButton *PBLeft;
@@ -36,6 +37,8 @@ public:
     QPushButton *PBFolder;
     QPushButton *PBHome;
     QLabel *LWarning;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout;
 
     void setupUi(QDialog *NewPhoto)
     {
@@ -51,14 +54,9 @@ public:
 "{\n"
 "	background-image: url(:/Resources/Images/backgroundMain.png);\n"
 "}"));
-        LPreviewScreen = new QLabel(NewPhoto);
-        LPreviewScreen->setObjectName(QStringLiteral("LPreviewScreen"));
-        LPreviewScreen->setGeometry(QRect(19, 107, 760, 427));
-        LPreviewScreen->setFrameShape(QFrame::StyledPanel);
-        LPreviewScreen->setAlignment(Qt::AlignCenter);
         PBDown = new QPushButton(NewPhoto);
         PBDown->setObjectName(QStringLiteral("PBDown"));
-        PBDown->setGeometry(QRect(705, 500, 30, 23));
+        PBDown->setGeometry(QRect(715, 550, 30, 23));
         PBDown->setStyleSheet(QLatin1String("#PBDown {\n"
 "background-image: url(:/Resources/Images/down.png);\n"
 "border: none;\n"
@@ -69,7 +67,7 @@ public:
         PBDown->setFlat(true);
         PBRight = new QPushButton(NewPhoto);
         PBRight->setObjectName(QStringLiteral("PBRight"));
-        PBRight->setGeometry(QRect(740, 465, 23, 30));
+        PBRight->setGeometry(QRect(750, 515, 23, 30));
         PBRight->setStyleSheet(QLatin1String("#PBRight {\n"
 "background-image: url(:/Resources/Images/right.png);\n"
 "border: none;\n"
@@ -80,7 +78,7 @@ public:
         PBRight->setFlat(true);
         PBLeft = new QPushButton(NewPhoto);
         PBLeft->setObjectName(QStringLiteral("PBLeft"));
-        PBLeft->setGeometry(QRect(677, 465, 23, 30));
+        PBLeft->setGeometry(QRect(687, 515, 23, 30));
         PBLeft->setStyleSheet(QLatin1String("#PBLeft {\n"
 "background-image: url(:/Resources/Images/left.png);\n"
 "border: none;\n"
@@ -91,7 +89,7 @@ public:
         PBLeft->setFlat(true);
         PBUp = new QPushButton(NewPhoto);
         PBUp->setObjectName(QStringLiteral("PBUp"));
-        PBUp->setGeometry(QRect(705, 437, 30, 23));
+        PBUp->setGeometry(QRect(715, 487, 30, 23));
         PBUp->setStyleSheet(QLatin1String("#PBUp {\n"
 "background-image: url(:/Resources/Images/up.png);\n"
 "border: none;\n"
@@ -151,7 +149,7 @@ public:
         PBFolder->setFlat(true);
         PBHome = new QPushButton(NewPhoto);
         PBHome->setObjectName(QStringLiteral("PBHome"));
-        PBHome->setGeometry(QRect(700, 460, 40, 40));
+        PBHome->setGeometry(QRect(710, 510, 40, 40));
         PBHome->setStyleSheet(QLatin1String("#PBHome{\n"
 "background-image: url(:/Resources/Images/home.png);\n"
 "border: none;\n"
@@ -168,6 +166,14 @@ public:
         LWarning->setGeometry(QRect(270, 550, 271, 31));
         LWarning->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);"));
+        verticalLayoutWidget = new QWidget(NewPhoto);
+        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(80, 110, 641, 361));
+        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
 
         retranslateUi(NewPhoto);
 
@@ -177,7 +183,6 @@ public:
     void retranslateUi(QDialog *NewPhoto)
     {
         NewPhoto->setWindowTitle(QApplication::translate("NewPhoto", "LeonCam", Q_NULLPTR));
-        LPreviewScreen->setText(QApplication::translate("NewPhoto", "Preview", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBDown->setToolTip(QApplication::translate("NewPhoto", "Move the camera down", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

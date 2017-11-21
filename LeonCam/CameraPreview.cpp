@@ -40,7 +40,12 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, buttonTakePhotoFromParent] {buttonTakePhotoFromParent->click(); });
 
-	connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	imageWidget = new CVImageWidget();
+	ui.verticalLayout->addWidget(imageWidget);
+	qRegisterMetaType< cv::Mat >("const cv::Mat&");
+
+	//connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	connect(capThread, SIGNAL(updateImage(const cv::Mat&)), imageWidget, SLOT(ShowImage(const cv::Mat&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
 
@@ -70,6 +75,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	{
 		TurnOffLabels();
 	}
+
+	//ui.widget->setCentralWidget(imageWidget);
 }
 CameraPreview::~CameraPreview()
 {
@@ -124,10 +131,6 @@ void CameraPreview::TurnOffLabels()
 	ui.PBHome->setEnabled(false);
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 	ui.PBSnapshot->setEnabled(false);
-}
-void CameraPreview::UpdatePixmap(const QPixmap& pixmap) 
-{
-	ui.LPreviewScreen->setPixmap(pixmap);
 }
 void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 {
@@ -184,7 +187,6 @@ void CameraPreview::TurnOnOffCamera()
 		{
 			buttonIsEnabledFromParent->click();
 			TurnOffLabels();
-			ui.LPreviewScreen->clear();
 		}
 	}
 }

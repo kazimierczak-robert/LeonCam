@@ -35,30 +35,11 @@
 	background-image: url(:/Resources/Images/backgroundMain.png);
 }</string>
   </property>
-  <widget class="QLabel" name="LPreviewScreen">
-   <property name="geometry">
-    <rect>
-     <x>19</x>
-     <y>107</y>
-     <width>760</width>
-     <height>427</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="text">
-    <string>Preview</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PBDown">
    <property name="geometry">
     <rect>
-     <x>705</x>
-     <y>500</y>
+     <x>715</x>
+     <y>550</y>
      <width>30</width>
      <height>23</height>
     </rect>
@@ -85,8 +66,8 @@ background-image: url(:/Resources/Images/downHover.png);}</string>
   <widget class="QPushButton" name="PBRight">
    <property name="geometry">
     <rect>
-     <x>740</x>
-     <y>465</y>
+     <x>750</x>
+     <y>515</y>
      <width>23</width>
      <height>30</height>
     </rect>
@@ -113,8 +94,8 @@ background-image: url(:/Resources/Images/rightHover.png);}</string>
   <widget class="QPushButton" name="PBLeft">
    <property name="geometry">
     <rect>
-     <x>677</x>
-     <y>465</y>
+     <x>687</x>
+     <y>515</y>
      <width>23</width>
      <height>30</height>
     </rect>
@@ -141,8 +122,8 @@ background-image: url(:/Resources/Images/leftHover.png);}</string>
   <widget class="QPushButton" name="PBUp">
    <property name="geometry">
     <rect>
-     <x>705</x>
-     <y>437</y>
+     <x>715</x>
+     <y>487</y>
      <width>30</width>
      <height>23</height>
     </rect>
@@ -290,8 +271,8 @@ padding: 0px;}
   <widget class="QPushButton" name="PBHome">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>460</y>
+     <x>710</x>
+     <y>510</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -334,6 +315,17 @@ background-color: rgb(255, 77, 61);</string>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;No faces has been detected&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>110</y>
+     <width>641</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

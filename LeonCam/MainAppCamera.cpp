@@ -9,6 +9,7 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	redAlert = new RedAlert();
 	redAlert->redAlertID = -1;
 	cameraFPS = 25;
+	this->faceRecognitionPB = faceRecognitionPB;
 	connect(this, SIGNAL(insertGreenAlert(int, int, int, QString)), parent, SLOT(InsertGreenAlert(int, int, int, QString)));
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
@@ -74,7 +75,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
 			//the last parameter: color or not video
 			//CV_FOURCC('M', 'J', 'P', 'G')
-			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , cameraFPS, cv::Size(426, 240), true);
+			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , (double)cameraFPS/2, cv::Size(640, 360), true);
 		}
 		else
 		{
@@ -319,12 +320,19 @@ void MainAppCamera::Process()
 {
 	//Frame number
 	int frameID;
-
+	cv::Mat imgGray;
+	std::vector<cv::Rect> faces;
 	while (isWorking)
 	{
 		if (vcap.read(img))
 		{
 			frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
+			if (frameID % 2 == 0)
+			{
+				cvtColor(img, imgGray, CV_BGR2GRAY);
+				cv::equalizeHist(imgGray, imgGray);
+				cv::resize(imgGray, imgGray, cv::Size(640, 360));
+			}
 			if (faceRecognitionState == true) //OK
 			{
 				if (imgProc->CheckIfFaceCascadeLoaded() == false)
@@ -333,16 +341,11 @@ void MainAppCamera::Process()
 				}
 				else
 				{
-					if (frameID % 10 == 0)
+					//If move isn't being recorded
+					if (frameID % 10 == 0 && videowriter.isOpened()==false)
 					{
 						//Get gray picture 20x20
-						std::vector<cv::Rect> faces;
-						cv::Mat imgGray;
-
-						cv::resize(img, imgGray, cv::Size(640, 360));
-						cvtColor(imgGray, imgGray, CV_BGR2GRAY);
-						cv::equalizeHist(imgGray, imgGray);
-
+						faces.clear();
 						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
 						cv::Mat imgCropped;
 						//rectangle
@@ -368,28 +371,26 @@ void MainAppCamera::Process()
 				}
 
 			}
-
-			cv::Mat resizedMat;
-			cv::Mat videoImg;
 			//Resize oroginal image
-			cvtColor(img, resizedMat, CV_BGR2RGB);
+			
 			if (frameID % 2 == 0 && sendBigPicture)
 			{
-				cv::resize(resizedMat, resizedMat, cv::Size(760, 427));
-				emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
+				//cv::resize(imgGray, resizedMat, cv::Size(760, 427));
+				//emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
+				emit updateImage(imgGray);
+			}
+			//cvtColor(img, resizedMat, CV_BGR2RGB);
+			if (frameID % 2 == 0 && videowriter.isOpened())
+			{
+				//cv::resize(imgGray, videoImg, cv::Size(426, 240));
+				videowriter.write(imgGray);
 			}
 
-			if (videowriter.isOpened())
+			if (frameID % 2 == 0 && sendThumbnail)
 			{
-				cv::resize(img, videoImg, cv::Size(426, 240));
-				videowriter.write(videoImg);
-			}
-
-			if (sendThumbnail)
-			{
-				cv::resize(resizedMat, resizedMat, cv::Size(thumbnailWidth, thumbnailHeight));
+				cv::resize(imgGray, imgGray, cv::Size(thumbnailWidth, thumbnailHeight));
 				//View on thumbnail
-				emit updateThumbnail(QPixmap::fromImage(QImage(resizedMat.data, thumbnailWidth, thumbnailHeight, resizedMat.step, QImage::Format_RGB888)), cameraID);
+				emit updateThumbnail(QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8)), cameraID);
 			}
 			if (frameID % 2 == 0)
 			{

@@ -65,6 +65,7 @@ private slots:
 	void RemoveGreenAlert(int greenAlertID);
 	void RemoveRedAlert(int redAlertID);
 	void ChangeTWReport(int i);
+	void PlayMovie(QString path);
 public slots:
 	void OpenCameraEdit(int cameraID);
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);

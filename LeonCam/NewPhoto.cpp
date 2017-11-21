@@ -22,7 +22,12 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=](int index) {CurrentIndexChanged(passHash); });
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
-	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	
+	imageWidget = new CVImageWidget();
+	ui.verticalLayout->addWidget(imageWidget);
+	qRegisterMetaType< cv::Mat >("const cv::Mat&");
+	connect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
+	//connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
 	FillPtzAndProfileToken(passHash);
 	//Camera control
@@ -60,27 +65,13 @@ NewPhoto::~NewPhoto()
 
 }
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
-void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
+void NewPhoto::UpdateImage(const cv::Mat& image)
 {
-	disconnect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	disconnect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
 	bool result = true;
-
-	//Keep the last frame
-	QImage   swapped = pixmap.toImage();
-	if (pixmap.toImage().format() == QImage::Format_RGB32)
-	{
-		swapped = swapped.convertToFormat(QImage::Format_RGB888);
-	}
-	swapped = swapped.rgbSwapped();
-	cv::Mat tmpMatImg = cv::Mat(
-		swapped.height(), swapped.width(),
-		CV_8UC3,
-		const_cast<uchar*>(swapped.bits()),
-		static_cast<size_t>(swapped.bytesPerLine())).clone();
-
 	//Detect face
-	//cv::Mat tmpMatImg = matImg;
-	std::vector<cv::Rect> faces = imgProc->DetectFace(tmpMatImg);
+	cv::Mat tmpImage = image;
+	std::vector<cv::Rect> faces = imgProc->DetectFace(tmpImage);
 	int peopleInFrameCounter = faces.size();
 	if (peopleInFrameCounter > 1)
 	{
@@ -96,10 +87,10 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 		ui.LWarning->setText("You can take photo");
 		ui.LWarning->setAlignment(Qt::AlignCenter);
 		//crop photo
-		cv::Rect myROI(faces[0].x*2+1, faces[0].y*2+1, faces[0].width*2-1, faces[0].height*2-1);
+		cv::Rect myROI(faces[0].x+1, faces[0].y+1, faces[0].width-1, faces[0].height-1);
 		// Crop the full image to that image contained by the rectangle myROI
-		cv::Mat imgCropped = tmpMatImg(myROI);
-		cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
+		cv::Mat imgCropped = tmpImage(myROI);
+		//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
 		cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
 		matImg = imgCropped;
 	}
@@ -111,13 +102,9 @@ void NewPhoto::UpdatePixmap(const QPixmap& pixmap)
 		ui.LWarning->setAlignment(Qt::AlignCenter);
 	}
 
-	cvtColor(tmpMatImg, tmpMatImg, CV_BGR2RGB);
-	//cv::Mat -> to QPixmap
-	QPixmap::fromImage(QImage(tmpMatImg.data, 760, 427, tmpMatImg.step, QImage::Format_RGB888));
-	QImage imgIn = QImage((uchar*)tmpMatImg.data, tmpMatImg.cols, tmpMatImg.rows, tmpMatImg.step, QImage::Format_RGB888);
-	ui.LPreviewScreen->setPixmap(QPixmap::fromImage(imgIn));
+	imageWidget->ShowImage(tmpImage);
 	//ui.LPreviewScreen->setPixmap(tmp);
-	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	connect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
 }
 void NewPhoto::BackButtonClicked()
 {
@@ -140,28 +127,6 @@ void NewPhoto::PBSnapshotClicked(int faceID)
 	//Add to labels
 	imgProc->PushBackLabel(faceID);
 	Utilities::MBAlarm("Picture has been taken", true);
-}
-//Delete this method
-bool NewPhoto::CameraPreviewUpdate(std::string streamURI)
-{
-	//QThread::currentThread()->setPriority(QThread::Priority::HighestPriority);
-	cv::VideoCapture vcap;
-	ImgProc *imgproc = new ImgProc(loggedID);
-	bool result = true;
-	if (vcap.open(streamURI))
-	{
-		while (true)
-		{
-			if (vcap.read(matImg))
-			{
-				cvtColor(matImg, matImg, CV_BGR2RGB);
-				
-				ui.LPreviewScreen->setPixmap(QPixmap::fromImage(QImage(matImg.data, 760, 427, matImg.step, QImage::Format_RGB888)));
-			}
-		}
-	}
-	delete imgproc;
-	return result;
 }
 void NewPhoto::GetCamerasInfo(int loggedID, std::vector<int> cameraIDs)
 {
@@ -225,8 +190,8 @@ void NewPhoto::CurrentIndexChanged(std::string passHash)
 	currentCameraID = ui.CBPresets->currentData().toInt();
 	FillPtzAndProfileToken(passHash);
 	//Disconnect 'old' thread
-	disconnect(cameraThread->at(previousCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
-	connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	disconnect(cameraThread->at(previousCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
+	connect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
 	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
 }
 void NewPhoto::closeEvent(QCloseEvent *event)

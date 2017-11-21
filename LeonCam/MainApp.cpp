@@ -173,9 +173,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 		query.next();
 		QGridLayout *layout = new QGridLayout();
 
-		//Add thread do cameraThread map (combines layout camera with thread)
-		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
-
 		QPushButton* btn = new QPushButton();
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
@@ -202,15 +199,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
-		btn->setFocusPolicy(Qt::NoFocus);
-		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/snapshot.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/snapshotHover.png);}");
-		btn->setToolTip("Take a picture (disabled)");
-		btn->setEnabled(false);
-		connect(btn, SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
-		layout->addWidget(btn, 2, 1);
-
-		btn = new QPushButton();
-		btn->setFixedSize(40, 40);
 		btn->setText("Off");
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
@@ -220,6 +208,17 @@ void MainApp::AddCameraFromDB(int cameraID)
 			connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
 		}
 		layout->addWidget(btn, 2, 2);
+		//Add thread do cameraThread map (combines layout camera with thread)
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
+
+		btn = new QPushButton();
+		btn->setFixedSize(40, 40);
+		btn->setFocusPolicy(Qt::NoFocus);
+		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/snapshot.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/snapshotHover.png);}");
+		btn->setToolTip("Take a picture (disabled)");
+		btn->setEnabled(false);
+		connect(btn, SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
+		layout->addWidget(btn, 2, 1);
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
@@ -1039,8 +1038,8 @@ void MainApp::AddRowToRedReports(int redAlertID, int cameraID, QString startDate
 	//Set the layout on the widget
 	widget->setLayout(layout);
 	//Set the widget in the cell
-	ui.TWRedReport->setCellWidget(rowCount, 5, widget);
-	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	Utilities::OpenFileExplorer(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString()); });
+	ui.TWRedReport->setCellWidget(rowCount, 5, widget);		
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	PlayMovie(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi"); });
 	ui.TWRedReport->setSortingEnabled(true);
 
 	//New widget
@@ -1608,6 +1607,18 @@ void MainApp::ChangeTWReport(int i)
 		ui.TWGreenReport->setVisible(true);
 		ui.TWRedReport->setVisible(false);
 		ui.LChooseAlertDelSet->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color:rgb(36, 118, 59);}");
+	}
+}
+void MainApp::PlayMovie(QString path)
+{
+	if (Utilities::NotEmptyFileExists(path))
+	{
+		//ShellExecuteA(0, 0, (LPCSTR)path.toStdString().c_str(), 0, 0, SW_SHOW);
+		QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+	}
+	else
+	{
+		Utilities::MBAlarm("No movie associated with the alert", false);
 	}
 }
 void MainApp::CurrentIndexChanged()

@@ -17,6 +17,7 @@
 #include "ImgProc.h"
 #include "MainAppCamera.h"
 #include <QCloseEvent>
+#include "CVImageWidget.h"
 
 class NewPhoto : public QDialog
 {
@@ -27,7 +28,7 @@ public:
 	NewPhoto(std::vector<int> cameraIDs,std::string passHash, QString name, QString surname, int loggedID, int FaceID, ImgProc *imgProc, map<int, MainAppCamera *> *cameraThread, QWidget *parent = Q_NULLPTR);
 	~NewPhoto();
 	public slots:
-	void UpdatePixmap(const QPixmap& pixmap);
+	void UpdateImage(const cv::Mat& image);
 	private slots:
 	void BackButtonClicked();
 	void PBSnapshotClicked(int faceID);
@@ -41,8 +42,9 @@ private:
 	CameraControl *cameraControl = nullptr;
 	ImgProc *imgProc = nullptr;
 	map<int, MainAppCamera *> *cameraThread;
+	// Create the image widget
+	CVImageWidget* imageWidget;
 	void CurrentIndexChanged(std::string passHash);
-	bool CameraPreviewUpdate(std::string streamUri);//Update video frames
 	void NewPhoto::FillPtzAndProfileToken(std::string passHash);
 	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);
 	void closeEvent(QCloseEvent *event);

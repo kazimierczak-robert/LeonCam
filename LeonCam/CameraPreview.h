@@ -13,6 +13,7 @@
 #include <qfuture.h>
 #include <QtConcurrent\qtconcurrentrun.h>
 #include "MainAppCamera.h"
+#include <CVImageWidget.h>
 
 class CameraPreview : public QDialog
 {
@@ -27,10 +28,12 @@ private slots:
 	void TurnOnOffCamera();
 	void TurnOnOffRecognizeMode();
 public slots:
-	void UpdatePixmap(const QPixmap& pixmap);
 	void CloseCameraEdit(const QString& cameraDetails);
 	void TurnOnLabels();
 private:
+	// Create the image widget
+	CVImageWidget* imageWidget;
+
 	Ui::CameraPreview ui;
 	DesignBase *designB;
 	QPushButton *buttonIsEnabledFromParent;

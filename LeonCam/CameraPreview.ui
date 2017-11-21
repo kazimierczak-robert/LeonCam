@@ -38,8 +38,8 @@
   <widget class="QLabel" name="LCameraDetails">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>500</y>
+     <x>120</x>
+     <y>440</y>
      <width>261</width>
      <height>21</height>
     </rect>
@@ -56,8 +56,8 @@ font-weight:600;</string>
   <widget class="QPushButton" name="PBRecognize">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>460</y>
+     <x>530</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -80,8 +80,8 @@ QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png)
   <widget class="QPushButton" name="PBEdit">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>460</y>
+     <x>580</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -104,8 +104,8 @@ QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}
   <widget class="QPushButton" name="PBSnapshot">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>460</y>
+     <x>480</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -132,30 +132,11 @@ background-image: url(:/Resources/Images/snapshotHover.png);
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="LPreviewScreen">
-   <property name="geometry">
-    <rect>
-     <x>19</x>
-     <y>20</y>
-     <width>760</width>
-     <height>427</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PBHome">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>379</y>
+     <x>653</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -185,8 +166,8 @@ background-image: url(:/Resources/Images/homeHover.png);
   <widget class="QPushButton" name="PBUp">
    <property name="geometry">
     <rect>
-     <x>715</x>
-     <y>356</y>
+     <x>658</x>
+     <y>467</y>
      <width>30</width>
      <height>23</height>
     </rect>
@@ -213,8 +194,8 @@ background-image: url(:/Resources/Images/upHover.png);}</string>
   <widget class="QPushButton" name="PBRight">
    <property name="geometry">
     <rect>
-     <x>750</x>
-     <y>384</y>
+     <x>693</x>
+     <y>495</y>
      <width>23</width>
      <height>30</height>
     </rect>
@@ -241,8 +222,8 @@ background-image: url(:/Resources/Images/rightHover.png);}</string>
   <widget class="QPushButton" name="PBDown">
    <property name="geometry">
     <rect>
-     <x>715</x>
-     <y>419</y>
+     <x>658</x>
+     <y>530</y>
      <width>30</width>
      <height>23</height>
     </rect>
@@ -269,8 +250,8 @@ background-image: url(:/Resources/Images/downHover.png);}</string>
   <widget class="QPushButton" name="PBLeft">
    <property name="geometry">
     <rect>
-     <x>687</x>
-     <y>384</y>
+     <x>630</x>
+     <y>495</y>
      <width>23</width>
      <height>30</height>
     </rect>
@@ -297,8 +278,8 @@ background-image: url(:/Resources/Images/leftHover.png);}</string>
   <widget class="QPushButton" name="PBSavePreset">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>460</y>
+     <x>430</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -320,9 +301,9 @@ QPushButton:hover{background-image: url(:/Resources/Images/savePresetHover.png);
   <widget class="QComboBox" name="CBPresets">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>470</y>
-     <width>291</width>
+     <x>300</x>
+     <y>500</y>
+     <width>71</width>
      <height>21</height>
     </rect>
    </property>
@@ -355,8 +336,8 @@ background-color:none*/</string>
   <widget class="QPushButton" name="PBCameraOnOff">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>500</y>
+     <x>80</x>
+     <y>440</y>
      <width>31</width>
      <height>23</height>
     </rect>
@@ -371,8 +352,8 @@ background-color:none*/</string>
   <widget class="QPushButton" name="PBGoToPreset">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>460</y>
+     <x>380</x>
+     <y>490</y>
      <width>40</width>
      <height>40</height>
     </rect>
@@ -395,7 +376,7 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>190</y>
+     <y>200</y>
      <width>61</width>
      <height>61</height>
     </rect>
@@ -403,6 +384,17 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
    <property name="text">
     <string/>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>70</y>
+     <width>641</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

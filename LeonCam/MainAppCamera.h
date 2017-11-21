@@ -13,6 +13,7 @@
 #include <QCoreApplication>
 #include <qrunnable.h>
 #include "Utilities.h"
+#include <qpushbutton.h>
 
 #define thumbnailWidth 216
 #define thumbnailHeight 123
@@ -34,8 +35,8 @@ public:
 	QTimer *redTimer;
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
-	void updatePixmap(const QPixmap& pixmap);
-
+signals:
+	void updateImage(const cv::Mat& image);
 //private slots:
 //	void UpdateGreenAlerts();
 //	void UpdateRedAlerts();
@@ -68,6 +69,7 @@ private:
 	std::list<GreenAlert> *greenAlertList;
 	RedAlert *redAlert = nullptr;
 	int cameraFPS;
+	QPushButton *faceRecognitionPB;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
 public slots:
