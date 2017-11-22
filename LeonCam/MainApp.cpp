@@ -390,7 +390,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 					_trt__GetStreamUriResponse link;
 					media.GetStreamUrl(profileToken, link);
 
-					if (&link.MediaUri != 0)//Error
+					if (link.soap->status == 200)
 					{
 						std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");							
 						//Set stream URI

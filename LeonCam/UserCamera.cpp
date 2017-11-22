@@ -14,6 +14,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	connect(ui.PBAdd, SIGNAL(clicked()), this, SLOT(AddClicked()));
 	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();	});
 	this->userID = userID;
+	watcher = nullptr;
 	SearchForCameraIPs();
 }
 UserCamera::~UserCamera()
@@ -51,7 +52,7 @@ void UserCamera::SearchForCameraIPs()
 	proxy.header->wsa__MessageID = (char*)tmpuuid.c_str();
 	proxy.header->wsa__To = (char*)"urn:schemas-xmlsoap-org:ws:2005:04:discovery";
 	
-	proxy.recv_timeout = 2;
+	proxy.recv_timeout = 1;
 	ns1__ProbeType probe;
 	probe.Types = new std::string("tdn:NetworkVideoTransmitter");
 	ns1__ProbeMatchesType probeMatches;
