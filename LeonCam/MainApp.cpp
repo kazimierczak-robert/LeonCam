@@ -33,6 +33,8 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	imgProc = new ImgProc(loggedID);
 	imgProc->LoadFaceCascade();
 
+	ui.LEnabledNumber->setText(ui.LEnabledNumber->text() + QVariant(QThread::idealThreadCount()).toString());
+
 	FillFacesBaseTW();
 	FillReportsTW();
 	StatisticsChart();
@@ -70,7 +72,6 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 			AddCameraFromDB(query.value(0).toInt());
 		}
 	}
-	
 }
 MainApp::~MainApp()
 {
@@ -173,6 +174,9 @@ void MainApp::AddCameraFromDB(int cameraID)
 		query.next();
 		QGridLayout *layout = new QGridLayout();
 
+		//Add thread do cameraThread map (combines layout camera with thread)
+		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
+
 		QPushButton* btn = new QPushButton();
 		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
 		btn->setFixedSize(216, 123);
@@ -208,8 +212,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 			connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
 		}
 		layout->addWidget(btn, 2, 2);
-		//Add thread do cameraThread map (combines layout camera with thread)
-		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
 
 		btn = new QPushButton();
 		btn->setFixedSize(40, 40);
@@ -347,13 +349,18 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 }
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
-	int number = ui.LEnabledNumber->text().split(" ").last().toInt();
+	int number = ui.LEnabledNumber->text().split(" ").last().split("/").first().toInt();
 	int cameraID = getCameraIDFromLayout(layout);
 
 	QPushButton *button = (QPushButton*)layout->itemAtPosition(2, 0)->widget();
 
 	if (button->text() == "Off")
 	{
+		if (number == QThread::idealThreadCount())
+		{
+			Utilities::MBAlarm("You can't run more cameras simultaneously!", false);
+			return;
+		}
 		/*Face recognition*/
 
 		//Set state of face recognition module
@@ -426,7 +433,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 		cameraThread->at(cameraID)->wait();
 	}
 
-	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString());
+	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString() + "/" + QVariant(QThread::idealThreadCount()).toString());
 }
 void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
@@ -524,8 +531,8 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 
 			if (((QPushButton*)(layout->itemAt(2)->widget()))->text() == "On")
 			{
-				int numberEnabled = ui.LEnabledNumber->text().split(" ").last().toInt();
-				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(numberEnabled - 1).toString());
+				int numberEnabled = ui.LEnabledNumber->text().split(" ").last().split("/").first().toInt();
+				ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(numberEnabled - 1).toString() + "/" + QVariant(QThread::idealThreadCount()).toString());
 			}
 			int number = ui.LTotalNumber->text().split(" ").last().toInt();
 			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(number - 1).toString());

@@ -171,8 +171,8 @@ void MainAppCamera::run()
 		//processTimer.start();
 
 		//start processing frames
-		connect(this, SIGNAL(starkWorking()), this, SLOT(Process()), Qt::DirectConnection);
-		emit starkWorking();
+		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), Qt::DirectConnection);
+		emit startWorking();
 
 		exec();
 
@@ -321,6 +321,7 @@ void MainAppCamera::Process()
 	//Frame number
 	int frameID;
 	cv::Mat imgGray;
+	cv::Mat imgCropped;
 	std::vector<cv::Rect> faces;
 	while (isWorking)
 	{
@@ -347,15 +348,15 @@ void MainAppCamera::Process()
 						//Get gray picture 20x20
 						faces.clear();
 						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
-						cv::Mat imgCropped;
+
 						//rectangle
 						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
 						for (int i = 0; i < faces.size(); i++)
 						{
 							//Get rect to crop
-							cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+							//cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
 							//Crop the full image to that image contained by the rectangle myROI
-							imgCropped = imgGray(myROI);
+							imgCropped = imgGray(faces[i]);
 							//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
 							cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
 							//save to debug

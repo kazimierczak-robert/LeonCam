@@ -228,7 +228,7 @@ background-color: transparent;
 font-weight:600;</string>
       </property>
       <property name="text">
-       <string>Number of enabled cameras: 0</string>
+       <string>Number of enabled cameras: 0/</string>
       </property>
      </widget>
      <zorder>PBAddCamera</zorder>

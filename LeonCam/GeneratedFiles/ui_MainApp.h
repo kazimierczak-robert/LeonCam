@@ -453,7 +453,7 @@ public:
         LSearch->setText(QString());
         LESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
-        LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0", Q_NULLPTR));
+        LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0/", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));
         LHelp->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">You can sort by clicking on the table header</p></body></html>", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = TWFacesBase->horizontalHeaderItem(0);

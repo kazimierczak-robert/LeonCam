@@ -80,7 +80,7 @@ public slots:
 	void Process();
 	void SaveMat();
 signals:
-	void starkWorking();
+	void startWorking();
 	void insertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
 	void insertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);
 	void updateGreenAlert(int greenAlertID, QString stopDate);
