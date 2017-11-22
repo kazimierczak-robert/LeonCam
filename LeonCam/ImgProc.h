@@ -61,4 +61,3 @@ private:
 	void FillLabelsAndImagesVectors();
 	//bool ReadCSV(QString filename, std::vector<cv::Mat> &images, std::vector<int> &labels);
 };
-

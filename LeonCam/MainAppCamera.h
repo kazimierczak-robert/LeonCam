@@ -14,9 +14,11 @@
 #include <qrunnable.h>
 #include "Utilities.h"
 #include <qpushbutton.h>
+#include <QMutex>
 
 #define thumbnailWidth 216
 #define thumbnailHeight 123
+
 class MainAppCamera : public QThread//, public QRunnable
 {
 	Q_OBJECT

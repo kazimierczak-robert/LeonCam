@@ -13,9 +13,9 @@ ImgProc::ImgProc(int loggedID)
 }
 ImgProc::ImgProc(const ImgProc &imProc, int cameraID)
 {
-	this->loadedFaceCascade = imProc.loadedFaceCascade;
 	this->faceCascadeName= imProc.faceCascadeName;
-	this->faceCascade=imProc.faceCascade;
+	this->loadedFaceCascade = false;
+	this->LoadFaceCascade();
 	this->model=imProc.model;
 	this->images=imProc.images;
 	this->labels=imProc.labels;

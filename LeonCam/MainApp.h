@@ -102,6 +102,7 @@ private:
 	std::map<int, int> weekChartRedMap;
 	QDateTime todayDateTime;
 	int getCameraIDFromLayout(QGridLayout* layout);
+	//https://stackoverflow.com/a/7286710
 	Camera* GetCameraFromDBByID(int cameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void RecognitionCamera(QPushButton* button, int cameraID);

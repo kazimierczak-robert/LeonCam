@@ -348,9 +348,11 @@ void MainAppCamera::Process()
 						//Get gray picture 20x20
 						faces.clear();
 						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
-
 						//rectangle
-						imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
+						
+						{
+							imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
+						}
 						for (int i = 0; i < faces.size(); i++)
 						{
 							//Get rect to crop
