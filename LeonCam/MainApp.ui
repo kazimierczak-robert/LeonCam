@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -791,6 +791,452 @@ padding: 0px;*/</string>
      <attribute name="title">
       <string>SETTINGS</string>
      </attribute>
+     <widget class="QGroupBox" name="GBChangePassword">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>230</y>
+        <width>291</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#GBChangePassword{color: rgb(255, 255, 255);}</string>
+      </property>
+      <property name="title">
+       <string>Change profile password</string>
+      </property>
+      <widget class="QLineEdit" name="LEChangePasswordOldPassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Old password</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEChangePasswordPassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>New password</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEChangePasswordConfPass">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Confirm new password</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="LTipPass">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>50</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;span style=&quot;font-weight:600;&quot;&gt;Requirements:&lt;/span&gt;
+&lt;ul style=&quot;margin-top:0px;&quot;&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 8 characters&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 1 digit&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum 1 capital letter&lt;/li&gt;
+&lt;li style=&quot;margin-left:-30px;&quot;&gt;minimum lowercase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#LTipPass{background-image: url(:/Resources/Images/bulb.png);}
+#LTipPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PBChangePassword">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>115</y>
+         <width>100</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#PBChangePassword{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBChangePassword:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
+       </property>
+       <property name="text">
+        <string>Change password</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="GBChangeLogin">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>100</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#GBChangeLogin{color: rgb(255, 255, 255);}</string>
+      </property>
+      <property name="title">
+       <string>Change profile login</string>
+      </property>
+      <widget class="QLineEdit" name="LEChangeLoginPassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Password</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEChangeLoginUsername">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>231</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>50</number>
+       </property>
+       <property name="placeholderText">
+        <string>Username</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PBChangeLogin">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>85</y>
+         <width>100</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#PBChangeLogin{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBChangeLogin:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
+       </property>
+       <property name="text">
+        <string>Change login</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="LTipLogin">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>20</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Username&lt;/span&gt; has &lt;span style=&quot; font-weight:600;&quot;&gt;50&lt;/span&gt; letters up limit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#LTipLogin{background-image: url(:/Resources/Images/bulb.png);}
+#LTipLogin:hover{background-image: url(:/Resources/Images/bulbHover.png);}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="GBChangeSecQuestion">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>230</y>
+        <width>291</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#GBChangeSecQuestion{color: rgb(255, 255, 255);}</string>
+      </property>
+      <property name="title">
+       <string>Change profile security question</string>
+      </property>
+      <widget class="QLineEdit" name="LEChangeSecQuestionSecQuest">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>271</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Security Question</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEChangeSecQuestionNewAnswer">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>271</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Answer</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PBChangeSecQuestion">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>115</y>
+         <width>141</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#PBChangeSecQuestion{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBChangeSecQuestion:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
+       </property>
+       <property name="text">
+        <string>Change security question</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEChangeSecQuestionPassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>271</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Password</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="GBDeleteProfile">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>100</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#GBDeleteProfile{color: rgb(255, 255, 255);}</string>
+      </property>
+      <property name="title">
+       <string>Delete profile</string>
+      </property>
+      <widget class="QLineEdit" name="LEDeleteProfilePassword">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>271</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>127</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Password</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PBDeleteProfile">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>85</y>
+         <width>100</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#PBDeleteProfile{
+color: rgb(255, 255, 255);
+background-color:rgb(36, 118, 59)}
+#PBDeleteProfile:hover
+{
+background-color: rgb(39, 129, 63);
+}</string>
+       </property>
+       <property name="text">
+        <string>Delete profile</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="LSettingsHelp">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>680</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(46, 147, 222);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Here you can change settings of your profile&lt;br/&gt;If you complete it successfully, you'll be logged out&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="PBLogout">

@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -56,6 +57,26 @@ public:
     QVBoxLayout *VLLayout;
     QPushButton *PBGreenAlert;
     QWidget *TSettings;
+    QGroupBox *GBChangePassword;
+    QLineEdit *LEChangePasswordOldPassword;
+    QLineEdit *LEChangePasswordPassword;
+    QLineEdit *LEChangePasswordConfPass;
+    QLabel *LTipPass;
+    QPushButton *PBChangePassword;
+    QGroupBox *GBChangeLogin;
+    QLineEdit *LEChangeLoginPassword;
+    QLineEdit *LEChangeLoginUsername;
+    QPushButton *PBChangeLogin;
+    QLabel *LTipLogin;
+    QGroupBox *GBChangeSecQuestion;
+    QLineEdit *LEChangeSecQuestionSecQuest;
+    QLineEdit *LEChangeSecQuestionNewAnswer;
+    QPushButton *PBChangeSecQuestion;
+    QLineEdit *LEChangeSecQuestionPassword;
+    QGroupBox *GBDeleteProfile;
+    QLineEdit *LEDeleteProfilePassword;
+    QPushButton *PBDeleteProfile;
+    QLabel *LSettingsHelp;
     QPushButton *PBLogout;
 
     void setupUi(QMainWindow *MainApp)
@@ -412,6 +433,139 @@ public:
         TSettings = new QWidget();
         TSettings->setObjectName(QStringLiteral("TSettings"));
         TSettings->setStyleSheet(QStringLiteral("background-color: transparent;"));
+        GBChangePassword = new QGroupBox(TSettings);
+        GBChangePassword->setObjectName(QStringLiteral("GBChangePassword"));
+        GBChangePassword->setGeometry(QRect(70, 230, 291, 151));
+        GBChangePassword->setStyleSheet(QStringLiteral("#GBChangePassword{color: rgb(255, 255, 255);}"));
+        LEChangePasswordOldPassword = new QLineEdit(GBChangePassword);
+        LEChangePasswordOldPassword->setObjectName(QStringLiteral("LEChangePasswordOldPassword"));
+        LEChangePasswordOldPassword->setGeometry(QRect(10, 20, 231, 25));
+        LEChangePasswordOldPassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangePasswordOldPassword->setMaxLength(127);
+        LEChangePasswordOldPassword->setEchoMode(QLineEdit::Password);
+        LEChangePasswordPassword = new QLineEdit(GBChangePassword);
+        LEChangePasswordPassword->setObjectName(QStringLiteral("LEChangePasswordPassword"));
+        LEChangePasswordPassword->setGeometry(QRect(10, 50, 231, 25));
+        LEChangePasswordPassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangePasswordPassword->setMaxLength(127);
+        LEChangePasswordPassword->setEchoMode(QLineEdit::Password);
+        LEChangePasswordConfPass = new QLineEdit(GBChangePassword);
+        LEChangePasswordConfPass->setObjectName(QStringLiteral("LEChangePasswordConfPass"));
+        LEChangePasswordConfPass->setGeometry(QRect(10, 80, 231, 25));
+        LEChangePasswordConfPass->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangePasswordConfPass->setMaxLength(127);
+        LEChangePasswordConfPass->setEchoMode(QLineEdit::Password);
+        LTipPass = new QLabel(GBChangePassword);
+        LTipPass->setObjectName(QStringLiteral("LTipPass"));
+        LTipPass->setGeometry(QRect(250, 50, 31, 31));
+        LTipPass->setStyleSheet(QLatin1String("#LTipPass{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipPass:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
+        PBChangePassword = new QPushButton(GBChangePassword);
+        PBChangePassword->setObjectName(QStringLiteral("PBChangePassword"));
+        PBChangePassword->setGeometry(QRect(90, 115, 100, 23));
+        PBChangePassword->setStyleSheet(QLatin1String("#PBChangePassword{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBChangePassword:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
+        PBChangePassword->setAutoDefault(true);
+        GBChangeLogin = new QGroupBox(TSettings);
+        GBChangeLogin->setObjectName(QStringLiteral("GBChangeLogin"));
+        GBChangeLogin->setGeometry(QRect(70, 100, 291, 121));
+        GBChangeLogin->setStyleSheet(QStringLiteral("#GBChangeLogin{color: rgb(255, 255, 255);}"));
+        LEChangeLoginPassword = new QLineEdit(GBChangeLogin);
+        LEChangeLoginPassword->setObjectName(QStringLiteral("LEChangeLoginPassword"));
+        LEChangeLoginPassword->setGeometry(QRect(10, 50, 231, 25));
+        LEChangeLoginPassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangeLoginPassword->setMaxLength(127);
+        LEChangeLoginPassword->setEchoMode(QLineEdit::Password);
+        LEChangeLoginUsername = new QLineEdit(GBChangeLogin);
+        LEChangeLoginUsername->setObjectName(QStringLiteral("LEChangeLoginUsername"));
+        LEChangeLoginUsername->setGeometry(QRect(10, 20, 231, 25));
+        LEChangeLoginUsername->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangeLoginUsername->setMaxLength(50);
+        PBChangeLogin = new QPushButton(GBChangeLogin);
+        PBChangeLogin->setObjectName(QStringLiteral("PBChangeLogin"));
+        PBChangeLogin->setGeometry(QRect(90, 85, 100, 23));
+        PBChangeLogin->setStyleSheet(QLatin1String("#PBChangeLogin{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBChangeLogin:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
+        PBChangeLogin->setAutoDefault(true);
+        LTipLogin = new QLabel(GBChangeLogin);
+        LTipLogin->setObjectName(QStringLiteral("LTipLogin"));
+        LTipLogin->setGeometry(QRect(250, 20, 31, 31));
+        LTipLogin->setStyleSheet(QLatin1String("#LTipLogin{background-image: url(:/Resources/Images/bulb.png);}\n"
+"#LTipLogin:hover{background-image: url(:/Resources/Images/bulbHover.png);}"));
+        GBChangeSecQuestion = new QGroupBox(TSettings);
+        GBChangeSecQuestion->setObjectName(QStringLiteral("GBChangeSecQuestion"));
+        GBChangeSecQuestion->setGeometry(QRect(380, 230, 291, 151));
+        GBChangeSecQuestion->setStyleSheet(QStringLiteral("#GBChangeSecQuestion{color: rgb(255, 255, 255);}"));
+        LEChangeSecQuestionSecQuest = new QLineEdit(GBChangeSecQuestion);
+        LEChangeSecQuestionSecQuest->setObjectName(QStringLiteral("LEChangeSecQuestionSecQuest"));
+        LEChangeSecQuestionSecQuest->setGeometry(QRect(10, 50, 271, 25));
+        LEChangeSecQuestionSecQuest->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangeSecQuestionNewAnswer = new QLineEdit(GBChangeSecQuestion);
+        LEChangeSecQuestionNewAnswer->setObjectName(QStringLiteral("LEChangeSecQuestionNewAnswer"));
+        LEChangeSecQuestionNewAnswer->setGeometry(QRect(10, 80, 271, 25));
+        LEChangeSecQuestionNewAnswer->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        PBChangeSecQuestion = new QPushButton(GBChangeSecQuestion);
+        PBChangeSecQuestion->setObjectName(QStringLiteral("PBChangeSecQuestion"));
+        PBChangeSecQuestion->setGeometry(QRect(70, 115, 141, 23));
+        PBChangeSecQuestion->setStyleSheet(QLatin1String("#PBChangeSecQuestion{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBChangeSecQuestion:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
+        PBChangeSecQuestion->setAutoDefault(true);
+        LEChangeSecQuestionPassword = new QLineEdit(GBChangeSecQuestion);
+        LEChangeSecQuestionPassword->setObjectName(QStringLiteral("LEChangeSecQuestionPassword"));
+        LEChangeSecQuestionPassword->setGeometry(QRect(10, 20, 271, 25));
+        LEChangeSecQuestionPassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEChangeSecQuestionPassword->setMaxLength(127);
+        LEChangeSecQuestionPassword->setEchoMode(QLineEdit::Password);
+        GBDeleteProfile = new QGroupBox(TSettings);
+        GBDeleteProfile->setObjectName(QStringLiteral("GBDeleteProfile"));
+        GBDeleteProfile->setGeometry(QRect(380, 100, 291, 121));
+        GBDeleteProfile->setStyleSheet(QStringLiteral("#GBDeleteProfile{color: rgb(255, 255, 255);}"));
+        LEDeleteProfilePassword = new QLineEdit(GBDeleteProfile);
+        LEDeleteProfilePassword->setObjectName(QStringLiteral("LEDeleteProfilePassword"));
+        LEDeleteProfilePassword->setGeometry(QRect(10, 20, 271, 25));
+        LEDeleteProfilePassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEDeleteProfilePassword->setMaxLength(127);
+        LEDeleteProfilePassword->setEchoMode(QLineEdit::Password);
+        PBDeleteProfile = new QPushButton(GBDeleteProfile);
+        PBDeleteProfile->setObjectName(QStringLiteral("PBDeleteProfile"));
+        PBDeleteProfile->setGeometry(QRect(90, 85, 100, 23));
+        PBDeleteProfile->setStyleSheet(QLatin1String("#PBDeleteProfile{\n"
+"color: rgb(255, 255, 255);\n"
+"background-color:rgb(36, 118, 59)}\n"
+"#PBDeleteProfile:hover\n"
+"{\n"
+"background-color: rgb(39, 129, 63);\n"
+"}"));
+        PBDeleteProfile->setAutoDefault(true);
+        LSettingsHelp = new QLabel(TSettings);
+        LSettingsHelp->setObjectName(QStringLiteral("LSettingsHelp"));
+        LSettingsHelp->setGeometry(QRect(30, 30, 680, 41));
+        LSettingsHelp->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: rgb(46, 147, 222);"));
         TWMenu->addTab(TSettings, QString());
         PBLogout = new QPushButton(centralWidget);
         PBLogout->setObjectName(QStringLiteral("PBLogout"));
@@ -439,7 +593,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(3);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -512,6 +666,49 @@ public:
         ___qtablewidgetitem22->setText(QApplication::translate("MainApp", "Delete alert and movie", Q_NULLPTR));
         PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
+        GBChangePassword->setTitle(QApplication::translate("MainApp", "Change profile password", Q_NULLPTR));
+        LEChangePasswordOldPassword->setText(QString());
+        LEChangePasswordOldPassword->setPlaceholderText(QApplication::translate("MainApp", "Old password", Q_NULLPTR));
+        LEChangePasswordPassword->setText(QString());
+        LEChangePasswordPassword->setPlaceholderText(QApplication::translate("MainApp", "New password", Q_NULLPTR));
+        LEChangePasswordConfPass->setPlaceholderText(QApplication::translate("MainApp", "Confirm new password", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        LTipPass->setToolTip(QApplication::translate("MainApp", "<html><head/><body>\n"
+"<span style=\"font-weight:600;\">Requirements:</span>\n"
+"<ul style=\"margin-top:0px;\">\n"
+"<li style=\"margin-left:-30px;\">minimum 8 characters</li>\n"
+"<li style=\"margin-left:-30px;\">minimum 1 digit</li>\n"
+"<li style=\"margin-left:-30px;\">minimum 1 capital letter</li>\n"
+"<li style=\"margin-left:-30px;\">minimum lowercase</li>\n"
+"</ul>\n"
+"</body>\n"
+"</html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        LTipPass->setText(QString());
+        PBChangePassword->setText(QApplication::translate("MainApp", "Change password", Q_NULLPTR));
+        GBChangeLogin->setTitle(QApplication::translate("MainApp", "Change profile login", Q_NULLPTR));
+        LEChangeLoginPassword->setText(QString());
+        LEChangeLoginPassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
+        LEChangeLoginUsername->setText(QString());
+        LEChangeLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "Username", Q_NULLPTR));
+        PBChangeLogin->setText(QApplication::translate("MainApp", "Change login", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        LTipLogin->setToolTip(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Username</span> has <span style=\" font-weight:600;\">50</span> letters up limit</p></body></html>", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        LTipLogin->setText(QString());
+        GBChangeSecQuestion->setTitle(QApplication::translate("MainApp", "Change profile security question", Q_NULLPTR));
+        LEChangeSecQuestionSecQuest->setText(QString());
+        LEChangeSecQuestionSecQuest->setPlaceholderText(QApplication::translate("MainApp", "Security Question", Q_NULLPTR));
+        LEChangeSecQuestionNewAnswer->setText(QString());
+        LEChangeSecQuestionNewAnswer->setPlaceholderText(QApplication::translate("MainApp", "Answer", Q_NULLPTR));
+        PBChangeSecQuestion->setText(QApplication::translate("MainApp", "Change security question", Q_NULLPTR));
+        LEChangeSecQuestionPassword->setText(QString());
+        LEChangeSecQuestionPassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
+        GBDeleteProfile->setTitle(QApplication::translate("MainApp", "Delete profile", Q_NULLPTR));
+        LEDeleteProfilePassword->setText(QString());
+        LEDeleteProfilePassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
+        PBDeleteProfile->setText(QApplication::translate("MainApp", "Delete profile", Q_NULLPTR));
+        LSettingsHelp->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Here you can change settings of your profile<br/>If you complete it successfully, you'll be logged out</p></body></html>", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBLogout->setToolTip(QApplication::translate("MainApp", "<html><head/><body><p>Log out</p></body></html>", Q_NULLPTR));

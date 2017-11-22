@@ -62,6 +62,11 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	//Reports
 	connect(ui.CBSettings, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=]() {CurrentIndexChanged(); });
+	//Settings
+	connect(ui.PBChangeLogin, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.PBChangePassword, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.PBDeleteProfile, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.PBChangeSecQuestion, SIGNAL(clicked()), this, SLOT(LogOut()));
 
 	query.prepare("SELECT CameraID FROM Cameras");
 	result = query.exec();
@@ -1919,4 +1924,76 @@ void MainApp::StatisticsChart()
 	chartView->setRenderHint(QPainter::Antialiasing);
 
 	ui.VLLayout->addWidget(chartView);
+}
+void MainApp::ChangeLogin()
+{
+	if (ui.LEChangeLoginUsername->text() != "" && ui.LEChangeLoginPassword->text() != "")
+	{
+		QSqlQuery query;
+		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.bindValue(0, loggedID);
+		bool result = query.exec();;
+		if (result == true)
+		{
+
+		}
+	}
+	else
+	{
+		Utilities::MBAlarm("At least one field is incomplete", false);
+	}
+}
+void MainApp::ChangePassword()
+{
+	if (ui.LEChangePasswordOldPassword->text() != "" && ui.LEChangePasswordPassword->text() != "" && ui.LEChangePasswordConfPass->text() != "")
+	{
+		QSqlQuery query;
+		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.bindValue(0, loggedID);
+		bool result = query.exec();;
+		if (result == true)
+		{
+
+		}
+	}
+	else
+	{
+		Utilities::MBAlarm("At least one field is incomplete", false);
+	}
+}
+void MainApp::DeleteProfile()
+{
+	if (ui.LEDeleteProfilePassword->text() != "")
+	{
+		QSqlQuery query;
+		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.bindValue(0, loggedID);
+		bool result = query.exec();;
+		if (result == true)
+		{
+
+		}
+	}
+	else
+	{
+		Utilities::MBAlarm("At least one field is incomplete", false);
+	}
+}
+void MainApp::ChangeSecurityQuestion()
+{
+	if (ui.LEChangeSecQuestionPassword->text() != "" && ui.LEChangeSecQuestionSecQuest->text() != "" && ui.LEChangeSecQuestionNewAnswer->text() != "")
+	{
+		QSqlQuery query;
+		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.bindValue(0, loggedID);
+		bool result = query.exec();;
+		if (result == true)
+		{
+
+		}
+	}
+	else
+	{
+		Utilities::MBAlarm("At least one field is incomplete", false);
+	}
 }
