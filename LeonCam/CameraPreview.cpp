@@ -1,6 +1,6 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QPushButton *buttonTakePhotoFromParent, OnvifClientDevice *onvifDevice, int cameraID, MainAppCamera *thread, std::string passHash)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QPushButton *buttonTakePhotoFromParent, int cameraID, MainAppCamera *thread, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -16,6 +16,7 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	ui.LCameraDetails->setText(cameraDetails);
 
 	this->capThread = thread;
+	device = nullptr;
 	ptz = nullptr;
 	ctrl = nullptr;
 
@@ -66,20 +67,23 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
 		TurnOnLabels();
-		if (!SetProfileTokenAndPTZ(onvifDevice))
+		if (!SetProfileTokenAndPTZ())
 		{
-			TurnOnOffCamera();
+			buttonIsEnabledFromParent->click();
+			TurnOffLabels();
 		}
 	}
 	else
 	{
 		TurnOffLabels();
 	}
-
-	//ui.widget->setCentralWidget(imageWidget);
 }
 CameraPreview::~CameraPreview()
 {
+	if (device != nullptr)
+	{
+		delete device;
+	}
 	if (ptz != nullptr)
 	{
 		delete ptz;
@@ -102,19 +106,48 @@ void CameraPreview::TurnOnLabels()
 	ui.PBSnapshot->setEnabled(true);
 	capThread->SetSendBigPicture(true);
 }
-bool CameraPreview::SetProfileTokenAndPTZ(OnvifClientDevice *onvifDevice)
+bool CameraPreview::SetProfileTokenAndPTZ()
 {
-	if (onvifDevice->GetCapabilities() == 0)
+	this->profileToken = "";
+	if (device != nullptr)
 	{
-		OnvifClientMedia media(*onvifDevice);
-		_trt__GetProfilesResponse profiles;
-		media.GetProfiles(profiles);
-		if (profiles.Profiles.size() > 0)
+		delete device;
+		device = nullptr;
+	}
+	if (ptz != nullptr)
+	{
+		delete ptz;
+		ptz = nullptr;
+	}
+	if (ctrl != nullptr)
+	{
+		delete ctrl;
+		ctrl = nullptr;
+	}
+
+	QSqlQuery query;
+	query.prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
+	query.bindValue(0, cameraID);
+	if (query.exec())
+	{
+		query.next();
+		string url = "http://" + query.value(0).toString().toStdString() + "/onvif/device_service";
+		string user = query.value(1).toString().toStdString();
+		string pass = Utilities::GetDecrypted(passHash, query.value(2).toString().toStdString());
+
+		device = new OnvifClientDevice(url, user, pass);
+		if (device->GetCapabilities() == 0)
 		{
-			this->profileToken = profiles.Profiles[0]->token;
-			this->ptz = new OnvifClientPTZ(*onvifDevice);
-			ctrl = new CameraControl(ptz, profileToken);
-			return true;
+			OnvifClientMedia media(*device);
+			_trt__GetProfilesResponse profiles;
+			media.GetProfiles(profiles);
+			if (profiles.Profiles.size() > 0)
+			{
+				this->profileToken = profiles.Profiles[0]->token;
+				this->ptz = new OnvifClientPTZ(*device);
+				ctrl = new CameraControl(ptz, profileToken);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -142,52 +175,36 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 	}
 	ui.LCameraDetails->setText(cameraDetails);
 
-	QSqlQuery query;
-	query.prepare("SELECT IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, cameraID);
-	if (query.exec() == true)
+	if (wasTurnedOn == true)
 	{
-		query.next();
-		string url = "http://" + query.value(0).toString().toStdString() + "/onvif/device_service";
-		string user = query.value(1).toString().toStdString();
-		string pass = Utilities::GetDecrypted(passHash, query.value(2).toString().toStdString());
-
-		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
-		if (!SetProfileTokenAndPTZ(onvifDevice))
+		if (SetProfileTokenAndPTZ())
 		{
-			delete onvifDevice;
-			return;
+			TurnOnOffCamera();
 		}
-		delete onvifDevice;
 	}
-
-	if (buttonIsEnabledFromParent->text() == "On")
-	{
-		TurnOnOffCamera();
-	}
-}
-void CameraPreview::closeEvent(QCloseEvent *event)
-{
-	event->accept();
 }
 void CameraPreview::TurnOnOffCamera()
 {
-	if (ptz == nullptr)
+	if (ui.PBCameraOnOff->text() == "Off")
 	{
-		CloseCameraEdit(ui.LCameraDetails->text());
-	}
-	else
-	{
-		if (ui.PBCameraOnOff->text() == "Off")
+		if (ptz == nullptr)
 		{
-			buttonIsEnabledFromParent->click();
-			TurnOnLabels();
+			if (SetProfileTokenAndPTZ())
+			{
+				buttonIsEnabledFromParent->click();
+				TurnOnLabels();
+			}
 		}
 		else
 		{
 			buttonIsEnabledFromParent->click();
-			TurnOffLabels();
+			TurnOnLabels();
 		}
+	}
+	else
+	{
+		buttonIsEnabledFromParent->click();
+		TurnOffLabels();
 	}
 }
 void CameraPreview::TurnOnOffRecognizeMode()

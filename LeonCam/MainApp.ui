@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -1172,7 +1172,7 @@ background-color: rgb(39, 129, 63);
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
+         <y>50</y>
          <width>271</width>
          <height>25</height>
         </rect>
@@ -1217,6 +1217,29 @@ background-color: rgb(39, 129, 63);
        </property>
        <property name="autoDefault">
         <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="LEDeleteLoginUsername">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>271</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>50</number>
+       </property>
+       <property name="placeholderText">
+        <string>Username</string>
        </property>
       </widget>
      </widget>
@@ -1280,10 +1303,26 @@ padding: 0px;}
   <tabstop>TWCameraPages</tabstop>
   <tabstop>PBAddCamera</tabstop>
   <tabstop>LESearchFB</tabstop>
-  <tabstop>TWFacesBase</tabstop>
   <tabstop>LEUsername</tabstop>
   <tabstop>LESurname</tabstop>
   <tabstop>PBAddPerson</tabstop>
+  <tabstop>PBRedAlert</tabstop>
+  <tabstop>PBGreenAlert</tabstop>
+  <tabstop>CBSettings</tabstop>
+  <tabstop>LEChangeLoginUsername</tabstop>
+  <tabstop>LEChangeLoginPassword</tabstop>
+  <tabstop>PBChangeLogin</tabstop>
+  <tabstop>LEChangePasswordOldPassword</tabstop>
+  <tabstop>LEChangePasswordPassword</tabstop>
+  <tabstop>LEChangePasswordConfPass</tabstop>
+  <tabstop>PBChangePassword</tabstop>
+  <tabstop>LEDeleteLoginUsername</tabstop>
+  <tabstop>LEDeleteProfilePassword</tabstop>
+  <tabstop>PBDeleteProfile</tabstop>
+  <tabstop>LEChangeSecQuestionPassword</tabstop>
+  <tabstop>LEChangeSecQuestionSecQuest</tabstop>
+  <tabstop>LEChangeSecQuestionNewAnswer</tabstop>
+  <tabstop>PBChangeSecQuestion</tabstop>
   <tabstop>PBLogout</tabstop>
  </tabstops>
  <resources>

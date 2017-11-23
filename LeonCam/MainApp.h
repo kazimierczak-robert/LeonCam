@@ -46,9 +46,8 @@ public:
 	~MainApp();
 signals:
 	void closeCameraEdit(const QString& cameraDetails);
-public: signals:
-		void checkGreenAlertInList(int greenAlertID);
-		void checkRedAlertID(int redAlertID);
+	void checkGreenAlertInList(int greenAlertID);
+	void checkRedAlertID(int redAlertID);
 private slots:
 	void AddCamera();
 	void LogOut();

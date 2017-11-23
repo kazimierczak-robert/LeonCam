@@ -47,7 +47,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.PBAddCamera, SIGNAL(clicked()), this, SLOT(AddCamera()));
 	//logout: on close (logout and close), by clicking logout icon (only logout and switch to LogIn window)
 	connect(this, SIGNAL(closed()), this, SLOT(LogOut()));
-	connect(ui.PBLogout, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.PBLogout, SIGNAL(clicked()), this, SLOT(LogOut()), Qt::ConnectionType::QueuedConnection);
 	connect(ui.LESearch, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchChanged()));
 	connect(ui.LESearch, SIGNAL(returnPressed()), this, SLOT(LESearchPressed()));
 	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
@@ -63,12 +63,26 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.CBSettings, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=]() {CurrentIndexChanged(); });
 	//Settings
-	connect(ui.PBChangeLogin, SIGNAL(clicked()), this, SLOT(LogOut()));
-	connect(ui.PBChangePassword, SIGNAL(clicked()), this, SLOT(LogOut()));
-	connect(ui.PBDeleteProfile, SIGNAL(clicked()), this, SLOT(LogOut()));
-	connect(ui.PBChangeSecQuestion, SIGNAL(clicked()), this, SLOT(LogOut()));
+	connect(ui.LEChangeLoginUsername, SIGNAL(returnPressed()), this, SLOT(ChangeLogin()));
+	connect(ui.LEChangeLoginPassword, SIGNAL(returnPressed()), this, SLOT(ChangeLogin()));
+	connect(ui.PBChangeLogin, SIGNAL(clicked()), this, SLOT(ChangeLogin()));
 
-	query.prepare("SELECT CameraID FROM Cameras");
+	connect(ui.LEChangePasswordOldPassword, SIGNAL(returnPressed()), this, SLOT(ChangePassword()));
+	connect(ui.LEChangePasswordPassword, SIGNAL(returnPressed()), this, SLOT(ChangePassword()));
+	connect(ui.LEChangePasswordConfPass, SIGNAL(returnPressed()), this, SLOT(ChangePassword()));
+	connect(ui.PBChangePassword, SIGNAL(clicked()), this, SLOT(ChangePassword()));
+
+	connect(ui.LEDeleteLoginUsername, SIGNAL(returnPressed()), this, SLOT(DeleteProfile()));
+	connect(ui.LEDeleteProfilePassword, SIGNAL(returnPressed()), this, SLOT(DeleteProfile()));
+	connect(ui.PBDeleteProfile, SIGNAL(clicked()), this, SLOT(DeleteProfile()));
+
+	connect(ui.LEChangeSecQuestionPassword, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
+	connect(ui.LEChangeSecQuestionSecQuest, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
+	connect(ui.LEChangeSecQuestionNewAnswer, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
+	connect(ui.PBChangeSecQuestion, SIGNAL(clicked()), this, SLOT(ChangeSecurityQuestion()));
+
+	query.prepare("SELECT CameraID FROM Cameras WHERE UserID = ?");
+	query.bindValue(0, loggedID);
 	result = query.exec();
 	if (result == true)
 	{
@@ -294,26 +308,12 @@ void MainApp::AddTab()
 void MainApp::CameraSelected(QGridLayout* layout)
 {
 	int cameraID = getCameraIDFromLayout(layout);
-	QSqlQuery query;
-	query.prepare("SELECT Name, IPAddress, Login, Password FROM Cameras WHERE CameraID=?");
-	query.bindValue(0, cameraID);
-	bool result = query.exec();
-	if (result == true)
-	{
-		query.next();
-		string url = "http://" + query.value(1).toString().toStdString() + "/onvif/device_service";
-		string user = query.value(2).toString().toStdString();
-		string pass = Utilities::GetDecrypted(passHash, query.value(3).toString().toStdString());
-
-		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, user, pass);
-
-		CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), onvifDevice, cameraID, cameraThread->at(cameraID), passHash);
-		connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
-		cameraThread->at(cameraID)->SetSendBigPicture(true);
-		cameraPreview->exec();
-		cameraThread->at(cameraID)->SetSendBigPicture(false);
-		delete cameraPreview;
-	}
+	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), cameraID, cameraThread->at(cameraID), passHash);
+	connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
+	cameraThread->at(cameraID)->SetSendBigPicture(true);
+	cameraPreview->exec();
+	cameraThread->at(cameraID)->SetSendBigPicture(false);
+	delete cameraPreview;
 }
 struct MainApp::Camera* MainApp::GetCameraFromDBByID(int cameraID)
 {
@@ -1930,12 +1930,44 @@ void MainApp::ChangeLogin()
 	if (ui.LEChangeLoginUsername->text() != "" && ui.LEChangeLoginPassword->text() != "")
 	{
 		QSqlQuery query;
-		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
 		query.bindValue(0, loggedID);
-		bool result = query.exec();;
-		if (result == true)
+		if (query.exec())
 		{
+			query.next();
 
+			std::string concatHelp = ui.LEChangeLoginPassword->text().toStdString() + query.value(0).toString().toStdString();
+			QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+
+			if (query.value(1).toString() == passwordHash)
+			{
+				query.clear();
+				query.prepare("UPDATE Users SET Username = ?, Password = ? WHERE UserID = ?");
+				query.bindValue(0, ui.LEChangeLoginUsername->text());
+
+				std::string concatHelp = ui.LEChangeLoginPassword->text().toStdString() + ui.LEChangeLoginUsername->text().toStdString();
+				QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+				query.bindValue(1, passwordHash);
+				query.bindValue(2, loggedID);
+				if (query.exec())
+				{
+					query.exec("COMMIT");
+					Utilities::MBAlarm("Your login was changed succesfully. Please log in again", true);
+					ui.PBLogout->click();
+				}
+				else
+				{
+					Utilities::MBAlarm("Typed login is occupied by antother profile. Please type another one", false);
+				}
+			}
+			else
+			{
+				Utilities::MBAlarm("Typed password is incorrect. Please try again", false);
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("Something went wrong. Please try again", false);
 		}
 	}
 	else
@@ -1948,12 +1980,11 @@ void MainApp::ChangePassword()
 	if (ui.LEChangePasswordOldPassword->text() != "" && ui.LEChangePasswordPassword->text() != "" && ui.LEChangePasswordConfPass->text() != "")
 	{
 		QSqlQuery query;
-		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
 		query.bindValue(0, loggedID);
-		bool result = query.exec();;
-		if (result == true)
+		if (query.exec())
 		{
-
+			ui.PBLogout->click();
 		}
 	}
 	else
@@ -1963,13 +1994,12 @@ void MainApp::ChangePassword()
 }
 void MainApp::DeleteProfile()
 {
-	if (ui.LEDeleteProfilePassword->text() != "")
+	if (ui.LEDeleteLoginUsername->text() != "" && ui.LEDeleteProfilePassword->text() != "")
 	{
 		QSqlQuery query;
-		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
 		query.bindValue(0, loggedID);
-		bool result = query.exec();;
-		if (result == true)
+		if (query.exec())
 		{
 
 		}
@@ -1984,10 +2014,9 @@ void MainApp::ChangeSecurityQuestion()
 	if (ui.LEChangeSecQuestionPassword->text() != "" && ui.LEChangeSecQuestionSecQuest->text() != "" && ui.LEChangeSecQuestionNewAnswer->text() != "")
 	{
 		QSqlQuery query;
-		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
 		query.bindValue(0, loggedID);
-		bool result = query.exec();;
-		if (result == true)
+		if (query.exec())
 		{
 
 		}

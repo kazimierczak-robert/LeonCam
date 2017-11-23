@@ -159,12 +159,6 @@
     <ClCompile Include="onvifgen\soapC.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
-    <ClCompile Include="onvifgen\soapCreatePullPointBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapCreatePullPointBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
     <ClCompile Include="onvifgen\soapDeviceBindingProxy.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
@@ -183,18 +177,6 @@
     <ClCompile Include="onvifgen\soapDiscoveryLookupBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
-    <ClCompile Include="onvifgen\soapDisplayBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapDisplayBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapEventBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapEventBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
     <ClCompile Include="onvifgen\soapImagingBindingProxy.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
@@ -207,76 +189,16 @@
     <ClCompile Include="onvifgen\soapMediaBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
-    <ClCompile Include="onvifgen\soapNotificationConsumerBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapNotificationConsumerBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapNotificationProducerBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapNotificationProducerBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapPausableSubscriptionManagerBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapPausableSubscriptionManagerBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
     <ClCompile Include="onvifgen\soapPTZBindingProxy.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="onvifgen\soapPTZBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
-    <ClCompile Include="onvifgen\soapPullPointBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapPullPointBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapPullPointSubscriptionBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapPullPointSubscriptionBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapReceiverBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapReceiverBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapRecordingBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapRecordingBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
     <ClCompile Include="onvifgen\soapRemoteDiscoveryBindingProxy.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="onvifgen\soapRemoteDiscoveryBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapReplayBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapReplayBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapSearchBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapSearchBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapSubscriptionManagerBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapSubscriptionManagerBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="CameraControl.cpp">
@@ -418,12 +340,6 @@
     <ClInclude Include="gsoap\runtime\wsseapi.h">
       <Filter>gsoap\runtime</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapCreatePullPointBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapCreatePullPointBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapDeviceBindingProxy.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
@@ -442,18 +358,6 @@
     <ClInclude Include="onvifgen\soapDiscoveryLookupBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapDisplayBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapDisplayBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapEventBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapEventBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapH.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
@@ -469,52 +373,10 @@
     <ClInclude Include="onvifgen\soapMediaBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapNotificationConsumerBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapNotificationConsumerBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapNotificationProducerBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapNotificationProducerBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPausableSubscriptionManagerBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPausableSubscriptionManagerBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapPTZBindingProxy.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
     <ClInclude Include="onvifgen\soapPTZBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPullPointBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPullPointBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPullPointSubscriptionBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapPullPointSubscriptionBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapReceiverBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapReceiverBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapRecordingBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapRecordingBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
     <ClInclude Include="onvifgen\soapRemoteDiscoveryBindingProxy.h">
@@ -523,25 +385,7 @@
     <ClInclude Include="onvifgen\soapRemoteDiscoveryBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapReplayBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapReplayBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapSearchBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapSearchBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapStub.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapSubscriptionManagerBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapSubscriptionManagerBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
     <ClInclude Include="CameraControl.h">
@@ -555,9 +399,6 @@
     <ResourceCompile Include="LeonCam.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="onvifgen\CreatePullPointBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
     <None Include="onvifgen\DeviceBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
@@ -567,52 +408,16 @@
     <None Include="onvifgen\DiscoveryLookupBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
-    <None Include="onvifgen\DisplayBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\EventBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
     <None Include="onvifgen\ImagingBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
     <None Include="onvifgen\MediaBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
-    <None Include="onvifgen\NotificationConsumerBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\NotificationProducerBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\PausableSubscriptionManagerBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
     <None Include="onvifgen\PTZBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
-    <None Include="onvifgen\PullPointBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\PullPointSubscriptionBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\ReceiverBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\RecordingBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
     <None Include="onvifgen\RemoteDiscoveryBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\ReplayBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\SearchBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\SubscriptionManagerBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
   </ItemGroup>

@@ -76,6 +76,7 @@ public:
     QGroupBox *GBDeleteProfile;
     QLineEdit *LEDeleteProfilePassword;
     QPushButton *PBDeleteProfile;
+    QLineEdit *LEDeleteLoginUsername;
     QLabel *LSettingsHelp;
     QPushButton *PBLogout;
 
@@ -545,7 +546,7 @@ public:
         GBDeleteProfile->setStyleSheet(QStringLiteral("#GBDeleteProfile{color: rgb(255, 255, 255);}"));
         LEDeleteProfilePassword = new QLineEdit(GBDeleteProfile);
         LEDeleteProfilePassword->setObjectName(QStringLiteral("LEDeleteProfilePassword"));
-        LEDeleteProfilePassword->setGeometry(QRect(10, 20, 271, 25));
+        LEDeleteProfilePassword->setGeometry(QRect(10, 50, 271, 25));
         LEDeleteProfilePassword->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 ""));
         LEDeleteProfilePassword->setMaxLength(127);
@@ -561,6 +562,12 @@ public:
 "background-color: rgb(39, 129, 63);\n"
 "}"));
         PBDeleteProfile->setAutoDefault(true);
+        LEDeleteLoginUsername = new QLineEdit(GBDeleteProfile);
+        LEDeleteLoginUsername->setObjectName(QStringLiteral("LEDeleteLoginUsername"));
+        LEDeleteLoginUsername->setGeometry(QRect(10, 20, 271, 25));
+        LEDeleteLoginUsername->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+""));
+        LEDeleteLoginUsername->setMaxLength(50);
         LSettingsHelp = new QLabel(TSettings);
         LSettingsHelp->setObjectName(QStringLiteral("LSettingsHelp"));
         LSettingsHelp->setGeometry(QRect(30, 30, 680, 41));
@@ -585,15 +592,31 @@ public:
         QWidget::setTabOrder(LESearch, TWCameraPages);
         QWidget::setTabOrder(TWCameraPages, PBAddCamera);
         QWidget::setTabOrder(PBAddCamera, LESearchFB);
-        QWidget::setTabOrder(LESearchFB, TWFacesBase);
-        QWidget::setTabOrder(TWFacesBase, LEUsername);
+        QWidget::setTabOrder(LESearchFB, LEUsername);
         QWidget::setTabOrder(LEUsername, LESurname);
         QWidget::setTabOrder(LESurname, PBAddPerson);
-        QWidget::setTabOrder(PBAddPerson, PBLogout);
+        QWidget::setTabOrder(PBAddPerson, PBRedAlert);
+        QWidget::setTabOrder(PBRedAlert, PBGreenAlert);
+        QWidget::setTabOrder(PBGreenAlert, CBSettings);
+        QWidget::setTabOrder(CBSettings, LEChangeLoginUsername);
+        QWidget::setTabOrder(LEChangeLoginUsername, LEChangeLoginPassword);
+        QWidget::setTabOrder(LEChangeLoginPassword, PBChangeLogin);
+        QWidget::setTabOrder(PBChangeLogin, LEChangePasswordOldPassword);
+        QWidget::setTabOrder(LEChangePasswordOldPassword, LEChangePasswordPassword);
+        QWidget::setTabOrder(LEChangePasswordPassword, LEChangePasswordConfPass);
+        QWidget::setTabOrder(LEChangePasswordConfPass, PBChangePassword);
+        QWidget::setTabOrder(PBChangePassword, LEDeleteLoginUsername);
+        QWidget::setTabOrder(LEDeleteLoginUsername, LEDeleteProfilePassword);
+        QWidget::setTabOrder(LEDeleteProfilePassword, PBDeleteProfile);
+        QWidget::setTabOrder(PBDeleteProfile, LEChangeSecQuestionPassword);
+        QWidget::setTabOrder(LEChangeSecQuestionPassword, LEChangeSecQuestionSecQuest);
+        QWidget::setTabOrder(LEChangeSecQuestionSecQuest, LEChangeSecQuestionNewAnswer);
+        QWidget::setTabOrder(LEChangeSecQuestionNewAnswer, PBChangeSecQuestion);
+        QWidget::setTabOrder(PBChangeSecQuestion, PBLogout);
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(3);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -708,6 +731,8 @@ public:
         LEDeleteProfilePassword->setText(QString());
         LEDeleteProfilePassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
         PBDeleteProfile->setText(QApplication::translate("MainApp", "Delete profile", Q_NULLPTR));
+        LEDeleteLoginUsername->setText(QString());
+        LEDeleteLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "Username", Q_NULLPTR));
         LSettingsHelp->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Here you can change settings of your profile<br/>If you complete it successfully, you'll be logged out</p></body></html>", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TSettings), QApplication::translate("MainApp", "SETTINGS", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
