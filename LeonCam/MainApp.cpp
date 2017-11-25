@@ -76,9 +76,9 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.LEDeleteProfilePassword, SIGNAL(returnPressed()), this, SLOT(DeleteProfile()));
 	connect(ui.PBDeleteProfile, SIGNAL(clicked()), this, SLOT(DeleteProfile()));
 
-	connect(ui.LEChangeSecQuestionPassword, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
-	connect(ui.LEChangeSecQuestionSecQuest, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
-	connect(ui.LEChangeSecQuestionNewAnswer, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()), Qt::ConnectionType::QueuedConnection);
+	connect(ui.LEChangeSecQuestionPassword, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()));
+	connect(ui.LEChangeSecQuestionSecQuest, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()));
+	connect(ui.LEChangeSecQuestionNewAnswer, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()));
 	connect(ui.PBChangeSecQuestion, SIGNAL(clicked()), this, SLOT(ChangeSecurityQuestion()));
 
 	query.prepare("SELECT CameraID FROM Cameras WHERE UserID = ?");
@@ -1993,12 +1993,64 @@ void MainApp::ChangePassword()
 {
 	if (ui.LEChangePasswordOldPassword->text() != "" && ui.LEChangePasswordPassword->text() != "" && ui.LEChangePasswordConfPass->text() != "")
 	{
-		QSqlQuery query;
-		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
-		query.bindValue(0, loggedID);
-		if (query.exec())
+		if (ui.LEChangePasswordPassword->text() == ui.LEChangePasswordConfPass->text())
 		{
-			ui.PBLogout->click();
+			/*Requirements:
+			minimum 8 characters
+			minimum 1 digit
+			minimum 1 capital letter
+			minimum lowercase*/
+			std::regex passwordPattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$");
+			if (std::regex_match(ui.LEChangePasswordPassword->text().toStdString(), passwordPattern) == false)
+			{
+				Utilities::MBAlarm("Password incompatible format", false);
+				return;
+			}
+
+			QSqlQuery query;
+			query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
+			query.bindValue(0, loggedID);
+			if (query.exec())
+			{
+				query.next();
+
+				std::string login = query.value(0).toString().toStdString();
+				std::string concatHelp = ui.LEChangePasswordOldPassword->text().toStdString() + login;
+				QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+
+				if (query.value(1).toString() == passwordHash)
+				{
+					query.clear();
+					query.prepare("UPDATE Users SET Password = ? WHERE UserID = ?");
+
+					std::string concatHelp = ui.LEChangePasswordPassword->text().toStdString() + login;
+					QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+					query.bindValue(0, passwordHash);
+					query.bindValue(1, loggedID);
+					if (query.exec())
+					{
+						query.exec("COMMIT");
+						Utilities::MBAlarm("Your password was changed succesfully. Please log in again", true);
+						ui.PBLogout->click();
+					}
+					else
+					{
+						Utilities::MBAlarm("Something went wrong. Please try again", false);
+					}
+				}
+				else
+				{
+					Utilities::MBAlarm("Typed password is incorrect. Please try again", false);
+				}
+			}
+			else
+			{
+				Utilities::MBAlarm("Something went wrong. Please try again", false);
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("New passwords are not the same. Please try again", false);
 		}
 	}
 	else
@@ -2011,11 +2063,48 @@ void MainApp::DeleteProfile()
 	if (ui.LEDeleteLoginUsername->text() != "" && ui.LEDeleteProfilePassword->text() != "")
 	{
 		QSqlQuery query;
-		query.prepare("SELECT Username, Password FROM Users WHERE UserID = ?");
+		query.prepare("SELECT Password FROM Users WHERE UserID = ?");
 		query.bindValue(0, loggedID);
 		if (query.exec())
 		{
+			query.next();
 
+			std::string concatHelp = ui.LEDeleteProfilePassword->text().toStdString() + ui.LEDeleteLoginUsername->text().toStdString();
+			QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+
+			if (query.value(0).toString() == passwordHash)
+			{
+				query.clear();
+				query.prepare("DELETE FROM Users WHERE UserID = ?");
+				query.bindValue(0, loggedID);
+				if (query.exec())
+				{
+					query.exec("COMMIT");
+
+					for (int j = vectorCameraLayoutsPages->size() - 1; j >= 0; j--)
+					{
+						for (int i = vectorCameraLayoutsPages->at(j)->size() - 1; i >= 0; i--)
+						{
+							RemoveCamera(vectorCameraLayoutsPages->at(j)->at(i));
+						}
+					}
+
+					Utilities::MBAlarm("Your profile was deleted succesfully.", true);
+					ui.PBLogout->click();
+				}
+				else
+				{
+					Utilities::MBAlarm("Something went wrong. Please try again", false);
+				}
+			}
+			else
+			{
+				Utilities::MBAlarm("Typed password is incorrect. Please try again", false);
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("Something went wrong. Please try again", false);
 		}
 	}
 	else
@@ -2032,7 +2121,40 @@ void MainApp::ChangeSecurityQuestion()
 		query.bindValue(0, loggedID);
 		if (query.exec())
 		{
+			query.next();
 
+			std::string concatHelp = ui.LEChangeSecQuestionPassword->text().toStdString() + query.value(0).toString().toStdString();
+			QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+
+			if (query.value(1).toString() == passwordHash)
+			{
+				query.clear();
+				query.prepare("UPDATE Users SET SecurityQuestion = ?, Answer = ? WHERE UserID = ?");
+				query.bindValue(0, ui.LEChangeSecQuestionSecQuest->text());
+
+				std::string concatHelp = ui.LEChangeSecQuestionSecQuest->text().toStdString() + ui.LEChangeSecQuestionNewAnswer->text().toStdString();
+				QString answerHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+				query.bindValue(1, answerHash);
+				query.bindValue(2, loggedID);
+				if (query.exec())
+				{
+					query.exec("COMMIT");
+					Utilities::MBAlarm("Your security question was changed succesfully. Please log in again", true);
+					ui.PBLogout->click();
+				}
+				else
+				{
+					Utilities::MBAlarm("Something went wrong. Please try again", false);
+				}
+			}
+			else
+			{
+				Utilities::MBAlarm("Typed password is incorrect. Please try again", false);
+			}
+		}
+		else
+		{
+			Utilities::MBAlarm("Something went wrong. Please try again", false);
 		}
 	}
 	else

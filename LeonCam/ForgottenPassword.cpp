@@ -48,7 +48,7 @@ void ForgottenPassword::VerifyClicked()
 	else
 	{
 		std::string answer = ui.LEAnswer->text().toStdString();
-		std::string concatHelp = this->username.toStdString() + answer;
+		std::string concatHelp = ui.LESecurityQuestion->text().toStdString() + answer;
 
 		QSqlQuery query;
 		query.prepare("SELECT COUNT (*) FROM Users WHERE Username = ? AND ANSWER = ?");

@@ -26,6 +26,7 @@
 #include <QDate>
 #include <QLocale>
 #include <algorithm>
+#include <regex>
 
 using namespace QtCharts;
 

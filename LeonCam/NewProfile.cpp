@@ -64,8 +64,8 @@ void NewProfile::CreateClicked()
 	concatHelp = password.toStdString() + username.toStdString();
 	QString passwordAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
-	//answer abbreviation -> username + answer
-	concatHelp = username.toStdString() + answer.toStdString();
+	//answer abbreviation -> question + answer
+	concatHelp = securityQuestion.toStdString() + answer.toStdString();
 
 	QString answerAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
