@@ -185,3 +185,8 @@ int ImgProc::PredictPerson(cv::Mat matImg)
 	model->predict(matImg, predictionLabel, predicted_confidence);
 	return predictionLabel;
 }
+bool ImgProc::CheckIfFaceCascadeExists()
+{
+	QString path = faceCascadeFilePath;
+	return Utilities::NotEmptyFileExists(path);
+}

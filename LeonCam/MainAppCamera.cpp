@@ -171,7 +171,7 @@ void MainAppCamera::run()
 		//processTimer.start();
 
 		//start processing frames
-		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), Qt::DirectConnection);
+		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), /*Qt::DirectConnection | */Qt::QueuedConnection);
 		emit startWorking();
 
 		exec();
@@ -313,6 +313,7 @@ void MainAppCamera::CheckRedAlertID(int redAlertID)
 		if (redAlert->redAlertID == redAlertID)
 		{
 			redAlert->redAlertID = -1;
+			videowriter.release();
 		}
 	}
 }

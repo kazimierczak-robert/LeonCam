@@ -21,6 +21,7 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	//future = QtConcurrent::run([=]() {CameraPreviewUpdate(cameraURIs); }); //run preview from camera
 	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=](int index) {CurrentIndexChanged(passHash); });
+
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
 	
 	imageWidget = new CVImageWidget();

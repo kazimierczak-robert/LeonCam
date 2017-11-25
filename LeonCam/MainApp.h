@@ -48,6 +48,7 @@ signals:
 	void closeCameraEdit(const QString& cameraDetails);
 	void checkGreenAlertInList(int greenAlertID);
 	void checkRedAlertID(int redAlertID);
+	void releaseVideoWriter();
 private slots:
 	void AddCamera();
 	void LogOut();
@@ -87,7 +88,7 @@ private:
 	std::vector<QGridLayout*> *vectorQGridLayouts;
 	std::map<int, std::string> alertDeleteSettingsToCB;
 	ImgProc *imgProc = nullptr;
-	map<int, MainAppCamera *> *cameraThread;
+	std::map<int, MainAppCamera *> *cameraThread;
 	int activeCameraPage;
 	struct Camera
 	{

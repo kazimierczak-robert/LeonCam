@@ -47,6 +47,7 @@ public:
 		labels.clear();
 	}
 	int GetLoggedID() { return loggedID; }
+	bool CheckIfFaceCascadeExists();
 private:
 	int cameraID;
 	int loggedID;
