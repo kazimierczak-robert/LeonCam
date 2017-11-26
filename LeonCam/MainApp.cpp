@@ -36,6 +36,113 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	ui.LEnabledNumber->setText(ui.LEnabledNumber->text() + QVariant(QThread::idealThreadCount()).toString());
 
 	FillFacesBaseTW();
+
+	if (loggedID > 0)
+	{
+		//delete alerts
+		query.clear();
+		//Get RedAlertsDeleteSettings & GreenAlertsDeleteSettings
+		query.prepare("SELECT RedAlertDeleteSettingID, GreenAlertDeleteSettingID FROM Users WHERE UserID = ?");
+		query.bindValue(0, loggedID);
+		result = query.exec();
+		if (result == true && query.next())
+		{
+			int redAlertDelSets = query.value(0).toInt();
+			int greenAlertDelSets = query.value(1).toInt();
+			QSqlQuery selectedQuery;
+			//1 - never				
+			if (redAlertDelSets > 1)
+			{
+				query.clear();
+				query.exec("BEGIN IMMEDIATE TRANSACTION");
+				switch (redAlertDelSets)
+				{
+				case 2: //2 - 1 day
+				{
+					selectedQuery.prepare("SELECT RedAlertID, CameraID FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 1 AND UserID = ?");
+					query.prepare("DELETE FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 1 AND UserID = ?");
+					break;
+				}
+				case 3: //3 - 1 week
+				{
+					selectedQuery.prepare("SELECT RedAlertID, CameraID FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 7 AND UserID = ?");
+					query.prepare("DELETE FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 7 AND UserID = ?");
+					break;
+				}
+				case 4: //4 - 1 month
+				{
+					selectedQuery.prepare("SELECT RedAlertID, CameraID FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 30 AND UserID = ?");
+					query.prepare("DELETE FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 30 AND UserID = ?");
+					break;
+				}
+				case 5: //5 - half a year
+				{
+					selectedQuery.prepare("SELECT RedAlertID, CameraID FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 183 AND UserID = ?");
+					query.prepare("DELETE FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 183 AND UserID = ?");
+					break;
+				}
+				case 6: //6 - year
+				{
+					selectedQuery.prepare("SELECT RedAlertID, CameraID FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 365 AND UserID = ?");
+					query.prepare("DELETE FROM RedAlerts WHERE (julianday('now')-julianday(StartDate)) >= 365 AND UserID = ?");
+				}
+				}
+				selectedQuery.bindValue(0, loggedID);
+				result = selectedQuery.exec();
+				if (result == true)
+				{
+					QFile file;
+					QString fileName;
+					while (selectedQuery.next())
+					{
+						
+						fileName = ".\\RedAlerts\\" + QVariant(selectedQuery.value(1)).toString() + "\\" + QVariant(selectedQuery.value(0)).toString() + ".avi";
+						file.remove(fileName);
+					}
+				}
+				query.bindValue(0, loggedID);
+				result = query.exec();
+				query.exec("COMMIT");
+			}
+			if (greenAlertDelSets > 1)
+			{
+				query.clear();
+				query.exec("BEGIN IMMEDIATE TRANSACTION");
+				switch (greenAlertDelSets)
+				{
+				case 2: //2 - 1 day
+				{
+					query.prepare("DELETE FROM GreenAlerts WHERE (julianday('now')-julianday(StartDate)) >= 1 AND UserID = ?");
+					break;
+				}
+				case 3: //3 - 1 week
+				{
+					query.prepare("DELETE FROM GreenAlerts WHERE (julianday('now')-julianday(StartDate)) >= 7 AND UserID = ?");
+					break;
+				}
+				case 4: //4 - 1 month
+				{
+					query.prepare("DELETE FROM GreenAlerts WHERE (julianday('now')-julianday(StartDate)) >= 30 AND UserID = ?");
+					break;
+				}
+				case 5: //5 - half a year
+				{
+					query.prepare("DELETE FROM GreenAlerts WHERE (julianday('now')-julianday(StartDate)) >= 183 AND UserID = ?");
+					break;
+				}
+				case 6: //6 - year
+				{
+					query.prepare("DELETE FROM GreenAlerts WHERE (julianday('now')-julianday(StartDate)) >= 365 AND UserID = ?");
+					break;
+				}
+				}
+				query.bindValue(0, loggedID);
+				result = query.exec();
+				query.exec("COMMIT");
+			}
+		}
+	}
+
 	FillReportsTW();
 	StatisticsChart();
 
@@ -1033,7 +1140,7 @@ void MainApp::AddRowToRedReports(int redAlertID, int cameraID, QString startDate
 	widget->setLayout(layout);
 	ui.TWRedReport->setCellWidget(rowCount, 4, widget);
 
-	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	Utilities::OpenFileExplorer(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString()); });
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	Utilities::OpenFileExplorer(".\\RedAlerts\\" + QVariant(cameraID).toString()); });
 
 	//New widget
 	widget = new QWidget();
@@ -1051,7 +1158,7 @@ void MainApp::AddRowToRedReports(int redAlertID, int cameraID, QString startDate
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWRedReport->setCellWidget(rowCount, 5, widget);		
-	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	PlayMovie(".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi"); });
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	PlayMovie(".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi"); });
 	ui.TWRedReport->setSortingEnabled(true);
 
 	//New widget
@@ -1614,7 +1721,7 @@ void MainApp::RemoveRedAlert(int redAlertID)
 				}
 
 				QFile file;
-				QString fileName = ".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi";
+				QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi";
 				file.remove(fileName);
 		}
 	}

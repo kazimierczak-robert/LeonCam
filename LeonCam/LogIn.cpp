@@ -32,7 +32,7 @@ void LogIn::LogInClicked()
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
 	QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-	std::string passHash = Utilities::Sha256HEX(passwordHash.toStdString()+ username.toStdString());
+	std::string passHash = Utilities::Sha256HEX(passwordHash.toStdString() + username.toStdString());
 
 	//Get proper user from DB
 	QSqlQuery query;
@@ -47,7 +47,7 @@ void LogIn::LogInClicked()
 		if (result > 0)
 		{
 			//check if account is not locked
-			QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");			
+			QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
 			QDateTime lastLoginAttemptDate = query.value(9).toDateTime();
 			int loginAttemptCounter = query.value(10).toInt();
 			int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
@@ -56,24 +56,22 @@ void LogIn::LogInClicked()
 			{
 				UpdateAttempts(0, username);
 				int loggedID = query.value(0).toInt();
-				if (loggedID > 0) {
-					MainApp *mainApp = new MainApp(nullptr, loggedID, passHash);
-					mainApp->show();
-					this->close();
-				}
+				MainApp *mainApp = new MainApp(nullptr, loggedID, passHash);
+				mainApp->show();
+				this->close();
 			}
 			else
 			{
 				designB->gif->stop();
 				Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
 			}
+		}
+		else
+		{
+			designB->gif->stop();
+			UpdateCounter(username);
+		}
 	}
-	else
-	{
-		designB->gif->stop();
-		UpdateCounter(username);
-	}
-}
 	else
 	{
 		designB->gif->stop();

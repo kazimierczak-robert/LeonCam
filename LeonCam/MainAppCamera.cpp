@@ -69,7 +69,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 				redAlert->stopDate = dateTimeNow;
 				emit insertRedAlert(query.value(0).toInt(), cameraID, dateTimeNow);
 			}
-			QString filePath = ".\\Pictures\\RedAlerts\\" + QString::number(cameraID);
+			QString filePath = ".\\RedAlerts\\" + QString::number(cameraID);
 			//Start movie
 			Utilities::CreateFolderIfNotExists(filePath);
 			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
@@ -388,7 +388,7 @@ void MainAppCamera::Process()
 				if (isRedAlertStop == true)
 				{
 					QFile file;
-					QString fileName = ".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
+					QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
 					stopRedAlert();		
 					file.remove(fileName);
 					isRedAlertStop = false;
@@ -416,7 +416,7 @@ void MainAppCamera::Process()
 }
 void MainAppCamera::SaveMat()
 {
-	QString filePath = ".\\Pictures\\PhotoFromCameras\\" + QVariant(cameraID).toString();
+	QString filePath = ".\\PhotoFromCameras\\" + QVariant(cameraID).toString();
 	Utilities::CreateFolderIfNotExists(filePath);
 	QString fileName= Utilities::GetCurrentDateTime() + ".jpg";
 	std::replace(fileName.begin(), fileName.end(), ':', '-');

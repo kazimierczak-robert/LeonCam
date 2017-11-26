@@ -1,5 +1,0 @@
-1. Photo - photo from CameraPreview, MainApp: folder:<CameraID> <date&time> 
-	Utilities::CreateFolderIfNotExists(".\\Pictures\\PhotoFromCameras\\" + QVariant(<CameraID>).toString());
-	
-2. RedAlert - photo of unrecognized person: <RedAlertID>
-	Utilities::CreateFolderIfNotExists(".\\Pictures\\RedAlerts\\<CameraID>" + QVariant(<RedAlertID>).toString());

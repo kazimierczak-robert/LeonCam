@@ -119,16 +119,6 @@ bool DataBase::CreateFaces()
 	result = query.isActive();
 	return result;
 }
-bool DataBase::CreateMoviesSettings() 
-{
-	QSqlQuery query("CREATE TABLE IF NOT EXISTS MoviesSettings("
-					"UserID INTEGER PRIMARY KEY REFERENCES Users(UserID),"
-					"CameraID INTEGER REFERENCES Cameras(CameraID));");
-
-	bool result;
-	result = query.isActive();
-	return result;
-}
 bool DataBase::CreateFacesModulesSettings() 
 {
 	QSqlQuery query("CREATE TABLE IF NOT EXISTS MoviesSettings("
@@ -158,7 +148,6 @@ bool DataBase::CreateDB()
 		creationResult &= CreateAlertsDeleteSettings();
 		creationResult &= CreateCameras();
 		creationResult &= CreateFaces();
-		creationResult &= CreateMoviesSettings();
 		creationResult &= CreateFacesModulesSettings();
 
 	}
