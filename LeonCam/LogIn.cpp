@@ -32,7 +32,7 @@ void LogIn::LogInClicked()
 	std::string concatHelp = "";
 	concatHelp = password.toStdString() + username.toStdString();
 	QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-	std::string passHash = Utilities::Sha256(password.toStdString());
+	std::string passHash = Utilities::Sha256HEX(passwordHash.toStdString()+ username.toStdString());
 
 	//Get proper user from DB
 	QSqlQuery query;
@@ -108,8 +108,10 @@ void LogIn::ForgotPasswordClicked()
 		result = forgottenPassword->exec();
 		if (result == QDialog::Accepted)
 		{
+			int logID = forgottenPassword->GetLoggedID();
+			QString passH = forgottenPassword->GetPassHash();
 			this->close();
-			MainApp *mainApp = new MainApp(nullptr, -1);
+			MainApp *mainApp = new MainApp(nullptr, logID, passH.toStdString());
 			mainApp->show();
 		}
 		delete forgottenPassword;

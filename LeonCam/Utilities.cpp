@@ -28,6 +28,19 @@ bool Utilities::MBQuestion(QString message)
 		return false;
 	}
 }
+void Utilities::ChangePasswordBox(QString message, QString password)
+{
+	////http://doc.qt.io/qt-4.8/qmessagebox.html
+	QMessageBox msgBox;
+	QPixmap pixmap(iconPath);
+	QIcon buttonIcon(pixmap);
+	msgBox.setWindowIcon(buttonIcon);
+	msgBox.setText(message);
+	msgBox.setDetailedText(password);
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.adjustSize();
+	int result = msgBox.exec();
+}
 void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 {
 	QMessageBox msgBox;

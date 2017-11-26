@@ -74,6 +74,7 @@ private:
 	QPushButton *faceRecognitionPB;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
+	void stopRedAlert();
 public slots:
 	void UpdateGreenAlerts();
 	void UpdateRedAlerts();

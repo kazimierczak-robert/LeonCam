@@ -15,6 +15,9 @@
 #include <openssl/evp.h>
 #include <openssl/err.h>
 #include <string.h>
+#include  <QInputDialog>
+#include <QLineEdit>
+#include  <QLayout>
 
 
 
@@ -46,5 +49,6 @@ public:
 	static std::string  GetEncrypted(std::string yourHashKey, std::string msg);
 	static std::string  GetDecrypted(std::string yourHashKey, std::string encMsg);
 	static bool Utilities::NotEmptyFileExists(QString path);
+	static void ChangePasswordBox(QString message, QString password);
 };
 

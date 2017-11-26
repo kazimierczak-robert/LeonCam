@@ -171,7 +171,7 @@ void MainAppCamera::run()
 		//processTimer.start();
 
 		//start processing frames
-		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), /*Qt::DirectConnection | */Qt::QueuedConnection);
+		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), Qt::DirectConnection /*|*/ /*Qt::QueuedConnection*/);
 		emit startWorking();
 
 		exec();
@@ -290,9 +290,7 @@ void MainAppCamera::UpdateRedAlerts()
 	msDifferece = dtStop.msecsTo(dTNow);
 	if (msDifferece > (1 * 30 * 1000))
 	{
-		redAlert->redAlertID = -1;
-		//Stop movie
-		videowriter.release();
+		stopRedAlert();
 	}
 }
 void MainAppCamera::CheckGreenAlertInList(int greenAlertID)
@@ -312,8 +310,8 @@ void MainAppCamera::CheckRedAlertID(int redAlertID)
 	{
 		if (redAlert->redAlertID == redAlertID)
 		{
-			redAlert->redAlertID = -1;
-			videowriter.release();
+			stopRedAlert();
+
 		}
 	}
 }
@@ -384,11 +382,13 @@ void MainAppCamera::Process()
 				emit updateImage(imgGray);
 			}
 			//cvtColor(img, resizedMat, CV_BGR2RGB);
+
 			if (frameID % 2 == 0 && videowriter.isOpened())
 			{
 				//cv::resize(imgGray, videoImg, cv::Size(426, 240));
 				videowriter.write(imgGray);
 			}
+
 
 			if (frameID % 2 == 0 && sendThumbnail)
 			{
@@ -412,4 +412,9 @@ void MainAppCamera::SaveMat()
 	filePath = filePath + "\\" + fileName;
 	cv::imwrite(filePath.toStdString(), img);
 	Utilities::MBAlarm("Picture has been taken", true);
+}
+void MainAppCamera::stopRedAlert()
+{
+	redAlert->redAlertID = -1;
+	videowriter.release();
 }
