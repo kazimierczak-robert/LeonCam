@@ -147,6 +147,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 }
 void MainAppCamera::run()
 {
+	isRedAlertStop = false;
 	this->isWorking = true;
 	greenAlertList->clear();
 	redAlert->redAlertID = -1;
@@ -310,8 +311,7 @@ void MainAppCamera::CheckRedAlertID(int redAlertID)
 	{
 		if (redAlert->redAlertID == redAlertID)
 		{
-			stopRedAlert();
-
+			isRedAlertStop = true;
 		}
 	}
 }
@@ -385,8 +385,19 @@ void MainAppCamera::Process()
 
 			if (frameID % 2 == 0 && videowriter.isOpened())
 			{
-				//cv::resize(imgGray, videoImg, cv::Size(426, 240));
-				videowriter.write(imgGray);
+				if (isRedAlertStop == true)
+				{
+					QFile file;
+					QString fileName = ".\\Pictures\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
+					stopRedAlert();		
+					file.remove(fileName);
+					isRedAlertStop = false;
+				}
+				else
+				{
+					//cv::resize(imgGray, videoImg, cv::Size(426, 240));
+					videowriter.write(imgGray);
+				}
 			}
 
 

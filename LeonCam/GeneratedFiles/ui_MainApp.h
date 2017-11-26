@@ -713,7 +713,7 @@ public:
         LEChangeLoginPassword->setText(QString());
         LEChangeLoginPassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
         LEChangeLoginUsername->setText(QString());
-        LEChangeLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "Username", Q_NULLPTR));
+        LEChangeLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "New username", Q_NULLPTR));
         PBChangeLogin->setText(QApplication::translate("MainApp", "Change login", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTipLogin->setToolTip(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Username</span> has <span style=\" font-weight:600;\">50</span> letters up limit</p></body></html>", Q_NULLPTR));

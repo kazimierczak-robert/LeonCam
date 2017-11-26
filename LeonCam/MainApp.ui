@@ -997,7 +997,7 @@ background-color: rgb(39, 129, 63);
         <number>50</number>
        </property>
        <property name="placeholderText">
-        <string>Username</string>
+        <string>New username</string>
        </property>
       </widget>
       <widget class="QPushButton" name="PBChangeLogin">

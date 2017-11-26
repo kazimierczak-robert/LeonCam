@@ -395,7 +395,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 					_trt__GetStreamUriResponse link;
 					media.GetStreamUrl(profileToken, link);
 
-					if (link.soap->status == 200)
+					if (link.MediaUri != NULL)
 					{
 						std::string streamURI = link.MediaUri->Uri.insert(link.MediaUri->Uri.find("//") + 2, cam->Login + ":" + password + "@");							
 						//Set stream URI
@@ -1956,22 +1956,58 @@ void MainApp::ChangeLogin()
 			if (query.value(1).toString() == passwordHash)
 			{
 				query.clear();
-				query.prepare("UPDATE Users SET Username = ?, Password = ? WHERE UserID = ?");
-				query.bindValue(0, ui.LEChangeLoginUsername->text());
 
-				std::string concatHelp = ui.LEChangeLoginPassword->text().toStdString() + ui.LEChangeLoginUsername->text().toStdString();
-				QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-				query.bindValue(1, passwordHash);
-				query.bindValue(2, loggedID);
+				std::string newPassHash = Utilities::Sha256HEX(Utilities::Sha256HEX(ui.LEChangeLoginPassword->text().toStdString() + ui.LEChangeLoginUsername->text().toStdString()) + ui.LEChangeLoginUsername->text().toStdString());
+
+				int camID = 0;
+				std::string cameraPassword = "";
+				query.prepare("SELECT CameraID, Password FROM Cameras WHERE UserID = ?");
+				query.bindValue(0, loggedID);
 				if (query.exec())
 				{
+					QSqlQuery queryUpdate;
+					std::string encMsg;
+					queryUpdate.exec("BEGIN IMMEDIATE TRANSACTION");
+					while (query.next())
+					{
+						queryUpdate.clear();
+						camID = query.value(0).toInt();
+						encMsg = query.value(1).toString().toStdString();
+						//Decrypt camera password
+						cameraPassword = Utilities::GetDecrypted(passHash, encMsg);
+						//Encrypt new camera password
+						cameraPassword = Utilities::GetEncrypted(newPassHash, cameraPassword);
+						//Update password
+						queryUpdate.prepare("UPDATE Cameras SET Password = ?  WHERE UserID = ?");
+						queryUpdate.bindValue(0, QString::fromStdString(cameraPassword));
+						queryUpdate.bindValue(1, loggedID);
+						queryUpdate.exec();
+					}
+					queryUpdate.exec("COMMIT");
+
+					query.clear();
+					//Update Password
+					query.exec("BEGIN IMMEDIATE TRANSACTION");
+					query.prepare("UPDATE Users SET Username = ?, Password = ?  WHERE UserID = ?");
+					query.bindValue(0, ui.LEChangeLoginUsername->text());
+					query.bindValue(1, QString::fromStdString(Utilities::Sha256HEX(ui.LEChangeLoginPassword->text().toStdString() + ui.LEChangeLoginUsername->text().toStdString())));
+					query.bindValue(2, loggedID);
+					bool result = query.exec();
 					query.exec("COMMIT");
-					Utilities::MBAlarm("Your login was changed succesfully. Please log in again", true);
-					ui.PBLogout->click();
+					if (result)
+					{
+						query.exec("COMMIT");
+						Utilities::MBAlarm("Your login was changed succesfully. Please log in again", true);
+						ui.PBLogout->click();
+					}
+					else
+					{
+						Utilities::MBAlarm("Typed login is occupied by antother profile. Please type another one", false);
+					}
 				}
 				else
 				{
-					Utilities::MBAlarm("Typed login is occupied by antother profile. Please type another one", false);
+					Utilities::MBAlarm("Something went wrong. Please try again", false);
 				}
 			}
 			else
@@ -2021,17 +2057,52 @@ void MainApp::ChangePassword()
 				if (query.value(1).toString() == passwordHash)
 				{
 					query.clear();
-					query.prepare("UPDATE Users SET Password = ? WHERE UserID = ?");
 
-					std::string concatHelp = ui.LEChangePasswordPassword->text().toStdString() + login;
-					QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-					query.bindValue(0, passwordHash);
-					query.bindValue(1, loggedID);
+					std::string newPassHash = Utilities::Sha256HEX(Utilities::Sha256HEX(ui.LEChangePasswordPassword->text().toStdString() + login) + login);
+
+					int camID = 0;
+					std::string cameraPassword = "";
+					query.prepare("SELECT CameraID, Password FROM Cameras WHERE UserID = ?");
+					query.bindValue(0, loggedID);
 					if (query.exec())
 					{
-						query.exec("COMMIT");
-						Utilities::MBAlarm("Your password was changed succesfully. Please log in again", true);
-						ui.PBLogout->click();
+						QSqlQuery queryUpdate;
+						std::string encMsg;
+						queryUpdate.exec("BEGIN IMMEDIATE TRANSACTION");
+						while (query.next())
+						{
+							queryUpdate.clear();
+							camID = query.value(0).toInt();
+							encMsg = query.value(1).toString().toStdString();
+							//Decrypt camera password
+							cameraPassword = Utilities::GetDecrypted(passHash, encMsg);
+							//Encrypt new camera password
+							cameraPassword = Utilities::GetEncrypted(newPassHash, cameraPassword);
+							//Update password
+							queryUpdate.prepare("UPDATE Cameras SET Password = ?  WHERE UserID = ?");
+							queryUpdate.bindValue(0, QString::fromStdString(cameraPassword));
+							queryUpdate.bindValue(1, loggedID);
+							queryUpdate.exec();
+						}
+						queryUpdate.exec("COMMIT");
+
+						query.clear();
+						query.prepare("UPDATE Users SET Password = ? WHERE UserID = ?");
+
+						std::string concatHelp = ui.LEChangePasswordPassword->text().toStdString() + login;
+						QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+						query.bindValue(0, passwordHash);
+						query.bindValue(1, loggedID);
+						if (query.exec())
+						{
+							query.exec("COMMIT");
+							Utilities::MBAlarm("Your password was changed succesfully. Please log in again", true);
+							ui.PBLogout->click();
+						}
+						else
+						{
+							Utilities::MBAlarm("Something went wrong. Please try again", false);
+						}
 					}
 					else
 					{

@@ -65,6 +65,7 @@ private:
 	bool sendBigPicture;
 	bool sendThumbnail;
 	bool faceRecognitionState = false;
+	bool isRedAlertStop = false;
 	cv::VideoCapture vcap;
 	cv::VideoWriter videowriter;
 	cv::Mat img;
