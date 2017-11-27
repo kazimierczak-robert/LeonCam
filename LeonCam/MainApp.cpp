@@ -274,9 +274,9 @@ void MainApp::AddCamera()
 		query.bindValue(":UserID", loggedID);
 		query.bindValue(":LastEditDate", Utilities::GetCurrentDateTime());
 		result = query.exec();
+		query.exec("COMMIT");
 		if (result == true)
 		{
-			query.exec("COMMIT");
 			query.prepare("SELECT CameraID FROM Cameras WHERE Name = ? AND UserID = ?");
 			query.bindValue(0, controlsValues->at(0));
 			query.bindValue(1, loggedID);
@@ -590,9 +590,9 @@ void MainApp::EditCamera(int cameraID, QLabel *label)
 		query.bindValue(2, controlsValues->at(2));
 		query.bindValue(3, Utilities::GetCurrentDateTime());
 		result = query.exec();
+		query.exec("COMMIT");
 		if (result == true)
 		{
-			query.exec("COMMIT");
 			label->setText(controlsValues->at(0) + " (" + controlsValues->at(1) + ")");
 		}
 	}
@@ -734,13 +734,16 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 {
 	int cameraID = getCameraIDFromLayout(layout);
 	QSqlQuery query;
+	query.exec("BEGIN IMMEDIATE TRANSACTION");
 	query.prepare("DELETE FROM Cameras WHERE CameraID=?");
 	query.bindValue(0, cameraID);
 	bool result = query.exec();
+	query.exec("COMMIT");
 	if (result == true)
 	{
 		DeleteCameraFromMemory(layout);
 		query.clear();
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
 		query.prepare("DELETE FROM GreenAlerts WHERE CameraID=?");
 		query.bindValue(0, cameraID);
 		query.exec();
@@ -748,6 +751,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 		query.prepare("DELETE FROM RedAlerts WHERE CameraID=?");
 		query.bindValue(0, cameraID);
 		query.exec();
+		query.exec("COMMIT");
 	}
 }
 void MainApp::LESearchChanged()
@@ -1360,9 +1364,9 @@ void MainApp::AddPerson()
 		query.addBindValue(currentDateTimeS);
 		bool result;
 		result = query.exec();
+		query.exec("COMMIT");
 		if (result == true)
 		{
-			query.exec("COMMIT");
 			int faceID = query.lastInsertId().toInt();
 			if (faceID>0)
 			{ 
@@ -2091,7 +2095,6 @@ void MainApp::ChangeLogin()
 						queryUpdate.exec();
 					}
 					queryUpdate.exec("COMMIT");
-
 					query.clear();
 					//Update Password
 					query.exec("BEGIN IMMEDIATE TRANSACTION");
@@ -2103,7 +2106,6 @@ void MainApp::ChangeLogin()
 					query.exec("COMMIT");
 					if (result)
 					{
-						query.exec("COMMIT");
 						Utilities::MBAlarm("Your login was changed succesfully. Please log in again", true);
 						ui.PBLogout->click();
 					}
@@ -2194,15 +2196,17 @@ void MainApp::ChangePassword()
 						queryUpdate.exec("COMMIT");
 
 						query.clear();
+						query.exec("BEGIN IMMEDIATE TRANSACTION");
 						query.prepare("UPDATE Users SET Password = ? WHERE UserID = ?");
 
 						std::string concatHelp = ui.LEChangePasswordPassword->text().toStdString() + login;
 						QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 						query.bindValue(0, passwordHash);
 						query.bindValue(1, loggedID);
-						if (query.exec())
+						bool result = query.exec();
+						query.exec("COMMIT");
+						if (result)
 						{
-							query.exec("COMMIT");
 							Utilities::MBAlarm("Your password was changed succesfully. Please log in again", true);
 							ui.PBLogout->click();
 						}
@@ -2253,12 +2257,13 @@ void MainApp::DeleteProfile()
 			if (query.value(0).toString() == passwordHash)
 			{
 				query.clear();
+				query.exec("BEGIN IMMEDIATE TRANSACTION");
 				query.prepare("DELETE FROM Users WHERE UserID = ?");
 				query.bindValue(0, loggedID);
-				if (query.exec())
+				query.exec("COMMIT");
+				bool result = query.exec();
+				if (result == true)
 				{
-					query.exec("COMMIT");
-
 					for (int j = vectorCameraLayoutsPages->size() - 1; j >= 0; j--)
 					{
 						for (int i = vectorCameraLayoutsPages->at(j)->size() - 1; i >= 0; i--)
@@ -2307,6 +2312,7 @@ void MainApp::ChangeSecurityQuestion()
 			if (query.value(1).toString() == passwordHash)
 			{
 				query.clear();
+				query.exec("BEGIN IMMEDIATE TRANSACTION");
 				query.prepare("UPDATE Users SET SecurityQuestion = ?, Answer = ? WHERE UserID = ?");
 				query.bindValue(0, ui.LEChangeSecQuestionSecQuest->text());
 
@@ -2314,9 +2320,10 @@ void MainApp::ChangeSecurityQuestion()
 				QString answerHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 				query.bindValue(1, answerHash);
 				query.bindValue(2, loggedID);
-				if (query.exec())
+				bool result = query.exec();
+				query.exec("COMMIT");
+				if (result)
 				{
-					query.exec("COMMIT");
 					Utilities::MBAlarm("Your security question was changed succesfully. Please log in again", true);
 					ui.PBLogout->click();
 				}

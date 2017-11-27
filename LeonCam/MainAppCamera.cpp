@@ -80,7 +80,6 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 		else
 		{
 			dateTimeNow = Utilities::GetCurrentDateTime();
-			//NO
 			//Update stopDate in redAlert object
 			redAlert->stopDate = dateTimeNow;
 		}
@@ -116,10 +115,10 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 			query.bindValue(":StopDate", dateTimeNow);
 			query.bindValue(":UserID", imgProc->GetLoggedID());
 			result = query.exec();
+			query.exec("COMMIT");
 			if (result == true)
 			{
 				//Get inserted greenAlertID
-				query.exec("COMMIT");
 				query.prepare("SELECT GreenAlertID FROM GreenAlerts WHERE CameraID = ? AND StartDate = ?");
 				query.bindValue(0, cameraID);
 				query.bindValue(1, dateTimeNow);

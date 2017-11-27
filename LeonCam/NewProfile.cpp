@@ -86,11 +86,10 @@ void NewProfile::CreateClicked()
 	query.bindValue(":LoginAttemptCounter", 0);
 	query.bindValue(":RegistrationDate", currentDateTimeS);
 	bool result = query.exec();
-	
+	query.exec("COMMIT");
 	designB->gif->stop();
 	if (result == true)
 	{
-		query.exec("COMMIT");
 		Utilities::MBAlarm("Account has been created", true);
 		this->close();
 	}

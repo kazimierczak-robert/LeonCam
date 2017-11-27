@@ -9,7 +9,8 @@ DataBase::~DataBase()
 void DataBase::SetPathToDB()
 {
 	QDir databasePath;
-	pathToDB = databasePath.currentPath() + "/DataBase/LeonCamDB.sqlite";
+	pathToDB = databasePath.currentPath() + "\\DataBase\\LeonCamDB.sqlite";
+	Utilities::CreateFolderIfNotExists(databasePath.currentPath() + "\\DataBase\\");
 }
 bool DataBase::CreateUsers()
 {
