@@ -13,9 +13,15 @@ ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
 	SetSecurityQuestion(username);
 	this->setResult(QDialog::Rejected);
+	watcher = nullptr;
 }
 ForgottenPassword::~ForgottenPassword()
 {
+	delete designB;
+	if (watcher != nullptr)
+	{
+		watcher->waitForFinished();
+	}
 }
 void ForgottenPassword::SetSecurityQuestion(QString username)
 {
@@ -39,79 +45,98 @@ void ForgottenPassword::SetSecurityQuestion(QString username)
 void ForgottenPassword::VerifyClicked()
 {
 	designB->gif->start();
-	if (ui.LEAnswer->text() == "")
+	Utilities::resultMsg = "";
+	passwordFromMap = "";
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
+	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
-		designB->gif->stop();
-		Utilities::MBAlarm("Please, fill in the <i> Answer </i> field", false);
-		return;
-	}
-	else
-	{
-		std::string answer = ui.LEAnswer->text().toStdString();
-		std::string concatHelp = ui.LESecurityQuestion->text().toStdString() + answer;
-
-		QSqlQuery query;
-		query.prepare("SELECT * FROM Users WHERE Username = ? AND ANSWER = ?");
-		query.bindValue(0, username);
-		QString answerHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-		query.bindValue(1, answerHash);
-		bool result = query.exec();
-		if (result == true)
+		if (Utilities::resultMsg == "")
 		{
-			query.next();
-			int result = query.value(0).toInt();
-			if (result > 0)
-			{			
-				QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-				QDateTime lastLoginAttemptDate = query.value(8).toDateTime();
-				int loginAttemptCounter = query.value(9).toInt();
-				int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
-				if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
-				if (loginAttemptCounter < loginAttemptCounterMAX)
-				{
-					LogIn::UpdateAttempts(0, username);
-					loggedID = query.value(0).toInt();
-					/*Requirements:
-					minimum 8 characters
-					minimum 1 digit
-					minimum 1 capital letter
-					minimum lowercase*/
-					//8 letters
-					std::map<int, char> passwordMap;
-					srand(time(NULL));
-					//capital letter and position
-					int positionPrev = rand() % 8;
-					int positionNext;
-					passwordMap.insert(std::pair<int, char>(positionPrev, rand() % 26 + 65));
-					do
-					{
-						positionNext = rand() % 8;
-					} while (positionPrev == positionNext);
-					//digits and position
-					passwordMap.insert(std::pair<int, char>(positionNext, rand() % 10 + 48));
-					QString passwordFromMap = "";
-					for (int i = 0; i < 8; i++)
-					{
-						if (i == positionNext || i == positionPrev)
-						{
-							passwordFromMap += passwordMap.at(i);
-							continue;
-						}
-						//letter and position
-						passwordMap.insert(std::pair<int, char>(i, rand() % 26 + 97));
-						passwordFromMap += passwordMap.at(i);
-					}
+			Utilities::ChangePasswordBox("You should copy the password to the clipboard, then go to the Settings tab and change it!", passwordFromMap);
+			this->done(QDialog::Accepted);
+		}
+		else
+		{
+			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
+		}
+		designB->gif->stop();
+		Utilities::resultMsg = "";
+	});
+	*future = QtConcurrent::run([=]()
+	{
+		if (ui.LEAnswer->text() == "")
+		{
+			Utilities::resultMsg = "Please, fill in the <i> Answer </i> field";
+			return;
+		}
+		else
+		{
+			std::string answer = ui.LEAnswer->text().toStdString();
+			std::string concatHelp = ui.LESecurityQuestion->text().toStdString() + answer;
 
-					//Get password hash from DB
-					query.clear();
-					query.prepare("SELECT Password FROM Users WHERE UserID = ?");
-					query.bindValue(0, loggedID);
-					bool result = query.exec();
-					if (result == true)
+			QSqlQuery query;
+			query.prepare("SELECT * FROM Users WHERE Username = ? AND ANSWER = ?");
+			query.bindValue(0, username);
+			QString answerHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+			query.bindValue(1, answerHash);
+			bool result = query.exec();
+			if (result == true)
+			{
+				query.next();
+				int result = query.value(0).toInt();
+				if (result > 0)
+				{
+					QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+					QDateTime lastLoginAttemptDate = query.value(8).toDateTime();
+					int loginAttemptCounter = query.value(9).toInt();
+					int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
+					if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
+					if (loginAttemptCounter < loginAttemptCounterMAX)
 					{
-						query.next();
-						QString oldPasswordHash = query.value(0).toString();
-						passHash = QString::fromStdString(Utilities::Sha256HEX(oldPasswordHash.toStdString() + username.toStdString()));
+						LogIn::UpdateAttempts(0, username);
+						loggedID = query.value(0).toInt();
+						/*Requirements:
+						minimum 8 characters
+						minimum 1 digit
+						minimum 1 capital letter
+						minimum lowercase*/
+						//8 letters
+						std::map<int, char> passwordMap;
+						srand(time(NULL));
+						//capital letter and position
+						int positionPrev = rand() % 8;
+						int positionNext;
+						passwordMap.insert(std::pair<int, char>(positionPrev, rand() % 26 + 65));
+						do
+						{
+							positionNext = rand() % 8;
+						} while (positionPrev == positionNext);
+						//digits and position
+						passwordMap.insert(std::pair<int, char>(positionNext, rand() % 10 + 48));
+						passwordFromMap = "";
+						for (int i = 0; i < 8; i++)
+						{
+							if (i == positionNext || i == positionPrev)
+							{
+								passwordFromMap += passwordMap.at(i);
+								continue;
+							}
+							//letter and position
+							passwordMap.insert(std::pair<int, char>(i, rand() % 26 + 97));
+							passwordFromMap += passwordMap.at(i);
+						}
+
+						//Get password hash from DB
+						query.clear();
+						query.prepare("SELECT Password FROM Users WHERE UserID = ?");
+						query.bindValue(0, loggedID);
+						bool result = query.exec();
+						if (result == true)
+						{
+							query.next();
+							QString oldPasswordHash = query.value(0).toString();
+							passHash = QString::fromStdString(Utilities::Sha256HEX(oldPasswordHash.toStdString() + username.toStdString()));
 
 							query.clear();
 							int camID = 0;
@@ -120,7 +145,7 @@ void ForgottenPassword::VerifyClicked()
 							query.prepare("SELECT CameraID, Password FROM Cameras WHERE UserID = ?");
 							query.bindValue(0, loggedID);
 							result = query.exec();
-							if (result == true) 
+							if (result == true)
 							{
 								QSqlQuery queryUpdate;
 								std::string encMsg;
@@ -153,13 +178,11 @@ void ForgottenPassword::VerifyClicked()
 									query.exec("COMMIT");
 									if (result == false)
 									{
-										Utilities::MBAlarm("Acount error has occured. Please log in again", false);
+										Utilities::resultMsg = "Acount error has occured. Please log in again";
 									}
 									else
 									{
 										passHash = QString::fromStdString(newHashPass);
-										Utilities::ChangePasswordBox("You should copy the password to the clipboard, then go to the Settings tab and change it!", passwordFromMap);
-										this->done(QDialog::Accepted);
 									}
 								}
 							}
@@ -168,18 +191,18 @@ void ForgottenPassword::VerifyClicked()
 				}
 				else
 				{
-					designB->gif->stop();
-					Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
+					Utilities::resultMsg = "Your account is blocked! Try again after few minutes";
+					return;
 				}
 			}
 			else
 			{
-				designB->gif->stop();
 				LogIn::UpdateCounter(username);
 				return;
 			}
 		}
-	designB->gif->stop();
+	});
+	watcher->setFuture(*future);
 }
 void ForgottenPassword::BackClicked()
 {

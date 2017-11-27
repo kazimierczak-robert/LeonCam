@@ -26,7 +26,7 @@ private:
 	DesignBase *designB;
 	int userID;
 	void SearchForCameraIPs();
-	std::string result;
+	std::string resultMsg;
 	QFuture<void> *future;
 	QFutureWatcher<void> *watcher;
 	std::string GenerateUuid();

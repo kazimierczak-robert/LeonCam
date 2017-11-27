@@ -50,5 +50,5 @@ public:
 	static std::string  GetDecrypted(std::string yourHashKey, std::string encMsg);
 	static bool Utilities::NotEmptyFileExists(QString path);
 	static void ChangePasswordBox(QString message, QString password);
+	static std::string resultMsg;
 };
-

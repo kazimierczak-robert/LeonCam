@@ -11,9 +11,15 @@ NewProfile::NewProfile(QWidget *parent)
 	//Signals and slots
 	connect(ui.PBCreate, SIGNAL(clicked()), this, SLOT(CreateClicked()));
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackClicked()));
+	watcher = nullptr;
 }
 NewProfile::~NewProfile()
 {
+	delete designB;
+	if (watcher != nullptr)
+	{
+		watcher->waitForFinished();
+	}
 }
 void NewProfile::CreateClicked()
 {
@@ -30,73 +36,89 @@ void NewProfile::CreateClicked()
 	QString answer = "";
 	answer = ui.LEAnswer->text();
 
-	if (username == "" || password == "" || confirmedPassword == "" || securityQuestion == "" || answer == "")
+	Utilities::resultMsg = "";
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
+	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
+		if (Utilities::resultMsg == "")
+		{
+			Utilities::MBAlarm("Account has been created", true);
+			this->close();
+		}
+		else
+		{
+			ui.LEPassword->setText("");
+			ui.LEConfPass->setText("");
+			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
+		}
 		designB->gif->stop();
-		Utilities::MBAlarm("At least one field is incomplete", false);
-		return;
-	}
-	if (password != confirmedPassword)
+		Utilities::resultMsg = "";
+	});
+	*future = QtConcurrent::run([=]()
 	{
-		designB->gif->stop();
-		Utilities::MBAlarm("Passwords are not the same", false);
-		return;
-	}
+		if (username == "" || password == "" || confirmedPassword == "" || securityQuestion == "" || answer == "")
+		{
+			Utilities::resultMsg = "At least one field is incomplete";
+			return;
+		}
+		if (password != confirmedPassword)
+		{
+			Utilities::resultMsg = "Passwords are not the same";
+			return;
+		}
 
-	/*Requirements:
+		/*Requirements:
 		minimum 8 characters
 		minimum 1 digit
 		minimum 1 capital letter
 		minimum lowercase*/
-	std::regex passwordPattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$");
-	if (std::regex_match(password.toStdString(), passwordPattern) == false)
-	{
-		designB->gif->stop();
-		Utilities::MBAlarm("Password incompatible format", false);
-		ui.LEPassword->setText("");
-		ui.LEConfPass->setText("");
+		std::regex passwordPattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$");
+		if (std::regex_match(password.toStdString(), passwordPattern) == false)
+		{
+			Utilities::resultMsg = "Password incompatible format";
+			return;
+		}
 
-		return;
-	}
+		std::string concatHelp = "";
+		//password abbreviation -> password + username
+		concatHelp = password.toStdString() + username.toStdString();
+		QString passwordAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
-	std::string concatHelp = "";
-	//password abbreviation -> password + username
-	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+		//answer abbreviation -> question + answer
+		concatHelp = securityQuestion.toStdString() + answer.toStdString();
 
-	//answer abbreviation -> question + answer
-	concatHelp = securityQuestion.toStdString() + answer.toStdString();
+		QString answerAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
 
-	QString answerAbbreviation = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+		QString currentDateTimeS = Utilities::GetCurrentDateTime();
 
-	QString currentDateTimeS = Utilities::GetCurrentDateTime();
+		QSqlQuery query;
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		query.prepare("INSERT INTO Users (Username, Password, SecurityQuestion, Answer, RedAlertDeleteSettingID, GreenAlertDeleteSettingID, LastLogoutDate, LastLoginAttemptDate, LoginAttemptCounter, RegistrationDate) "
+			"VALUES (:Username, :Password, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID, :LastLogoutDate, :LastLoginAttemptDate, :LoginAttemptCounter, :RegistrationDate)");
+		query.bindValue(":Username", username);
+		query.bindValue(":Password", passwordAbbreviation);
+		query.bindValue(":SecurityQuestion", securityQuestion);
+		query.bindValue(":Answer", answerAbbreviation);
+		query.bindValue(":RedAlertDeleteSettingID", 1);
+		query.bindValue(":GreenAlertDeleteSettingID", 1);
+		query.bindValue(":LastLogoutDate", currentDateTimeS);
+		query.bindValue(":LastLoginAttemptDate", currentDateTimeS);
+		query.bindValue(":LoginAttemptCounter", 0);
+		query.bindValue(":RegistrationDate", currentDateTimeS);
+		bool result = query.exec();
+		query.exec("COMMIT");
 
-	QSqlQuery query;
-	query.exec("BEGIN IMMEDIATE TRANSACTION");
-	query.prepare("INSERT INTO Users (Username, Password, SecurityQuestion, Answer, RedAlertDeleteSettingID, GreenAlertDeleteSettingID, LastLogoutDate, LastLoginAttemptDate, LoginAttemptCounter, RegistrationDate) "
-		"VALUES (:Username, :Password, :SecurityQuestion, :Answer, :RedAlertDeleteSettingID,:GreenAlertDeleteSettingID, :LastLogoutDate, :LastLoginAttemptDate, :LoginAttemptCounter, :RegistrationDate)");
-	query.bindValue(":Username", username);
-	query.bindValue(":Password", passwordAbbreviation);
-	query.bindValue(":SecurityQuestion", securityQuestion);
-	query.bindValue(":Answer", answerAbbreviation);
-	query.bindValue(":RedAlertDeleteSettingID", 1);
-	query.bindValue(":GreenAlertDeleteSettingID", 1);
-	query.bindValue(":LastLogoutDate", currentDateTimeS);
-	query.bindValue(":LastLoginAttemptDate", currentDateTimeS);
-	query.bindValue(":LoginAttemptCounter", 0);
-	query.bindValue(":RegistrationDate", currentDateTimeS);
-	bool result = query.exec();
-	query.exec("COMMIT");
-	designB->gif->stop();
-	if (result == true)
-	{
-		Utilities::MBAlarm("Account has been created", true);
-		this->close();
-	}
-	else
-	{
-		Utilities::MBAlarm("Account has not been created. Your login is occupied", false);
-	}
+		if (result == true)
+		{
+			return;
+		}
+		else
+		{
+			Utilities::resultMsg = "Account has not been created. Your login is occupied";
+		}
+	});
+	watcher->setFuture(*future);	
 }
 void NewProfile::BackClicked()
 {

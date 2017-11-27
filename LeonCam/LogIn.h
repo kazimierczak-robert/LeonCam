@@ -7,8 +7,11 @@
 #include "DesignBase.h"
 #include "NewProfile.h"
 #include "MainApp.h"
-#include "DataBase.h"
 #include <qtooltip.h>
+
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
 
 #define loginAttemptCounterMAX 3
 #define loginTimeLock 900
@@ -19,6 +22,7 @@ class LogIn : public QMainWindow
 
 public:
 	LogIn(QWidget *parent = Q_NULLPTR);
+	~LogIn();
 	static void UpdateAttempts(int loginAttemptCounter, QString username);
 	static void UpdateCounter(QString username);
 	private slots:
@@ -28,4 +32,8 @@ public:
 private:
 	Ui::LogInClass ui;
 	DesignBase *designB;
+	QFuture<void> *future;
+	QFutureWatcher<void> *watcher;
+	int loggedID;
+	std::string passHash;
 };

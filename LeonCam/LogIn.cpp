@@ -14,70 +14,99 @@ LogIn::LogIn(QWidget *parent)
 	connect(ui.LEPassword, SIGNAL(returnPressed()), this, SLOT(LogInClicked()));
 	connect(ui.PBForgotPassword, SIGNAL(clicked()), this, SLOT(ForgotPasswordClicked()));
 	connect(ui.PBNewProfile, SIGNAL(clicked()), this, SLOT(NewProfileClicked()));
+	watcher = nullptr;
+}
+LogIn::~LogIn()
+{
+	delete designB;
+	if (watcher != nullptr)
+	{
+		watcher->waitForFinished();
+	}
 }
 void LogIn::LogInClicked()
 {
 	designB->gif->start();
+
 	QString username = "";
 	QString password = "";
 	username = ui.LEUsername->text();
 	password = ui.LEPassword->text();
-	if (username == "" || password == "")
+	loggedID = -1;
+	Utilities::resultMsg = "";
+	passHash = "";
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
+	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
-		designB->gif->stop();
-		Utilities::MBAlarm("At least one field is incomplete", false);
-		return;
-	}
-
-	std::string concatHelp = "";
-	concatHelp = password.toStdString() + username.toStdString();
-	QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
-	std::string passHash = Utilities::Sha256HEX(passwordHash.toStdString() + username.toStdString());
-
-	//Get proper user from DB
-	QSqlQuery query;
-	query.prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
-	query.bindValue(0, username);
-	query.bindValue(1, passwordHash);
-	bool result = query.exec();
-	if (result == true)
-	{
-		query.next();
-		int result = query.value(0).toInt();
-		if (result > 0)
+		if (Utilities::resultMsg == "")
 		{
-			//check if account is not locked
-			QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-			QDateTime lastLoginAttemptDate = query.value(9).toDateTime();
-			int loginAttemptCounter = query.value(10).toInt();
-			int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
-			if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
-			if (loginAttemptCounter < loginAttemptCounterMAX)
+			MainApp *mainApp = new MainApp(nullptr, loggedID, passHash);
+			mainApp->show();
+			this->close();
+		}
+		else
+		{
+			ui.LEPassword->setText("");
+			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
+		}
+		designB->gif->stop();
+		Utilities::resultMsg = "";
+	});
+	*future = QtConcurrent::run([=]()
+	{
+		if (username == "" || password == "")
+		{
+			Utilities::resultMsg = "At least one field is incomplete";
+			return;
+		}
+
+		std::string concatHelp = "";
+		concatHelp = password.toStdString() + username.toStdString();
+		QString passwordHash = QString::fromStdString(Utilities::Sha256HEX(concatHelp));
+		passHash = Utilities::Sha256HEX(passwordHash.toStdString() + username.toStdString());
+
+		//Get proper user from DB
+		QSqlQuery query;
+		query.prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
+		query.bindValue(0, username);
+		query.bindValue(1, passwordHash);
+		bool result = query.exec();
+		if (result == true)
+		{
+			query.next();
+			int result = query.value(0).toInt();
+			if (result > 0)
 			{
-				UpdateAttempts(0, username);
-				int loggedID = query.value(0).toInt();
-				MainApp *mainApp = new MainApp(nullptr, loggedID, passHash);
-				mainApp->show();
-				this->close();
+				//check if account is not locked
+				QDateTime currentDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+				QDateTime lastLoginAttemptDate = query.value(9).toDateTime();
+				int loginAttemptCounter = query.value(10).toInt();
+				int secondsDiff = lastLoginAttemptDate.secsTo(currentDateTime);
+				if (secondsDiff > loginTimeLock) { loginAttemptCounter = 0; }
+				if (loginAttemptCounter < loginAttemptCounterMAX)
+				{
+					UpdateAttempts(0, username);
+					loggedID = query.value(0).toInt();
+					return;
+				}
+				else
+				{
+					Utilities::resultMsg = "Your account is blocked! Try again after few minutes";
+					return;
+				}
 			}
 			else
 			{
-				designB->gif->stop();
-				Utilities::MBAlarm("Your account is blocked! Try again after few minutes", false);
+				UpdateCounter(username);
 			}
 		}
 		else
 		{
-			designB->gif->stop();
-			UpdateCounter(username);
+			Utilities::resultMsg = "User has not been found. Please, try log in again";
 		}
-	}
-	else
-	{
-		designB->gif->stop();
-		Utilities::MBAlarm("User has not been found. Please, try log in again", false);
-	}
-	ui.LEPassword->setText("");
+	});
+	watcher->setFuture(*future);	
 }
 void LogIn::ForgotPasswordClicked()
 {
@@ -125,7 +154,6 @@ void LogIn::UpdateAttempts(int loginAttemptCounter, QString username)
 {
 	QSqlQuery query;
 	query.exec("BEGIN IMMEDIATE TRANSACTION");
-	query.clear();
 	query.prepare("UPDATE Users SET LoginAttemptCounter = ?, LastLoginAttemptDate = ?  WHERE Username = ?");
 	query.bindValue(0, loginAttemptCounter);
 	query.bindValue(1, Utilities::GetCurrentDateTime());
@@ -134,7 +162,7 @@ void LogIn::UpdateAttempts(int loginAttemptCounter, QString username)
 	query.exec("COMMIT");
 	if (result == false)
 	{
-		Utilities::MBAlarm("Something went wrong. Please, try log in again", false);
+		Utilities::resultMsg = "Something went wrong. Please, try log in again";
 	}
 }
 void LogIn::UpdateCounter(QString username)
@@ -152,18 +180,18 @@ void LogIn::UpdateCounter(QString username)
 		if (loginAttemptCounter < loginAttemptCounterMAX)
 		{
 			UpdateAttempts(loginAttemptCounter, username);
-			Utilities::MBAlarm("Typed data is incorrect. Please, try log in again", false);
+			Utilities::resultMsg="Typed data is incorrect. Please, try log in again";
 		}
 		else
 		{
 			loginAttemptCounter = 4;
 			int msg = loginTimeLock / 60;
-			Utilities::MBAlarm("Your account is blocked. Please, try log in again after " + QString::number(msg) + " minutes", false);
+			Utilities::resultMsg = "Your account is blocked. Please, try log in again after " + QString::number(msg).toStdString() + " minutes";
 			UpdateAttempts(loginAttemptCounter, username);
 		}
 	}
 	else
 	{
-		Utilities::MBAlarm("Something went wrong. Please, try log in again", false);
+		Utilities::resultMsg = "Something went wrong. Please, try log in again";
 	}
 }

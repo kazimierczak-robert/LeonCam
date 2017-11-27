@@ -1,6 +1,8 @@
 ﻿#include "LogIn.h"
 #include <QtWidgets/QApplication>
+#include "DataBase.h"
 
+std::string Utilities::resultMsg = "";
 
 int main(int argc, char *argv[])
 {

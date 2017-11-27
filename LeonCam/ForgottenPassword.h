@@ -8,6 +8,10 @@
 #include "qsqlquery.h"
 #include <cstdlib>
 
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
+
 class ForgottenPassword : public QDialog
 {
 	Q_OBJECT
@@ -27,5 +31,7 @@ private:
 	int loggedID;
 	DesignBase *designB;
 	Ui::ForgottenPassword ui;
-
+	QFuture<void> *future;
+	QFutureWatcher<void> *watcher;
+	QString passwordFromMap;
 };

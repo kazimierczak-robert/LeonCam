@@ -19,6 +19,10 @@
 #include <QCloseEvent>
 #include "CVImageWidget.h"
 
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
+
 class NewPhoto : public QDialog
 {
 	Q_OBJECT

@@ -7,6 +7,10 @@
 #include <regex>
 #include <qsqlquery.h>
 
+#include <qfuture.h>
+#include <QtConcurrent\qtconcurrentrun.h>
+#include <qfuturewatcher.h>
+
 class NewProfile : public QDialog
 {
 	Q_OBJECT
@@ -20,4 +24,6 @@ public:
 private:
 	Ui::NewProfile ui;
 	DesignBase *designB;
+	QFuture<void> *future;
+	QFutureWatcher<void> *watcher;
 };

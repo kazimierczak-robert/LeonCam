@@ -84,18 +84,18 @@ std::vector<QString>* UserCamera::GetValuesFromControls()
 void UserCamera::AddClicked() 
 {	
 	designB->gif->start();
-	result = "";
+	resultMsg = "";
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
-		if (result == "")
+		if (resultMsg == "")
 		{
 			this->done(QDialog::Accepted);
 		}
 		else
 		{
-			Utilities::MBAlarm(QString::fromStdString(result), false);
+			Utilities::MBAlarm(QString::fromStdString(resultMsg), false);
 		}
 		designB->gif->stop();
 	});
@@ -103,14 +103,14 @@ void UserCamera::AddClicked()
 	{
 		if (ui.LEDescripton->text() == "" || ui.CBAvailableCameras->currentText() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
 		{
-			result = "At least one field is incomplete";
+			resultMsg = "At least one field is incomplete";
 			return;
 		}
 
 		std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
 		if (std::regex_match(ui.CBAvailableCameras->currentText().toStdString(), IPv4AddressPattern) == false)
 		{
-			result = "IPv4 address incompatible format";
+			resultMsg = "IPv4 address incompatible format";
 			return;
 		}
 
@@ -124,7 +124,7 @@ void UserCamera::AddClicked()
 			int counter = query.value(0).toInt();
 			if (counter > 0)
 			{
-				result = "This name is occupied by your another camera. Please type another one";
+				resultMsg = "This name is occupied by your another camera. Please type another one";
 				return;
 			}
 		}
