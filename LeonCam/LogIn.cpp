@@ -33,8 +33,9 @@ void LogIn::LogInClicked()
 	username = ui.LEUsername->text();
 	password = ui.LEPassword->text();
 	loggedID = -1;
-	Utilities::resultMsg = "";
 	passHash = "";
+
+	Utilities::resultMsg = "";
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
@@ -106,7 +107,7 @@ void LogIn::LogInClicked()
 			Utilities::resultMsg = "User has not been found. Please, try log in again";
 		}
 	});
-	watcher->setFuture(*future);	
+	watcher->setFuture(*future);
 }
 void LogIn::ForgotPasswordClicked()
 {

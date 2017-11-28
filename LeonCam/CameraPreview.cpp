@@ -1,6 +1,6 @@
 #include "CameraPreview.h"
 
-CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QPushButton *buttonTakePhotoFromParent, int cameraID, MainAppCamera *thread, std::string passHash)
+CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton *buttonIsEnabledFromParent, QPushButton *buttonRecognationFromParent, QPushButton *buttonTakePhotoFromParent, int cameraID, /*MainAppCamera *thread*/std::map<int, MainAppCamera *> *cameraThread, std::string passHash)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
@@ -9,13 +9,14 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	this->buttonTakePhotoFromParent = buttonTakePhotoFromParent;
 	this->cameraID = cameraID;
 	this->passHash = passHash;
-	designB = new DesignBase(this);
-	ui.Lloading->setVisible(false);
-	designB->SetGifInLabel(ui.Lloading);
 
 	ui.LCameraDetails->setText(cameraDetails);
 
-	this->capThread = thread;
+	ui.CBPresets->setVisible(false);
+	ui.PBGoToPreset->setVisible(false);
+	ui.PBSavePreset->setVisible(false);
+
+	this->cameraThread = cameraThread;
 	device = nullptr;
 	ptz = nullptr;
 	ctrl = nullptr;
@@ -46,7 +47,6 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	qRegisterMetaType< cv::Mat >("const cv::Mat&");
 
 	//connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
-	connect(capThread, SIGNAL(updateImage(const cv::Mat&)), imageWidget, SLOT(ShowImage(const cv::Mat&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 
 
@@ -64,11 +64,15 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 
+	imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
+
 	if (buttonIsEnabledFromParent->text() == "On")
 	{
+		imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\connecting.png"));
 		TurnOnLabels();
 		if (!SetProfileTokenAndPTZ())
 		{
+			imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
 			buttonIsEnabledFromParent->click();
 			TurnOffLabels();
 		}
@@ -104,7 +108,9 @@ void CameraPreview::TurnOnLabels()
 	ui.PBHome->setEnabled(true);
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 	ui.PBSnapshot->setEnabled(true);
-	capThread->SetSendBigPicture(true);
+
+	connect(cameraThread->at(cameraID), SIGNAL(updateImage(const cv::Mat&)), imageWidget, SLOT(ShowImage(const cv::Mat&)));
+	cameraThread->at(cameraID)->SetSendBigPicture(true);
 }
 bool CameraPreview::SetProfileTokenAndPTZ()
 {
@@ -154,7 +160,8 @@ bool CameraPreview::SetProfileTokenAndPTZ()
 }
 void CameraPreview::TurnOffLabels()
 {
-	capThread->SetSendBigPicture(false);
+	disconnect(cameraThread->at(cameraID), SIGNAL(updateImage(const cv::Mat&)), imageWidget, SLOT(ShowImage(const cv::Mat&)));
+	cameraThread->at(cameraID)->SetSendBigPicture(false);
 	ui.PBCameraOnOff->setText("Off");
 	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 	ui.PBUp->setEnabled(false);
@@ -164,6 +171,9 @@ void CameraPreview::TurnOffLabels()
 	ui.PBHome->setEnabled(false);
 	ui.PBSnapshot->setText(buttonTakePhotoFromParent->text());
 	ui.PBSnapshot->setEnabled(false);
+
+	ui.PBRecognize->setText(buttonRecognationFromParent->text());
+	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
 }
 void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 {
@@ -177,9 +187,14 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 
 	if (wasTurnedOn == true)
 	{
+		imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\connecting.png"));
 		if (SetProfileTokenAndPTZ())
 		{
 			TurnOnOffCamera();
+		}
+		else
+		{
+			imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
 		}
 	}
 }
@@ -187,24 +202,51 @@ void CameraPreview::TurnOnOffCamera()
 {
 	if (ui.PBCameraOnOff->text() == "Off")
 	{
+		imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\connecting.png"));
 		if (ptz == nullptr)
 		{
 			if (SetProfileTokenAndPTZ())
 			{
 				buttonIsEnabledFromParent->click();
-				TurnOnLabels();
+				if (buttonIsEnabledFromParent->text() == "On")
+				{
+					TurnOnLabels();
+				}
+				else
+				{
+					QCoreApplication::processEvents();
+					imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
+				}
+			}
+			else
+			{
+				QCoreApplication::processEvents();
+				imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
 			}
 		}
 		else
 		{
 			buttonIsEnabledFromParent->click();
-			TurnOnLabels();
+			if (buttonIsEnabledFromParent->text() == "On")
+			{
+				TurnOnLabels();
+			}
+			else
+			{
+				QCoreApplication::processEvents();
+				imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
+			}
 		}
 	}
 	else
 	{
 		buttonIsEnabledFromParent->click();
-		TurnOffLabels();
+		if (buttonIsEnabledFromParent->text() == "Off")
+		{
+			QCoreApplication::processEvents();
+			imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\previewNotAvailable.png"));
+			TurnOffLabels();
+		}
 	}
 }
 void CameraPreview::TurnOnOffRecognizeMode()

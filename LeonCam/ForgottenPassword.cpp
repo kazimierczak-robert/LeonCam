@@ -150,7 +150,7 @@ void ForgottenPassword::VerifyClicked()
 								QSqlQuery queryUpdate;
 								std::string encMsg;
 								queryUpdate.exec("BEGIN IMMEDIATE TRANSACTION");
-								std::string newHashPass = Utilities::Sha256HEX(Utilities::Sha256HEX(passwordFromMap.toStdString() + username.toStdString()) + QString(username).toStdString());
+								std::string newHashPass = Utilities::Sha256HEX(Utilities::Sha256HEX(passwordFromMap.toStdString() + username.toStdString()) + username.toStdString());
 								while (query.next())
 								{
 									camID = query.value(0).toInt();

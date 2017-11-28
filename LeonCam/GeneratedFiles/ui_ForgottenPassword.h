@@ -119,7 +119,7 @@ public:
 
     void retranslateUi(QDialog *ForgottenPassword)
     {
-        ForgottenPassword->setWindowTitle(QApplication::translate("ForgottenPassword", "LeoCam", Q_NULLPTR));
+        ForgottenPassword->setWindowTitle(QApplication::translate("ForgottenPassword", "LeonCam", Q_NULLPTR));
         LHelp->setText(QApplication::translate("ForgottenPassword", "<html><head/><body><p align=\"center\">To recover your password, answer the <span style=\" font-weight:600; color:#bdf0ff;\">Security Question </span></p><p align=\"center\">and confirm by clicking the <span style=\" font-weight:600; color:#bdf0ff;\">Verify</span> button</p></body></html>", Q_NULLPTR));
         PBBack->setText(QApplication::translate("ForgottenPassword", "Back", Q_NULLPTR));
         Lloading->setText(QString());

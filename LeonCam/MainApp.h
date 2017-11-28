@@ -30,7 +30,6 @@
 
 using namespace QtCharts;
 
-
 class MainApp : public QMainWindow
 {
 	Q_OBJECT
@@ -80,6 +79,7 @@ public slots:
 	void UpdateGreenAlert(int greenAlertID, QString stopDate);
 	void UpdateRedAlert(int redAlertID, QString stopDate);
 private:
+	int activeCameraCounter;
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
 	std::string passHash;
@@ -107,7 +107,7 @@ private:
 	Camera* GetCameraFromDBByID(int cameraID);
 	void TurnOnOffCamera(QGridLayout* layout);
 	void RecognitionCamera(QPushButton* button, int cameraID);
-	void EditCamera(int cameraID, QLabel *label);
+	void EditCamera(int cameraID, QLabel *label, QPushButton *onOffButton);
 	void DeleteCameraFromMemory(QGridLayout* layout);
 	void RemoveCamera(QGridLayout* layout);
 	void AddCameraFromDB(int cameraID);
@@ -127,4 +127,6 @@ private:
 	void CurrentIndexChanged();
 	int GetChartRange();
 	void StatisticsChart();
+public:
+	MainAppCamera* getThreadByCameraID(int cameraID) { return cameraThread->at(cameraID); }
 };

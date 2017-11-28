@@ -59,26 +59,27 @@ std::vector<QString>* CameraEdition::GetValuesFromControls()
 void CameraEdition::EditClicked()
 {
 	designB->gif->start();
-	result = "";
+	Utilities::resultMsg = "";
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	connect(watcher, &QFutureWatcher<void>::finished, this, [this] 
 	{
-		if (result=="")
+		if (Utilities::resultMsg =="")
 		{
 			this->done(QDialog::Accepted);
 		}
 		else
 		{
-			Utilities::MBAlarm(QString::fromStdString(result), false);
+			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
 		}
 		designB->gif->stop();
+		Utilities::resultMsg = "";
 	});
 	*future = QtConcurrent::run([=]()
 	{
 		if (ui.LEDescripton->text() == "" || ui.LEIPv4Address->text() == "" || ui.LELogin->text() == "")
 		{
-			result = "At least one necessary field is incomplete";
+			Utilities::resultMsg = "At least one necessary field is incomplete";
 			return;
 		}
 
@@ -88,20 +89,20 @@ void CameraEdition::EditClicked()
 		passCounter += ui.LEConfPass->text() == "" ? 0 : 1;
 		if (passCounter % 3 != 0)
 		{
-			result = "At least one necessary field in \"Change Password\" is incomplete";
+			Utilities::resultMsg = "At least one necessary field in \"Change Password\" is incomplete";
 			return;
 		}
 
 		std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
 		if (std::regex_match(ui.LEIPv4Address->text().toStdString(), IPv4AddressPattern) == false)
 		{
-			result = "IPv4 address incompatible format";
+			Utilities::resultMsg = "IPv4 address incompatible format";
 			return;
 		}
 
 		if (ui.LEPassword->text() != ui.LEConfPass->text())
 		{
-			result = "Passwords are not the same";
+			Utilities::resultMsg = "Passwords are not the same";
 			return;
 		}
 
@@ -116,7 +117,7 @@ void CameraEdition::EditClicked()
 			int counter = query.value(0).toInt();
 			if (counter > 0)
 			{
-				result = "This name is occupied by your another camera. Please type another one";
+				Utilities::resultMsg = "This name is occupied by your another camera. Please type another one";
 				return;
 			}
 		}
@@ -132,7 +133,7 @@ void CameraEdition::EditClicked()
 				std::string encryptedMsg = Utilities::GetEncrypted(passHash, ui.LEPassword->text().toStdString());
 				if (QString::fromStdString(encryptedMsg) != query.value(0).toString())
 				{
-					result = "Old password is incorrect";
+					Utilities::resultMsg = "Old password is incorrect";
 					return;
 				}
 			}

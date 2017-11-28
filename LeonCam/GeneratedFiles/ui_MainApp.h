@@ -154,7 +154,7 @@ public:
 "border-radius: 11px;"));
         TWCameraPages = new QTabWidget(TCameras);
         TWCameraPages->setObjectName(QStringLiteral("TWCameraPages"));
-        TWCameraPages->setGeometry(QRect(10, 59, 720, 440));
+        TWCameraPages->setGeometry(QRect(10, 60, 720, 440));
         TWCameraPages->setStyleSheet(QLatin1String("QTabWidget::pane {\n"
 "color: rgb(213, 235, 255);\n"
 "border: 0px;\n"

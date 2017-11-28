@@ -4,6 +4,8 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	activeCameraCounter = 0;
+
 	this->loggedID = loggedID;
 	this->passHash = passHash;
 	//Get username by loggedID
@@ -304,7 +306,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 		cameraThread->insert(std::pair<int, MainAppCamera*>(cameraID, new MainAppCamera(imgProc, cameraID, this)));
 
 		QPushButton* btn = new QPushButton();
-		btn->setStyleSheet("background-image: url(:/Resources/Images/unavailablePreview.png); color: transparent;");
+		btn->setStyleSheet("background-image: url(:/Resources/Images/previewNotAvailableSmall.png);");
 		btn->setFixedSize(216, 123);
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setIconSize(QSize(216, 123));
@@ -344,8 +346,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/snapshot.png); border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/snapshotHover.png);}");
 		btn->setToolTip("Take a picture (disabled)");
-		btn->setEnabled(false);
-		connect(btn, SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
 		layout->addWidget(btn, 2, 1);
 
 		btn = new QPushButton();
@@ -353,7 +353,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/edit.png);border: none; margin: 0px; padding: 0px;} QPushButton:hover{background-image: url(:/Resources/Images/editHover.png);}");
 		btn->setToolTip("Edit camera");
-		connect(btn, &QPushButton::clicked, this, [this, cameraID, label] {EditCamera(cameraID, label); });
+		connect(btn, &QPushButton::clicked, this, [this, cameraID, label, layout] {EditCamera(cameraID, label, (QPushButton*)layout->itemAtPosition(2, 0)->widget()); });
 		layout->addWidget(btn, 2, 3);
 
 		btn = new QPushButton();
@@ -415,7 +415,7 @@ void MainApp::AddTab()
 void MainApp::CameraSelected(QGridLayout* layout)
 {
 	int cameraID = getCameraIDFromLayout(layout);
-	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), cameraID, cameraThread->at(cameraID), passHash);
+	CameraPreview *cameraPreview = new CameraPreview(this, ((QLabel *)layout->itemAtPosition(1, 0)->widget())->text(), (QPushButton *)layout->itemAtPosition(2, 0)->widget(), (QPushButton *)layout->itemAtPosition(2, 2)->widget(), (QPushButton *)layout->itemAtPosition(2, 1)->widget(), cameraID, cameraThread, passHash);
 	connect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
 	cameraThread->at(cameraID)->SetSendBigPicture(true);
 	cameraPreview->exec();
@@ -454,25 +454,29 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 			if (getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j)) == cameraID)
 			{
 				((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(0, 0)->widget())->setIcon(QIcon(pixmap));
-				break;
+				return;
 			}
 		}
 	}
 }
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
-	int number = ui.LEnabledNumber->text().split(" ").last().split("/").first().toInt();
 	int cameraID = getCameraIDFromLayout(layout);
 
 	QPushButton *button = (QPushButton*)layout->itemAtPosition(2, 0)->widget();
 
 	if (button->text() == "Off")
 	{
-		if (number == QThread::idealThreadCount())
+		if (activeCameraCounter == QThread::idealThreadCount())
 		{
 			Utilities::MBAlarm("You can't run more cameras simultaneously!", false);
 			return;
 		}
+
+		bool result = false;
+
+		layout->itemAtPosition(0, 0)->widget()->setStyleSheet("background-image: url(:/Resources/Images/ConnectingSmall.png);");
+		QCoreApplication::processEvents();
 		/*Face recognition*/
 
 		//Set state of face recognition module
@@ -515,37 +519,52 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 						cameraThread->at(cameraID)->start();
 						connect(cameraThread->at(cameraID), SIGNAL(updateThumbnail(const QPixmap&, int)), this, SLOT(UpdateThumbnail(const QPixmap&, int)));
 	
-						//layout->itemAtPosition(0, 0)->widget()->setStyleSheet("color: transparent;");
 						button->setText("On");
 						button->setToolTip("Stop monitoring camera");
 						button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
 						layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture");
-						layout->itemAtPosition(2, 1)->widget()->setEnabled(true);
-						number += 1;
-
+						connect(layout->itemAtPosition(2, 1)->widget(), SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
+						activeCameraCounter += 1;
+						result = true;
 					}
 				}
 			}
+		}
+		if (result != true)
+		{
+			Utilities::MBAlarm("Cannot connect to this camera. Check camera details and try again", false);
+			layout->itemAtPosition(0, 0)->widget()->setStyleSheet("background-image: url(:/Resources/Images/previewNotAvailableSmall.png);");
 		}
 	}
 	else
 	{
 		cameraThread->at(cameraID)->SetSendBigPicture(false);
 		cameraThread->at(cameraID)->SetSendThumbnail(false);
+
 		button->setText("Off");
 		button->setToolTip("Start monitoring camera");
 		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
 		layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture (disabled)");
-		layout->itemAtPosition(2, 1)->widget()->setEnabled(false);
-		number -= 1;
+		disconnect(layout->itemAtPosition(2, 1)->widget(), SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
+		activeCameraCounter -= 1;
 		/*Face recognition*/
+
 		//Stop thread
 		cameraThread->at(cameraID)->StopThread();
 		cameraThread->at(cameraID)->quit();//equivalent to exit(0==success)
 		cameraThread->at(cameraID)->wait();
+		QCoreApplication::processEvents();
+		delete cameraThread->at(cameraID);
+		cameraThread->at(cameraID) = new MainAppCamera(imgProc, cameraID, this);
+		if (((QPushButton*)layout->itemAtPosition(2, 2)->widget())->text() == "On")
+		{
+			RecognitionCamera((QPushButton*)layout->itemAtPosition(2, 2)->widget(), cameraID);
+		}
+		layout->itemAtPosition(0, 0)->widget()->setStyleSheet("background-image: url(:/Resources/Images/previewNotAvailableSmall.png);");
+		((QPushButton*)layout->itemAtPosition(0, 0)->widget())->setIcon(QIcon());
 	}
 
-	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(number).toString() + "/" + QVariant(QThread::idealThreadCount()).toString());
+	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(activeCameraCounter).toString() + "/" + QVariant(QThread::idealThreadCount()).toString());
 }
 void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
@@ -562,7 +581,7 @@ void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}
 }
-void MainApp::EditCamera(int cameraID, QLabel *label)
+void MainApp::EditCamera(int cameraID, QLabel *label, QPushButton *onOffButton)
 {
 	CameraEdition *cameraEdition = new CameraEdition(this, loggedID, cameraID, passHash);
 	bool result = cameraEdition->exec();
@@ -595,6 +614,11 @@ void MainApp::EditCamera(int cameraID, QLabel *label)
 		{
 			label->setText(controlsValues->at(0) + " (" + controlsValues->at(1) + ")");
 		}
+		if (cameraThread->at(cameraID)->isRunning() == true && onOffButton != nullptr)
+		{
+			onOffButton->click();
+			onOffButton->click();
+		}
 	}
 	delete cameraEdition;
 }
@@ -606,7 +630,7 @@ void MainApp::OpenCameraEdit(int cameraID)
 		{
 			if (getCameraIDFromLayout(lt) == cameraID)
 			{
-				EditCamera(cameraID, (QLabel*)lt->itemAtPosition(1, 0)->widget());
+				EditCamera(cameraID, (QLabel*)lt->itemAtPosition(1, 0)->widget(), nullptr);
 				emit closeCameraEdit(((QLabel*)lt->itemAtPosition(1, 0)->widget())->text());
 				return;
 			}

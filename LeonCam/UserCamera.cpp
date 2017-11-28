@@ -12,7 +12,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	designB->SetGifInLabel(ui.Lloading);
 	//Signals and slots
 	connect(ui.PBAdd, SIGNAL(clicked()), this, SLOT(AddClicked()));
-	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();	});
+	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();});
 	this->userID = userID;
 	watcher = nullptr;
 	SearchForCameraIPs();
@@ -84,33 +84,34 @@ std::vector<QString>* UserCamera::GetValuesFromControls()
 void UserCamera::AddClicked() 
 {	
 	designB->gif->start();
-	resultMsg = "";
+	Utilities::resultMsg = "";
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	connect(watcher, &QFutureWatcher<void>::finished, this, [this]
 	{
-		if (resultMsg == "")
+		if (Utilities::resultMsg == "")
 		{
 			this->done(QDialog::Accepted);
 		}
 		else
 		{
-			Utilities::MBAlarm(QString::fromStdString(resultMsg), false);
+			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
 		}
 		designB->gif->stop();
+		Utilities::resultMsg = "";
 	});
 	*future = QtConcurrent::run([=]()
 	{
 		if (ui.LEDescripton->text() == "" || ui.CBAvailableCameras->currentText() == "" || ui.LELogin->text() == "" || ui.LEPassword->text() == "")
 		{
-			resultMsg = "At least one field is incomplete";
+			Utilities::resultMsg = "At least one field is incomplete";
 			return;
 		}
 
 		std::regex IPv4AddressPattern("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})?$");
 		if (std::regex_match(ui.CBAvailableCameras->currentText().toStdString(), IPv4AddressPattern) == false)
 		{
-			resultMsg = "IPv4 address incompatible format";
+			Utilities::resultMsg = "IPv4 address incompatible format";
 			return;
 		}
 
@@ -124,7 +125,7 @@ void UserCamera::AddClicked()
 			int counter = query.value(0).toInt();
 			if (counter > 0)
 			{
-				resultMsg = "This name is occupied by your another camera. Please type another one";
+				Utilities::resultMsg = "This name is occupied by your another camera. Please type another one";
 				return;
 			}
 		}

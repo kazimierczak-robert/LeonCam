@@ -372,19 +372,6 @@ QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="Lloading">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>200</y>
-     <width>61</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>

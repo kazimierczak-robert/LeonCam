@@ -5,7 +5,6 @@
         <file>Resources/Images/bulbHover.png</file>
         <file>Resources/loading4.gif</file>
         <file>Resources/Images/backgroundMain.png</file>
-        <file>Resources/Images/unavailablePreview.png</file>
         <file>Resources/Images/logo.ico</file>
         <file>Resources/Images/home.png</file>
         <file>Resources/Images/homeHover.png</file>
@@ -34,11 +33,15 @@
         <file>Resources/Images/goToPresetHover.png</file>
         <file>Resources/Images/savePreset.png</file>
         <file>Resources/Images/savePresetHover.png</file>
-		    <file>Resources/Images/logout.png</file>
-		    <file>Resources/Images/logoutHover.png</file>
+        <file>Resources/Images/logout.png</file>
+        <file>Resources/Images/logoutHover.png</file>
         <file>Resources/Images/folder.png</file>
         <file>Resources/Images/folderHover.png</file>
         <file>Resources/Images/movie.png</file>
-       <file>Resources/Images/movieHover.png</file>
+        <file>Resources/Images/movieHover.png</file>
+        <file>Resources/Images/Connecting.png</file>
+        <file>Resources/Images/ConnectingSmall.png</file>
+        <file>Resources/Images/previewNotAvailable.png</file>
+        <file>Resources/Images/previewNotAvailableSmall.png</file>
     </qresource>
 </RCC>

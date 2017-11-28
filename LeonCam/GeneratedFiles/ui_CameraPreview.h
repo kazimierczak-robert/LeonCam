@@ -40,7 +40,6 @@ public:
     QPushButton *PBBack;
     QPushButton *PBCameraOnOff;
     QPushButton *PBGoToPreset;
-    QLabel *Lloading;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
 
@@ -182,9 +181,6 @@ public:
         PBGoToPreset->setStyleSheet(QLatin1String("QPushButton{background-image: url(:/Resources/Images/goToPreset.png);border: none; margin: 0px; padding: 0px;}\n"
 "QPushButton:hover{background-image: url(:/Resources/Images/goToPresetHover.png);}"));
         PBGoToPreset->setFlat(true);
-        Lloading = new QLabel(CameraPreview);
-        Lloading->setObjectName(QStringLiteral("Lloading"));
-        Lloading->setGeometry(QRect(370, 200, 61, 61));
         verticalLayoutWidget = new QWidget(CameraPreview);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(80, 70, 641, 361));
@@ -257,7 +253,6 @@ public:
         PBGoToPreset->setToolTip(QApplication::translate("CameraPreview", "Go to selected preset", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBGoToPreset->setText(QString());
-        Lloading->setText(QString());
     } // retranslateUi
 
 };

@@ -26,7 +26,6 @@ private:
 	int userID;
 	int cameraID;
 	std::string passHash;
-	std::string result;
 	QFuture<void> *future;
 	QFutureWatcher<void> *watcher;
 };
