@@ -17,8 +17,8 @@ public:
 	~CVImageWidget() {}
 	QSize SizeHint () const;
 	QSize MinimumSizeHint() const;
-public slots :
-void ShowImage(const cv::Mat& image);
+public slots:
+	void ShowImage(const cv::Mat& image);
 protected:
 	void paintEvent(QPaintEvent* /*event*/);
 };

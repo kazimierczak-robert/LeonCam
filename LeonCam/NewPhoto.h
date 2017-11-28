@@ -6,7 +6,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp> 
 #include "opencv2/contrib/contrib.hpp"
-
 #include <QFuture> 
 #include <QtConcurrent\qtconcurrentrun.h>
 #include "qsqlquery.h"
@@ -18,7 +17,6 @@
 #include "MainAppCamera.h"
 #include <QCloseEvent>
 #include "CVImageWidget.h"
-
 #include <qfuture.h>
 #include <QtConcurrent\qtconcurrentrun.h>
 #include <qfuturewatcher.h>
@@ -47,7 +45,7 @@ private:
 	ImgProc *imgProc = nullptr;
 	map<int, MainAppCamera *> *cameraThread;
 	// Create the image widget
-	CVImageWidget* imageWidget;
+	CVImageWidget* imageWidget = nullptr;
 	void CurrentIndexChanged(std::string passHash);
 	void NewPhoto::FillPtzAndProfileToken(std::string passHash);
 	void GetCamerasInfo(int loggedID, std::vector<int> cameraIDs);

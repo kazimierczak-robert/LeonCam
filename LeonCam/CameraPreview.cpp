@@ -23,11 +23,8 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	connect(ui.PBCameraOnOff, SIGNAL(clicked()), this, SLOT(TurnOnOffCamera()));
 	connect(ui.PBRecognize, SIGNAL(clicked()), this, SLOT(TurnOnOffRecognizeMode()));
-
 	connect(ui.PBBack, &QPushButton::clicked, this, [this] {this->close();	});
-
 	connect(ui.PBEdit, &QPushButton::clicked, this, [this, cameraID] {emit openCameraEdit(cameraID); });
-
 	connect(ui.PBLeft, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(-0.2, 0.0); });
 	connect(ui.PBRight, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(0.2, 0.0); });
 	connect(ui.PBUp, &QPushButton::pressed, this, [this] {ctrl->MoveCamera(0.0, 0.2); });
@@ -39,7 +36,6 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	connect(ui.PBDown, &QPushButton::released, this, [this] {ctrl->StopCamera(); });
 
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {ctrl->GoHomeCamera(); });
-
 	connect(ui.PBSnapshot, &QPushButton::clicked, this, [this, buttonTakePhotoFromParent] {buttonTakePhotoFromParent->click(); });
 
 	imageWidget = new CVImageWidget();
@@ -48,8 +44,6 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 
 	//connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
-
-
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
 
@@ -95,6 +89,10 @@ CameraPreview::~CameraPreview()
 	if (ctrl != nullptr)
 	{
 		delete ctrl;
+	}
+	if (imageWidget != nullptr)
+	{
+		delete imageWidget;
 	}
 }
 void CameraPreview::TurnOnLabels()
@@ -156,6 +154,7 @@ bool CameraPreview::SetProfileTokenAndPTZ()
 			}
 		}
 	}
+	Utilities::MBAlarm("Cannot connect to this camera. Check camera details and try again", false);
 	return false;
 }
 void CameraPreview::TurnOffLabels()
@@ -190,6 +189,7 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 		imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\connecting.png"));
 		if (SetProfileTokenAndPTZ())
 		{
+
 			TurnOnOffCamera();
 		}
 		else

@@ -25,13 +25,13 @@ public:
 	~LogIn();
 	static void UpdateAttempts(int loginAttemptCounter, QString username);
 	static void UpdateCounter(QString username);
-	private slots:
+private slots:
 	void LogInClicked();
 	void ForgotPasswordClicked();
 	void NewProfileClicked();
 private:
 	Ui::LogInClass ui;
-	DesignBase *designB;
+	DesignBase *designB = nullptr;
 	QFuture<void> *future;
 	QFutureWatcher<void> *watcher;
 	int loggedID;

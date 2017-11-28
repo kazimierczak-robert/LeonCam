@@ -7,7 +7,6 @@
 #include "qsystemtrayicon.h"
 #include "qsqlquery.h"
 #include <cstdlib>
-
 #include <qfuture.h>
 #include <QtConcurrent\qtconcurrentrun.h>
 #include <qfuturewatcher.h>

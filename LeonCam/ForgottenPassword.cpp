@@ -4,6 +4,7 @@ ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
+	designB = nullptr;
 	//Create DesignB instance
 	designB = new DesignBase(this);
 	//Set gif in Lloading label
@@ -17,7 +18,10 @@ ForgottenPassword::ForgottenPassword(QWidget *parent, QString username)
 }
 ForgottenPassword::~ForgottenPassword()
 {
-	delete designB;
+	if (designB != nullptr)
+	{
+		delete designB;
+	}
 	if (watcher != nullptr)
 	{
 		watcher->waitForFinished();
@@ -53,7 +57,7 @@ void ForgottenPassword::VerifyClicked()
 	{
 		if (Utilities::resultMsg == "")
 		{
-			Utilities::ChangePasswordBox("You should copy the password to the clipboard, then go to the Settings tab and change it!", passwordFromMap);
+			Utilities::ChangePasswordBox("You should copy the password to the clipboard, then go to the <i> Settings </i> tab and change it!", passwordFromMap);
 			this->done(QDialog::Accepted);
 		}
 		else

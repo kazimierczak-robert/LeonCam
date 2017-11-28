@@ -19,17 +19,16 @@ CameraEdition::CameraEdition(QWidget *parent, int userID, int cameraID, std::str
 	future = nullptr;
 	watcher = nullptr;
 
-	QSqlQuery *query = new QSqlQuery();
-	query->prepare("SELECT Name, IPAddress, Login FROM Cameras WHERE CameraID=?");
-	query->bindValue(0, cameraID);
-	if (query->exec() == true)
+	QSqlQuery query;
+	query.prepare("SELECT Name, IPAddress, Login FROM Cameras WHERE CameraID=?");
+	query.bindValue(0, cameraID);
+	if (query.exec() == true)
 	{
-		query->next();
-		ui.LEDescripton->setText(query->value(0).toString());
-		ui.LEIPv4Address->setText(query->value(1).toString());
-		ui.LELogin->setText(query->value(2).toString());
+		query.next();
+		ui.LEDescripton->setText(query.value(0).toString());
+		ui.LEIPv4Address->setText(query.value(1).toString());
+		ui.LELogin->setText(query.value(2).toString());
 	}
-	delete query;
 }
 CameraEdition::~CameraEdition()
 {

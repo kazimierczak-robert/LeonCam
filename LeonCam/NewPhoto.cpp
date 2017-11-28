@@ -6,14 +6,9 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	this->loggedID = loggedID;
 	this->imgProc = imgProc;
 	this->cameraThread = cameraThread;
-	/*imgProc = new ImgProc();*/
-	/*imgProc->LoadFaceCascade();*/
 	ui.setupUi(this);
 	this->setWindowTitle(name + " " + surname +" (ID: " + (QVariant(faceID)).toString() + ") - LeonCam");
-//	capThread = new CapturingFrame(this);
-
 	connect(ui.PBBack, SIGNAL(clicked()), this, SLOT(BackButtonClicked()));
-
 	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(faceID).toString()); });
 	GetCamerasInfo(loggedID, cameraIDs);
 	currentCameraID = ui.CBPresets->currentData().toInt();
@@ -62,6 +57,10 @@ NewPhoto::~NewPhoto()
 	if (cameraControl != nullptr)
 	{
 		delete cameraControl;
+	}
+	if (imageWidget != nullptr)
+	{
+		delete imageWidget;
 	}
 
 }

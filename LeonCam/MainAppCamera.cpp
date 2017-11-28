@@ -17,8 +17,24 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 }
 MainAppCamera::~MainAppCamera()
 {
+	if (greenAlertList != nullptr)
+	{
+		delete greenAlertList;
+	}
+	if (redAlert != nullptr)
+	{
+		delete redAlert;
+	}
+	if (greenTimer != nullptr)
+	{
+		delete greenTimer;
+	}
+	if (redTimer != nullptr)
+	{
+		delete redTimer;
+	}
 }
-void MainAppCamera::SetStreamURI(std::string streamURI) //OK
+void MainAppCamera::SetStreamURI(std::string streamURI)
 {
 	this->streamURI = streamURI;
 }
@@ -137,10 +153,10 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 					emit insertGreenAlert(query.value(0).toInt(), faceID, cameraID, dateTimeNow);
 				}
 			}
-			else
-			{
-				//TODO
-			}
+			//else
+			//{
+			//	
+			//}
 		}
 	}
 }
@@ -348,9 +364,7 @@ void MainAppCamera::Process()
 						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
 						//rectangle
 						
-						{
-							imgProc->getFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
-						}
+						imgProc->GetFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
 						for (int i = 0; i < faces.size(); i++)
 						{
 							//Get rect to crop

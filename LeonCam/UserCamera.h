@@ -23,7 +23,7 @@ private slots:
 	void AddClicked();
 private:
 	Ui::UserCamera ui;
-	DesignBase *designB;
+	DesignBase *designB = nullptr;
 	int userID;
 	void SearchForCameraIPs();
 	QFuture<void> *future;

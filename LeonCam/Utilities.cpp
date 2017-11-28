@@ -30,7 +30,7 @@ bool Utilities::MBQuestion(QString message)
 }
 void Utilities::ChangePasswordBox(QString message, QString password)
 {
-	////http://doc.qt.io/qt-4.8/qmessagebox.html
+	//http://doc.qt.io/qt-4.8/qmessagebox.html
 	QMessageBox msgBox;
 	QPixmap pixmap(iconPath);
 	QIcon buttonIcon(pixmap);

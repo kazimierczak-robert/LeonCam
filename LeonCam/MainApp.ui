@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -367,9 +367,9 @@ QHeaderView::section
      <widget class="QLineEdit" name="LESearchFB">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>35</x>
         <y>70</y>
-        <width>681</width>
+        <width>676</width>
         <height>23</height>
        </rect>
       </property>
@@ -379,13 +379,13 @@ padding-left: 22px;
 border-radius: 11px;</string>
       </property>
       <property name="placeholderText">
-       <string>  Search person by Surname</string>
+       <string>Search person by Surname</string>
       </property>
      </widget>
      <widget class="QLabel" name="LSearch_2">
       <property name="geometry">
        <rect>
-        <x>29</x>
+        <x>30</x>
         <y>70</y>
         <width>23</width>
         <height>23</height>

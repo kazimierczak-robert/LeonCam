@@ -10,7 +10,6 @@
 #include <QVariant>
 #include <QDir>
 #include <QUrl>
-
 #include <openssl/conf.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
@@ -18,8 +17,6 @@
 #include  <QInputDialog>
 #include <QLineEdit>
 #include  <QLayout>
-
-
 
 #define iconPath ":/Resources/Images/logo.ico"
 typedef unsigned char BYTE;// 8-bit byte
@@ -31,7 +28,6 @@ public:
 	~Utilities();
 	static void MBAlarm(QString alarm, bool errorOrSuccess);
 	static QString GetCurrentDateTime();
-
 	static bool SaveToBinFile(std::string fileName, BYTE *data);
 	static BYTE *ReadFromBinFile(std::string fileName);
 	static int BinFileElementsNo(std::string fileName);
@@ -41,7 +37,6 @@ public:
 	static void OpenFileExplorer(QString path);
 	static void CreateFolderIfNotExists(QString path);
 	static void RemoveFolderRecursively(QString path);
-
 	static int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
 		unsigned char *iv, unsigned char *plaintext);
 	static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,

@@ -33,16 +33,12 @@ public:
 	void SetFPS(int fps) { this->cameraFPS = fps; }
 	void SetSendBigPicture(bool setting);
 	void SetSendThumbnail(bool setting);
-	QTimer *greenTimer;
-	QTimer *redTimer;
+	QTimer *greenTimer = nullptr;
+	QTimer *redTimer = nullptr;
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
 signals:
 	void updateImage(const cv::Mat& image);
-//private slots:
-//	void UpdateGreenAlerts();
-//	void UpdateRedAlerts();
-
 private:
 	struct GreenAlert
 	{
@@ -69,7 +65,7 @@ private:
 	cv::VideoCapture vcap;
 	cv::VideoWriter videowriter;
 	cv::Mat img;
-	std::list<GreenAlert> *greenAlertList;
+	std::list<GreenAlert> *greenAlertList = nullptr;
 	RedAlert *redAlert = nullptr;
 	int cameraFPS;
 	QPushButton *faceRecognitionPB;

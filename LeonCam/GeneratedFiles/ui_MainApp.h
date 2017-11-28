@@ -255,13 +255,13 @@ public:
         TWFacesBase->verticalHeader()->setHighlightSections(false);
         LESearchFB = new QLineEdit(TFacesBase);
         LESearchFB->setObjectName(QStringLiteral("LESearchFB"));
-        LESearchFB->setGeometry(QRect(30, 70, 681, 23));
+        LESearchFB->setGeometry(QRect(35, 70, 676, 23));
         LESearchFB->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "padding-left: 22px;\n"
 "border-radius: 11px;"));
         LSearch_2 = new QLabel(TFacesBase);
         LSearch_2->setObjectName(QStringLiteral("LSearch_2"));
-        LSearch_2->setGeometry(QRect(29, 70, 23, 23));
+        LSearch_2->setGeometry(QRect(30, 70, 23, 23));
         LSearch_2->setStyleSheet(QStringLiteral("background-image: url(:/Resources/Images/search.png); border: none; margin: 0px; padding: 0px;"));
         LEUsername = new QLineEdit(TFacesBase);
         LEUsername->setObjectName(QStringLiteral("LEUsername"));
@@ -616,7 +616,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(1);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -647,7 +647,7 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("MainApp", "Edit", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem6 = TWFacesBase->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("MainApp", "Delete", Q_NULLPTR));
-        LESearchFB->setPlaceholderText(QApplication::translate("MainApp", "  Search person by Surname", Q_NULLPTR));
+        LESearchFB->setPlaceholderText(QApplication::translate("MainApp", "Search person by Surname", Q_NULLPTR));
         LSearch_2->setText(QString());
         LEUsername->setPlaceholderText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
         LESurname->setPlaceholderText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));

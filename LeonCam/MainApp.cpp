@@ -392,10 +392,10 @@ void MainApp::AddCameraFromDB(int cameraID)
 
 		ui.LTotalNumber->setText("Total number of cameras: " + QString::number((vectorQGridLayouts->size() - 1) * 6 + vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size()));
 	}
-	else
-	{
-		//TODO
-	}
+	//else
+	//{
+	//	
+	//}
 }
 void MainApp::AddTab()
 {
@@ -1395,6 +1395,8 @@ void MainApp::AddPerson()
 			if (faceID>0)
 			{ 
 				AddRowToFB(faceID, name, surname);
+				ui.LEUsername->setText("");
+				ui.LESurname->setText("");
 			}
 		}
 		else
@@ -2130,7 +2132,7 @@ void MainApp::ChangeLogin()
 					query.exec("COMMIT");
 					if (result)
 					{
-						Utilities::MBAlarm("Your login was changed succesfully. Please log in again", true);
+						Utilities::MBAlarm("Your login has been changed succesfully. Please log in again", true);
 						ui.PBLogout->click();
 					}
 					else
@@ -2231,7 +2233,7 @@ void MainApp::ChangePassword()
 						query.exec("COMMIT");
 						if (result)
 						{
-							Utilities::MBAlarm("Your password was changed succesfully. Please log in again", true);
+							Utilities::MBAlarm("Your password has been changed succesfully. Please log in again", true);
 							ui.PBLogout->click();
 						}
 						else
@@ -2296,7 +2298,7 @@ void MainApp::DeleteProfile()
 						}
 					}
 
-					Utilities::MBAlarm("Your profile was deleted succesfully.", true);
+					Utilities::MBAlarm("Your profile has been deleted succesfully.", true);
 					ui.PBLogout->click();
 				}
 				else
@@ -2348,7 +2350,7 @@ void MainApp::ChangeSecurityQuestion()
 				query.exec("COMMIT");
 				if (result)
 				{
-					Utilities::MBAlarm("Your security question was changed succesfully. Please log in again", true);
+					Utilities::MBAlarm("Your security question has been changed succesfully. Please log in again", true);
 					ui.PBLogout->click();
 				}
 				else

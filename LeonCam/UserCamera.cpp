@@ -19,7 +19,10 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 }
 UserCamera::~UserCamera()
 {
-	delete designB;
+	if (designB != nullptr)
+	{
+		delete designB;
+	}
 	if (watcher != nullptr)
 	{
 		watcher->waitForFinished();

@@ -127,6 +127,4 @@ private:
 	void CurrentIndexChanged();
 	int GetChartRange();
 	void StatisticsChart();
-public:
-	MainAppCamera* getThreadByCameraID(int cameraID) { return cameraThread->at(cameraID); }
 };

@@ -71,8 +71,7 @@ bool DataBase::CreateAlertsDeleteSettings()
 	{
 		query.clear();
 		query.prepare("SELECT COUNT(*) FROM AlertsDeleteSettings");
-		query.exec();
-		result = query.isActive();
+		result = query.exec();
 
 		query.next();
 		int queryResult = query.value(0).toInt();
@@ -153,6 +152,5 @@ bool DataBase::CreateDB()
 
 	}
 	dataBase.removeDatabase("QSQLITE"); //Removes the DB connection [connectionName] from the list of database connections
-	return creationResult;
-	
+	return creationResult;	
 }

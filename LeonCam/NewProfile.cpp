@@ -15,7 +15,10 @@ NewProfile::NewProfile(QWidget *parent)
 }
 NewProfile::~NewProfile()
 {
-	delete designB;
+	if (designB != nullptr)
+	{
+		delete designB;
+	}
 	if (watcher != nullptr)
 	{
 		watcher->waitForFinished();

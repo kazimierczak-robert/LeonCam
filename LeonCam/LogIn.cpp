@@ -18,7 +18,10 @@ LogIn::LogIn(QWidget *parent)
 }
 LogIn::~LogIn()
 {
-	delete designB;
+	if (designB != nullptr)
+	{
+		delete designB;
+	}
 	if (watcher != nullptr)
 	{
 		watcher->waitForFinished();

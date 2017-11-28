@@ -9,8 +9,8 @@
 #include "Utilities.h"
 #include <qsqlquery.h>
 #include <iterator>
+
 #define trainedFaceRecognizerFilePath "TrainedFaceRecognizer.xml"
-#define corpFilePath "corp.csv"
 //".\\opencv\\data\\haarcascades\\haarcascade_frontalface_alt.xml"
 #define faceCascadeFilePath ".\\opencv\\data\\lbpcascades\\lbpcascade_frontalface.xml"
 
@@ -24,7 +24,7 @@ public:
 	bool CheckIfFaceCascadeLoaded();
 	void LoadFaceCascade();
 	void TrainFaceRecognizer();
-	cv::CascadeClassifier getFaceCascade() { return faceCascade; }
+	cv::CascadeClassifier GetFaceCascade() { return faceCascade; }
 	int PredictPerson(cv::Mat matImg);
 	bool CheckIfModelTrained() {return isModelTrained;}
 	std::vector<cv::Mat> GetImages() { return images; }

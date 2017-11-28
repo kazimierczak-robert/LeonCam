@@ -31,9 +31,6 @@ public slots:
 private:
 	// Create the image widget
 	CVImageWidget* imageWidget;
-
-	QWidget* parentMainApp;
-
 	Ui::CameraPreview ui;
 	QPushButton *buttonIsEnabledFromParent;
 	QPushButton *buttonRecognationFromParent;
