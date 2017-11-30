@@ -13,7 +13,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <QTDIR>C:\Qt\Qt5.9.1\5.9.1\msvc2017_64\</QTDIR>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b opencv\x64\vc14\bin%3b$(PATH)</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bopencv\x64\vc14\bin%3bopenssl-win64\lib%3b$(PATH)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

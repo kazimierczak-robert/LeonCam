@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -442,7 +442,8 @@ border-radius: 11px;</string>
       <property name="styleSheet">
        <string notr="true">#PBAddPerson{
 color: rgb(255, 255, 255);
-background-color:rgb(36, 118, 59)}
+background-color:rgb(36, 118, 59);
+}
 #PBAddPerson:hover
 {
 background-color: rgb(39, 129, 63);

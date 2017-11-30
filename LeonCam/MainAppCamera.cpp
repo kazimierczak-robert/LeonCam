@@ -337,6 +337,10 @@ void MainAppCamera::Process()
 	cv::Mat imgGray;
 	cv::Mat imgCropped;
 	std::vector<cv::Rect> faces;
+	QPixmap pixmapWithRedBorder;
+	QPainter qPainter;
+	QPen pen(Qt::red);
+	pen.setWidth(2);
 	while (isWorking)
 	{
 		if (vcap.read(img))
@@ -417,8 +421,19 @@ void MainAppCamera::Process()
 			if (frameID % 2 == 0 && sendThumbnail)
 			{
 				cv::resize(imgGray, imgGray, cv::Size(thumbnailWidth, thumbnailHeight));
+				pixmapWithRedBorder = QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8));
+				//There is an alert add red border
+				if (redAlert->redAlertID != -1)
+				{
+					qPainter.begin(&pixmapWithRedBorder);
+					qPainter.setBrush(Qt::NoBrush);
+					qPainter.setPen(pen);
+					qPainter.drawRect(1, 1, thumbnailWidth - 2, thumbnailHeight - 2);
+					qPainter.end();
+					//cv::rectangle(imgGray, cv::Point(0, 0), cv::Point(thumbnailWidth-1, thumbnailHeight-1), cv::Scalar(255, 0, 0), 1, 8, 0);
+				}
 				//View on thumbnail
-				emit updateThumbnail(QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8)), cameraID);
+				emit updateThumbnail(pixmapWithRedBorder, cameraID);
 			}
 			if (frameID % 2 == 0)
 			{

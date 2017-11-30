@@ -154,7 +154,7 @@ bool CameraPreview::SetProfileTokenAndPTZ()
 			}
 		}
 	}
-	Utilities::MBAlarm("Cannot connect to this camera. Check camera details and try again", false);
+	Utilities::MBAlarm("Cannot connect to this camera. Check camera details and your local network connection, then try again", false);
 	return false;
 }
 void CameraPreview::TurnOffLabels()

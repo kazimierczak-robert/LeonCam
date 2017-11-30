@@ -532,7 +532,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 		}
 		if (result != true)
 		{
-			Utilities::MBAlarm("Cannot connect to this camera. Check camera details and try again", false);
+			Utilities::MBAlarm("Cannot connect to this camera. Check camera details and your local network connection, then try again", false);
 			layout->itemAtPosition(0, 0)->widget()->setStyleSheet("background-image: url(:/Resources/Images/previewNotAvailableSmall.png);");
 		}
 	}
@@ -793,8 +793,8 @@ void MainApp::LESearchChanged()
 		{
 			if (((QLabel *)oneLayout->itemAtPosition(1, 0)->widget())->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
 			{
-				activeCameraPage = i;
-				ui.TWCameraPages->setCurrentIndex(activeCameraPage);
+				//activeCameraPage = i;
+				ui.TWCameraPages->setCurrentIndex(i);
 				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 100, 100);");
 				loopBreak = true;
 			}
@@ -826,8 +826,8 @@ void MainApp::LESearchPressed()
 		{
 			if (((QLabel *)oneLayout->itemAtPosition(1, 0)->widget())->text().startsWith(ui.LESearch->text(), Qt::CaseInsensitive))
 			{
-				activeCameraPage = i;
-				ui.TWCameraPages->setCurrentIndex(activeCameraPage);
+				//activeCameraPage = i;
+				ui.TWCameraPages->setCurrentIndex(i);
 				oneLayout->itemAtPosition(1, 0)->widget()->setStyleSheet("color:rgb(255, 100, 100);");
 				loopBreak = true;
 			}
@@ -1941,6 +1941,19 @@ void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 		todayDateTime = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
 		int range = GetChartRange();
 		chart->axisY()->setRange(0, range);
+	}
+
+	for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+	{
+		for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+		{
+			if (getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j)) == cameraID)
+			{
+				//activeCameraPage = i;
+				ui.TWCameraPages->setCurrentIndex(i);
+				return;
+			}
+		}
 	}
 }
 void MainApp::UpdateGreenAlert(int greenAlertID, QString stopDate)

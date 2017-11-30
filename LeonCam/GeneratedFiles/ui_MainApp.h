@@ -276,7 +276,8 @@ public:
         PBAddPerson->setGeometry(QRect(450, 480, 81, 25));
         PBAddPerson->setStyleSheet(QLatin1String("#PBAddPerson{\n"
 "color: rgb(255, 255, 255);\n"
-"background-color:rgb(36, 118, 59)}\n"
+"background-color:rgb(36, 118, 59);\n"
+"}\n"
 "#PBAddPerson:hover\n"
 "{\n"
 "background-color: rgb(39, 129, 63);\n"
@@ -616,7 +617,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(1);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 

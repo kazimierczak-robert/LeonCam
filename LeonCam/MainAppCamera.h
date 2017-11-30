@@ -15,6 +15,7 @@
 #include "Utilities.h"
 #include <qpushbutton.h>
 #include <QMutex>
+#include <QPainter>
 
 #define thumbnailWidth 216
 #define thumbnailHeight 123
@@ -37,7 +38,6 @@ public:
 	QTimer *redTimer = nullptr;
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
-signals:
 	void updateImage(const cv::Mat& image);
 private:
 	struct GreenAlert
