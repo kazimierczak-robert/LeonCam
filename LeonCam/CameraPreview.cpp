@@ -42,7 +42,6 @@ CameraPreview::CameraPreview(QWidget *parent, QString cameraDetails, QPushButton
 	ui.verticalLayout->addWidget(imageWidget);
 	qRegisterMetaType< cv::Mat >("const cv::Mat&");
 
-	//connect(capThread, SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
 	connect(parent, SIGNAL(closeCameraEdit(const QString&)), this, SLOT(CloseCameraEdit(const QString&)));
 	/*_tptz__SetPresetResponse *res2 = new _tptz__SetPresetResponse();
 	ptz->SetPreset(*res2, profileToken);
@@ -189,7 +188,6 @@ void CameraPreview::CloseCameraEdit(const QString& cameraDetails)
 		imageWidget->ShowImage(cv::imread(".\\Resources\\Images\\connecting.png"));
 		if (SetProfileTokenAndPTZ())
 		{
-
 			TurnOnOffCamera();
 		}
 		else

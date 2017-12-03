@@ -34,7 +34,7 @@ class MainApp : public QMainWindow
 {
 	Q_OBJECT
 
-		enum chartOption
+	enum chartOption
 	{
 		week = 0,
 		day = 1,

@@ -12,8 +12,7 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	connect(ui.PBFolder, &QPushButton::clicked, this, [this, faceID] {Utilities::OpenFileExplorer(".\\FaceBase\\" + QVariant(faceID).toString()); });
 	GetCamerasInfo(loggedID, cameraIDs);
 	currentCameraID = ui.CBPresets->currentData().toInt();
-	//connect(ui.PBFolder, SIGNAL(clicked()), this, SLOT(OpenFileExplorer(ID)));
-	//future = QtConcurrent::run([=]() {CameraPreviewUpdate(cameraURIs); }); //run preview from camera
+
 	connect(ui.CBPresets, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		[=](int index) {CurrentIndexChanged(passHash); });
 
@@ -23,7 +22,7 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	ui.verticalLayout->addWidget(imageWidget);
 	qRegisterMetaType< cv::Mat >("const cv::Mat&");
 	connect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
-	//connect(cameraThread->at(currentCameraID), SIGNAL(updatePixmap(const QPixmap&)), this, SLOT(UpdatePixmap(const QPixmap&)));
+	
 	cameraThread->at(currentCameraID)->SetSendBigPicture(true);
 	FillPtzAndProfileToken(passHash);
 	//Camera control
@@ -43,13 +42,10 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 }
 NewPhoto::~NewPhoto()
 {
-	//Close thread
-	//if (capThread != nullptr)
-	//{
-	//	capThread->StopThread();
-	//	capThread->wait();
-	//	delete capThread;
-	//}
+	if (onvifDevice != nullptr)
+	{
+		delete onvifDevice;
+	}
 	if (ptz != nullptr)
 	{
 		delete ptz;
@@ -62,13 +58,11 @@ NewPhoto::~NewPhoto()
 	{
 		delete imageWidget;
 	}
-
 }
 //https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap/
 void NewPhoto::UpdateImage(const cv::Mat& image)
 {
 	disconnect(cameraThread->at(currentCameraID), SIGNAL(updateImage(const cv::Mat&)), this, SLOT(UpdateImage(const cv::Mat&)));
-	bool result = true;
 	//Detect face
 	cv::Mat tmpImage = image;
 	std::vector<cv::Rect> faces = imgProc->DetectFace(tmpImage);
@@ -164,10 +158,10 @@ void NewPhoto::FillPtzAndProfileToken(std::string passHash)
 		QString password = query.value(2).toString();
 
 		//Decrypt password
-		std::string DecPass = Utilities::GetDecrypted(passHash, password.toStdString());
+		std::string decPass = Utilities::GetDecrypted(passHash, password.toStdString());
 		//Get stream URI
 		std::string url = "http://" + iPAddress.toStdString() + "/onvif/device_service";
-		OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, login.toStdString(), DecPass);
+		onvifDevice = new OnvifClientDevice(url, login.toStdString(), decPass);
 		if (onvifDevice->GetCapabilities() == 0) 
 		{
 			OnvifClientMedia media(*onvifDevice);

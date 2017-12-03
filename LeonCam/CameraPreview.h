@@ -2,15 +2,15 @@
 
 #include <QDialog>
 #include "ui_CameraPreview.h"
-#include "onvifclientptz.hpp"
-#include "onvifclientmedia.hpp"
-#include "onvifclientdevice.hpp"
+#include "ONVIF\onvifclientptz.hpp"
+#include "ONVIF\onvifclientmedia.hpp"
+#include "ONVIF\onvifclientdevice.hpp"
 #include <QCloseEvent>
 #include "qsqlquery.h"
 #include "Utilities.h"
 #include "CameraControl.h"
 #include "MainAppCamera.h"
-#include <CVImageWidget.h>
+#include "CVImageWidget.h"
 #include "MainApp.h"
 
 class CameraPreview : public QDialog
@@ -18,7 +18,7 @@ class CameraPreview : public QDialog
 	Q_OBJECT
 
 public:
-	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QPushButton *buttonTakePhotoFromParent = nullptr, int cameraID = -1, /*MainAppCamera *thread = nullptr*/std::map<int, MainAppCamera *> *cameraThread = nullptr, std::string passHash = "");
+	CameraPreview(QWidget *parent = Q_NULLPTR, QString cameraDetails = "None", QPushButton *buttonIsEnabledFromParent=nullptr, QPushButton *buttonRecognationFromParent = nullptr, QPushButton *buttonTakePhotoFromParent = nullptr, int cameraID = -1, std::map<int, MainAppCamera *> *cameraThread = nullptr, std::string passHash = "");
 	~CameraPreview();
 signals:
 	void openCameraEdit(int cameraID);
@@ -39,7 +39,6 @@ private:
 	OnvifClientPTZ *ptz;
 	string profileToken;
 	std::map<int, MainAppCamera *> *cameraThread;
-	//MainAppCamera *capThread;
 	int cameraID;
 	CameraControl *ctrl;
 	std::string passHash;

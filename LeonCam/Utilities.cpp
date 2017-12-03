@@ -118,7 +118,6 @@ BYTE * Utilities::ReadFromBinFile(std::string fileName)
 	}
 	else
 	{
-		//std::cout << fileName << " is corrupted!" << std::endl;
 		return NULL;
 	}
 }
@@ -329,8 +328,7 @@ std::string Utilities::GetEncrypted(std::string yourHashKey, std::string msg)
 	OPENSSL_config(NULL);
 
 	/* Encrypt the plaintext */
-	ciphertext_len = encrypt(mesg, strlen((char *)mesg) + 1, hashKey, iv,
-		ciphertext);
+	ciphertext_len = encrypt(mesg, strlen((char *)mesg) + 1, hashKey, iv, ciphertext);
 
 	/* Clean up */
 	EVP_cleanup();
@@ -346,7 +344,6 @@ std::string Utilities::GetEncrypted(std::string yourHashKey, std::string msg)
 	}
 
 	//Convert ciphertext to string
-	//std::string ciphTmp(reinterpret_cast<char const*>(ciphertext));
 	unsigned char ciphTmp[172];
 	EVP_EncodeBlock((unsigned char *)ciphTmp, ciphertext, ciphertext_len);
 	std::string ciphTmps(reinterpret_cast<char const*>(ciphTmp));
@@ -380,7 +377,7 @@ std::string Utilities::GetDecrypted(std::string yourHashKey, std::string encMsg)
 	OPENSSL_config(NULL);
 
 	/* Decrypt the ciphertext */
-	decryptedtext_len = Utilities::decrypt(encMesg, strlen((char *)encMesg), hashKey, iv, decryptedtext);
+	decryptedtext_len = decrypt(encMesg, strlen((char *)encMesg), hashKey, iv, decryptedtext);
 
 	/* Clean up */
 	EVP_cleanup();
@@ -410,5 +407,5 @@ bool Utilities::NotEmptyFileExists(QString path)
 	bool sizeResult = fileSize == 0 ? false : true;
 	bool existsResult = file.exists();
 	bool isFileResult = file.isFile();
-	return  sizeResult && existsResult && isFileResult;
+	return sizeResult && existsResult && isFileResult;
 }

@@ -14,9 +14,9 @@
 #include <openssl/evp.h>
 #include <openssl/err.h>
 #include <string.h>
-#include  <QInputDialog>
+#include <QInputDialog>
 #include <QLineEdit>
-#include  <QLayout>
+#include <QLayout>
 
 #define iconPath ":/Resources/Images/logo.ico"
 typedef unsigned char BYTE;// 8-bit byte
@@ -41,8 +41,8 @@ public:
 		unsigned char *iv, unsigned char *plaintext);
 	static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
 		unsigned char *iv, unsigned char *ciphertext);
-	static std::string  GetEncrypted(std::string yourHashKey, std::string msg);
-	static std::string  GetDecrypted(std::string yourHashKey, std::string encMsg);
+	static std::string GetEncrypted(std::string yourHashKey, std::string msg);
+	static std::string GetDecrypted(std::string yourHashKey, std::string encMsg);
 	static bool Utilities::NotEmptyFileExists(QString path);
 	static void ChangePasswordBox(QString message, QString password);
 	static std::string resultMsg;

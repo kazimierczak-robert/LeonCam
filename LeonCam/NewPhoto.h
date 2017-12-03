@@ -9,9 +9,9 @@
 #include <QFuture> 
 #include <QtConcurrent\qtconcurrentrun.h>
 #include "qsqlquery.h"
-#include "onvifclientptz.hpp"
-#include "onvifclientmedia.hpp"
-#include "onvifclientdevice.hpp"
+#include "ONVIF\onvifclientptz.hpp"
+#include "ONVIF\onvifclientmedia.hpp"
+#include "ONVIF\onvifclientdevice.hpp"
 #include "CameraControl.h"
 #include "ImgProc.h"
 #include "MainAppCamera.h"
@@ -39,6 +39,7 @@ private:
 	int loggedID;
 	Ui::NewPhoto ui;
 	string profileToken;
+	OnvifClientDevice *onvifDevice = nullptr;
 	OnvifClientPTZ *ptz=nullptr;
 	cv::Mat matImg;
 	CameraControl *cameraControl = nullptr;

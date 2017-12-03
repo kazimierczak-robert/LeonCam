@@ -39,7 +39,6 @@ int main(int argc, char *argv[])
 	std::string decryptedMSG = Utilities::GetDecrypted("01234567890123456789012345678901", encryptedMsg);
 	*/
 	delete dataBase;
-	//
 
 	w.show();
 

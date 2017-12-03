@@ -11,10 +11,8 @@
 #include "qtimer.h"
 #include <iterator>
 #include <QCoreApplication>
-#include <qrunnable.h>
 #include "Utilities.h"
 #include <qpushbutton.h>
-#include <QMutex>
 #include <QPainter>
 
 #define thumbnailWidth 216
@@ -34,8 +32,6 @@ public:
 	void SetFPS(int fps) { this->cameraFPS = fps; }
 	void SetSendBigPicture(bool setting);
 	void SetSendThumbnail(bool setting);
-	QTimer *greenTimer = nullptr;
-	QTimer *redTimer = nullptr;
 signals:
 	void updateThumbnail(const QPixmap& pixmap, int cameraID);
 	void updateImage(const cv::Mat& image);
@@ -68,10 +64,9 @@ private:
 	std::list<GreenAlert> *greenAlertList = nullptr;
 	RedAlert *redAlert = nullptr;
 	int cameraFPS;
-	QPushButton *faceRecognitionPB;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
-	void stopRedAlert();
+	void StopRedAlert();
 public slots:
 	void UpdateGreenAlerts();
 	void UpdateRedAlerts();

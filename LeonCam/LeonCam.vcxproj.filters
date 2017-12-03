@@ -165,22 +165,10 @@
     <ClCompile Include="onvifgen\soapDeviceBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
-    <ClCompile Include="onvifgen\soapDeviceIOBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapDeviceIOBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
     <ClCompile Include="onvifgen\soapDiscoveryLookupBindingProxy.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="onvifgen\soapDiscoveryLookupBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapImagingBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapImagingBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="onvifgen\soapMediaBindingProxy.cpp">
@@ -193,12 +181,6 @@
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="onvifgen\soapPTZBindingService.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapRemoteDiscoveryBindingProxy.cpp">
-      <Filter>onvifgen</Filter>
-    </ClCompile>
-    <ClCompile Include="onvifgen\soapRemoteDiscoveryBindingService.cpp">
       <Filter>onvifgen</Filter>
     </ClCompile>
     <ClCompile Include="CameraControl.cpp">
@@ -346,12 +328,6 @@
     <ClInclude Include="onvifgen\soapDeviceBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapDeviceIOBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapDeviceIOBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapDiscoveryLookupBindingProxy.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
@@ -359,12 +335,6 @@
       <Filter>onvifgen</Filter>
     </ClInclude>
     <ClInclude Include="onvifgen\soapH.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapImagingBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapImagingBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
     <ClInclude Include="onvifgen\soapMediaBindingProxy.h">
@@ -379,12 +349,6 @@
     <ClInclude Include="onvifgen\soapPTZBindingService.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
-    <ClInclude Include="onvifgen\soapRemoteDiscoveryBindingProxy.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
-    <ClInclude Include="onvifgen\soapRemoteDiscoveryBindingService.h">
-      <Filter>onvifgen</Filter>
-    </ClInclude>
     <ClInclude Include="onvifgen\soapStub.h">
       <Filter>onvifgen</Filter>
     </ClInclude>
@@ -394,6 +358,15 @@
     <ClInclude Include="ImgProc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ONVIF\onvifclientdevice.hpp">
+      <Filter>ONVIF</Filter>
+    </ClInclude>
+    <ClInclude Include="ONVIF\onvifclientmedia.hpp">
+      <Filter>ONVIF</Filter>
+    </ClInclude>
+    <ClInclude Include="ONVIF\onvifclientptz.hpp">
+      <Filter>ONVIF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LeonCam.rc" />
@@ -402,22 +375,13 @@
     <None Include="onvifgen\DeviceBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
-    <None Include="onvifgen\DeviceIOBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
     <None Include="onvifgen\DiscoveryLookupBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\ImagingBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
     <None Include="onvifgen\MediaBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
     <None Include="onvifgen\PTZBinding.nsmap">
-      <Filter>onvifgen</Filter>
-    </None>
-    <None Include="onvifgen\RemoteDiscoveryBinding.nsmap">
       <Filter>onvifgen</Filter>
     </None>
   </ItemGroup>

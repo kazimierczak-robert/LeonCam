@@ -5,7 +5,6 @@
 #include "qvariant.h"
 #include "Utilities.h"
 
-
 class DataBase
 {
 public:

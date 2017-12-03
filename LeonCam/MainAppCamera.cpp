@@ -9,7 +9,6 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	redAlert = new RedAlert();
 	redAlert->redAlertID = -1;
 	cameraFPS = 25;
-	this->faceRecognitionPB = faceRecognitionPB;
 	connect(this, SIGNAL(insertGreenAlert(int, int, int, QString)), parent, SLOT(InsertGreenAlert(int, int, int, QString)));
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
@@ -24,14 +23,6 @@ MainAppCamera::~MainAppCamera()
 	if (redAlert != nullptr)
 	{
 		delete redAlert;
-	}
-	if (greenTimer != nullptr)
-	{
-		delete greenTimer;
-	}
-	if (redTimer != nullptr)
-	{
-		delete redTimer;
 	}
 }
 void MainAppCamera::SetStreamURI(std::string streamURI)
@@ -153,10 +144,6 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 					emit insertGreenAlert(query.value(0).toInt(), faceID, cameraID, dateTimeNow);
 				}
 			}
-			//else
-			//{
-			//	
-			//}
 		}
 	}
 }
@@ -169,25 +156,23 @@ void MainAppCamera::run()
 	sendThumbnail = true;
 	sendBigPicture = false;
 	//Image from camera
-	if (vcap.open(streamURI)) //OK
+	if (vcap.open(streamURI))
 	{
 		int frameID = -1;
-		QTimer greenTimer, redTimer;// , processTimer;
+		QTimer greenTimer, redTimer;
 		//conects
 		connect(&greenTimer, SIGNAL(timeout()), this, SLOT(UpdateGreenAlerts()), Qt::DirectConnection);
 		connect(&redTimer, SIGNAL(timeout()), this, SLOT(UpdateRedAlerts()), Qt::DirectConnection);
-		//connect(&processTimer, SIGNAL(timeout()), this, SLOT(Process()), Qt::DirectConnection);
 		//set intervals
 		greenTimer.setInterval(5*60*1000); //5 minutes
 		redTimer.setInterval(1*30*1000); //0.5 minutes
-		//processTimer.setInterval(40);
+
 		//start timers
 		greenTimer.start();
 		redTimer.start();
-		//processTimer.start();
 
 		//start processing frames
-		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), Qt::DirectConnection /*|*/ /*Qt::QueuedConnection*/);
+		connect(this, SIGNAL(startWorking()), this, SLOT(Process()), Qt::DirectConnection);
 		emit startWorking();
 
 		exec();
@@ -306,7 +291,7 @@ void MainAppCamera::UpdateRedAlerts()
 	msDifferece = dtStop.msecsTo(dTNow);
 	if (msDifferece > (1 * 30 * 1000))
 	{
-		stopRedAlert();
+		StopRedAlert();
 	}
 }
 void MainAppCamera::CheckGreenAlertInList(int greenAlertID)
@@ -390,15 +375,12 @@ void MainAppCamera::Process()
 				}
 
 			}
-			//Resize oroginal image
+			//Resize original image
 			
 			if (frameID % 2 == 0 && sendBigPicture)
 			{
-				//cv::resize(imgGray, resizedMat, cv::Size(760, 427));
-				//emit updatePixmap(QPixmap::fromImage(QImage(resizedMat.data, 760, 427, resizedMat.step, QImage::Format_RGB888)));
 				emit updateImage(imgGray);
 			}
-			//cvtColor(img, resizedMat, CV_BGR2RGB);
 
 			if (frameID % 2 == 0 && videowriter.isOpened())
 			{
@@ -406,17 +388,15 @@ void MainAppCamera::Process()
 				{
 					QFile file;
 					QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
-					stopRedAlert();		
+					StopRedAlert();		
 					file.remove(fileName);
 					isRedAlertStop = false;
 				}
 				else
 				{
-					//cv::resize(imgGray, videoImg, cv::Size(426, 240));
 					videowriter.write(imgGray);
 				}
 			}
-
 
 			if (frameID % 2 == 0 && sendThumbnail)
 			{
@@ -430,7 +410,6 @@ void MainAppCamera::Process()
 					qPainter.setPen(pen);
 					qPainter.drawRect(1, 1, thumbnailWidth - 2, thumbnailHeight - 2);
 					qPainter.end();
-					//cv::rectangle(imgGray, cv::Point(0, 0), cv::Point(thumbnailWidth-1, thumbnailHeight-1), cv::Scalar(255, 0, 0), 1, 8, 0);
 				}
 				//View on thumbnail
 				emit updateThumbnail(pixmapWithRedBorder, cameraID);
@@ -452,7 +431,7 @@ void MainAppCamera::SaveMat()
 	cv::imwrite(filePath.toStdString(), img);
 	Utilities::MBAlarm("Picture has been taken", true);
 }
-void MainAppCamera::stopRedAlert()
+void MainAppCamera::StopRedAlert()
 {
 	redAlert->redAlertID = -1;
 	videowriter.release();

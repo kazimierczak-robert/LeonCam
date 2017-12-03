@@ -9,10 +9,6 @@
 #include "MainApp.h"
 #include <qtooltip.h>
 
-#include <qfuture.h>
-#include <QtConcurrent\qtconcurrentrun.h>
-#include <qfuturewatcher.h>
-
 #define loginAttemptCounterMAX 3
 #define loginTimeLock 900
 

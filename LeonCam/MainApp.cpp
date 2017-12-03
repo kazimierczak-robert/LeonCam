@@ -190,6 +190,7 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.LEChangeSecQuestionNewAnswer, SIGNAL(returnPressed()), this, SLOT(ChangeSecurityQuestion()));
 	connect(ui.PBChangeSecQuestion, SIGNAL(clicked()), this, SLOT(ChangeSecurityQuestion()));
 
+	query.clear();
 	query.prepare("SELECT CameraID FROM Cameras WHERE UserID = ?");
 	query.bindValue(0, loggedID);
 	result = query.exec();
@@ -374,9 +375,6 @@ void MainApp::AddCameraFromDB(int cameraID)
 		layout->setHorizontalSpacing(4);
 		layout->setVerticalSpacing(2);
 
-		//layout->itemAtPosition(2,0)->widget()->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
-
-
 		if (vectorCameraLayoutsPages->at(vectorCameraLayoutsPages->size() - 1)->size() == 6)
 		{
 			AddTab();
@@ -490,18 +488,16 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 			std::string password = Utilities::GetDecrypted(passHash, cam->Password);
 			//Get stream URI & start capturing frames thread 
 			std::string url = "http://" + cam->IPAddress + "/onvif/device_service";
-			OnvifClientDevice *onvifDevice = new OnvifClientDevice(url, cam->Login, password);
-			if (onvifDevice->GetCapabilities() == 0)
+			OnvifClientDevice onvifDevice(url, cam->Login, password);
+			if (onvifDevice.GetCapabilities() == 0)
 			{
-				OnvifClientMedia media(*onvifDevice);
+				OnvifClientMedia media(onvifDevice);
 				_trt__GetProfilesResponse profiles;
 				media.GetProfiles(profiles);
 
 				if (profiles.Profiles.size() > 0)
 				{
-					string profileToken;
-					OnvifClientPTZ *ptz = nullptr;
-					profileToken = profiles.Profiles[0]->token;
+					string profileToken = profiles.Profiles[0]->token;
 					int cameraFPS = profiles.Profiles[0]->VideoEncoderConfiguration->RateControl->FrameRateLimit;
 					_trt__GetStreamUriResponse link;
 					media.GetStreamUrl(profileToken, link);
@@ -1551,105 +1547,98 @@ void MainApp::RemovePerson(int faceID)
 		query.exec("BEGIN IMMEDIATE TRANSACTION");
 		query.exec("DELETE FROM GreenAlerts WHERE FaceID = ?");
 		query.bindValue(0, faceID);
-		result = query.exec();
+		query.exec();
 		query.exec("COMMIT");
-
-
 	}
 }
 void MainApp::RemoveGreenAlert(int greenAlertID)
 {
 	int cameraID = -1;
-		if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> green alert with ID: " + ((QVariant)greenAlertID).toString() + "?"))
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> green alert with ID: " + ((QVariant)greenAlertID).toString() + "?"))
+	{
+		//Remove row from table
+		for (int i = 0; i < ui.TWGreenReport->rowCount(); i++)
 		{
-			//Remove row from table
-			for (int i = 0; i < ui.TWGreenReport->rowCount(); i++)
+			if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
 			{
-				if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
-				{
-					cameraID = ui.TWGreenReport->item(i, 1)->text().toInt();
-					ui.TWGreenReport->removeCellWidget(i, 7);
-					ui.TWGreenReport->removeCellWidget(i, 8);
-					ui.TWGreenReport->removeRow(i);
-					break;
-				}
+				cameraID = ui.TWGreenReport->item(i, 1)->text().toInt();
+				ui.TWGreenReport->removeCellWidget(i, 7);
+				ui.TWGreenReport->removeCellWidget(i, 8);
+				ui.TWGreenReport->removeRow(i);
+				break;
 			}
-			QSqlQuery query;
-			QString startGreenDate;
-			query.exec("SELECT StartDate FROM GreenAlerts WHERE GreenAlertID = ?");
-			query.bindValue(0, greenAlertID);
-			bool result = query.exec();
-			if (result == true)
+		}
+		QSqlQuery query;
+		QString startGreenDate;
+		query.exec("SELECT StartDate FROM GreenAlerts WHERE GreenAlertID = ?");
+		query.bindValue(0, greenAlertID);
+		bool result = query.exec();
+		if (result == true)
+		{
+			query.next();
+			startGreenDate = query.value(0).toString();
+		}
+		//Remove from DB
+		query.clear();
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		query.exec("DELETE FROM GreenAlerts WHERE GreenAlertID = ?");
+		query.bindValue(0, greenAlertID);
+		result = query.exec();
+		query.exec("COMMIT");
+		if (result == false)
+		{
+			Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+		}
+		if (cameraID > -1)
+		{
+			connect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
+			emit checkGreenAlertInList(greenAlertID);
+			disconnect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
+			//Difference should be 0 in most cases, but it can be >0 or <0
+			//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
+			int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
+			int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			if (greenDiff < 7)
 			{
-				query.next();
-				startGreenDate = query.value(0).toString();
+				int value = setGreen->at(6 - greenDiff);
+				value--;
+				weekChartGreenMap[greenDiff]--;
+				setGreen->replace(6 - greenDiff, value);
+				int range = GetChartRange();
+				chart->axisY()->setRange(0, range);
 			}
-
-			//Remove from DB
-			query.clear();
-			query.exec("BEGIN IMMEDIATE TRANSACTION");
-			query.exec("DELETE FROM GreenAlerts WHERE GreenAlertID = ?");
-			query.bindValue(0, greenAlertID);
-			result = query.exec();
-			query.exec("COMMIT");
-			if (result == false)
+			if (diff != 0)
 			{
-				Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+				//Data for bar series: second has people counter on <today - diff> position
+				for (int i = 6; i > 0; i--)
+				{
+					weekChartGreenMap[i] = weekChartGreenMap[i - 1];
+					weekChartRedMap[i] = weekChartRedMap[i - 1];
+				}
+				//Move week names by 1
+				weekChartGreenMap[0] = 0;
+				QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
+				((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
+				((QBarCategoryAxis *)(chart->axisX()))->append(category0);
+				chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0),	((QBarCategoryAxis *)(chart->axisX()))->at(6));
+
+				setGreen->remove(0);
+				setGreen->append(0);
+
+				//move red
+				weekChartRedMap[0] = 0;
+
+				QBarSet *setRed = series->barSets().at(0);
+				setRed->remove(0);
+				setRed->append(0);
+
+				todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+				int range = GetChartRange();
+				chart->axisY()->setRange(0, range);
 			}
-			if (cameraID > -1)
-			{
-				connect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
-				emit checkGreenAlertInList(greenAlertID);
-				disconnect(this, SIGNAL(checkGreenAlertInList(int)), cameraThread->at(cameraID), SLOT(CheckGreenAlertInList(int)));
-				//Difference should be 0 in most cases, but it can be >0 or <0
-				//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
-				int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-				QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
-				QBarSeries *series = (QBarSeries *)chart->series().at(0);
-				QBarSet *setGreen = series->barSets().at(1);
-				int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-
-				if (greenDiff < 7)
-				{
-					int value = setGreen->at(6 - greenDiff);
-					value--;
-					weekChartGreenMap[greenDiff]--;
-					setGreen->replace(6 - greenDiff, value);
-					int range = GetChartRange();
-					chart->axisY()->setRange(0, range);
-				}
-				if (diff != 0)
-				{
-					//Data for bar series: second has people counter on <today - diff> position
-					for (int i = 6; i > 0; i--)
-					{
-						weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-						weekChartRedMap[i] = weekChartRedMap[i - 1];
-					}
-
-					//Move week names by 1
-					weekChartGreenMap[0] = 0;
-
-					QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-					((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-					((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-					chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0),
-						((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-					setGreen->remove(0);
-					setGreen->append(0);
-
-					//move red
-					weekChartRedMap[0] = 0;
-
-					QBarSet *setRed = series->barSets().at(0);
-					setRed->remove(0);
-					setRed->append(0);
-
-					todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-					int range = GetChartRange();
-					chart->axisY()->setRange(0, range);
-				}
 		}
 	}
 }
@@ -1657,102 +1646,101 @@ void MainApp::RemoveRedAlert(int redAlertID)
 {
 	int cameraID = -1;
 
-		if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> red alert with ID: " + ((QVariant)redAlertID).toString() + "?"))
+	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> red alert with ID: " + ((QVariant)redAlertID).toString() + "?"))
+	{
+		//Remove row from table
+		for (int i = 0; i < ui.TWRedReport->rowCount(); i++)
 		{
-			//Remove row from table
-			for (int i = 0; i < ui.TWRedReport->rowCount(); i++)
+			if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
 			{
-				if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
-				{
-					cameraID = ui.TWRedReport->item(i, 1)->text().toInt();
-					ui.TWRedReport->removeCellWidget(i, 4);
-					ui.TWRedReport->removeCellWidget(i, 5);
-					ui.TWRedReport->removeCellWidget(i, 6);
-					ui.TWRedReport->removeRow(i);
-					break;
-				}
+				cameraID = ui.TWRedReport->item(i, 1)->text().toInt();
+				ui.TWRedReport->removeCellWidget(i, 4);
+				ui.TWRedReport->removeCellWidget(i, 5);
+				ui.TWRedReport->removeCellWidget(i, 6);
+				ui.TWRedReport->removeRow(i);
+				break;
 			}
-			QSqlQuery query;
-			QString startRedDate;
-			query.exec("SELECT StartDate FROM RedAlerts WHERE RedAlertID = ?");
-			query.bindValue(0, redAlertID);
-			bool result = query.exec();
-			if (result == true)
+		}
+		QSqlQuery query;
+		QString startRedDate;
+		query.exec("SELECT StartDate FROM RedAlerts WHERE RedAlertID = ?");
+		query.bindValue(0, redAlertID);
+		bool result = query.exec();
+		if (result == true)
+		{
+			query.next();
+			startRedDate = query.value(0).toString();
+		}
+
+		//Remove from DB
+		query.clear();
+		query.exec("BEGIN IMMEDIATE TRANSACTION");
+		query.exec("DELETE FROM RedAlerts WHERE RedAlertID = ?");
+		query.bindValue(0, redAlertID);
+		result = query.exec();
+		query.exec("COMMIT");
+		if (result == false)
+		{
+			Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
+		}
+		else
+		{
+			if (cameraID > -1)
 			{
-				query.next();
-				startRedDate = query.value(0).toString();
+				connect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
+				emit checkRedAlertID(redAlertID);
+				disconnect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
+			}
+			//Difference should be 0 in most cases, but it can be >0 or <0
+			int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setRed = series->barSets().at(0);
+			int redDiff = (QDateTime::fromString(startRedDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			if (redDiff < 7)
+			{
+				int value = setRed->at(6 - redDiff);
+				value--;
+				weekChartRedMap[redDiff]--;
+				setRed->replace(6 - redDiff, value);
+				int range = GetChartRange();
+				chart->axisY()->setRange(0, range);
+			}
+			if (diff != 0)
+			{
+				//Data for bar series: second has people counter on <today - diff> position
+				for (int i = 6; i > 0; i--)
+				{
+					weekChartGreenMap[i] = weekChartGreenMap[i - 1];
+					weekChartRedMap[i] = weekChartRedMap[i - 1];
+				}
+
+				//Move week names by 1
+				weekChartGreenMap[0] = 0;
+
+				QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
+				((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
+				((QBarCategoryAxis *)(chart->axisX()))->append(category0);
+				chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
+
+				setRed->remove(0);
+				setRed->append(0);
+
+				//move red
+				weekChartRedMap[0] = 0;
+
+				QBarSet *setGreen = series->barSets().at(1);
+				setGreen->remove(0);
+				setGreen->append(0);
+
+				todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+				int range = GetChartRange();
+				chart->axisY()->setRange(0, range);
 			}
 
-			//Remove from DB
-			query.clear();
-			query.exec("BEGIN IMMEDIATE TRANSACTION");
-			query.exec("DELETE FROM RedAlerts WHERE RedAlertID = ?");
-			query.bindValue(0, redAlertID);
-			result = query.exec();
-			query.exec("COMMIT");
-			if (result == false)
-			{
-				Utilities::MBAlarm("Something went wrong. Row hasn't been deleted", false);
-			}
-			else
-			{
-				if (cameraID > -1)
-				{
-					connect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
-					emit checkRedAlertID(redAlertID);
-					disconnect(this, SIGNAL(checkRedAlertID(int)), cameraThread->at(cameraID), SLOT(CheckRedAlertID(int)));
-				}
-				//Difference should be 0 in most cases, but it can be >0 or <0
-				int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-				QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
-				QBarSeries *series = (QBarSeries *)chart->series().at(0);
-				QBarSet *setRed = series->barSets().at(0);
-				int redDiff = (QDateTime::fromString(startRedDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-				if (redDiff < 7)
-				{
-					int value = setRed->at(6 - redDiff);
-					value--;
-					weekChartGreenMap[redDiff]--;
-					setRed->replace(6 - redDiff, value);
-					int range = GetChartRange();
-					chart->axisY()->setRange(0, range);
-				}
-				if (diff != 0)
-				{
-					//Data for bar series: second has people counter on <today - diff> position
-					for (int i = 6; i > 0; i--)
-					{
-						weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-						weekChartRedMap[i] = weekChartRedMap[i - 1];
-					}
-
-					//Move week names by 1
-					weekChartGreenMap[0] = 0;
-
-					QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-					((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-					((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-					chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0),
-						((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-					setRed->remove(0);
-					setRed->append(0);
-
-					//move red
-					weekChartRedMap[0] = 0;
-
-					QBarSet *setGreen = series->barSets().at(1);
-					setGreen->remove(0);
-					setGreen->append(0);
-
-					todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-					int range = GetChartRange();
-					chart->axisY()->setRange(0, range);
-				}
-
-				QFile file;
-				QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi";
-				file.remove(fileName);
+			QFile file;
+			QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi";
+			file.remove(fileName);
 		}
 	}
 }
@@ -1818,13 +1806,13 @@ void MainApp::CurrentIndexChanged()
 			query.exec("COMMIT");
 			if (result == false)
 			{
-				Utilities::MBAlarm("Acount error has occured. Please log in again", false);
+				Utilities::MBAlarm("Account error has occured. Please log in again", false);
 				LogOut();
 			}
 		}
 		else
 		{
-			Utilities::MBAlarm("Acount error has occured. Please log in again", false);
+			Utilities::MBAlarm("Account error has occured. Please log in again", false);
 			LogOut();
 		}
 	}
@@ -1872,8 +1860,7 @@ void MainApp::InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QStri
 			QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
 			((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
 			((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-			chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0),
-				((QBarCategoryAxis *)(chart->axisX()))->at(6));
+			chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
 
 			setGreen->remove(0);
 			setGreen->append(1);
@@ -1925,8 +1912,7 @@ void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 		QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
 		((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
 		((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-		chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0),
-			((QBarCategoryAxis *)(chart->axisX()))->at(6));
+		chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
 
 		QBarSet *setGreen = series->barSets().at(1);
 		setGreen->remove(0);
@@ -1949,7 +1935,6 @@ void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 		{
 			if (getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j)) == cameraID)
 			{
-				//activeCameraPage = i;
 				ui.TWCameraPages->setCurrentIndex(i);
 				return;
 			}
