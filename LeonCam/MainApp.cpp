@@ -49,8 +49,8 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 		result = query.exec();
 		if (result == true && query.next())
 		{
-			int redAlertDelSets = query.value(0).toInt();
-			int greenAlertDelSets = query.value(1).toInt();
+			redAlertDelSets = query.value(0).toInt();
+			greenAlertDelSets = query.value(1).toInt();
 			QSqlQuery selectedQuery;
 			//1 - never				
 			if (redAlertDelSets > 1)
@@ -459,10 +459,11 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 }
 void MainApp::TurnOnOffCamera(QGridLayout* layout)
 {
+
 	int cameraID = getCameraIDFromLayout(layout);
 
 	QPushButton *button = (QPushButton*)layout->itemAtPosition(2, 0)->widget();
-
+	disconnect(button, &QPushButton::clicked, this, nullptr);
 	if (button->text() == "Off")
 	{
 		if (activeCameraCounter == QThread::idealThreadCount())
@@ -561,6 +562,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	}
 
 	ui.LEnabledNumber->setText("Number of enabled cameras: " + QVariant(activeCameraCounter).toString() + "/" + QVariant(QThread::idealThreadCount()).toString());
+	connect(button, &QPushButton::clicked, this, [this, layout] {TurnOnOffCamera(layout); });
 }
 void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 {
@@ -1249,6 +1251,7 @@ void MainApp::FillReportsTW()
 	ui.TWRedReport->setVisible(false);
 	GetAlertDeleteSettings();
 	FillCBSetsWithAlertDelSets();
+	ui.CBSettings->setCurrentIndex(ui.CBSettings->findData(greenAlertDelSets));
 	//Fill green alerts
 	QSqlQuery query;
 	query.prepare("SELECT * FROM GreenAlerts WHERE UserID = ?");
@@ -1752,12 +1755,15 @@ void MainApp::ChangeTWReport(int i)
 		ui.TWGreenReport->setVisible(false);
 		ui.TWRedReport->setVisible(true);
 		ui.LChooseAlertDelSet->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
+		ui.CBSettings->setCurrentIndex(ui.CBSettings->findData(redAlertDelSets));
+
 	}
 	else
 	{
 		ui.TWGreenReport->setVisible(true);
 		ui.TWRedReport->setVisible(false);
 		ui.LChooseAlertDelSet->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color:rgb(36, 118, 59);}");
+		ui.CBSettings->setCurrentIndex(ui.CBSettings->findData(greenAlertDelSets));
 	}
 }
 void MainApp::PlayMovie(QString path)
@@ -1793,10 +1799,12 @@ void MainApp::CurrentIndexChanged()
 			//Check if green or Red
 			if (greenOrRedAlert == 0)//0 - green
 			{
+				greenAlertDelSets = settingID;
 				query.prepare("UPDATE Users SET GreenAlertDeleteSettingID = ?  WHERE UserID = ?");
 			}
 			else //1 - red
 			{
+				redAlertDelSets = settingID;
 				query.prepare("UPDATE Users SET RedAlertDeleteSettingID = ?  WHERE UserID = ?");
 			}			
 
@@ -2284,8 +2292,8 @@ void MainApp::DeleteProfile()
 				query.exec("BEGIN IMMEDIATE TRANSACTION");
 				query.prepare("DELETE FROM Users WHERE UserID = ?");
 				query.bindValue(0, loggedID);
-				query.exec("COMMIT");
 				bool result = query.exec();
+				query.exec("COMMIT");
 				if (result == true)
 				{
 					for (int j = vectorCameraLayoutsPages->size() - 1; j >= 0; j--)

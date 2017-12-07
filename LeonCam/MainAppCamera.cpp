@@ -346,7 +346,7 @@ void MainAppCamera::Process()
 				else
 				{
 					//If move isn't being recorded
-					if (frameID % 10 == 0 && videowriter.isOpened()==false)
+					if (frameID % 10 == 0 /*&& videowriter.isOpened()==false*/)
 					{
 						//Get gray picture 20x20
 						faces.clear();

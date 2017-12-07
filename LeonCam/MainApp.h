@@ -79,6 +79,8 @@ public slots:
 	void UpdateGreenAlert(int greenAlertID, QString stopDate);
 	void UpdateRedAlert(int redAlertID, QString stopDate);
 private:
+	int redAlertDelSets;
+	int greenAlertDelSets;
 	int activeCameraCounter;
 	bool greenOrRedAlert = 0; //0-green, 1-red
 	int loggedID;
