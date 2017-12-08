@@ -326,7 +326,7 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setFixedSize(40, 40);
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setToolTip("Start monitoring camera");
-		btn->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/redSwitch.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/redSwitchHover.png);}");
 		connect(btn, &QPushButton::clicked, this, [this, layout] {TurnOnOffCamera(layout); });
 		layout->addWidget(btn, 2, 0);
 
@@ -418,6 +418,7 @@ void MainApp::CameraSelected(QGridLayout* layout)
 	cameraThread->at(cameraID)->SetSendBigPicture(true);
 	cameraPreview->exec();
 	cameraThread->at(cameraID)->SetSendBigPicture(false);
+	disconnect(cameraPreview, SIGNAL(openCameraEdit(int)), this, SLOT(OpenCameraEdit(int)));
 	delete cameraPreview;
 }
 struct MainApp::Camera* MainApp::GetCameraFromDBByID(int cameraID)
@@ -518,7 +519,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 	
 						button->setText("On");
 						button->setToolTip("Stop monitoring camera");
-						button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+						button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/greenSwitch.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/greenSwitchHover.png);}");
 						layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture");
 						connect(layout->itemAtPosition(2, 1)->widget(), SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
 						activeCameraCounter += 1;
@@ -540,7 +541,7 @@ void MainApp::TurnOnOffCamera(QGridLayout* layout)
 
 		button->setText("Off");
 		button->setToolTip("Start monitoring camera");
-		button->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/redSwitch.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/redSwitchHover.png);}");
 		layout->itemAtPosition(2, 1)->widget()->setToolTip("Take a picture (disabled)");
 		disconnect(layout->itemAtPosition(2, 1)->widget(), SIGNAL(clicked()), cameraThread->at(cameraID), SLOT(SaveMat()));
 		activeCameraCounter -= 1;

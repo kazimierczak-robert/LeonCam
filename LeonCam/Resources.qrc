@@ -43,5 +43,9 @@
         <file>Resources/Images/ConnectingSmall.png</file>
         <file>Resources/Images/previewNotAvailable.png</file>
         <file>Resources/Images/previewNotAvailableSmall.png</file>
+        <file>Resources/Images/greenSwitch.png</file>
+        <file>Resources/Images/greenSwitchHover.png</file>
+        <file>Resources/Images/redSwitch.png</file>
+        <file>Resources/Images/redSwitchHover.png</file>
     </qresource>
 </RCC>

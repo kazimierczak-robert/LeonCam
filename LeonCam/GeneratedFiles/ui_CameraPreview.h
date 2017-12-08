@@ -59,7 +59,7 @@ public:
 "}"));
         LCameraDetails = new QLabel(CameraPreview);
         LCameraDetails->setObjectName(QStringLiteral("LCameraDetails"));
-        LCameraDetails->setGeometry(QRect(120, 440, 261, 21));
+        LCameraDetails->setGeometry(QRect(130, 450, 261, 21));
         LCameraDetails->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: transparent;\n"
 "font-weight:600;"));
@@ -173,7 +173,7 @@ public:
 "background-color:none*/"));
         PBCameraOnOff = new QPushButton(CameraPreview);
         PBCameraOnOff->setObjectName(QStringLiteral("PBCameraOnOff"));
-        PBCameraOnOff->setGeometry(QRect(80, 440, 31, 23));
+        PBCameraOnOff->setGeometry(QRect(80, 440, 40, 40));
         PBCameraOnOff->setStyleSheet(QStringLiteral("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}"));
         PBGoToPreset = new QPushButton(CameraPreview);
         PBGoToPreset->setObjectName(QStringLiteral("PBGoToPreset"));

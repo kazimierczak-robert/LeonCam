@@ -97,7 +97,7 @@ CameraPreview::~CameraPreview()
 void CameraPreview::TurnOnLabels()
 {
 	ui.PBCameraOnOff->setText("On");
-	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(36, 118, 59);}QPushButton:hover{background-color: rgb(39, 129, 63);}");
+	ui.PBCameraOnOff->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/greenSwitch.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/greenSwitchHover.png);}");
 	ui.PBUp->setEnabled(true);
 	ui.PBDown->setEnabled(true);
 	ui.PBLeft->setEnabled(true);
@@ -161,7 +161,7 @@ void CameraPreview::TurnOffLabels()
 	disconnect(cameraThread->at(cameraID), SIGNAL(updateImage(const cv::Mat&)), imageWidget, SLOT(ShowImage(const cv::Mat&)));
 	cameraThread->at(cameraID)->SetSendBigPicture(false);
 	ui.PBCameraOnOff->setText("Off");
-	ui.PBCameraOnOff->setStyleSheet("QPushButton{color:rgb(255, 255, 255);background-color: rgb(255, 77, 61);}QPushButton:hover{background-color: rgb(255, 87, 58);}");
+	ui.PBCameraOnOff->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/redSwitch.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/redSwitchHover.png);}");
 	ui.PBUp->setEnabled(false);
 	ui.PBDown->setEnabled(false);
 	ui.PBLeft->setEnabled(false);

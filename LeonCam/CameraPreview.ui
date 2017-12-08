@@ -38,8 +38,8 @@
   <widget class="QLabel" name="LCameraDetails">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>440</y>
+     <x>130</x>
+     <y>450</y>
      <width>261</width>
      <height>21</height>
     </rect>
@@ -338,8 +338,8 @@ background-color:none*/</string>
     <rect>
      <x>80</x>
      <y>440</y>
-     <width>31</width>
-     <height>23</height>
+     <width>40</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">

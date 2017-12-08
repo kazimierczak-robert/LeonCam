@@ -39,7 +39,7 @@ void Utilities::ChangePasswordBox(QString message, QString password)
 	msgBox.setDetailedText(password);
 	msgBox.setStandardButtons(QMessageBox::Ok);
 	msgBox.adjustSize();
-	int result = msgBox.exec();
+	msgBox.exec();
 }
 void Utilities::MBAlarm(QString alarm, bool errorOrSuccess)
 {
@@ -84,14 +84,14 @@ bool Utilities::SaveToBinFile(std::string fileName, BYTE *data)
 	fclose(file);
 	return true;
 }
-BYTE * Utilities::ReadFromBinFile(std::string fileName)
+BYTE* Utilities::ReadFromBinFile(std::string fileName)
 {
 	FILE *file = NULL;
 	fopen_s(&file, fileName.c_str(), "rb");
 	if (file != NULL)
 	{
 		long lSize;
-		BYTE * data;
+		BYTE* data;
 		size_t result;
 
 		fseek(file, 0, SEEK_END);
@@ -113,7 +113,6 @@ BYTE * Utilities::ReadFromBinFile(std::string fileName)
 				fclose(file);
 				return NULL;
 			}
-
 		}
 	}
 	else
@@ -128,7 +127,6 @@ int Utilities::BinFileElementsNo(std::string fileName)
 	fopen_s(&file, fileName.c_str(), "rb");
 	if (file != NULL)
 	{
-
 		BYTE * data;
 		size_t result;
 
