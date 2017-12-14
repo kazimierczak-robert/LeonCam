@@ -8,7 +8,7 @@ MainAppCamera::MainAppCamera(ImgProc *imgProc, int cameraID, QObject *parent)
 	this->greenAlertList = new std::list<GreenAlert>();
 	redAlert = new RedAlert();
 	redAlert->redAlertID = -1;
-	cameraFPS = 25;
+	SetFPS(25);
 	connect(this, SIGNAL(insertGreenAlert(int, int, int, QString)), parent, SLOT(InsertGreenAlert(int, int, int, QString)));
 	connect(this, SIGNAL(insertRedAlert(int, int, QString)), parent, SLOT(InsertRedAlert(int, int, QString)));
 	connect(this, SIGNAL(updateGreenAlert(int, QString)), parent, SLOT(UpdateGreenAlert(int, QString)));
@@ -229,6 +229,31 @@ void MainAppCamera::ChangeFaceRecoState(bool state)
 {
 	faceRecognitionState = state;
 }
+void MainAppCamera::SetFPS(int fps)
+{ 
+	this->cameraFPS = fps; 
+	/*
+		FPS - 1s
+		x	- 0.1s
+	*/
+	this->updateImagePeriod = ceil((double)fps / 10); //want to update: ~0.1s (for 10fps), but it can be slower, depending on camera features
+	if (fps == 1)
+	{
+		this->processImagePeriod = 1;
+	}
+	else if (fps>1 && fps < 20)
+	{
+		this->processImagePeriod = floor((double)fps / 2);
+		if (fps > 10 && this->processImagePeriod % 2 == 1)
+		{
+			this->processImagePeriod += 1;
+		}
+	}
+	else
+	{
+		this->processImagePeriod = this->updateImagePeriod * 5; //it is 5 times slower
+	}
+}
 void MainAppCamera::UpdateGreenAlerts()
 {
 	if (greenAlertList->size() == 0) return;
@@ -331,7 +356,7 @@ void MainAppCamera::Process()
 		if (vcap.read(img))
 		{
 			frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
-			if (frameID % 2 == 0)
+			if (frameID % this->updateImagePeriod == 0)
 			{
 				cvtColor(img, imgGray, CV_BGR2GRAY);
 				cv::equalizeHist(imgGray, imgGray);
@@ -346,7 +371,7 @@ void MainAppCamera::Process()
 				else
 				{
 					//If move isn't being recorded
-					if (frameID % 10 == 0 /*&& videowriter.isOpened()==false*/)
+					if (frameID % this->processImagePeriod == 0 /*&& videowriter.isOpened()==false*/)
 					{
 						//Get gray picture 20x20
 						faces.clear();
@@ -377,12 +402,12 @@ void MainAppCamera::Process()
 			}
 			//Resize original image
 			
-			if (frameID % 2 == 0 && sendBigPicture)
+			if (frameID % this->updateImagePeriod == 0 && sendBigPicture)
 			{
 				emit updateImage(imgGray);
 			}
 
-			if (frameID % 2 == 0 && videowriter.isOpened())
+			if (frameID % this->updateImagePeriod == 0 && videowriter.isOpened())
 			{
 				if (isRedAlertStop == true)
 				{
@@ -398,7 +423,7 @@ void MainAppCamera::Process()
 				}
 			}
 
-			if (frameID % 2 == 0 && sendThumbnail)
+			if (frameID % this->updateImagePeriod == 0 && sendThumbnail)
 			{
 				cv::resize(imgGray, imgGray, cv::Size(thumbnailWidth, thumbnailHeight));
 				pixmapWithRedBorder = QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8));
@@ -414,7 +439,7 @@ void MainAppCamera::Process()
 				//View on thumbnail
 				emit updateThumbnail(pixmapWithRedBorder, cameraID);
 			}
-			if (frameID % 2 == 0)
+			if (frameID % this->updateImagePeriod == 0)
 			{
 				QCoreApplication::processEvents();
 			}

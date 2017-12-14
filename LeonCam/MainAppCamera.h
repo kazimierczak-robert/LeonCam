@@ -29,7 +29,7 @@ public:
 	void StopThread();
 	void ChangeFaceRecoState(bool state);
 	void SetCameraID(int cameraID) { this->cameraID = cameraID; }
-	void SetFPS(int fps) { this->cameraFPS = fps; }
+	void SetFPS(int fps);
 	void SetSendBigPicture(bool setting);
 	void SetSendThumbnail(bool setting);
 signals:
@@ -64,6 +64,8 @@ private:
 	std::list<GreenAlert> *greenAlertList = nullptr;
 	RedAlert *redAlert = nullptr;
 	int cameraFPS;
+	int updateImagePeriod;
+	int processImagePeriod;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
 	void StopRedAlert();
