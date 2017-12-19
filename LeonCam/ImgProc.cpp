@@ -5,7 +5,7 @@ ImgProc::ImgProc(int loggedID)
 	faceCascadeName = faceCascadeFilePath;
 	model = cv::createLBPHFaceRecognizer();//cv::createFisherFaceRecognizer();
 	loadedFaceCascade = false;
-	model->set("threshold", 100.0);
+	model->set("threshold", 80.0);
 	isModelTrained = false;
 	TrainFaceRecognizer();
 	this->loggedID = loggedID;
