@@ -9,6 +9,7 @@
 #include "Utilities.h"
 #include <qsqlquery.h>
 #include <iterator>
+#include "qregularexpression.h"
 
 #define trainedFaceRecognizerFilePath "TrainedFaceRecognizer.xml"
 //".\\opencv\\data\\haarcascades\\haarcascade_frontalface_alt.xml"

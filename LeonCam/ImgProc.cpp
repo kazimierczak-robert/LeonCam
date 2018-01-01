@@ -46,15 +46,25 @@ void ImgProc::FillLabelsAndImagesVectors()
 	int label = -1;
 	QString filename = "";
 	QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files | QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories);
+	bool isProperDir = false;
 	while (iter.hasNext())
 	{
 		iter.next();
 		filInfo = iter.fileInfo();
 		if (filInfo.isDir())
 		{
-			label = filInfo.fileName().toInt();
+			QRegularExpression qRegExpr("^[1-9][0-9]*$");
+			if (filInfo.fileName().contains(qRegExpr))
+			{
+				label = filInfo.fileName().toInt();
+				isProperDir = true;
+			}
+			else
+			{
+				isProperDir = false;
+			}
 		}
-		else if (filInfo.isFile())
+		else if (filInfo.isFile() && isProperDir == true)
 		{
 			filename = iter.filePath();
 			if (filename.split('/').count() == 4) //protect against files not in the folder
