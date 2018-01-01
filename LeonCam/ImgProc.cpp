@@ -44,7 +44,8 @@ void ImgProc::FillLabelsAndImagesVectors()
 	QString dirPath = ".\\FaceBase\\";
 	QFileInfo filInfo;
 	int label = -1;
-	QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files|QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories );
+	QString filename = "";
+	QDirIterator iter(dirPath, QStringList() << "*.jpg", QDir::Files | QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDirIterator::Subdirectories);
 	while (iter.hasNext())
 	{
 		iter.next();
@@ -55,8 +56,19 @@ void ImgProc::FillLabelsAndImagesVectors()
 		}
 		else if (filInfo.isFile())
 		{
-			images.push_back(cv::imread(iter.filePath().toStdString(), 0));
-			labels.push_back(label);
+			filename = iter.filePath();
+			if (filename.split('/').count() == 4) //protect against files not in the folder
+			{
+				if (filInfo.completeSuffix().split('.').count() == 1) //protect against . in filename or extensions .pdf.jpg
+				{
+					cv::Mat tmpMat = cv::imread(iter.filePath().toStdString(), 0);
+					if (tmpMat.rows == 100 & tmpMat.cols == 100) //image dimensions
+					{
+						images.push_back(tmpMat);
+						labels.push_back(label);
+					}
+				}
+			}
 		}
 	}
 }
