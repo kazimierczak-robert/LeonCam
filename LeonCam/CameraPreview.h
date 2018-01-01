@@ -11,7 +11,6 @@
 #include "CameraControl.h"
 #include "MainAppCamera.h"
 #include "CVImageWidget.h"
-#include "MainApp.h"
 
 class CameraPreview : public QDialog
 {

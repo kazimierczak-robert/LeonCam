@@ -64,12 +64,12 @@ void UserCamera::SearchForCameraIPs()
 	{
 		if (proxy.Probe(&probe, &probeMatches) == SOAP_OK)
 		{
+			for each (ns1__ProbeMatchType* device in probeMatches.ProbeMatch)
+			{
+				ui.CBAvailableCameras->addItem(QString::fromStdString(device->XAddrs->c_str()).split('/')[2]);
+			}
 			break;
 		}
-	}
-	for each (ns1__ProbeMatchType* device in probeMatches.ProbeMatch)
-	{
-		ui.CBAvailableCameras->addItem(QString::fromStdString(device->XAddrs->c_str()).split('/')[2]);
 	}
 
 	delete proxy.header;

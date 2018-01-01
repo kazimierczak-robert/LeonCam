@@ -46,7 +46,6 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 	if (predictionLabel < 0)
 	{
 		//Person hasn't been recognized
-		//Check if 0.5 minute has passed : 1 * 30 * 1000
 		result = redAlert->redAlertID < 0 ? true : false;
 		//YES
 		if (result == true)
@@ -158,7 +157,6 @@ void MainAppCamera::run()
 	//Image from camera
 	if (vcap.open(streamURI))
 	{
-		int frameID = -1;
 		QTimer greenTimer, redTimer;
 		//conects
 		connect(&greenTimer, SIGNAL(timeout()), this, SLOT(UpdateGreenAlerts()), Qt::DirectConnection);
@@ -361,86 +359,83 @@ void MainAppCamera::Process()
 				cvtColor(img, imgGray, CV_BGR2GRAY);
 				cv::equalizeHist(imgGray, imgGray);
 				cv::resize(imgGray, imgGray, cv::Size(640, 360));
-			}
-			if (faceRecognitionState == true) //OK
-			{
-				if (imgProc->CheckIfFaceCascadeLoaded() == false)
+
+				if (faceRecognitionState == true) //OK
 				{
-					Utilities::MBAlarm("CascadeClassifier hasn't been loaded, recognition is disabled", false);
-				}
-				else
-				{
-					//If move isn't being recorded
-					if (frameID % this->processImagePeriod == 0 /*&& videowriter.isOpened()==false*/)
+					if (imgProc->CheckIfFaceCascadeLoaded() == false)
 					{
-						//Get gray picture 20x20
-						faces.clear();
-						//cv::resize(imgGray, imgGray, cv::Size(380, 213));
-						//rectangle
-						
-						imgProc->GetFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
-						for (int i = 0; i < faces.size(); i++)
+						Utilities::MBAlarm("CascadeClassifier hasn't been loaded, recognition is disabled", false);
+					}
+					else
+					{
+						if (frameID % this->processImagePeriod == 0 /*&& videowriter.isOpened()==false*/)
 						{
-							//Get rect to crop
-							//cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-							//Crop the full image to that image contained by the rectangle myROI
-							imgCropped = imgGray(faces[i]);
-							//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
-							cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
-							//save to debug
-							//cv::imwrite(".\\x.jpg", imgCropped);
-							//Predict person
-							int predictionLabel = imgProc->PredictPerson(imgCropped);
-							if (predictionLabel > -2)
+							//Get gray picture 20x20
+							faces.clear();
+							//cv::resize(imgGray, imgGray, cv::Size(380, 213));
+							//rectangle
+
+							imgProc->GetFaceCascade().detectMultiScale(imgGray, faces, 1.1, 3, 0, cv::Size(30, 30));
+							for (int i = 0; i < faces.size(); i++)
 							{
-								UpdateDBAfterPrediction(predictionLabel);
+								//Get rect to crop
+								//cv::Rect myROI(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+								//Crop the full image to that image contained by the rectangle myROI
+								imgCropped = imgGray(faces[i]);
+								//cvtColor(imgCropped, imgCropped, CV_BGR2GRAY);
+								cv::resize(imgCropped, imgCropped, cv::Size(100, 100), 1.0, 1.0, cv::INTER_CUBIC);
+								//save to debug
+								//cv::imwrite(".\\x.jpg", imgCropped);
+								//Predict person
+								int predictionLabel = imgProc->PredictPerson(imgCropped);
+								if (predictionLabel > -2)
+								{
+									UpdateDBAfterPrediction(predictionLabel);
+								}
 							}
 						}
 					}
+
 				}
 
-			}
-			//Resize original image
-			
-			if (frameID % this->updateImagePeriod == 0 && sendBigPicture)
-			{
-				emit updateImage(imgGray);
-			}
+				//Resize original image
+				if (sendBigPicture)
+				{
+					emit updateImage(imgGray);
+				}
 
-			if (frameID % this->updateImagePeriod == 0 && videowriter.isOpened())
-			{
-				if (isRedAlertStop == true)
+				if (videowriter.isOpened())
 				{
-					QFile file;
-					QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
-					StopRedAlert();		
-					file.remove(fileName);
-					isRedAlertStop = false;
+					if (isRedAlertStop == true)
+					{
+						QFile file;
+						QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlert->redAlertID).toString() + ".avi";
+						StopRedAlert();
+						file.remove(fileName);
+						isRedAlertStop = false;
+					}
+					else
+					{
+						videowriter.write(imgGray);
+					}
 				}
-				else
-				{
-					videowriter.write(imgGray);
-				}
-			}
 
-			if (frameID % this->updateImagePeriod == 0 && sendThumbnail)
-			{
-				cv::resize(imgGray, imgGray, cv::Size(thumbnailWidth, thumbnailHeight));
-				pixmapWithRedBorder = QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8));
-				//There is an alert add red border
-				if (redAlert->redAlertID != -1)
+				if (sendThumbnail)
 				{
-					qPainter.begin(&pixmapWithRedBorder);
-					qPainter.setBrush(Qt::NoBrush);
-					qPainter.setPen(pen);
-					qPainter.drawRect(1, 1, thumbnailWidth - 2, thumbnailHeight - 2);
-					qPainter.end();
+					cv::resize(imgGray, imgGray, cv::Size(thumbnailWidth, thumbnailHeight));
+					pixmapWithRedBorder = QPixmap::fromImage(QImage(imgGray.data, thumbnailWidth, thumbnailHeight, imgGray.step, QImage::Format_Grayscale8));
+					//There is an alert add red border
+					if (redAlert->redAlertID != -1)
+					{
+						qPainter.begin(&pixmapWithRedBorder);
+						qPainter.setBrush(Qt::NoBrush);
+						qPainter.setPen(pen);
+						qPainter.drawRect(1, 1, thumbnailWidth - 2, thumbnailHeight - 2);
+						qPainter.end();
+					}
+					//View on thumbnail
+					emit updateThumbnail(pixmapWithRedBorder, cameraID);
 				}
-				//View on thumbnail
-				emit updateThumbnail(pixmapWithRedBorder, cameraID);
-			}
-			if (frameID % this->updateImagePeriod == 0)
-			{
 				QCoreApplication::processEvents();
 			}
 		}

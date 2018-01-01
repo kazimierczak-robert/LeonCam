@@ -11,7 +11,6 @@
 #include "qtimer.h"
 #include <iterator>
 #include <QCoreApplication>
-#include "Utilities.h"
 #include <qpushbutton.h>
 #include <QPainter>
 

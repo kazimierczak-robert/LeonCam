@@ -164,9 +164,9 @@ void ForgottenPassword::VerifyClicked()
 									//Encrypt new camera password
 									cameraPassword = Utilities::GetEncrypted(newHashPass, cameraPassword);
 									//Update password
-									queryUpdate.prepare("UPDATE Cameras SET Password = ?  WHERE UserID = ?");
+									queryUpdate.prepare("UPDATE Cameras SET Password = ? WHERE CameraID = ?");
 									queryUpdate.bindValue(0, QString::fromStdString(cameraPassword));
-									queryUpdate.bindValue(1, loggedID);
+									queryUpdate.bindValue(1, camID);
 									result == result && queryUpdate.exec();
 								}
 								queryUpdate.exec("COMMIT");
@@ -182,7 +182,7 @@ void ForgottenPassword::VerifyClicked()
 									query.exec("COMMIT");
 									if (result == false)
 									{
-										Utilities::resultMsg = "Acount error has occured. Please log in again";
+										Utilities::resultMsg = "Account error has occured. Please log in again";
 									}
 									else
 									{
