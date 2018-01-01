@@ -107,7 +107,7 @@ void LogIn::LogInClicked()
 		}
 		else
 		{
-			Utilities::resultMsg = "User has not been found. Please, try log in again";
+			Utilities::resultMsg = "Something went wrong. Please, try log in again";
 		}
 	});
 	watcher->setFuture(*future);

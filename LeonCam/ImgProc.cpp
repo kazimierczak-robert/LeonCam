@@ -96,14 +96,14 @@ std::vector<cv::Rect> ImgProc::DetectFace(cv::Mat &img)
 	//int h = 0; //Height
 	//int w = 0; //Width
 	//
-	if (faces.size() == 1)
+	/*if (faces.size() == 1)
 	{
 		//10% https://stackoverflow.com/a/30842913
 		cv::Size deltaSize(faces[0].width * 0.1f, faces[0].height * 0.1f); // 0.1f = 10/100
 		cv::Point offset(deltaSize.width / 2, deltaSize.height / 2);
 		faces[0] += deltaSize;
 		faces[0] -= offset;
-	}
+	}*/
 
 	//	x = faces[0].x/**2*/;
 	//	y = faces[0].y/**2*/;

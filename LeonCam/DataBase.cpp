@@ -119,16 +119,6 @@ bool DataBase::CreateFaces()
 	result = query.isActive();
 	return result;
 }
-bool DataBase::CreateFacesModulesSettings() 
-{
-	QSqlQuery query("CREATE TABLE IF NOT EXISTS MoviesSettings("
-					"UserID INTEGER PRIMARY KEY REFERENCES Users(UserID),"
-					"Time TIME NOT NULL);");
-
-	bool result;
-	result = query.isActive();
-	return result;
-}
 bool DataBase::CreateDB()
 {
 	bool creationResult = true;
@@ -148,8 +138,6 @@ bool DataBase::CreateDB()
 		creationResult &= CreateAlertsDeleteSettings();
 		creationResult &= CreateCameras();
 		creationResult &= CreateFaces();
-		creationResult &= CreateFacesModulesSettings();
-
 	}
 	dataBase.removeDatabase("QSQLITE"); //Removes the DB connection [connectionName] from the list of database connections
 	return creationResult;	

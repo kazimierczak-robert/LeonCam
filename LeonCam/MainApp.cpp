@@ -1729,13 +1729,98 @@ void MainApp::RemovePerson(int faceID)
 			QFile file;
 			file.remove(".\\TrainedFaceRecognizer.xml");
 		}
-		//Delete from GreenAlert
 		query.clear();
 		query.exec("BEGIN IMMEDIATE TRANSACTION");
-		query.exec("DELETE FROM GreenAlerts WHERE FaceID = ?");
+		query.prepare("Select GreenAlertID FROM GreenAlerts WHERE FaceID=?");
 		query.bindValue(0, faceID);
-		query.exec();
-		query.exec("COMMIT");
+		if (query.exec())
+		{
+			int greenAlertID = -1;
+			int cameraID = -1;
+			while (query.next())
+			{
+				greenAlertID = query.value(0).toInt();
+
+				//Remove row from table
+				for (int i = 0; i < ui.TWGreenReport->rowCount(); i++)
+				{
+					if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
+					{
+						cameraID = ui.TWGreenReport->item(i, 1)->text().toInt();
+						ui.TWGreenReport->removeCellWidget(i, 7);
+						ui.TWGreenReport->removeCellWidget(i, 8);
+						ui.TWGreenReport->removeRow(i);
+						break;
+					}
+				}
+				QSqlQuery query;
+				QString startGreenDate;
+				query.exec("SELECT StartDate FROM GreenAlerts WHERE GreenAlertID = ?");
+				query.bindValue(0, greenAlertID);
+				bool result = query.exec();
+				if (result == true)
+				{
+					query.next();
+					startGreenDate = query.value(0).toString();
+				}
+				//Remove from DB
+				query.clear();
+				query.exec("BEGIN IMMEDIATE TRANSACTION");
+				query.exec("DELETE FROM GreenAlerts WHERE GreenAlertID = ?");
+				query.bindValue(0, greenAlertID);
+				result = query.exec();
+				query.exec("COMMIT");
+				if (cameraID > -1)
+				{
+					//Difference should be 0 in most cases, but it can be >0 or <0
+					//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
+					int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+					QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+					QBarSeries *series = (QBarSeries *)chart->series().at(0);
+					QBarSet *setGreen = series->barSets().at(1);
+					int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+					if (greenDiff < 7)
+					{
+						int value = setGreen->at(6 - greenDiff);
+						value--;
+						weekChartGreenMap[greenDiff]--;
+						setGreen->replace(6 - greenDiff, value);
+						int range = GetChartRange();
+						chart->axisY()->setRange(0, range);
+					}
+					if (diff != 0)
+					{
+						//Data for bar series: second has people counter on <today - diff> position
+						for (int i = 6; i > 0; i--)
+						{
+							weekChartGreenMap[i] = weekChartGreenMap[i - 1];
+							weekChartRedMap[i] = weekChartRedMap[i - 1];
+						}
+						//Move week names by 1
+						weekChartGreenMap[0] = 0;
+						QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
+						((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
+						((QBarCategoryAxis *)(chart->axisX()))->append(category0);
+						chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
+
+						setGreen->remove(0);
+						setGreen->append(0);
+
+						//move red
+						weekChartRedMap[0] = 0;
+
+						QBarSet *setRed = series->barSets().at(0);
+						setRed->remove(0);
+						setRed->append(0);
+
+						todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
+						int range = GetChartRange();
+						chart->axisY()->setRange(0, range);
+					}
+				}
+
+			}
+		}
 	}
 }
 void MainApp::RemoveGreenAlert(int greenAlertID)
@@ -2231,6 +2316,7 @@ void MainApp::StatisticsChart()
 	//Create chart
 	QChart *chart = new QChart();
 	chart->addSeries(barseries);
+
 	//Days from today to 6 days ago
 	QStringList categories;
 	QLocale locale(QLocale::English);
@@ -2251,10 +2337,15 @@ void MainApp::StatisticsChart()
 
 	QValueAxis *axisY = new QValueAxis();
 	chart->setAxisY(axisY, barseries);
+	QFont font = chart->axisX()->labelsFont();
+	font.setBold(false);
+	chart->axisY()->setTitleFont(font);
+	chart->axisY()->setTitleText("Number of alerts");
 
 	int range = GetChartRange();
 
 	axisY->setRange(0, range);
+	axisY->setLabelFormat("%d");
 
 	//Show Legend
 	chart->legend()->setVisible(true);

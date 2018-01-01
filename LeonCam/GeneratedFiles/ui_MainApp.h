@@ -410,7 +410,7 @@ public:
         CBSettings->setStyleSheet(QStringLiteral("background-color: none;"));
         verticalLayoutWidget = new QWidget(TReports);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 290, 711, 211));
+        verticalLayoutWidget->setGeometry(QRect(0, 290, 711, 221));
         VLLayout = new QVBoxLayout(verticalLayoutWidget);
         VLLayout->setSpacing(6);
         VLLayout->setContentsMargins(11, 11, 11, 11);

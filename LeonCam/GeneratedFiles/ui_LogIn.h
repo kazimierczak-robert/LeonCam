@@ -130,7 +130,7 @@ public:
         LEUsername->setPlaceholderText(QApplication::translate("LogInClass", "Username", Q_NULLPTR));
         LEPassword->setText(QString());
         LEPassword->setPlaceholderText(QApplication::translate("LogInClass", "Password", Q_NULLPTR));
-        PBLogIn->setText(QApplication::translate("LogInClass", "Log In", Q_NULLPTR));
+        PBLogIn->setText(QApplication::translate("LogInClass", "Log in", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         PBForgotPassword->setToolTip(QApplication::translate("LogInClass", "To recover your password, firstly, fill your <b>Username</b>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

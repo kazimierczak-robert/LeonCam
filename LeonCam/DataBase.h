@@ -21,6 +21,5 @@ private:
 	bool CreateAlertsDeleteSettings();
 	bool CreateCameras();
 	bool CreateFaces();
-	bool CreateFacesModulesSettings();
 };
 

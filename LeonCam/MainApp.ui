@@ -748,7 +748,7 @@ QHeaderView::section
         <x>0</x>
         <y>290</y>
         <width>711</width>
-        <height>211</height>
+        <height>221</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="VLLayout"/>
