@@ -1535,10 +1535,42 @@ void MainApp::TakePicture(int faceID)
 		newPhoto->exec();
 		delete newPhoto;
 		//update model
-		imgProc->GetModel()->update(imgProc->GetImages(), imgProc->GetLabels());
-		imgProc->GetModel()->save(trainedFaceRecognizerFilePath);
-		imgProc->ClearImagesVector();
-		imgProc->ClearLabelsVector();
+		if (imgProc->GetImages().size() > 0)
+		{
+			imgProc->SetModelTrainingState(true);
+			imgProc->GetModel()->update(imgProc->GetImages(), imgProc->GetLabels());
+			imgProc->GetModel()->save(trainedFaceRecognizerFilePath);
+			imgProc->ClearImagesVector();
+			imgProc->ClearLabelsVector();
+			if (imgProc->CheckIfFaceCascadeExists())
+			{
+				int cameraID;
+				QPushButton *btn;
+				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				{
+					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+					{
+						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
+						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
+						connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
+					}
+				}
+			}
+			else
+			{
+				int cameraID;
+				QPushButton *btn;
+				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				{
+					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+					{
+						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
+						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
+						disconnect(btn, &QPushButton::clicked, this, nullptr);
+					}
+				}
+			}
+		}
 	}
 }
 void MainApp::LESearchFBChanged()
@@ -1731,6 +1763,36 @@ void MainApp::RemovePerson(int faceID)
 			//Remove trained model file if parson has been removed
 			QFile file;
 			file.remove(".\\TrainedFaceRecognizer.xml");
+			//Train model again
+			imgProc->TrainFaceRecognizer();
+			if (imgProc->CheckIfModelTrained() && imgProc->CheckIfFaceCascadeExists())
+			{
+				int cameraID;
+				QPushButton *btn;
+				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				{
+					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+					{
+						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
+						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
+						connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });						
+					}
+				}
+			}
+			else
+			{
+				int cameraID;
+				QPushButton *btn;
+				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				{
+					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
+					{
+						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
+						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
+						disconnect(btn, &QPushButton::clicked, this, nullptr);
+					}
+				}
+			}
 		}
 		query.clear();
 		query.exec("BEGIN IMMEDIATE TRANSACTION");

@@ -99,6 +99,10 @@ void ImgProc::TrainFaceRecognizer()
 		model->save(trainedFaceRecognizerFilePath);
 		isModelTrained = true;
 	}
+	else
+	{
+		isModelTrained = false;
+	}
 }
 bool ImgProc::CheckIfFaceCascadeLoaded()
 {

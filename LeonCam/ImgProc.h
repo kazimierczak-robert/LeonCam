@@ -28,6 +28,7 @@ public:
 	cv::CascadeClassifier GetFaceCascade() { return faceCascade; }
 	int PredictPerson(cv::Mat matImg);
 	bool CheckIfModelTrained() {return isModelTrained;}
+	void SetModelTrainingState(bool state) { isModelTrained = state; }
 	std::vector<cv::Mat> GetImages() { return images; }
 	std::vector<int> GetLabels() { return labels; }
 	cv::Ptr<cv::FaceRecognizer> GetModel() { return model; }
