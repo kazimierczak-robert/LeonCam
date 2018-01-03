@@ -81,7 +81,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
 			//the last parameter: color or not video
 			//CV_FOURCC('M', 'J', 'P', 'G')
-			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , (double)cameraFPS/2, cv::Size(640, 360), true);
+			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , (double)cameraFPS/updateImagePeriod, cv::Size(640, 360), true);
 		}
 		else
 		{
@@ -242,7 +242,7 @@ void MainAppCamera::SetFPS(int fps)
 	else if (fps>1 && fps < 20)
 	{
 		this->processImagePeriod = floor((double)fps / 2);
-		if (fps > 10 && this->processImagePeriod % 2 == 1)
+		if (fps > 10 && this->processImagePeriod % 2 == 1) //updateImagePeriod is 2 for this range, result must be multiply by 2
 		{
 			this->processImagePeriod += 1;
 		}

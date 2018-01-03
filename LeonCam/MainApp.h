@@ -104,6 +104,7 @@ private:
 	std::map<int, int> weekChartGreenMap;
 	std::map<int, int> weekChartRedMap;
 	QDateTime todayDateTime;
+	void MoveChartByDiff(int diff, QChart *chart, QBarSet *setGreen, QBarSet *setRed, QString dateTimeNow);
 	int getCameraIDFromLayout(QGridLayout* layout);
 	//https://stackoverflow.com/a/7286710
 	Camera* GetCameraFromDBByID(int cameraID);

@@ -814,7 +814,12 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 						int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
 						QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 						QBarSeries *series = (QBarSeries *)chart->series().at(0);
+						QBarSet *setRed = series->barSets().at(0);
 						QBarSet *setGreen = series->barSets().at(1);
+						if (diff != 0)
+						{
+							MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+						}
 						int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
 						if (greenDiff < 7)
 						{
@@ -822,35 +827,6 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 							value--;
 							weekChartGreenMap[greenDiff]--;
 							setGreen->replace(6 - greenDiff, value);
-							int range = GetChartRange();
-							chart->axisY()->setRange(0, range);
-						}
-						if (diff != 0)
-						{
-							//Data for bar series: second has people counter on <today - diff> position
-							for (int i = 6; i > 0; i--)
-							{
-								weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-								weekChartRedMap[i] = weekChartRedMap[i - 1];
-							}
-							//Move week names by 1
-							weekChartGreenMap[0] = 0;
-							QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-							((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-							((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-							chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-							setGreen->remove(0);
-							setGreen->append(0);
-
-							//move red
-							weekChartRedMap[0] = 0;
-
-							QBarSet *setRed = series->barSets().at(0);
-							setRed->remove(0);
-							setRed->append(0);
-
-							todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
 							int range = GetChartRange();
 							chart->axisY()->setRange(0, range);
 						}
@@ -911,6 +887,11 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 						QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 						QBarSeries *series = (QBarSeries *)chart->series().at(0);
 						QBarSet *setRed = series->barSets().at(0);
+						QBarSet *setGreen = series->barSets().at(1);
+						if (diff != 0)
+						{
+							MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+						}
 						int redDiff = (QDateTime::fromString(startRedDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
 						if (redDiff < 7)
 						{
@@ -921,37 +902,7 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 							int range = GetChartRange();
 							chart->axisY()->setRange(0, range);
 						}
-						if (diff != 0)
-						{
-							//Data for bar series: second has people counter on <today - diff> position
-							for (int i = 6; i > 0; i--)
-							{
-								weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-								weekChartRedMap[i] = weekChartRedMap[i - 1];
-							}
-
-							//Move week names by 1
-							weekChartGreenMap[0] = 0;
-
-							QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-							((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-							((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-							chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-							setRed->remove(0);
-							setRed->append(0);
-
-							//move red
-							weekChartRedMap[0] = 0;
-
-							QBarSet *setGreen = series->barSets().at(1);
-							setGreen->remove(0);
-							setGreen->append(0);
-
-							todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
-							int range = GetChartRange();
-							chart->axisY()->setRange(0, range);
-						}
+						
 
 						QFile file;
 						QString fileName = ".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi";
@@ -1843,6 +1794,11 @@ void MainApp::RemovePerson(int faceID)
 					QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 					QBarSeries *series = (QBarSeries *)chart->series().at(0);
 					QBarSet *setGreen = series->barSets().at(1);
+					QBarSet *setRed = series->barSets().at(0);
+					if (diff != 0)
+					{
+						MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+					}
 					int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
 					if (greenDiff < 7)
 					{
@@ -1850,35 +1806,6 @@ void MainApp::RemovePerson(int faceID)
 						value--;
 						weekChartGreenMap[greenDiff]--;
 						setGreen->replace(6 - greenDiff, value);
-						int range = GetChartRange();
-						chart->axisY()->setRange(0, range);
-					}
-					if (diff != 0)
-					{
-						//Data for bar series: second has people counter on <today - diff> position
-						for (int i = 6; i > 0; i--)
-						{
-							weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-							weekChartRedMap[i] = weekChartRedMap[i - 1];
-						}
-						//Move week names by 1
-						weekChartGreenMap[0] = 0;
-						QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-						((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-						((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-						chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-						setGreen->remove(0);
-						setGreen->append(0);
-
-						//move red
-						weekChartRedMap[0] = 0;
-
-						QBarSet *setRed = series->barSets().at(0);
-						setRed->remove(0);
-						setRed->append(0);
-
-						todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
 						int range = GetChartRange();
 						chart->axisY()->setRange(0, range);
 					}
@@ -1938,41 +1865,18 @@ void MainApp::RemoveGreenAlert(int greenAlertID)
 			QBarSeries *series = (QBarSeries *)chart->series().at(0);
 			QBarSet *setGreen = series->barSets().at(1);
 			int greenDiff = (QDateTime::fromString(startGreenDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			QBarSet *setRed = series->barSets().at(0);
+			if (diff != 0)
+			{
+				MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+			}
+			//
 			if (greenDiff < 7)
 			{
 				int value = setGreen->at(6 - greenDiff);
 				value--;
 				weekChartGreenMap[greenDiff]--;
 				setGreen->replace(6 - greenDiff, value);
-				int range = GetChartRange();
-				chart->axisY()->setRange(0, range);
-			}
-			if (diff != 0)
-			{
-				//Data for bar series: second has people counter on <today - diff> position
-				for (int i = 6; i > 0; i--)
-				{
-					weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-					weekChartRedMap[i] = weekChartRedMap[i - 1];
-				}
-				//Move week names by 1
-				weekChartGreenMap[0] = 0;
-				QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-				((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-				((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-				chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-				setGreen->remove(0);
-				setGreen->append(0);
-
-				//move red
-				weekChartRedMap[0] = 0;
-
-				QBarSet *setRed = series->barSets().at(0);
-				setRed->remove(0);
-				setRed->append(0);
-
-				todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
 				int range = GetChartRange();
 				chart->axisY()->setRange(0, range);
 			}
@@ -2033,6 +1937,12 @@ void MainApp::RemoveRedAlert(int redAlertID)
 			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 			QBarSeries *series = (QBarSeries *)chart->series().at(0);
 			QBarSet *setRed = series->barSets().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
+			if (diff != 0)
+			{
+				MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+			}
+			//
 			int redDiff = (QDateTime::fromString(startRedDate, "yyyy-MM-dd HH:mm:ss").date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
 			if (redDiff < 7)
 			{
@@ -2040,37 +1950,6 @@ void MainApp::RemoveRedAlert(int redAlertID)
 				value--;
 				weekChartRedMap[redDiff]--;
 				setRed->replace(6 - redDiff, value);
-				int range = GetChartRange();
-				chart->axisY()->setRange(0, range);
-			}
-			if (diff != 0)
-			{
-				//Data for bar series: second has people counter on <today - diff> position
-				for (int i = 6; i > 0; i--)
-				{
-					weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-					weekChartRedMap[i] = weekChartRedMap[i - 1];
-				}
-
-				//Move week names by 1
-				weekChartGreenMap[0] = 0;
-
-				QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-				((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-				((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-				chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-				setRed->remove(0);
-				setRed->append(0);
-
-				//move red
-				weekChartRedMap[0] = 0;
-
-				QBarSet *setGreen = series->barSets().at(1);
-				setGreen->remove(0);
-				setGreen->append(0);
-
-				todayDateTime = QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss");
 				int range = GetChartRange();
 				chart->axisY()->setRange(0, range);
 			}
@@ -2178,47 +2057,94 @@ void MainApp::InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QStri
 		QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 		QBarSeries *series = (QBarSeries *)chart->series().at(0);
 		QBarSet *setGreen = series->barSets().at(1);
-		if (diff == 0) 
+		QBarSet *setRed = series->barSets().at(0);
+		if (diff != 0) 
 		{
-			int value = setGreen->at(setGreen->count() - 1);
-			value++;
-			weekChartGreenMap[0]++;
-			setGreen->replace(setGreen->count() - 1, value);
-			int range = GetChartRange();
-			chart->axisY()->setRange(0, range);
+			MoveChartByDiff(diff, chart, setGreen, setRed, dateTimeNow);
 		}
-		else
+		int value = setGreen->at(setGreen->count() - 1);
+		value++;
+		weekChartGreenMap[0]++;
+		setGreen->replace(setGreen->count() - 1, value);
+		int range = GetChartRange();
+		chart->axisY()->setRange(0, range);
+	}
+}
+void MainApp::MoveChartByDiff(int diff, QChart *chart, QBarSet *setGreen, QBarSet *setRed, QString dateTimeNow)
+{
+	//Move map
+	if (diff < 7) 
+	{
+		//Data for bar series: second has people counter on <today - diff> position
+		for (int i = 6; i >= diff; i--)
 		{
-			//Data for bar series: second has people counter on <today - diff> position
-			for (int i = 6; i >0; i--)
-			{
-				weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-				weekChartRedMap[i] = weekChartRedMap[i - 1];
-			}
+			weekChartGreenMap[i] = weekChartGreenMap[i - diff];
+			weekChartRedMap[i] = weekChartRedMap[i - diff];
+		}
+		//0 series which havn't got alerts
+		for (int i = 0; i < diff; i++)
+		{
+			weekChartGreenMap[i] = 0;
+			weekChartRedMap[i] = 0;
+		}
 
-			//Move week names by 1
-			weekChartGreenMap[0] = 1;
-
-			QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
+		//Move chart
+		QString category0;
+		for (int i = 0; i < diff; i++)
+		{
+			category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
 			((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
 			((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-			chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
+		}
+		
+		chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
 
+		for (int i = 0; i < diff; i++)
+		{
 			setGreen->remove(0);
-			setGreen->append(1);
-
-			//move red
-			weekChartRedMap[0] = 0;
-
-			QBarSet *setRed= series->barSets().at(0);
+			setGreen->append(0);
 			setRed->remove(0);
 			setRed->append(0);
-
-			todayDateTime = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
-			int range = GetChartRange();
-			chart->axisY()->setRange(0, range);
 		}
+		
+		todayDateTime = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
+		int range = GetChartRange();
+		chart->axisY()->setRange(0, range);
 	}
+	else
+	{
+		//0 series which haven't got alerts
+		for (int i = 0; i < 7; i++)
+		{
+			weekChartGreenMap[i] = 0;
+			weekChartRedMap[i] = 0;
+		}
+
+		//Move chart
+		QString category0;
+		for (int i = 0; i < diff%7; i++)
+		{
+			category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
+			((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
+			((QBarCategoryAxis *)(chart->axisX()))->append(category0);
+		}
+
+		chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
+
+		for (int i = 0; i < 7; i++)
+		{
+			setGreen->remove(0);
+			setGreen->append(0);
+			setRed->remove(0);
+			setRed->append(0);
+		}
+
+		todayDateTime = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
+		int range = GetChartRange();
+		chart->axisY()->setRange(0, range);
+	}
+
+
 }
 void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 {
@@ -2226,50 +2152,21 @@ void MainApp::InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow)
 	//add to chart
 	QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
 	QBarSeries *series = (QBarSeries *)chart->series().at(0);
-	QBarSet *setRed = series->barSets().at(0);
 	//Difference should be 0 in most cases, but it can be >0
 	//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
 	int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss").date());
-	if (diff == 0)
+	QBarSet *setGreen = series->barSets().at(1);
+	QBarSet *setRed = series->barSets().at(0);
+	if (diff != 0)
 	{
-		int value = setRed->at(setRed->count() - 1);
-		value++;
-		weekChartRedMap[0]++;
-		setRed->replace(setRed->count() - 1, value);
-		int range = GetChartRange();
-		chart->axisY()->setRange(0, range);
+		MoveChartByDiff(diff, chart, setGreen, setRed, dateTimeNow);
 	}
-	else
-	{
-		//Data for bar series: second has people counter on <today - diff> position
-		for (int i = 6; i > 0; i--)
-		{
-			weekChartGreenMap[i] = weekChartGreenMap[i - 1];
-			weekChartRedMap[i] = weekChartRedMap[i - 1];
-		}
-
-		//Move week names by 1
-		weekChartRedMap[0] = 1;
-
-		QString category0 = ((QBarCategoryAxis *)(chart->axisX()))->at(0);
-		((QBarCategoryAxis *)(chart->axisX()))->remove(category0);
-		((QBarCategoryAxis *)(chart->axisX()))->append(category0);
-		chart->axisX()->setRange(((QBarCategoryAxis *)(chart->axisX()))->at(0), ((QBarCategoryAxis *)(chart->axisX()))->at(6));
-
-		QBarSet *setGreen = series->barSets().at(1);
-		setGreen->remove(0);
-		setGreen->append(0);
-
-		//move red
-		weekChartGreenMap[0] = 0;
-
-		setRed->remove(0);
-		setRed->append(1);
-
-		todayDateTime = QDateTime::fromString(dateTimeNow, "yyyy-MM-dd HH:mm:ss");
-		int range = GetChartRange();
-		chart->axisY()->setRange(0, range);
-	}
+	int value = setRed->at(setRed->count() - 1);
+	value++;
+	weekChartRedMap[0]++;
+	setRed->replace(setRed->count() - 1, value);
+	int range = GetChartRange();
+	chart->axisY()->setRange(0, range);
 
 	for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
 	{
@@ -2290,6 +2187,15 @@ void MainApp::UpdateGreenAlert(int greenAlertID, QString stopDate)
 		if (greenAlertID == ui.TWGreenReport->item(i, 0)->text().toInt())
 		{
 			ui.TWGreenReport->item(i, 6)->setText(stopDate);
+			int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setRed = series->barSets().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
+			if (diff != 0)
+			{
+				MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+			}
 			break;
 		}
 	}
@@ -2301,6 +2207,15 @@ void MainApp::UpdateRedAlert(int redAlertID, QString stopDate)
 		if (redAlertID == ui.TWRedReport->item(i, 0)->text().toInt())
 		{
 			ui.TWRedReport->item(i, 3)->setText(stopDate);
+			int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setRed = series->barSets().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
+			if (diff != 0)
+			{
+				MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
+			}
 			break;
 		}
 	}
