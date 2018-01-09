@@ -767,6 +767,10 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 		if (result == true)
 		{
 			DeleteCameraFromMemory(layout);
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setRed = series->barSets().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
 			query.clear();
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
 			query.prepare("Select GreenAlertID FROM GreenAlerts WHERE CameraID=?");
@@ -812,10 +816,6 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 						//Difference should be 0 in most cases, but it can be >0 or <0
 						//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
 						int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-						QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
-						QBarSeries *series = (QBarSeries *)chart->series().at(0);
-						QBarSet *setRed = series->barSets().at(0);
-						QBarSet *setGreen = series->barSets().at(1);
 						if (diff != 0)
 						{
 							MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
@@ -884,10 +884,6 @@ void MainApp::RemoveCamera(QGridLayout* layout)
 					{
 						//Difference should be 0 in most cases, but it can be >0 or <0
 						int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-						QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
-						QBarSeries *series = (QBarSeries *)chart->series().at(0);
-						QBarSet *setRed = series->barSets().at(0);
-						QBarSet *setGreen = series->barSets().at(1);
 						if (diff != 0)
 						{
 							MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());
@@ -1753,6 +1749,10 @@ void MainApp::RemovePerson(int faceID)
 		{
 			int greenAlertID = -1;
 			int cameraID = -1;
+			QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
+			QBarSeries *series = (QBarSeries *)chart->series().at(0);
+			QBarSet *setGreen = series->barSets().at(1);
+			QBarSet *setRed = series->barSets().at(0);
 			while (query.next())
 			{
 				greenAlertID = query.value(0).toInt();
@@ -1791,10 +1791,6 @@ void MainApp::RemovePerson(int faceID)
 					//Difference should be 0 in most cases, but it can be >0 or <0
 					//todayDateTime = QDateTime::fromString("2017-11-20 21:40:00", "yyyy-MM-dd HH:mm:ss");
 					int diff = (todayDateTime.date()).daysTo(QDateTime::fromString(Utilities::GetCurrentDateTime(), "yyyy-MM-dd HH:mm:ss").date());
-					QChart *chart = ((QChartView*)ui.VLLayout->itemAt(0)->widget())->chart();
-					QBarSeries *series = (QBarSeries *)chart->series().at(0);
-					QBarSet *setGreen = series->barSets().at(1);
-					QBarSet *setRed = series->barSets().at(0);
 					if (diff != 0)
 					{
 						MoveChartByDiff(diff, chart, setGreen, setRed, Utilities::GetCurrentDateTime());

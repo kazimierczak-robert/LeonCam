@@ -49,6 +49,7 @@ void ForgottenPassword::SetSecurityQuestion(QString username)
 void ForgottenPassword::VerifyClicked()
 {
 	designB->gif->start();
+	ui.PBVerify->setEnabled(false);
 	Utilities::resultMsg = "";
 	passwordFromMap = "";
 	future = new QFuture<void>();
@@ -65,6 +66,7 @@ void ForgottenPassword::VerifyClicked()
 			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
 		}
 		designB->gif->stop();
+		ui.PBVerify->setEnabled(true);
 		Utilities::resultMsg = "";
 	});
 	*future = QtConcurrent::run([=]()

@@ -29,6 +29,7 @@ LogIn::~LogIn()
 }
 void LogIn::LogInClicked()
 {
+	ui.PBLogIn->setDisabled(true);
 	designB->gif->start();
 
 	QString username = "";
@@ -55,6 +56,7 @@ void LogIn::LogInClicked()
 			Utilities::MBAlarm(QString::fromStdString(Utilities::resultMsg), false);
 		}
 		designB->gif->stop();
+		ui.PBLogIn->setDisabled(false);
 		Utilities::resultMsg = "";
 	});
 	*future = QtConcurrent::run([=]()
