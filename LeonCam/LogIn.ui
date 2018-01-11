@@ -79,7 +79,7 @@ margin: 0px;
 padding: 0px;*/</string>
     </property>
     <property name="text">
-     <string>New profile</string>
+     <string>New Profile</string>
     </property>
     <property name="autoDefault">
      <bool>true</bool>
@@ -145,7 +145,7 @@ background-color: rgb(0, 77, 116);
 }</string>
     </property>
     <property name="text">
-     <string>Log in</string>
+     <string>Log In</string>
     </property>
     <property name="autoDefault">
      <bool>true</bool>

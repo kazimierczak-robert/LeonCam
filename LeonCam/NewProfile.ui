@@ -137,7 +137,7 @@ background-color: rgb(46, 147, 222);</string>
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Security Question</string>
+    <string>Security question</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="LEAnswer">

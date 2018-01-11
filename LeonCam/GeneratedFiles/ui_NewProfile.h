@@ -132,7 +132,7 @@ public:
         LEConfPass->setText(QString());
         LEConfPass->setPlaceholderText(QApplication::translate("NewProfile", "Confirm password", Q_NULLPTR));
         LESecQuest->setText(QString());
-        LESecQuest->setPlaceholderText(QApplication::translate("NewProfile", "Security Question", Q_NULLPTR));
+        LESecQuest->setPlaceholderText(QApplication::translate("NewProfile", "Security question", Q_NULLPTR));
         LEAnswer->setText(QString());
         LEAnswer->setPlaceholderText(QApplication::translate("NewProfile", "Answer", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP

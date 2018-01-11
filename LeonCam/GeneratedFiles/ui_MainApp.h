@@ -617,7 +617,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(0);
+        TWMenu->setCurrentIndex(3);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -652,7 +652,7 @@ public:
         LSearch_2->setText(QString());
         LEUsername->setPlaceholderText(QApplication::translate("MainApp", "Name", Q_NULLPTR));
         LESurname->setPlaceholderText(QApplication::translate("MainApp", "Surname", Q_NULLPTR));
-        PBAddPerson->setText(QApplication::translate("MainApp", "Add person", Q_NULLPTR));
+        PBAddPerson->setText(QApplication::translate("MainApp", "Add Person", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TFacesBase), QApplication::translate("MainApp", "FACES BASE", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem7 = TWGreenReport->horizontalHeaderItem(0);
         ___qtablewidgetitem7->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
@@ -672,7 +672,7 @@ public:
         ___qtablewidgetitem14->setText(QApplication::translate("MainApp", "Go to", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem15 = TWGreenReport->horizontalHeaderItem(8);
         ___qtablewidgetitem15->setText(QApplication::translate("MainApp", "Delete alert", Q_NULLPTR));
-        PBRedAlert->setText(QApplication::translate("MainApp", "Manage and view Red Alerts", Q_NULLPTR));
+        PBRedAlert->setText(QApplication::translate("MainApp", "Manage and View Red Alerts", Q_NULLPTR));
         LChooseAlertDelSet->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Choose alert <br/>delete settings</p></body></html>", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem16 = TWRedReport->horizontalHeaderItem(0);
         ___qtablewidgetitem16->setText(QApplication::translate("MainApp", "ID", Q_NULLPTR));
@@ -688,7 +688,7 @@ public:
         ___qtablewidgetitem21->setText(QApplication::translate("MainApp", "Open movie", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem22 = TWRedReport->horizontalHeaderItem(6);
         ___qtablewidgetitem22->setText(QApplication::translate("MainApp", "Delete alert and movie", Q_NULLPTR));
-        PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and view Green Alerts", Q_NULLPTR));
+        PBGreenAlert->setText(QApplication::translate("MainApp", "Manage and View Green Alerts", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TReports), QApplication::translate("MainApp", "   REPORTS", Q_NULLPTR));
         GBChangePassword->setTitle(QApplication::translate("MainApp", "Change profile password", Q_NULLPTR));
         LEChangePasswordOldPassword->setText(QString());
@@ -709,29 +709,29 @@ public:
 "</html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTipPass->setText(QString());
-        PBChangePassword->setText(QApplication::translate("MainApp", "Change password", Q_NULLPTR));
+        PBChangePassword->setText(QApplication::translate("MainApp", "Change Password", Q_NULLPTR));
         GBChangeLogin->setTitle(QApplication::translate("MainApp", "Change profile login", Q_NULLPTR));
         LEChangeLoginPassword->setText(QString());
         LEChangeLoginPassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
         LEChangeLoginUsername->setText(QString());
         LEChangeLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "New username", Q_NULLPTR));
-        PBChangeLogin->setText(QApplication::translate("MainApp", "Change login", Q_NULLPTR));
+        PBChangeLogin->setText(QApplication::translate("MainApp", "Change Login", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTipLogin->setToolTip(QApplication::translate("MainApp", "<html><head/><body><p><span style=\" font-weight:600;\">Username</span> has <span style=\" font-weight:600;\">50</span> letters up limit</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         LTipLogin->setText(QString());
         GBChangeSecQuestion->setTitle(QApplication::translate("MainApp", "Change profile security question", Q_NULLPTR));
         LEChangeSecQuestionSecQuest->setText(QString());
-        LEChangeSecQuestionSecQuest->setPlaceholderText(QApplication::translate("MainApp", "Security Question", Q_NULLPTR));
+        LEChangeSecQuestionSecQuest->setPlaceholderText(QApplication::translate("MainApp", "Security question", Q_NULLPTR));
         LEChangeSecQuestionNewAnswer->setText(QString());
         LEChangeSecQuestionNewAnswer->setPlaceholderText(QApplication::translate("MainApp", "Answer", Q_NULLPTR));
-        PBChangeSecQuestion->setText(QApplication::translate("MainApp", "Change security question", Q_NULLPTR));
+        PBChangeSecQuestion->setText(QApplication::translate("MainApp", "Change Security Question", Q_NULLPTR));
         LEChangeSecQuestionPassword->setText(QString());
         LEChangeSecQuestionPassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
         GBDeleteProfile->setTitle(QApplication::translate("MainApp", "Delete profile", Q_NULLPTR));
         LEDeleteProfilePassword->setText(QString());
         LEDeleteProfilePassword->setPlaceholderText(QApplication::translate("MainApp", "Password", Q_NULLPTR));
-        PBDeleteProfile->setText(QApplication::translate("MainApp", "Delete profile", Q_NULLPTR));
+        PBDeleteProfile->setText(QApplication::translate("MainApp", "Delete Profile", Q_NULLPTR));
         LEDeleteLoginUsername->setText(QString());
         LEDeleteLoginUsername->setPlaceholderText(QApplication::translate("MainApp", "Username", Q_NULLPTR));
         LSettingsHelp->setText(QApplication::translate("MainApp", "<html><head/><body><p align=\"center\">Here you can change settings of your profile<br/>If you complete it successfully, you'll be logged out</p></body></html>", Q_NULLPTR));

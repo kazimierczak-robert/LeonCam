@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -453,7 +453,7 @@ margin: 0px;
 padding: 0px;*/</string>
       </property>
       <property name="text">
-       <string>Add person</string>
+       <string>Add Person</string>
       </property>
       <property name="autoDefault">
        <bool>true</bool>
@@ -605,7 +605,7 @@ padding: 0px;
 background-color:none*/</string>
       </property>
       <property name="text">
-       <string>Manage and view Red Alerts</string>
+       <string>Manage and View Red Alerts</string>
       </property>
      </widget>
      <widget class="QLabel" name="LChooseAlertDelSet">
@@ -775,7 +775,7 @@ margin: 0px;
 padding: 0px;*/</string>
       </property>
       <property name="text">
-       <string>Manage and view Green Alerts</string>
+       <string>Manage and View Green Alerts</string>
       </property>
       <property name="autoDefault">
        <bool>true</bool>
@@ -930,7 +930,7 @@ background-color: rgb(39, 129, 63);
 }</string>
        </property>
        <property name="text">
-        <string>Change password</string>
+        <string>Change Password</string>
        </property>
        <property name="autoDefault">
         <bool>true</bool>
@@ -1020,7 +1020,7 @@ background-color: rgb(39, 129, 63);
 }</string>
        </property>
        <property name="text">
-        <string>Change login</string>
+        <string>Change Login</string>
        </property>
        <property name="autoDefault">
         <bool>true</bool>
@@ -1079,7 +1079,7 @@ background-color: rgb(39, 129, 63);
         <string/>
        </property>
        <property name="placeholderText">
-        <string>Security Question</string>
+        <string>Security question</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="LEChangeSecQuestionNewAnswer">
@@ -1121,7 +1121,7 @@ background-color: rgb(39, 129, 63);
 }</string>
        </property>
        <property name="text">
-        <string>Change security question</string>
+        <string>Change Security Question</string>
        </property>
        <property name="autoDefault">
         <bool>true</bool>
@@ -1214,7 +1214,7 @@ background-color: rgb(39, 129, 63);
 }</string>
        </property>
        <property name="text">
-        <string>Delete profile</string>
+        <string>Delete Profile</string>
        </property>
        <property name="autoDefault">
         <bool>true</bool>
