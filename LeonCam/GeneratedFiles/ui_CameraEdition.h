@@ -144,7 +144,7 @@ public:
         LEDescripton->setText(QString());
         LEDescripton->setPlaceholderText(QApplication::translate("CameraEdition", "Description", Q_NULLPTR));
         LEIPv4Address->setText(QString());
-        LEIPv4Address->setPlaceholderText(QApplication::translate("CameraEdition", "IPv4 address : port number", Q_NULLPTR));
+        LEIPv4Address->setPlaceholderText(QApplication::translate("CameraEdition", "IPv4 address:port number", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         LTip->setToolTip(QApplication::translate("CameraEdition", "<html><head/><body><p><span style=\" font-weight:600;\">Description</span> must be unique.<br/>If <span style=\" font-weight:600;\">IP Address</span> is typed without port number, it takes <span style=\" font-weight:600;\">default</span> port (<span style=\" font-weight:600;\">80</span>)</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

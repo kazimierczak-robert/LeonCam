@@ -36,9 +36,9 @@ public:
     QLabel *LHelp;
     QPushButton *PBFolder;
     QPushButton *PBHome;
-    QLabel *LWarning;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
+    QPushButton *PWarning;
 
     void setupUi(QDialog *NewPhoto)
     {
@@ -161,11 +161,6 @@ public:
 "background-image: url(:/Resources/Images/homeHover.png);\n"
 "}"));
         PBHome->setFlat(true);
-        LWarning = new QLabel(NewPhoto);
-        LWarning->setObjectName(QStringLiteral("LWarning"));
-        LWarning->setGeometry(QRect(270, 550, 271, 31));
-        LWarning->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
-"background-color: rgb(255, 77, 61);"));
         verticalLayoutWidget = new QWidget(NewPhoto);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(80, 110, 641, 361));
@@ -174,6 +169,11 @@ public:
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
+        PWarning = new QPushButton(NewPhoto);
+        PWarning->setObjectName(QStringLiteral("PWarning"));
+        PWarning->setGeometry(QRect(265, 515, 271, 31));
+        PWarning->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: rgb(255, 77, 61);"));
 
         retranslateUi(NewPhoto);
 
@@ -216,7 +216,7 @@ public:
         PBHome->setToolTip(QApplication::translate("NewPhoto", "Go to home position", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBHome->setText(QString());
-        LWarning->setText(QApplication::translate("NewPhoto", "<html><head/><body><p align=\"center\">No faces has been detected</p></body></html>", Q_NULLPTR));
+        PWarning->setText(QApplication::translate("NewPhoto", "No faces has been detected", Q_NULLPTR));
     } // retranslateUi
 
 };

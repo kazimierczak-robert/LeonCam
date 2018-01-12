@@ -39,6 +39,7 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	connect(ui.PBDown, &QPushButton::released, this, [this] {cameraControl->StopCamera(); });
 	//home position
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {cameraControl->GoHomeCamera(); });
+	connect(ui.PWarning, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
 }
 NewPhoto::~NewPhoto()
 {
@@ -70,16 +71,19 @@ void NewPhoto::UpdateImage(const cv::Mat& image)
 	if (peopleInFrameCounter > 1)
 	{
 		ui.PBSnapshot->setEnabled(false);
-		ui.LWarning->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
-		ui.LWarning->setText("In frame must be only one face");
-		ui.LWarning->setAlignment(Qt::AlignCenter);
+		ui.PWarning->setEnabled(false);
+
+		ui.PWarning->setStyleSheet("QPushButton{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
+		ui.PWarning->setText("In frame must be only one face");
 	}
 	else if (peopleInFrameCounter == 1)
 	{
 		ui.PBSnapshot->setEnabled(true);
-		ui.LWarning->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color:rgb(36, 118, 59);}");
-		ui.LWarning->setText("You can take photo");
-		ui.LWarning->setAlignment(Qt::AlignCenter);
+		ui.PWarning->setEnabled(true);
+
+		ui.PWarning->setStyleSheet("QPushButton{color: rgb(255, 255, 255);background-color:rgb(36, 118, 59);}");
+		ui.PWarning->setText("You can take photo");
+
 		//crop photo
 		cv::Rect myROI(faces[0].x+1, faces[0].y+1, faces[0].width-1, faces[0].height-1);
 		// Crop the full image to that image contained by the rectangle myROI
@@ -91,9 +95,10 @@ void NewPhoto::UpdateImage(const cv::Mat& image)
 	else
 	{
 		ui.PBSnapshot->setEnabled(false);
-		ui.LWarning->setStyleSheet("QLabel{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
-		ui.LWarning->setText("No faces has been detected");
-		ui.LWarning->setAlignment(Qt::AlignCenter);
+		ui.PWarning->setEnabled(false);
+
+		ui.PWarning->setStyleSheet("QPushButton{color: rgb(255, 255, 255);background-color: rgb(255, 77, 61);}");
+		ui.PWarning->setText("No faces has been detected");
 	}
 
 	imageWidget->ShowImage(tmpImage);

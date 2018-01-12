@@ -617,7 +617,7 @@ public:
 
         retranslateUi(MainApp);
 
-        TWMenu->setCurrentIndex(3);
+        TWMenu->setCurrentIndex(0);
         TWCameraPages->setCurrentIndex(-1);
 
 
@@ -629,7 +629,7 @@ public:
         MainApp->setWindowTitle(QApplication::translate("MainApp", "LeonCam", Q_NULLPTR));
         PBAddCamera->setText(QApplication::translate("MainApp", "Add Camera", Q_NULLPTR));
         LSearch->setText(QString());
-        LESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera", Q_NULLPTR));
+        LESearch->setPlaceholderText(QApplication::translate("MainApp", "Search camera by Description", Q_NULLPTR));
         LTotalNumber->setText(QApplication::translate("MainApp", "Total number of cameras: 0", Q_NULLPTR));
         LEnabledNumber->setText(QApplication::translate("MainApp", "Number of enabled cameras: 0/", Q_NULLPTR));
         TWMenu->setTabText(TWMenu->indexOf(TCameras), QApplication::translate("MainApp", "CAMERAS", Q_NULLPTR));

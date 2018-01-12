@@ -76,7 +76,7 @@ color:rgb(219, 235, 255)
 </string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -144,7 +144,7 @@ padding-left: 22px;
 border-radius: 11px;</string>
       </property>
       <property name="placeholderText">
-       <string>Search camera</string>
+       <string>Search camera by Description</string>
       </property>
      </widget>
      <widget class="QTabWidget" name="TWCameraPages">

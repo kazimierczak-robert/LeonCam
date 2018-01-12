@@ -4,7 +4,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
-	ui.CBAvailableCameras->lineEdit()->setPlaceholderText("IPv4 address : port number");
+	ui.CBAvailableCameras->lineEdit()->setPlaceholderText("IPv4 address:port number");
 	this->setResult(QDialog::Rejected);
 	//Create DesignB instance
 	designB = new DesignBase(this);

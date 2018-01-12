@@ -51,7 +51,7 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>IPv4 address : port number</string>
+    <string>IPv4 address:port number</string>
    </property>
   </widget>
   <widget class="QLabel" name="LTip">
