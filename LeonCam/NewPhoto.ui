@@ -310,6 +310,23 @@ background-image: url(:/Resources/Images/homeHover.png);
    </property>
    <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
+  <widget class="QLabel" name="LView">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>110</y>
+     <width>640</width>
+     <height>360</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 54, 80);</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
   <widget class="QPushButton" name="PWarning">
    <property name="geometry">
     <rect>
@@ -327,6 +344,19 @@ background-color: rgb(255, 77, 61);</string>
     <string>No faces has been detected</string>
    </property>
   </widget>
+  <zorder>LView</zorder>
+  <zorder>PBDown</zorder>
+  <zorder>PBRight</zorder>
+  <zorder>PBLeft</zorder>
+  <zorder>PBUp</zorder>
+  <zorder>PBSnapshot</zorder>
+  <zorder>PBBack</zorder>
+  <zorder>CBPresets</zorder>
+  <zorder>LHelp</zorder>
+  <zorder>PBFolder</zorder>
+  <zorder>PBHome</zorder>
+  <zorder>verticalLayoutWidget</zorder>
+  <zorder>PWarning</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

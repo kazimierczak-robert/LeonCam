@@ -161,7 +161,6 @@ MainApp::MainApp(QWidget *parent, int loggedID, std::string passHash)
 	connect(ui.LESearch, SIGNAL(returnPressed()), this, SLOT(LESearchPressed()));
 	connect(ui.TWCameraPages, SIGNAL(currentChanged(int)), this, SLOT(TWCameraPagesChanged(int)));
 	//Faces base
-	connect(ui.TWFacesBase, SIGNAL(CurentCellChanged(int, int)), this, SLOT(UpdateDBAfterCellChanged(int, int)));
 	connect(ui.LESearchFB, SIGNAL(textChanged(const QString&)), this, SLOT(LESearchFBChanged()));
 	connect(ui.PBAddPerson, SIGNAL(clicked()), this, SLOT(AddPerson()));
 	connect(ui.LEUsername, SIGNAL(returnPressed()), this, SLOT(AddPerson()));
@@ -336,9 +335,10 @@ void MainApp::AddCameraFromDB(int cameraID)
 		btn->setFocusPolicy(Qt::NoFocus);
 		btn->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 		btn->setToolTip("Recognation mode: Off");
-		if (imgProc->CheckIfModelTrained() && imgProc->CheckIfFaceCascadeExists())
+		connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
+		if (!imgProc->CheckIfModelTrained() || !imgProc->CheckIfFaceCascadeExists())
 		{
-			connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
+			btn->setDisabled(true);
 		}
 		layout->addWidget(btn, 2, 2);
 
@@ -571,12 +571,14 @@ void MainApp::RecognitionCamera(QPushButton* button, int cameraID)
 	{
 		cameraThread->at(cameraID)->ChangeFaceRecoState(true);
 		button->setText("On");
+		button->setToolTip("Recognation mode: On");
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOn.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOnHover.png);}");
 	}
 	else
 	{
 		cameraThread->at(cameraID)->ChangeFaceRecoState(false);
 		button->setText("Off");
+		button->setToolTip("Recognation mode: Off");
 		button->setStyleSheet("QPushButton{background-image: url(:/Resources/Images/recognizeOff.png); border: none; margin: 0px; padding: 0px; color: transparent;} QPushButton:hover{background-image: url(:/Resources/Images/recognizeOffHover.png);}");
 	}
 }
@@ -1318,7 +1320,7 @@ void MainApp::AddRowToRedReports(int redAlertID, int cameraID, QString startDate
 	widget->setLayout(layout);
 	//Set the widget in the cell
 	ui.TWRedReport->setCellWidget(rowCount, 5, widget);		
-	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	PlayMovie(".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi"); });
+	connect(button, &QPushButton::clicked, this, [this, cameraID, redAlertID] {	PlayMovie(".\\RedAlerts\\" + QVariant(cameraID).toString() + "\\" + QVariant(redAlertID).toString() + ".avi", cameraID, redAlertID); });
 	ui.TWRedReport->setSortingEnabled(true);
 
 	//New widget
@@ -1429,10 +1431,6 @@ void MainApp::FillReportsTW()
 		}
 	}
 }
-void MainApp::UpdateDBAfterCellChanged(int row, int column)
-{
-	Utilities::MBAlarm("DB Update " + QVariant(row).toString() + " " + QVariant(column).toString(), true);
-}
 void MainApp::TakePicture(int faceID)
 {
 	QString name;
@@ -1489,34 +1487,15 @@ void MainApp::TakePicture(int faceID)
 			imgProc->GetModel()->save(trainedFaceRecognizerFilePath);
 			imgProc->ClearImagesVector();
 			imgProc->ClearLabelsVector();
-			if (imgProc->CheckIfFaceCascadeExists())
+			bool isFaceCascadeExists = imgProc->CheckIfFaceCascadeExists();
+			
+			for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
 			{
-				int cameraID;
-				QPushButton *btn;
-				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
 				{
-					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
-					{
-						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
-						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
-						connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });
-					}
+					((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget())->setEnabled(isFaceCascadeExists);
 				}
-			}
-			else
-			{
-				int cameraID;
-				QPushButton *btn;
-				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
-				{
-					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
-					{
-						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
-						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
-						disconnect(btn, &QPushButton::clicked, this, nullptr);
-					}
-				}
-			}
+			}	
 		}
 	}
 }
@@ -1676,6 +1655,7 @@ void MainApp::EditPerson(int faceID)
 		}
 	}
 }
+
 void MainApp::RemovePerson(int faceID)
 {
 	if (Utilities::MBQuestion("<b>Warning</b>: Are you sure, you want to <b>remove</b> person with ID: " + ((QVariant)faceID).toString() + "?"))
@@ -1712,32 +1692,13 @@ void MainApp::RemovePerson(int faceID)
 			file.remove(".\\TrainedFaceRecognizer.xml");
 			//Train model again
 			imgProc->TrainFaceRecognizer();
-			if (imgProc->CheckIfModelTrained() && imgProc->CheckIfFaceCascadeExists())
+			bool isFaceCascadeExistsAndModelTrained = imgProc->CheckIfModelTrained() && imgProc->CheckIfFaceCascadeExists();
+
+			for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
 			{
-				int cameraID;
-				QPushButton *btn;
-				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
+				for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
 				{
-					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
-					{
-						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
-						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
-						connect(btn, &QPushButton::clicked, this, [this, btn, cameraID] {RecognitionCamera(btn, cameraID); });						
-					}
-				}
-			}
-			else
-			{
-				int cameraID;
-				QPushButton *btn;
-				for (int i = 0; i < vectorCameraLayoutsPages->size(); i++)
-				{
-					for (int j = 0; j < vectorCameraLayoutsPages->at(i)->size(); j++)
-					{
-						cameraID = getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j));
-						btn = (QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget();
-						disconnect(btn, &QPushButton::clicked, this, nullptr);
-					}
+					((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(2, 2)->widget())->setEnabled(isFaceCascadeExistsAndModelTrained);
 				}
 			}
 		}
@@ -1975,12 +1936,20 @@ void MainApp::ChangeTWReport(int i)
 		ui.CBSettings->setCurrentIndex(ui.CBSettings->findData(greenAlertDelSets));
 	}
 }
-void MainApp::PlayMovie(QString path)
+void MainApp::PlayMovie(QString path, int cameraID, int redAlertID)
 {
 	if (Utilities::NotEmptyFileExists(path))
 	{
-		//ShellExecuteA(0, 0, (LPCSTR)path.toStdString().c_str(), 0, 0, SW_SHOW);
-		QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+		if (cameraThread->at(cameraID)->redAlert->redAlertID != redAlertID)
+		{
+			//ShellExecuteA(0, 0, (LPCSTR)path.toStdString().c_str(), 0, 0, SW_SHOW);
+			QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+		}
+		else
+		{
+			Utilities::MBAlarm("You can't watch this video because it's being recorded", false);
+		}
+
 	}
 	else
 	{

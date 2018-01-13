@@ -61,13 +61,14 @@ private:
 	cv::VideoWriter videowriter;
 	cv::Mat img;
 	std::list<GreenAlert> *greenAlertList = nullptr;
-	RedAlert *redAlert = nullptr;
 	int cameraFPS;
 	int updateImagePeriod;
 	int processImagePeriod;
 	void UpdateDBAfterPrediction(int predictionLabel);
 	void run() override;
 	void StopRedAlert();
+public:
+	RedAlert *redAlert = nullptr;
 public slots:
 	void UpdateGreenAlerts();
 	void UpdateRedAlerts();

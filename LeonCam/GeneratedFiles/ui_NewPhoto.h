@@ -38,6 +38,7 @@ public:
     QPushButton *PBHome;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
+    QLabel *LView;
     QPushButton *PWarning;
 
     void setupUi(QDialog *NewPhoto)
@@ -169,11 +170,29 @@ public:
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
+        LView = new QLabel(NewPhoto);
+        LView->setObjectName(QStringLiteral("LView"));
+        LView->setGeometry(QRect(80, 110, 640, 360));
+        LView->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
+"background-color: rgb(0, 54, 80);"));
         PWarning = new QPushButton(NewPhoto);
         PWarning->setObjectName(QStringLiteral("PWarning"));
         PWarning->setGeometry(QRect(265, 515, 271, 31));
         PWarning->setStyleSheet(QLatin1String("color: rgb(255, 255, 255);\n"
 "background-color: rgb(255, 77, 61);"));
+        LView->raise();
+        PBDown->raise();
+        PBRight->raise();
+        PBLeft->raise();
+        PBUp->raise();
+        PBSnapshot->raise();
+        PBBack->raise();
+        CBPresets->raise();
+        LHelp->raise();
+        PBFolder->raise();
+        PBHome->raise();
+        verticalLayoutWidget->raise();
+        PWarning->raise();
 
         retranslateUi(NewPhoto);
 
@@ -216,6 +235,7 @@ public:
         PBHome->setToolTip(QApplication::translate("NewPhoto", "Go to home position", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         PBHome->setText(QString());
+        LView->setText(QApplication::translate("NewPhoto", "<html><head/><body><p align=\"center\"><br/></p></body></html>", Q_NULLPTR));
         PWarning->setText(QApplication::translate("NewPhoto", "No faces has been detected", Q_NULLPTR));
     } // retranslateUi
 

@@ -40,6 +40,8 @@ NewPhoto::NewPhoto(std::vector<int> cameraIDs, std::string passHash, QString nam
 	//home position
 	connect(ui.PBHome, &QPushButton::clicked, this, [this] {cameraControl->GoHomeCamera(); });
 	connect(ui.PWarning, &QPushButton::clicked, this, [this, faceID] {PBSnapshotClicked(faceID); });
+
+	ui.LView->setStyleSheet("background-image: url(:/Resources/Images/Connecting.png);");
 }
 NewPhoto::~NewPhoto()
 {

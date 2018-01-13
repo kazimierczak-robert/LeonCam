@@ -56,7 +56,6 @@ private slots:
 	void LESearchPressed();
 	void TWCameraPagesChanged(int newIndex);
 	//Faces Base
-	void UpdateDBAfterCellChanged(int row, int column);
 	void TakePicture(int faceID);
 	void LESearchFBChanged();
 	void AddPerson();
@@ -65,7 +64,7 @@ private slots:
 	void RemoveGreenAlert(int greenAlertID);
 	void RemoveRedAlert(int redAlertID);
 	void ChangeTWReport(int i);
-	void PlayMovie(QString path);
+	void PlayMovie(QString path, int cameraID, int redAlertID);
 	//Settings
 	void ChangeLogin();
 	void ChangePassword();

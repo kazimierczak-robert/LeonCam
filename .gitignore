@@ -7,6 +7,8 @@ Pictures/
 PhotoFromCameras/
 RedAlerts/
 
+*.diagsession
+
 # User-specific files
 *.suo
 *.user

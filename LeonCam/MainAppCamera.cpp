@@ -81,7 +81,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
 			//the last parameter: color or not video
 			//CV_FOURCC('M', 'J', 'P', 'G')
-			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4') , (double)cameraFPS/updateImagePeriod, cv::Size(640, 360), true);
+			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4'), (double)cameraFPS/updateImagePeriod, cv::Size(640, 360), true);
 		}
 		else
 		{
@@ -217,6 +217,7 @@ void MainAppCamera::run()
 			query.exec("COMMIT");
 			emit updateRedAlert(redAlert->redAlertID, redAlert->stopDate);
 		}
+		vcap.release();
 	}
 }
 void MainAppCamera::StopThread()
@@ -349,10 +350,12 @@ void MainAppCamera::Process()
 	QPainter qPainter;
 	QPen pen(Qt::red);
 	pen.setWidth(2);
+	int errorCounter = 0;
 	while (isWorking)
 	{
 		if (vcap.read(img))
 		{
+			errorCounter = 0;
 			frameID = vcap.get(CV_CAP_PROP_POS_FRAMES);//current frame number
 			if (frameID % this->updateImagePeriod == 0)
 			{
@@ -437,6 +440,16 @@ void MainAppCamera::Process()
 					emit updateThumbnail(pixmapWithRedBorder, cameraID);
 				}
 				QCoreApplication::processEvents();
+			}
+		}
+		else
+		{
+			++errorCounter;
+			if (errorCounter == 50)
+			{
+				errorCounter = 0;
+				QCoreApplication::processEvents();
+				vcap.open(streamURI);
 			}
 		}
 	}

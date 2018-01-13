@@ -252,4 +252,5 @@ void CameraPreview::TurnOnOffRecognizeMode()
 	buttonRecognationFromParent->click();
 	ui.PBRecognize->setText(buttonRecognationFromParent->text());
 	ui.PBRecognize->setStyleSheet(buttonRecognationFromParent->styleSheet());
+	ui.PBRecognize->setToolTip(buttonRecognationFromParent->toolTip());
 }
