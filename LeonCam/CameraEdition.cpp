@@ -129,7 +129,7 @@ void CameraEdition::EditClicked()
 			if (query.exec() == true)
 			{
 				query.next();
-				std::string encryptedMsg = Utilities::GetEncrypted(passHash, ui.LEPassword->text().toStdString());
+				std::string encryptedMsg = Utilities::GetEncrypted(passHash, ui.LEOldPassword->text().toStdString());
 				if (QString::fromStdString(encryptedMsg) != query.value(0).toString())
 				{
 					Utilities::resultMsg = "Old password is incorrect";
