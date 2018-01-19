@@ -164,6 +164,7 @@ public:
 "left: 342px;\n"
 "}\n"
 "\n"
+"/*https://stackoverflow.com/a/26159728*/\n"
 "QTabBar::tab {\n"
 "background-color: transparent;\n"
 "color: rgb(133, 196, 255);\n"

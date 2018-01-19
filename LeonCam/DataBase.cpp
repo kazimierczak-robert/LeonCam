@@ -78,6 +78,7 @@ bool DataBase::CreateAlertsDeleteSettings()
 		if (queryResult == 0 && result==true)
 		{
 			query.clear();
+			//https://stackoverflow.com/a/25736288
 			query.exec("BEGIN IMMEDIATE TRANSACTION");
 			query.prepare("INSERT INTO AlertsDeleteSettings (Date) VALUES (?)");
 			QVariantList times;

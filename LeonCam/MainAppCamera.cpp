@@ -81,6 +81,7 @@ void MainAppCamera::UpdateDBAfterPrediction(int predictionLabel)
 			filePath = filePath + "\\" + QVariant(query.value(0).toInt()).toString() + ".avi";
 			//the last parameter: color or not video
 			//CV_FOURCC('M', 'J', 'P', 'G')
+			//https://stackoverflow.com/a/24197540
 			videowriter.open(filePath.toStdString(), CV_FOURCC('X','2','6','4'), (double)cameraFPS/updateImagePeriod, cv::Size(640, 360), true);
 		}
 		else
@@ -430,6 +431,7 @@ void MainAppCamera::Process()
 					//There is an alert add red border
 					if (redAlert->redAlertID != -1)
 					{
+						//http://www.qtcentre.org/threads/52964-Draw-rectangle-on-QImage?s=e283053d55d3b36ab4616fb2051808c3&p=237304#post237304
 						qPainter.begin(&pixmapWithRedBorder);
 						qPainter.setBrush(Qt::NoBrush);
 						qPainter.setPen(pen);

@@ -4,6 +4,7 @@ UserCamera::UserCamera(QWidget *parent, int userID)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	ui.setupUi(this);
+	//https://stackoverflow.com/a/18275148
 	ui.CBAvailableCameras->lineEdit()->setPlaceholderText("IPv4 address:port number");
 	this->setResult(QDialog::Rejected);
 	//Create DesignB instance
@@ -28,6 +29,7 @@ UserCamera::~UserCamera()
 		watcher->waitForFinished();
 	}
 }
+//https://github.com/Lycycz/onvif_device/blob/master/onvif.cpp
 std::string UserCamera::GenerateUuid()
 {
 	const int kGUIDSize = 39;

@@ -8,7 +8,6 @@
 #include "CameraPreview.h"
 #include "UserCamera.h"
 #include "CameraEdition.h"
-#include <algorithm>
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <qdialogbuttonbox.h>
@@ -25,7 +24,6 @@
 #include <QtCharts/QValueAxis>
 #include <QDate>
 #include <QLocale>
-#include <algorithm>
 #include <regex>
 
 using namespace QtCharts;
@@ -72,6 +70,7 @@ private slots:
 	void ChangeSecurityQuestion();
 public slots:
 	void OpenCameraEdit(int cameraID);
+	//https://stackoverflow.com/a/8701986
 	void UpdateThumbnail(const QPixmap& pixmap, int cameraID);
 	void InsertGreenAlert(int greenAlertID, int faceID, int cameraID, QString dateTimeNow);
 	void InsertRedAlert(int redAlertID, int cameraID, QString dateTimeNow);

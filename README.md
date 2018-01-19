@@ -62,6 +62,9 @@ Supervisor: dr Anna Grocholewska-Czuryło
 Attributions
 ------------
 - http://doc.qt.io/qt-5.9/index.html
+- https://github.com/linkingvision/rapidonvif/tree/onvifcpplib
+- https://github.com/peters/opencv.ffmpeg
+- https://github.com/Lycycz/onvif_device/blob/master/onvif.cpp
 - https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap
 - http://develnoter.blogspot.com/2012/05/integrating-opencv-in-qt-gui.html
 - http://www.qtcentre.org/threads/3416-Center-a-widget-in-a-cell-on-a-QTableWidget
@@ -70,3 +73,5 @@ Attributions
 - https://pixabay.com/
 - https://stackoverflow.com/ (hyperlinks in the source code)
 - https://wiki.openssl.org/index.php/EVP_Symmetric_Encryption_and_Decryption
+- http://www.qtcentre.org/threads/52964-Draw-rectangle-on-QImage?s=e283053d55d3b36ab4616fb2051808c3&p=237304#post237304
+- https://github.com/therecipe/qt/wiki/Setting-the-Application-Icon

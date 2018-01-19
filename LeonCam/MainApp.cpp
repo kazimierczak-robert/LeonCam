@@ -452,6 +452,7 @@ void MainApp::UpdateThumbnail(const QPixmap& pixmap, int cameraID)
 		{
 			if (getCameraIDFromLayout(vectorCameraLayoutsPages->at(i)->at(j)) == cameraID)
 			{
+				//https://stackoverflow.com/a/12799623
 				((QPushButton*)vectorCameraLayoutsPages->at(i)->at(j)->itemAtPosition(0, 0)->widget())->setIcon(QIcon(pixmap));
 				return;
 			}
@@ -674,6 +675,7 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 			int number = ui.LTotalNumber->text().split(" ").last().toInt();
 			ui.LTotalNumber->setText("Total number of cameras: " + QVariant(number - 1).toString());
 
+			//https://stackoverflow.com/a/7569928
 			//Removing all item in layout
 			QLayoutItem * itemLayout;
 			QWidget * widget;
@@ -690,6 +692,7 @@ void MainApp::DeleteCameraFromMemory(QGridLayout* layout)
 				}
 			}
 
+			//https://stackoverflow.com/a/3385251
 			item->erase(std::remove(item->begin(), item->end(), layout), item->end());
 			delete layout;
 

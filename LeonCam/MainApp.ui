@@ -166,6 +166,7 @@ QTabWidget::tab-bar {
 left: 342px;
 }
 
+/*https://stackoverflow.com/a/26159728*/
 QTabBar::tab {
 background-color: transparent;
 color: rgb(133, 196, 255);
