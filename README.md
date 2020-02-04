@@ -1,7 +1,7 @@
 LeonCam
 =======
 
-**Info**: Web version of LeonCam app is implementing: [LeonCam2](https://github.com/gradzka/LeonCam2)
+**Info**: Web version of LeonCam app is implemented: [LeonCam2](https://github.com/gradzka/LeonCam2)
 
 Description
 -----------
