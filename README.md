@@ -1,5 +1,8 @@
 LeonCam
 =======
+
+**Info**: Web version of LeonCam app is implementing: [LeonCam2](https://github.com/gradzka/LeonCam2)
+
 Description
 -----------
 **LeonCam** is a 64-bit, multi-threaded, desktop application designed to home surveillance with IP network cameras. Written in the C/C++17 programming language, based on the Qt library. Dedicated to the Microsoft Windows operating system and IP cameras supporting the ONVIF standard. Includes face detection and recognition modules implemented using the OpenCV library. The local SQLite database was used to store application data.
